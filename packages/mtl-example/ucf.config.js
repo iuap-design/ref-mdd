@@ -18,19 +18,13 @@ module.exports = (env, argv) => {
             {
                 enable: true,
                 headers: {
-                    "Referer": "http://172.20.52.215:8888"
+                    "Referer": "https://mock.yonyoucloud.com"
                 },
                 //要代理访问的对方路由
                 router: [
-                    '/iuap_walsin_demo',
-                    '/iuap-saas-message-center/',
-                    '/iuap-saas-filesystem-service/',
-                    '/wbalone',
-                    '/print_service/',
-                    '/eiap-plus',
-                    '/iuap-print/'
+                    '/mock'
                 ],
-                url: 'http://172.20.52.215:8888'
+                url: 'https://mock.yonyoucloud.com'
             }
         ],
         // 静态托管服务
