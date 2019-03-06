@@ -8,6 +8,8 @@
 - `mtl-components`：元数据中存放的组件（`container`类、`controls`类），如果`tinper-bee`和`tinper-acs`已有则复用，没有则在这里添加维护
 -  `mtl-core`：`datamodel` 数据模型层封装、`render-engine` 基于`UI`元数据的解析渲染、公共工具方法等。
 
+## [验资场景及需求描述](./docs/整体需求描述.md)
+ 
 ## 顶层设计：开发者视角，最终使用方式推演框架的设计（以终为始）
 
 1、package 方式使用：
