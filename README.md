@@ -10,14 +10,25 @@
 
 ## 快速使用
 
+1、package 方式使用：
 
 ```
-import { generate } from 'mtl-core';
+import MTLCore, { init, create } from 'mtl-core';
 
+init(options)
 
 ```
 
-## 基于lerna的开发和调试
+2、cjs 格式的CDN文件方式使用：
+
+- 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/mtl-core/0.0.1/js/mtl-core.js"></script>`
+
+- 初始化：`window.MTLCore.init(options)`
+- 逻辑调用。
+
+
+
+## 基于 lerna 的开发和调试
 
 > 基于lerna分包后的开发痛点：如果现在在开发module-2, 但是发现是module-1的bug, 把module-1的bug修改了, 需要发布一下到npm, 然后module-2再更新module-1的依赖。
 
