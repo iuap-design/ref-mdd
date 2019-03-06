@@ -30,10 +30,10 @@ export default {
          * @param {*} param
          * @param {*} getState
          */
-        async loadList(params, getState) {
-            let result = await api.getList();
+        async getMeta(params, getState) {
+            let result = await api.getMeta();
             if (result.code == 200) {
-                
+                console.log(result)
             }
         }
     }
