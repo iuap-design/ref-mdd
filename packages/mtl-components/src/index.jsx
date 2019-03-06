@@ -16,16 +16,26 @@ export Money from './inputnumber'
 export Price from './inputnumber'
 export Label from './label'
 export Text from './text'
+// export Progress from "./progress"
 export Radio from "./radio"
+// export Rate from "./rate"
 export Refer from "./refer"
 export Row from "./row"
 export Select from './select'
+// export Steps from "./steps"
 export Switch from "./switch"
 export Table from "./table"
 export Tag from "./tag"
+// export Tooltip from "./tooltip"
+// export Transfer from "./transfer"
 export Tree from "./tree"
 export RichText from './richtext'
+// export Selectgroup from '../Contacts/selectgroup'
+// export GroupBlock from './groupblock'
 export Menu from './menu'
+// export QuickTag from './quickTab'
+// export NewTabs from '../NewTabs'
+// export Map from './map'
 export Map from './amap'
 export Tag2 from "./tag2"
 export PredicateDatePicker from './predicatedatepicker';
@@ -35,6 +45,7 @@ export Attachment from '../file-upload'
 export SwitchLabel from './switchlabel'
 export ListRefer from './listrefer'
 export Avatar from './avatar'
+// export BInputNum from './binputnum'
 export TextImport from './textimport'
 export InputFloat from './inputfloat'
 export GroupCondition from './groupcondition'
