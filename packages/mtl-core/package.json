@@ -1,5 +1,5 @@
 {
-  "name": "@mtl/render-engine",
+  "name": "mtl-render-engine",
   "version": "1.0.0",
   "description": "",
   "main": "rollup.config.js",
