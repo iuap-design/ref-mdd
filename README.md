@@ -5,10 +5,8 @@
 
 ## mtl-web packages 
 
-- mtl-components 元数据中存放的组件（container类、controls类），如果tinper-bee和tinper-acs已有则复用，没有则在这里添加维护
-- mtl-datamodel 数据模型层封装
-- mtl-render-engine 基于UI元数据的解析渲染
-- mtl-core 暂定为对以上三者的合成，以及三者的公共工具方法等。
+- `mtl-components`：元数据中存放的组件（`container`类、`controls`类），如果`tinper-bee`和`tinper-acs`已有则复用，没有则在这里添加维护
+-  `mtl-core`：`datamodel` 数据模型层封装、`render-engine` 基于`UI`元数据的解析渲染、公共工具方法等。
 
 ## 快速使用
 
