@@ -8,14 +8,42 @@
 - `mtl-components`：元数据中存放的组件（`container`类、`controls`类），如果`tinper-bee`和`tinper-acs`已有则复用，没有则在这里添加维护
 -  `mtl-core`：`datamodel` 数据模型层封装、`render-engine` 基于`UI`元数据的解析渲染、公共工具方法等。
 
-## 快速使用
+## 顶层设计：开发者视角，最终使用方式推演框架的设计（以终为始）
 
 1、package 方式使用：
 
 ```
-import MTLCore, { init, create } from 'mtl-core';
 
-init(options)
+import MTLCore from 'mtl-core';
+
+// 创建一个模型驱动的组件，MTLCore wrapper 高阶
+class LogicComponent extends MTLCore {
+    async init(){
+        let res = await axios.get(url);
+        return {
+            viewmodel: res.viewmodel,
+            viewapplication: res.viewapplication
+        }
+    }
+    // hooks
+    onInit(){
+
+    }
+    // hooks
+    onEnd(opt){
+
+    }
+}
+
+// 大组件概念：模板，我们掌控全局
+ReactDOM.render(<LogicComponent />, root)
+
+// 小组件概念：纯组件，被引用
+<Form>
+    <Input />
+    <LogicComponent />
+    <Button>提交</Button>
+</Form>
 
 ```
 
