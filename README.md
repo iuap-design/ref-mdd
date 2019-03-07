@@ -21,23 +21,7 @@ import { MTLComponent } from 'mtl-core';
 // 创建一个模型驱动的组件，MTLCore wrapper 高阶
 class LogicComponent extends MTLComponent {
     constructor(){
-        this.init();
-    }
-    async init(){
-        let res = await axios.get('https://mock.yonyoucloud.com/project/717/interface/api/3902');
-
-        return {
-            viewmodel: res.viewmodel,
-            viewapplication: res.viewapplication
-        }
-    }
-    // hooks
-    onInit(){
-
-    }
-    // hooks
-    onEnd(opt){
-
+        this.init(url);
     }
 }
 
@@ -71,4 +55,16 @@ ReactDOM.render(<LogicComponent />, root)
 ```
 # 到项目根目录执行以下命令
 $ npm run link
+```
+
+然后到package/mtl-core中执行调试监听
+
+```
+$ npm run dev
+```
+
+最后到package/mtl-example中启动示例查看调试效果：
+
+```
+$ npm start
 ```

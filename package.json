@@ -5,6 +5,6 @@
     "lerna": "^3.4.3"
   },
   "scripts": {
-    "link": "lerna add mtl-core --scope=mtl-example"
+    "link": "lerna bootstrap && lerna add mtl-core --scope=mtl-example"
   }
 }

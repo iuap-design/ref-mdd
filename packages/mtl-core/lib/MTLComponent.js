@@ -1,36 +1,45 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+const axios = require('axios');
 
-export default class MtlCore extends Component {
-    constructor(props) {
-        super(props);
+class MTLComponent extends Component {
+    constructor(props){
+        super(props)
+        this.init(props);
         this.state = {
-
+            url: '',
+            viewmodel: {},
+            viewapplication: {},
+            refEntity: {}
         }
     }
-    CoreInit = (opt) => {
-        console.log('Init Core')
+    async init(opt){
+        let url = opt.url || ""
+        let res = await axios.get(url);
+        
+        this.isRefer(res);
+
     }
-    render() {
-        return <div>Hello,MTL</div>
+    isRefer = (data) => {
+        if(data.refEntity){
+            let { refEntity, gridMeta } = res.data;
+
+            this.setState({
+                viewmodel: gridMeta.viewmodel,
+                viewapplication: gridMeta.viewapplication,
+                refEntity
+            })
+        } else {
+            let { viewmodel, viewapplication } = res.data;
+
+            this.setState({
+                viewmodel,
+                viewapplication
+            })
+        }
+    }
+    render(){
+        return <div>hhh</div>
     }
 }
 
-function MTLComponent(opt) {
-    this.viewapplication = opt.viewapplication;
-    this.viewmodel = opt.viewmodel;
-    
-   
-}
-  
-MTLComponent.prototype.init = function(opt){
-    let url = opt;
-
-    console.log(opt)
-}
-
-
-MTLComponent.prototype.onHook = function(){
-
-}
-
-export default MTLComponent
+export default MTLComponent;

@@ -22,6 +22,7 @@ export default {
     resolve(),
     
     babel({
+      runtimeHelpers: true,
       exclude: 'node_modules/**' // only transpile our source code
     })
   ]

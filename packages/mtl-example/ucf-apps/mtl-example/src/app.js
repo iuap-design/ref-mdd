@@ -7,12 +7,18 @@ import { render } from 'react-dom'
 import { MTLComponent } from 'mtl-core';
 
 class LogicComponent extends MTLComponent {
-    constructor(){
-        this.init('/project/717/interface/api/3902');
+    constructor(props){
+        super({url: '/project/717/interface/api/3902'})
     }
 
-    onHook(){
-        this.onHook();
+    onMTLComponentReceive(store){
+        // store.get('xx')
+      
+        // this.onDeleteRow(opt);
+    }
+
+    onMTLComponentGet(store){
+        // this.onUpdate(opt);
     }
 }
 
