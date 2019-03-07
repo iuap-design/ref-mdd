@@ -16,6 +16,17 @@ module.exports = {
     '@babel/react'
   ],
   plugins: [
-    '@babel/plugin-proposal-class-properties'
+    ['@babel/plugin-transform-runtime', {
+      'corejs': false,
+      'helpers': true,
+      'regenerator': true,
+      'useESModules': false
+    }],
+    ['@babel/plugin-proposal-decorators', {
+      "legacy": true
+    }],
+    ['@babel/plugin-proposal-class-properties', {
+      "loose": true
+    }]
   ]
 }
