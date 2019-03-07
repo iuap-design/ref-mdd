@@ -29,23 +29,8 @@
             return React.createElement("div", null, "hellow");
           };
 
-          return _class;
         }(react.Component)
       );
     };
-  }
-
-  MTLComponent.prototype.init = function () {
-    return this.createComponent(opt);
-  };
-
-  var MTLCore = {
-    MTLComponent: MTLComponent // MTLModel,
-    // rollup 中的 output 配置 globals 
-
-  };
-  window.MTLCore = MTLCore;
-
-  return MTLCore;
 
 }));

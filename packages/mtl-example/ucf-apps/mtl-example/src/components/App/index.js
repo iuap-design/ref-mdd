@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { actions } from 'mirrorx';
-import MtlCore from './mtl-core';
+import MtlCore from 'mtl-core';
 
 
 import './index.less';
@@ -20,15 +20,15 @@ class App extends MtlCore {
         actions.app.getMeta();
     }
 
-    render() {
-        const _this = this;
-        console.log(_this)
-        return (
-            <div className="home-wrap">
-                MTL-Example
-            </div>
-        );
-    }
+    // render() {
+    //     const _this = this;
+    //     console.log(_this)
+    //     return (
+    //         <div className="home-wrap">
+    //             MTL-Example
+    //         </div>
+    //     );
+    // }
 }
 
 App.displayName = 'App';
