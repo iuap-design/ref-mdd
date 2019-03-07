@@ -56,7 +56,7 @@
     var _proto = MtlCore.prototype;
 
     _proto.render = function render() {
-      return React__default.createElement("div", null, "Hello");
+      return React__default.createElement("div", null, "Hello,MTL");
     };
 
     return MtlCore;

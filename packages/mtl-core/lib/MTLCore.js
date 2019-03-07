@@ -11,6 +11,6 @@ export default class MtlCore extends Component {
         console.log('Init Core')
     }
     render() {
-        return <div>Hello</div>
+        return <div>Hello,MTL</div>
     }
 }
