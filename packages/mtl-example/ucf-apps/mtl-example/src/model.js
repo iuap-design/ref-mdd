@@ -35,6 +35,13 @@ export default {
             if (result.code == 200) {
                 console.log(result)
             }
+        },
+        async getRef(params, getState) {
+            let result = await api.getRef();
+            if (result.code == 200) {
+                console.log(result)
+            }
         }
+        
     }
 };
