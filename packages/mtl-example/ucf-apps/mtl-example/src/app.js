@@ -3,8 +3,17 @@
  */
 
 import React from 'react';
-import { render } from 'mirrorx';
-import App from "./container";
+import { render } from 'react-dom'
+import { MTLComponent } from 'mtl-core';
 
+class LogicComponent extends MTLComponent {
+    constructor(){
+        this.init('/project/717/interface/api/3902');
+    }
 
-render(<App />, document.querySelector("#app"));
+    onHook(){
+        this.onHook();
+    }
+}
+
+render(<LogicComponent />, document.querySelector("#app"));

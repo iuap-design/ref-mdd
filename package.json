@@ -3,5 +3,8 @@
   "private": true,
   "devDependencies": {
     "lerna": "^3.4.3"
+  },
+  "scripts": {
+    "link": "lerna add mtl-core --scope=mtl-example"
   }
 }

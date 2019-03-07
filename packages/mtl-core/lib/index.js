@@ -1,10 +1,12 @@
-import MTLCore from './MTLCore.js'
+import MTLComponent from './MTLComponent.js'
 
-// MTLCore
+// 顶层对象
+let MTLCore = {
+    MTLComponent
+    // MTLModel,
+}
+
+// rollup 中的 output 配置 globals 
+window.MTLCore = MTLCore
 export default MTLCore
-
-// export { 
-//     init, 
-//     create 
-// };
 

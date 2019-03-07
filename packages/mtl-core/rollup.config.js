@@ -9,7 +9,10 @@ export default {
   output: {
     file: 'dist/mtl-core.js',
     format: 'umd',
-    name: 'MTLCore'
+    name: 'MTLCore',
+    globals: {
+      react: 'React'
+    }
   },
   external: [
     ...Object.keys(pkg.dependencies || {}),

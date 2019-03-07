@@ -16,12 +16,16 @@
 
 ```
 
-import MTLCore from 'mtl-core';
+import { MTLComponent } from 'mtl-core';
 
 // 创建一个模型驱动的组件，MTLCore wrapper 高阶
-class LogicComponent extends MTLCore {
+class LogicComponent extends MTLComponent {
+    constructor(){
+        this.init();
+    }
     async init(){
-        let res = await axios.get(url);
+        let res = await axios.get('https://mock.yonyoucloud.com/project/717/interface/api/3902');
+
         return {
             viewmodel: res.viewmodel,
             viewapplication: res.viewapplication
@@ -60,27 +64,11 @@ ReactDOM.render(<LogicComponent />, root)
 
 ## 基于 lerna 的开发和调试
 
-> 基于lerna分包后的开发痛点：如果现在在开发module-2, 但是发现是module-1的bug, 把module-1的bug修改了, 需要发布一下到npm, 然后module-2再更新module-1的依赖。
+> 基于lerna分包后的开发痛点：如果现在在开发module-2, 但是发现是module-1的bug, 把module-1的bug修改了, 需要发布一下到npm, 然后module-2再更新module-1的依赖。执行`lerna add package1 –-scope=package2`命令后，你本地的package1会依赖于本地的package2，而不用担心package2没发布或者已发布的版本是过时的。
 
-解决方案：
-```
-# 你本地的package1会依赖于本地的package2，而不用担心package2没发布或者已发布的版本是过时的。
-lerna add package1 –scope=package2
+**解决方案：**
 
 ```
-
-**更多参考使用：**
-
-```
-# 将模块  module-1 安装到packages下所有以 “prefix-*” 开头的目录中
-lerna add module-1 packages/prefix-*
-
-# 将 module-1 安装到 module-2
-lerna add module-1 --scope=module-2
-
-# 将 module-1 安装到 module-2的 devDependencies中
-lerna add module-1 --scope=module-2 --dev
-
-# 将 module-1 安装到所有模块（除 module-1 模块本身外）
-lerna add module-1
+# 到项目根目录执行以下命令
+$ npm run link
 ```

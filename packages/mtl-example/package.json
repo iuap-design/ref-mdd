@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "axios": "^0.18.0",
     "mirrorx": "^0.2.12",
     "mtl-core": "^1.0.0",
     "react": "^16.8.4",
