@@ -6,37 +6,66 @@
 
   var React__default = 'default' in React ? React['default'] : React;
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
   function _inheritsLoose(subClass, superClass) {
     subClass.prototype = Object.create(superClass.prototype);
     subClass.prototype.constructor = subClass;
     subClass.__proto__ = superClass;
   }
 
-  var MTLCore =
-  /*#__PURE__*/
-  function (_Component) {
-    _inheritsLoose(MTLCore, _Component);
-
-    function MTLCore(props) {
-      return _Component.call(this, props) || this;
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
 
-    var _proto = MTLCore.prototype;
+    return self;
+  }
 
-    _proto.init = function init() {};
+  var MtlCore =
+  /*#__PURE__*/
+  function (_Component) {
+    _inheritsLoose(MtlCore, _Component);
+
+    function MtlCore(props) {
+      var _this;
+
+      _this = _Component.call(this, props) || this;
+
+      _defineProperty(_assertThisInitialized(_this), "CoreInit", function (opt) {
+        console.log('Init Core');
+      });
+
+      _this.state = {};
+      return _this;
+    }
+
+    var _proto = MtlCore.prototype;
 
     _proto.render = function render() {
-      // this.props.init()
-      return React__default.createElement("div", null);
+      return React__default.createElement("div", null, "Hello");
     };
 
-    return MTLCore;
+    return MtlCore;
   }(React.Component);
 
   //     init, 
   //     create 
   // };
 
-  return MTLCore;
+  return MtlCore;
 
 }));

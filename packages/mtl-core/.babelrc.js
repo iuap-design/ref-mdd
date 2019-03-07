@@ -14,6 +14,9 @@ module.exports = {
       }
     ],
     '@babel/react'
+  ],
+  plugins:[
+    '@babel/plugin-proposal-class-properties'
   ]
 //   plugins: [
 //     // don't use `loose` mode here - need to copy symbols when spreading
