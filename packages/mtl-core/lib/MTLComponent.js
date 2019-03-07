@@ -4,9 +4,7 @@ const axios = require('axios');
 class MTLComponent extends Component {
     constructor(props) {
         super(props)
-        this.init(props);
         this.state = {
-            url: '',
             viewmodel: {},
             viewapplication: {},
             refEntity: {}
@@ -15,21 +13,18 @@ class MTLComponent extends Component {
     init = async (opt) => {
         let url = opt.url || ""
         let res = await axios.get(url);
-
-        this.isRefer(res);
-
+        this.isRefer(res.data.data);
     }
     isRefer = (data) => {
         if (data.refEntity) {
-            let { refEntity, gridMeta } = res.data;
-
+            let { refEntity, gridMeta } = data;
             this.setState({
                 viewmodel: gridMeta.viewmodel,
                 viewapplication: gridMeta.viewapplication,
                 refEntity
             })
         } else {
-            let { viewmodel, viewapplication } = res.data;
+            let { viewmodel, viewapplication } = data;
 
             this.setState({
                 viewmodel,

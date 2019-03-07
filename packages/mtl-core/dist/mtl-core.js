@@ -847,7 +847,7 @@
 	              case 3:
 	                res = _context.sent;
 
-	                _this.isRefer(res);
+	                _this.isRefer(res.data.data);
 
 	              case 5:
 	              case "end":
@@ -864,9 +864,8 @@
 
 	    _this.isRefer = function (data) {
 	      if (data.refEntity) {
-	        var _res$data = res.data,
-	            refEntity = _res$data.refEntity,
-	            gridMeta = _res$data.gridMeta;
+	        var refEntity = data.refEntity,
+	            gridMeta = data.gridMeta;
 
 	        _this.setState({
 	          viewmodel: gridMeta.viewmodel,
@@ -874,9 +873,8 @@
 	          refEntity: refEntity
 	        });
 	      } else {
-	        var _res$data2 = res.data,
-	            viewmodel = _res$data2.viewmodel,
-	            viewapplication = _res$data2.viewapplication;
+	        var viewmodel = data.viewmodel,
+	            viewapplication = data.viewapplication;
 
 	        _this.setState({
 	          viewmodel: viewmodel,
@@ -885,10 +883,7 @@
 	      }
 	    };
 
-	    _this.init(props);
-
 	    _this.state = {
-	      url: '',
 	      viewmodel: {},
 	      viewapplication: {},
 	      refEntity: {}
