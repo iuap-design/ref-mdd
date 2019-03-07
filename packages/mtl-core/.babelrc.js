@@ -8,21 +8,14 @@ module.exports = {
         targets: {
           browsers: ['ie >= 11']
         },
+        // exclude: ['transform-async-to-generator', 'transform-regenerator'],
+        modules: false,
         loose: true
       }
     ],
     '@babel/react'
   ],
-  plugins:[
-    '@babel/plugin-proposal-class-properties',
-    "@babel/plugin-transform-async-to-generator",
-    // "@babel/plugin-transform-runtime"
-    ["@babel/plugin-transform-runtime", {
-        "helpers": false,
-        "polyfill": false,
-        "regenerator": true,
-        "moduleName": "babel-runtime"
-      }
-    ]
+  plugins: [
+    '@babel/plugin-proposal-class-properties'
   ]
 }

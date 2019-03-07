@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 const axios = require('axios');
 
 class MTLComponent extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.init(props);
         this.state = {
@@ -12,15 +12,15 @@ class MTLComponent extends Component {
             refEntity: {}
         }
     }
-    async init(opt){
+    init = async (opt) => {
         let url = opt.url || ""
         let res = await axios.get(url);
-        
+
         this.isRefer(res);
 
     }
     isRefer = (data) => {
-        if(data.refEntity){
+        if (data.refEntity) {
             let { refEntity, gridMeta } = res.data;
 
             this.setState({
@@ -37,7 +37,7 @@ class MTLComponent extends Component {
             })
         }
     }
-    render(){
+    render() {
         return <div>hhh</div>
     }
 }

@@ -83,6 +83,39 @@
 
       _this = _Component.call(this, props) || this;
 
+      _defineProperty(_assertThisInitialized(_this), "init",
+      /*#__PURE__*/
+      function () {
+        var _ref = _asyncToGenerator(
+        /*#__PURE__*/
+        regeneratorRuntime.mark(function _callee(opt) {
+          var url, res;
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  url = opt.url || "";
+                  _context.next = 3;
+                  return axios.get(url);
+
+                case 3:
+                  res = _context.sent;
+
+                  _this.isRefer(res);
+
+                case 5:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        return function (_x) {
+          return _ref.apply(this, arguments);
+        };
+      }());
+
       _defineProperty(_assertThisInitialized(_this), "isRefer", function (data) {
         if (data.refEntity) {
           var _res$data = res.data,
@@ -118,40 +151,6 @@
     }
 
     var _proto = MTLComponent.prototype;
-
-    _proto.init =
-    /*#__PURE__*/
-    function () {
-      var _init = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(opt) {
-        var url, res;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                url = opt.url || "";
-                _context.next = 3;
-                return axios.get(url);
-
-              case 3:
-                res = _context.sent;
-                this.isRefer(res);
-
-              case 5:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function init(_x) {
-        return _init.apply(this, arguments);
-      }
-
-      return init;
-    }();
 
     _proto.render = function render() {
       return React__default.createElement("div", null, "hhh");
