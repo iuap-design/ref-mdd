@@ -12,23 +12,21 @@ import './index.less';
 class App extends MtlCore {
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
     }
     componentWillMount() {
         actions.app.getMeta();
+        actions.app.getRef();
     }
 
-    // render() {
-    //     const _this = this;
-    //     console.log(_this)
-    //     return (
-    //         <div className="home-wrap">
-    //             MTL-Example
-    //         </div>
-    //     );
-    // }
+    render() {
+        const _this = this;
+        console.log(_this)
+        return (
+            <div className="home-wrap">
+                MTL-Example
+            </div>
+        );
+    }
 }
 
 App.displayName = 'App';
