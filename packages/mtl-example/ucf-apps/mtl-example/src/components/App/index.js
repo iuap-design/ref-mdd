@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { actions } from 'mirrorx';
 import MtlCore, { MTLComponent } from 'mtl-core';
+import { Row, Col, FormControl } from 'tinper-bee';
 
 
 import './index.less';
@@ -19,9 +20,23 @@ class App extends Component {
         const _this = this;
         return (
             <div className="home-wrap">
-                <MTLComponent
-                    url={this.url}
-                />
+
+                <Row>
+                    <Col md={4} xs={6}>
+                        <FormControl />
+                    </Col>
+                    <Col md={4} xs={6}>
+                        <FormControl />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={4} xs={6}>
+                        <FormControl />
+                    </Col>
+                    <Col md={4} xs={6}>
+                        <MTLComponent url={this.url} />
+                    </Col>
+                </Row>
             </div>
         );
     }

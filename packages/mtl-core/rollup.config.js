@@ -14,7 +14,8 @@ export default {
     globals: {
       react: 'React',
       axios: 'axios',
-      'mini-store': "miniStore"
+      'mini-store': 'miniStore',
+      'tinper-bee': 'TinperBee'
     }
   },
   external: [

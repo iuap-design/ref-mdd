@@ -17,6 +17,7 @@
     "mtl-core": "^1.0.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "tinper-bee": "^2.0.0-alpha.9",
     "ucf-request": "^1.0.0",
     "ucf-scripts": "^1.1.0"
   }

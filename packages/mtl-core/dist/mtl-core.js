@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios')) :
-	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios'], factory) :
-	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios));
-}(this, function (React, miniStore, axios) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios'), require('tinper-bee')) :
+	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios', 'tinper-bee'], factory) :
+	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios, global.TinperBee));
+}(this, function (React, miniStore, axios, tinperBee) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
 	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
@@ -829,80 +829,84 @@
 	  });
 	}
 
-	var _dec, _class, _temp;
-	var Button = (_dec = miniStore.connect(function (state) {
+	var MTLInput =
+	/*#__PURE__*/
+	function (_Component) {
+	  inheritsLoose(MTLInput, _Component);
+
+	  function MTLInput() {
+	    return _Component.apply(this, arguments) || this;
+	  }
+
+	  var _proto = MTLInput.prototype;
+
+	  _proto.render = function render() {
+	    return React__default.createElement("div", null, React__default.createElement(tinperBee.FormControl, null));
+	  };
+
+	  return MTLInput;
+	}(React.Component);
+
+	var _dec, _class;
+	var RefRender = (_dec = miniStore.connect(function (state) {
 	  return {
 	    count: state.count
 	  };
-	}), _dec(_class = (_temp =
+	}), _dec(_class =
 	/*#__PURE__*/
 	function (_Component) {
-	  inheritsLoose(Button, _Component);
+	  inheritsLoose(RefRender, _Component);
 
-	  function Button() {
+	  function RefRender() {
+	    return _Component.apply(this, arguments) || this;
+	  }
+
+	  var _proto = RefRender.prototype;
+
+	  _proto.render = function render() {
+	    return React__default.createElement("div", null, React__default.createElement(MTLInput, null));
+	  };
+
+	  return RefRender;
+	}(React.Component)) || _class);
+
+	var _dec$1, _class$1, _temp;
+	var RenderEngine = (_dec$1 = miniStore.connect(), _dec$1(_class$1 = (_temp =
+	/*#__PURE__*/
+	function (_Component) {
+	  inheritsLoose(RenderEngine, _Component);
+
+	  function RenderEngine(props) {
 	    var _this;
 
-	    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    _this = _Component.call(this, props) || this;
 
-	    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+	    _this.renderComp = function () {
+	      var _this$props$meta = _this.props.meta,
+	          refEntity = _this$props$meta.refEntity,
+	          viewApplication = _this$props$meta.viewApplication,
+	          viewmodel = _this$props$meta.viewmodel;
 
-	    _this.handleClick = function (step) {
-	      return function () {
-	        var store = _this.props.store;
-
-	        var _store$getState = store.getState(),
-	            count = _store$getState.count;
-
-	        console.log(store.getState());
-	        store.setState({
-	          count: count + step
+	      if (refEntity) {
+	        return React__default.createElement(RefRender, {
+	          refEntity: refEntity,
+	          viewApplication: viewApplication,
+	          viewmodel: viewmodel
 	        });
-	      };
+	      }
 	    };
 
 	    return _this;
 	  }
 
-	  var _proto = Button.prototype;
+	  var _proto = RenderEngine.prototype;
 
 	  _proto.render = function render() {
-	    return React__default.createElement("div", null, React__default.createElement("input", {
-	      type: "button",
-	      onClick: this.handleClick(1),
-	      value: this.props.count
-	    }));
+	    return React__default.createElement("div", null, this.renderComp());
 	  };
 
-	  return Button;
-	}(React.Component), _temp)) || _class);
-
-	var Layout =
-	/*#__PURE__*/
-	function (_Component) {
-	  inheritsLoose(Layout, _Component);
-
-	  function Layout(props) {
-	    var _this;
-
-	    _this = _Component.call(this, props) || this;
-	    _this.store = miniStore.create({
-	      count: 3
-	    });
-	    return _this;
-	  }
-
-	  var _proto = Layout.prototype;
-
-	  _proto.render = function render() {
-	    return React__default.createElement(miniStore.Provider, {
-	      store: this.store
-	    }, React__default.createElement("div", null, React__default.createElement(Button, null)));
-	  };
-
-	  return Layout;
-	}(React.Component);
+	  return RenderEngine;
+	}(React.Component), _temp)) || _class$1);
 
 	var MTLComponent =
 	/*#__PURE__*/
@@ -910,37 +914,37 @@
 	  inheritsLoose(MTLComponent, _Component);
 
 	  function MTLComponent(props) {
-	    var _this2;
+	    var _this;
 
-	    _this2 = _Component.call(this, props) || this;
+	    _this = _Component.call(this, props) || this;
+	    _this.meta = {};
 
-	    _this2.isRefer = function (data) {
+	    _this.isRefer = function (data) {
 	      if (data.refEntity) {
 	        var refEntity = data.refEntity,
 	            gridMeta = data.gridMeta;
-
-	        _this2.setState({
+	        _this.meta = {
 	          viewmodel: gridMeta.viewmodel,
-	          viewapplication: gridMeta.viewapplication,
+	          viewApplication: gridMeta.viewApplication,
 	          refEntity: refEntity
-	        });
+	        };
 	      } else {
 	        var viewmodel = data.viewmodel,
-	            viewapplication = data.viewapplication;
-
-	        _this2.setState({
+	            viewApplication = data.viewApplication;
+	        _this.meta = {
 	          viewmodel: viewmodel,
-	          viewapplication: viewapplication
-	        });
+	          viewApplication: viewApplication
+	        };
 	      }
 	    };
 
-	    _this2.state = {
-	      viewmodel: {},
-	      viewapplication: {},
-	      refEntity: {}
+	    _this.state = {
+	      isNeedRender: false
 	    };
-	    return _this2;
+	    _this.store = miniStore.create({
+	      count: 0
+	    });
+	    return _this;
 	  }
 
 	  var _proto = MTLComponent.prototype;
@@ -951,7 +955,7 @@
 	    var _componentWillMount = asyncToGenerator(
 	    /*#__PURE__*/
 	    regenerator.mark(function _callee() {
-	      var url, _ref, data;
+	      var url, _ref, data, isNeedRender;
 
 	      return regenerator.wrap(function _callee$(_context) {
 	        while (1) {
@@ -964,13 +968,16 @@
 	            case 3:
 	              _ref = _context.sent;
 	              data = _ref.data;
+	              isNeedRender = this.state.isNeedRender;
 
 	              if (data.code == 200) {
 	                this.isRefer(data.data);
-	                console.log(data.data);
+	                this.setState({
+	                  isNeedRender: !isNeedRender
+	                });
 	              }
 
-	            case 6:
+	            case 7:
 	            case "end":
 	              return _context.stop();
 	          }
@@ -992,10 +999,11 @@
 	  ;
 
 	  _proto.render = function render() {
-
-	    return React__default.createElement("div", {
-	      className: "mtl-layout"
-	    }, React__default.createElement(Layout, null));
+	    return React__default.createElement(miniStore.Provider, {
+	      store: this.store
+	    }, React__default.createElement(RenderEngine, {
+	      meta: this.meta
+	    }));
 	  };
 
 	  return MTLComponent;
