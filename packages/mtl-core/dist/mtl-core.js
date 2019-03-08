@@ -844,7 +844,7 @@
 	    console.log(this.props.meta); // 生成参照的元数据
 
 	    return React__default.createElement("div", null, React__default.createElement(tinperBee.FormControl, {
-	      value: "\u6211\u662F\u5143\u6570\u636E\u751F\u6210\u7684"
+	      value: this.props.meta.refEntity.name
 	    }));
 	  };
 

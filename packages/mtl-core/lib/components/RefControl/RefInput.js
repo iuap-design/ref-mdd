@@ -6,7 +6,7 @@ class RefInput extends Component {
         console.log(this.props.meta);// 生成参照的元数据
         return (
             <div>
-                <FormControl value="我是元数据生成的" />
+                <FormControl value={this.props.meta.refEntity.name} />
             </div>
         );
     }
