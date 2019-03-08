@@ -5,24 +5,23 @@ import MtlCore, { MTLComponent } from 'mtl-core';
 
 import './index.less';
 
-class App extends MTLComponent {
+class App extends Component {
     constructor(props) {
         super(props);
     }
+    url = "/mock/717/dept/getRefMeta";
     componentWillMount() {
         //actions.app.getMeta();
         //actions.app.getRef();
-        this.init({
-            url: "/mock/717/dept/getRefMeta"
-        });
     }
 
     render() {
         const _this = this;
-        console.log(_this.state)
         return (
             <div className="home-wrap">
-                <MTLComponent />
+                <MTLComponent
+                    url={this.url}
+                />
             </div>
         );
     }

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-const axios = require('axios');
+import { Provider, create, connect } from 'mini-store';
+
+import { getMeta } from './utils';
+import Layout from './components/Layout';
 
 class MTLComponent extends Component {
     constructor(props) {
@@ -10,11 +13,21 @@ class MTLComponent extends Component {
             refEntity: {}
         }
     }
-    init = async (opt) => {
-        let url = opt.url || ""
-        let res = await axios.get(url);
-        this.isRefer(res.data.data);
+
+    async componentWillMount() {
+        let { url } = this.props;
+        let { data } = await getMeta(url);
+        if (data.code == 200) {
+            this.isRefer(data.data);
+            console.log(data.data);
+        }
     }
+
+    /**
+     * 处理元数据和UI绑定
+     *
+     * @param {object} data
+     */
     isRefer = (data) => {
         if (data.refEntity) {
             let { refEntity, gridMeta } = data;
@@ -32,8 +45,12 @@ class MTLComponent extends Component {
             })
         }
     }
+
     render() {
-        return <div>hhh</div>
+        let _this = this;
+        return <div className="mtl-layout">
+            <Layout />
+        </div>
     }
 }
 

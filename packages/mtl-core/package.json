@@ -33,6 +33,7 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "axios": "^0.18.0",
+    "mini-store": "^2.0.0",
     "mtl-components": "^0.0.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"

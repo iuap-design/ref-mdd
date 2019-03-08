@@ -12,7 +12,9 @@ export default {
     format: 'umd',
     name: 'MTLCore',
     globals: {
-      react: 'React'
+      react: 'React',
+      axios: 'axios',
+      'mini-store': "miniStore"
     }
   },
   external: [
@@ -21,7 +23,7 @@ export default {
   ],
   plugins: [
     resolve(),
-    
+
     babel({
       runtimeHelpers: true,
       exclude: 'node_modules/**' // only transpile our source code

@@ -1,10 +1,11 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
-	typeof define === 'function' && define.amd ? define(['react'], factory) :
-	(global = global || self, global.MTLCore = factory(global.React));
-}(this, function (React) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios')) :
+	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios'], factory) :
+	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios));
+}(this, function (React, miniStore, axios) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
+	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
 
 	function createCommonjsModule(fn, module) {
 		return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -817,7 +818,91 @@
 
 	var inheritsLoose = _inheritsLoose;
 
-	var axios = require('axios');
+	function getMeta(url) {
+	  return axios({
+	    timeout: 8000,
+	    method: 'get',
+	    url: url,
+	    params: {
+	      r: Math.random()
+	    }
+	  });
+	}
+
+	var _dec, _class, _temp;
+	var Button = (_dec = miniStore.connect(function (state) {
+	  return {
+	    count: state.count
+	  };
+	}), _dec(_class = (_temp =
+	/*#__PURE__*/
+	function (_Component) {
+	  inheritsLoose(Button, _Component);
+
+	  function Button() {
+	    var _this;
+
+	    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+
+	    _this.handleClick = function (step) {
+	      return function () {
+	        var store = _this.props.store;
+
+	        var _store$getState = store.getState(),
+	            count = _store$getState.count;
+
+	        console.log(store.getState());
+	        store.setState({
+	          count: count + step
+	        });
+	      };
+	    };
+
+	    return _this;
+	  }
+
+	  var _proto = Button.prototype;
+
+	  _proto.render = function render() {
+	    return React__default.createElement("div", null, React__default.createElement("input", {
+	      type: "button",
+	      onClick: this.handleClick(1),
+	      value: this.props.count
+	    }));
+	  };
+
+	  return Button;
+	}(React.Component), _temp)) || _class);
+
+	var Layout =
+	/*#__PURE__*/
+	function (_Component) {
+	  inheritsLoose(Layout, _Component);
+
+	  function Layout(props) {
+	    var _this;
+
+	    _this = _Component.call(this, props) || this;
+	    _this.store = miniStore.create({
+	      count: 3
+	    });
+	    return _this;
+	  }
+
+	  var _proto = Layout.prototype;
+
+	  _proto.render = function render() {
+	    return React__default.createElement(miniStore.Provider, {
+	      store: this.store
+	    }, React__default.createElement("div", null, React__default.createElement(Button, null)));
+	  };
+
+	  return Layout;
+	}(React.Component);
 
 	var MTLComponent =
 	/*#__PURE__*/
@@ -825,49 +910,16 @@
 	  inheritsLoose(MTLComponent, _Component);
 
 	  function MTLComponent(props) {
-	    var _this;
+	    var _this2;
 
-	    _this = _Component.call(this, props) || this;
+	    _this2 = _Component.call(this, props) || this;
 
-	    _this.init =
-	    /*#__PURE__*/
-	    function () {
-	      var _ref = asyncToGenerator(
-	      /*#__PURE__*/
-	      regenerator.mark(function _callee(opt) {
-	        var url, res;
-	        return regenerator.wrap(function _callee$(_context) {
-	          while (1) {
-	            switch (_context.prev = _context.next) {
-	              case 0:
-	                url = opt.url || "";
-	                _context.next = 3;
-	                return axios.get(url);
-
-	              case 3:
-	                res = _context.sent;
-
-	                _this.isRefer(res.data.data);
-
-	              case 5:
-	              case "end":
-	                return _context.stop();
-	            }
-	          }
-	        }, _callee);
-	      }));
-
-	      return function (_x) {
-	        return _ref.apply(this, arguments);
-	      };
-	    }();
-
-	    _this.isRefer = function (data) {
+	    _this2.isRefer = function (data) {
 	      if (data.refEntity) {
 	        var refEntity = data.refEntity,
 	            gridMeta = data.gridMeta;
 
-	        _this.setState({
+	        _this2.setState({
 	          viewmodel: gridMeta.viewmodel,
 	          viewapplication: gridMeta.viewapplication,
 	          refEntity: refEntity
@@ -876,25 +928,74 @@
 	        var viewmodel = data.viewmodel,
 	            viewapplication = data.viewapplication;
 
-	        _this.setState({
+	        _this2.setState({
 	          viewmodel: viewmodel,
 	          viewapplication: viewapplication
 	        });
 	      }
 	    };
 
-	    _this.state = {
+	    _this2.state = {
 	      viewmodel: {},
 	      viewapplication: {},
 	      refEntity: {}
 	    };
-	    return _this;
+	    return _this2;
 	  }
 
 	  var _proto = MTLComponent.prototype;
 
+	  _proto.componentWillMount =
+	  /*#__PURE__*/
+	  function () {
+	    var _componentWillMount = asyncToGenerator(
+	    /*#__PURE__*/
+	    regenerator.mark(function _callee() {
+	      var url, _ref, data;
+
+	      return regenerator.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              url = this.props.url;
+	              _context.next = 3;
+	              return getMeta(url);
+
+	            case 3:
+	              _ref = _context.sent;
+	              data = _ref.data;
+
+	              if (data.code == 200) {
+	                this.isRefer(data.data);
+	                console.log(data.data);
+	              }
+
+	            case 6:
+	            case "end":
+	              return _context.stop();
+	          }
+	        }
+	      }, _callee, this);
+	    }));
+
+	    function componentWillMount() {
+	      return _componentWillMount.apply(this, arguments);
+	    }
+
+	    return componentWillMount;
+	  }()
+	  /**
+	   * 处理元数据和UI绑定
+	   *
+	   * @param {object} data
+	   */
+	  ;
+
 	  _proto.render = function render() {
-	    return React__default.createElement("div", null, "hhh");
+
+	    return React__default.createElement("div", {
+	      className: "mtl-layout"
+	    }, React__default.createElement(Layout, null));
 	  };
 
 	  return MTLComponent;
@@ -910,4 +1011,3 @@
 	return MTLCore;
 
 }));
-//# sourceMappingURL=mtl-core.js.map
