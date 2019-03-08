@@ -829,22 +829,24 @@
 	  });
 	}
 
-	var MTLInput =
+	var RefInput =
 	/*#__PURE__*/
 	function (_Component) {
-	  inheritsLoose(MTLInput, _Component);
+	  inheritsLoose(RefInput, _Component);
 
-	  function MTLInput() {
+	  function RefInput() {
 	    return _Component.apply(this, arguments) || this;
 	  }
 
-	  var _proto = MTLInput.prototype;
+	  var _proto = RefInput.prototype;
 
 	  _proto.render = function render() {
-	    return React__default.createElement("div", null, React__default.createElement(tinperBee.FormControl, null));
+	    return React__default.createElement("div", null, React__default.createElement(tinperBee.FormControl, {
+	      value: "\u6211\u662F\u5143\u6570\u636E\u751F\u6210\u7684"
+	    }));
 	  };
 
-	  return MTLInput;
+	  return RefInput;
 	}(React.Component);
 
 	var _dec, _class;
@@ -864,7 +866,7 @@
 	  var _proto = RefRender.prototype;
 
 	  _proto.render = function render() {
-	    return React__default.createElement("div", null, React__default.createElement(MTLInput, null));
+	    return React__default.createElement(RefInput, null);
 	  };
 
 	  return RefRender;
