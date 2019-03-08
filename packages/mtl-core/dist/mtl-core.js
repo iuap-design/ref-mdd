@@ -841,6 +841,8 @@
 	  var _proto = RefInput.prototype;
 
 	  _proto.render = function render() {
+	    console.log(this.props.meta); // 生成参照的元数据
+
 	    return React__default.createElement("div", null, React__default.createElement(tinperBee.FormControl, {
 	      value: "\u6211\u662F\u5143\u6570\u636E\u751F\u6210\u7684"
 	    }));
@@ -866,7 +868,17 @@
 	  var _proto = RefRender.prototype;
 
 	  _proto.render = function render() {
-	    return React__default.createElement(RefInput, null);
+	    var _this$props = this.props,
+	        refEntity = _this$props.refEntity,
+	        viewApplication = _this$props.viewApplication,
+	        viewmodel = _this$props.viewmodel;
+	    return React__default.createElement(RefInput, {
+	      meta: {
+	        refEntity: refEntity,
+	        viewApplication: viewApplication,
+	        viewmodel: viewmodel
+	      }
+	    });
 	  };
 
 	  return RefRender;

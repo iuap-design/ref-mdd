@@ -6,8 +6,13 @@ import RefInput from '../../components/RefControl/RefInput';
 @connect(state => ({ count: state.count }))
 class RefRender extends Component {
     render() {
+        let { refEntity, viewApplication, viewmodel } = this.props;
         return (
-            <RefInput />
+            <RefInput meta={{
+                refEntity,
+                viewApplication,
+                viewmodel
+            }} />
         );
     }
 }
