@@ -10,6 +10,7 @@
     "test:watch": "npm test -- --watch",
     "test:cov": "npm test -- --coverage",
     "dev": "rollup -c -w",
+    "dev:map": "rollup -c -w -m",
     "build": "rollup -c"
   },
   "author": "yonyou fed",
