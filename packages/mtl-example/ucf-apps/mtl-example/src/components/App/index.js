@@ -1,28 +1,42 @@
 import React, { Component } from 'react';
 import { actions } from 'mirrorx';
 import MtlCore, { MTLComponent } from 'mtl-core';
+import { Row, Col, FormControl } from 'tinper-bee';
 
 
 import './index.less';
 
-class App extends MTLComponent {
+class App extends Component {
     constructor(props) {
         super(props);
     }
+    url = "/mock/717/dept/getRefMeta";
     componentWillMount() {
         //actions.app.getMeta();
         //actions.app.getRef();
-        this.init({
-            url: "/mock/717/dept/getRefMeta"
-        });
     }
 
     render() {
         const _this = this;
-        console.log(_this.state)
         return (
             <div className="home-wrap">
-                <MTLComponent />
+
+                <Row>
+                    <Col md={4} xs={6}>
+                        <FormControl />
+                    </Col>
+                    <Col md={4} xs={6}>
+                        <FormControl />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={4} xs={6}>
+                        <FormControl />
+                    </Col>
+                    <Col md={4} xs={6}>
+                        <MTLComponent url={this.url} />
+                    </Col>
+                </Row>
             </div>
         );
     }
