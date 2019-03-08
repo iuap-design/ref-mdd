@@ -16,8 +16,10 @@ export default {
     }
   },
   external: [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {})
+    pkg.dependencies.react,
+    pkg.dependencies['rect-dom']
+    // ...Object.keys(pkg.dependencies || {}),
+    // ...Object.keys(pkg.peerDependencies || {})
   ],
   plugins: [
     resolve(),
