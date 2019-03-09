@@ -2,25 +2,28 @@ import React, { Component } from 'react';
 import { Provider, create, connect } from 'mini-store';
 
 import { getMeta } from './utils';
-import Layout from './components/Layout';
-import ViewContent from './render-engine';
+import RenderEngine from './render-engine';
 
 class MTLComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            viewmodel: {},
-            viewapplication: {},
-            refEntity: {}
+            isNeedRender: false
         }
+        this.store = create({
+            count: 0
+        });
     }
-
+    meta = {};
     async componentWillMount() {
         let { url } = this.props;
         let { data } = await getMeta(url);
+        const { isNeedRender } = this.state;
         if (data.code == 200) {
             this.isRefer(data.data);
-            console.log(data.data);
+            this.setState({
+                isNeedRender: !isNeedRender
+            });
         }
     }
 
@@ -32,27 +35,26 @@ class MTLComponent extends Component {
     isRefer = (data) => {
         if (data.refEntity) {
             let { refEntity, gridMeta } = data;
-            this.setState({
+            this.meta = {
                 viewmodel: gridMeta.viewmodel,
-                viewapplication: gridMeta.viewapplication,
+                viewApplication: gridMeta.viewApplication,
                 refEntity
-            })
+            }
         } else {
-            let { viewmodel, viewapplication } = data;
-
-            this.setState({
+            let { viewmodel, viewApplication } = data;
+            this.meta = {
                 viewmodel,
-                viewapplication
-            })
+                viewApplication
+            }
         }
     }
 
     render() {
-        let _this = this;
-        return <div className="mtl-layout">
-            <Layout />
-            {/* <ViewContent /> */}
-        </div>
+        return (
+            <Provider store={this.store}>
+                <RenderEngine meta={this.meta} />
+            </Provider>
+        )
     }
 }
 
