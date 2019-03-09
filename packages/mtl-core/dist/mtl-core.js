@@ -995,7 +995,7 @@
 
 	    return React__default.createElement("div", {
 	      className: "mtl-layout"
-	    }, React__default.createElement(Layout, null));
+	    }, React__default.createElement(Layout, null), React__default.createElement(MTLCore, null));
 	  };
 
 	  return MTLComponent;

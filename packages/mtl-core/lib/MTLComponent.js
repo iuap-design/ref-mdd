@@ -3,6 +3,7 @@ import { Provider, create, connect } from 'mini-store';
 
 import { getMeta } from './utils';
 import Layout from './components/Layout';
+import ViewContent from './render-engine';
 
 class MTLComponent extends Component {
     constructor(props) {
@@ -50,6 +51,7 @@ class MTLComponent extends Component {
         let _this = this;
         return <div className="mtl-layout">
             <Layout />
+            {/* <ViewContent /> */}
         </div>
     }
 }
