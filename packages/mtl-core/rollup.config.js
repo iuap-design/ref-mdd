@@ -2,7 +2,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
-
+import json from 'rollup-plugin-json';
 import pkg from './package.json'
 
 export default {
@@ -19,16 +19,25 @@ export default {
     }
   },
   external: [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {})
+    pkg.dependencies.react,
+    pkg.dependencies['rect-dom']
+    // ...Object.keys(pkg.dependencies || {}),
+    // ...Object.keys(pkg.peerDependencies || {})
   ],
   plugins: [
     resolve(),
 
     babel({
       runtimeHelpers: true,
-      exclude: 'node_modules/**' // only transpile our source code
+      exclude: [
+            'node_modules/**',
+             '*.json'
+      ],// only transpile our source code
     }),
-    commonjs()
+    json({
+      exclude: [ 'node_modules/**' ]
+    }),
+    commonjs(),
+  
   ]
 };
