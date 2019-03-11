@@ -37,6 +37,7 @@
     "mtl-components": "^0.0.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "ref-core": "0.0.11",
     "tinper-bee": "^2.0.0-alpha.9"
   }
 }

@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'mini-store';
 import MTLButton from '../../components/MTLButton';
-import MTLInput from '../../components/MTLInput';
+import RefInput from '../../components/RefControl/RefInput';
 
 @connect(state => ({ count: state.count }))
 class RefRender extends Component {
     render() {
+        let { refEntity, viewApplication, viewmodel } = this.props;
         return (
-            <div>
-                <MTLInput />
-            </div>
+            <RefInput meta={{
+                refEntity,
+                viewApplication,
+                viewmodel
+            }} />
         );
     }
 }
