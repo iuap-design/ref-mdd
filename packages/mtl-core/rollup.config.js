@@ -37,7 +37,17 @@ export default {
     json({
       exclude: [ 'node_modules/**' ]
     }),
-    commonjs(),
-  
+    json(),
+    commonjs({
+      namedExports: {
+        // left-hand side can be an absolute path, a path
+        // relative to the current directory, or the name
+        // of a module in node_modules
+        'node_modules/react/index.js': [ 'Component' ],
+        'node_modules/tinper-bee/build/tinper-bee.js': [ 'FormControl', 'Button' ]
+        
+      }
+    })
+    
   ]
 };
