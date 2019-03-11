@@ -16,11 +16,9 @@ class MTLComponent extends Component {
         
     }
     meta = {};
-    async componentWillMount() {
+    componentDidMount() {
         let url = this.props.url || '';
-        
-        await this.handleDynamicView(url)
-        
+        this.handleDynamicView(url)
     }
 
     /**
@@ -87,12 +85,9 @@ class MTLComponent extends Component {
     }
 
     render() {
-
-        let _this = this;
-
         return (
             <Provider store={this.store}>
-                <RenderEngine meta={_this.meta} />
+                <RenderEngine meta={this.meta} />
             </Provider>
         )
     }
