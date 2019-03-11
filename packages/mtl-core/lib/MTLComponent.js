@@ -15,7 +15,7 @@ class MTLComponent extends Component {
         });
     }
     meta = {};
-    async componentWillMount() {
+    componentWillMount() {
         let url = this.props.url || '';
         
         this.handleDynamicView()
@@ -38,7 +38,7 @@ class MTLComponent extends Component {
      * billtype：页面类型，列表还是表单
      * billno：模块名称
      */
-    getMetaDataByBrowserURL = () => {
+    getMetaDataByBrowserURL = async () => {
         // ""
         let pathnameArr = window.location.pathname.split('/');
         if(pathnameArr[1] == 'meta'){
@@ -49,7 +49,7 @@ class MTLComponent extends Component {
         let { data } = await getMeta(`/meta?billtype=${billtype}&billno=${billno}`);
     }
 
-    getMetaDataByCustomURL = url => {
+    getMetaDataByCustomURL = async url => {
         let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
         if (data.code == 200) {
