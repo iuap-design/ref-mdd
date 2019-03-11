@@ -3,24 +3,16 @@ import { connect } from 'mini-store';
 import RefRender from './refer-render';
 
 
-// // switch(cBillType){
-// //     case "voucher": 
+// switch(cBillType){
+//     case "voucher": 
 
-// //     case "ArchiveList":
+//     case "ArchiveList":
 
-// //     case "grid"
-// // }
-// import React ,{ Component }from "react";
-// import Routes from './routes'
-
-// class ViewContent extends Component{
-
-//     render(){
-//         return <Routes/>
-//     }
+//     case "grid"
 // }
 
-// export default ViewContent;
+//
+
 @connect()
 class RenderEngine extends Component {
     constructor(props) {
