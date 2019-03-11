@@ -8,11 +8,6 @@ module.exports = (env, argv) => {
         context: "",// 上下文对象
         // 启动所有模块，默认这个配置，速度慢的时候使用另外的配置
         bootList: true,
-        // 启动这两个模块，启动调试、构建
-        // bootList: [
-        //     "demo-app-org",
-        //     "demo-app-staff"
-        // ],
         // 代理的配置
         proxy: [
             {

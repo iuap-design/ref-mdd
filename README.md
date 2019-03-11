@@ -12,23 +12,22 @@
  
 ## 顶层设计：开发者视角，最终使用方式推演框架的设计（以终为始）
 
-1、package 方式使用：
+### 1、package 组件包方式
 
 ```
 
 import { MTLComponent } from 'mtl-core';
 
-// 创建一个模型驱动的组件，MTLCore wrapper 高阶
-class LogicComponent extends MTLComponent {
-    constructor(){
-        this.init(url);
-    }
-}
+const LogicComponent = () => (
+    <div className="home-wrap">
+        <MTLComponent url='url' />
+    </div>
+);
 
-// 大组件概念：模板，我们掌控全局
+// 大组件：UI模板
 ReactDOM.render(<LogicComponent />, root)
 
-// 小组件概念：纯组件，被引用
+// 小组件：纯组件，被引用
 <Form>
     <Input />
     <LogicComponent />
@@ -37,7 +36,7 @@ ReactDOM.render(<LogicComponent />, root)
 
 ```
 
-2、cjs 格式的CDN文件方式使用：
+### 2、cjs 格式的CDN文件
 
 - 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/mtl-core/0.0.1/js/mtl-core.js"></script>`
 
