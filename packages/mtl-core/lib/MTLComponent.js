@@ -13,12 +13,14 @@ class MTLComponent extends Component {
         this.store = create({
             count: 0
         });
+        
     }
     meta = {};
-    componentWillMount() {
+    async componentWillMount() {
         let url = this.props.url || '';
         
-        this.handleDynamicView()
+        await this.handleDynamicView(url)
+        
     }
 
     /**
@@ -39,7 +41,6 @@ class MTLComponent extends Component {
      * billno：模块名称
      */
     getMetaDataByBrowserURL = async () => {
-        // ""
         let pathnameArr = window.location.pathname.split('/');
         if(pathnameArr[1] == 'meta'){
             let billtype = pathnameArr[2]
@@ -50,8 +51,9 @@ class MTLComponent extends Component {
     }
 
     getMetaDataByCustomURL = async url => {
-        let { data } = await getMeta(url);
+        let {data} = await getMeta(url);
         const { isNeedRender } = this.state;
+
         if (data.code == 200) {
             this.isRefer(data.data);
             this.setState({
@@ -81,12 +83,16 @@ class MTLComponent extends Component {
                 refEntity: {}
             }
         }
+
     }
 
     render() {
+
+        let _this = this;
+
         return (
             <Provider store={this.store}>
-                <RenderEngine meta={this.meta} />
+                <RenderEngine meta={_this.meta} />
             </Provider>
         )
     }
