@@ -6,7 +6,6 @@ let MTLCore = {
     // MTLModel,
 }
 
-// rollup 中的 output 配置 globals 
 window.MTLCore = MTLCore
 export default MTLCore
 
