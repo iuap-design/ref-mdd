@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Provider, create, connect } from 'mini-store';
+import { Provider, connect } from 'mini-store';
 
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
+import store from './datamodel/store'
 
 class MTLComponent extends Component {
     constructor(props) {
@@ -11,17 +12,12 @@ class MTLComponent extends Component {
             isNeedRender: false,
             isLoading: true
         }
-        this.store = create({
-            count: 0
-        });
-        
     }
     meta = {};
     componentWillMount() {
         let url = this.props.url || '';
         
         this.handleDynamicView(url)
-        
     }
 
     /**
@@ -90,10 +86,10 @@ class MTLComponent extends Component {
     render() {
         let {isLoading} = this.state
         if(isLoading){
-            return <p>isLoading...</p>
+            return <p>数据请求中...</p>
         }else{
             return (
-                <Provider store={this.store}>
+                <Provider store={store}>
                     <RenderEngine meta={this.meta} />
                 </Provider>
             )
