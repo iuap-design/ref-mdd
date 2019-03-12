@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios'), require('ref-core/lib/refs/refcorewithinput.css'), require('tinper-bee')) :
-	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios', 'ref-core/lib/refs/refcorewithinput.css', 'tinper-bee'], factory) :
-	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios, null, global.TinperBee));
-}(this, function (React, miniStore, axios, refcorewithinput_css, tinperBee) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios'), require('tinper-bee')) :
+	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios', 'tinper-bee'], factory) :
+	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios, global.TinperBee));
+}(this, function (React, miniStore, axios, tinperBee) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
 	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
@@ -829,6 +829,36 @@
 	  });
 	}
 
+	function styleInject(css, ref) {
+	  if ( ref === void 0 ) ref = {};
+	  var insertAt = ref.insertAt;
+
+	  if (!css || typeof document === 'undefined') { return; }
+
+	  var head = document.head || document.getElementsByTagName('head')[0];
+	  var style = document.createElement('style');
+	  style.type = 'text/css';
+
+	  if (insertAt === 'top') {
+	    if (head.firstChild) {
+	      head.insertBefore(style, head.firstChild);
+	    } else {
+	      head.appendChild(style);
+	    }
+	  } else {
+	    head.appendChild(style);
+	  }
+
+	  if (style.styleSheet) {
+	    style.styleSheet.cssText = css;
+	  } else {
+	    style.appendChild(document.createTextNode(css));
+	  }
+	}
+
+	var css = "div{background:red;color:#f0f8ff}";
+	styleInject(css);
+
 	// const props = {
 	//     param: {
 	//         "refCode": "new_bd_staff"
@@ -1270,6 +1300,10 @@
 	  return RenderEngine;
 	}(React.Component), _temp$1)) || _class$1);
 
+	var store = miniStore.create({
+	  count: 0
+	});
+
 	var MTLComponent =
 	/*#__PURE__*/
 	function (_Component) {
@@ -1388,9 +1422,6 @@
 	      isNeedRender: false,
 	      isLoading: true
 	    };
-	    _this.store = miniStore.create({
-	      count: 0
-	    });
 	    return _this;
 	  }
 
@@ -1412,10 +1443,10 @@
 	    var isLoading = this.state.isLoading;
 
 	    if (isLoading) {
-	      return React__default.createElement("p", null, "isLoading...");
+	      return React__default.createElement("p", null, "\u6570\u636E\u8BF7\u6C42\u4E2D...");
 	    } else {
 	      return React__default.createElement(miniStore.Provider, {
-	        store: this.store
+	        store: store
 	      }, React__default.createElement(RenderEngine, {
 	        meta: this.meta
 	      }));
