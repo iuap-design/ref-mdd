@@ -4,7 +4,13 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 // import json from 'rollup-plugin-json';
 import pkg from './package.json'
+import postcss from 'rollup-plugin-postcss';
 
+// PostCSS plugins
+import simplevars from 'postcss-simple-vars';
+import nested from 'postcss-nested';
+import cssnext from 'postcss-cssnext';
+import cssnano from 'cssnano';
 export default {
   input: 'lib/index.js',
   output: {
@@ -25,6 +31,16 @@ export default {
     ...Object.keys(pkg.peerDependencies || {})
   ],
   plugins: [
+    postcss({
+      plugins:[
+              simplevars(),
+              nested(),
+              cssnext({ warnForDuplicates: false, }),
+              cssnano(),
+             ],
+      extract: true,
+      extensions: [ '.css','.scss' ],
+    }),
     resolve(),
 
     babel({
