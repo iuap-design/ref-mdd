@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { connect } from 'mini-store';
 // import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
-
+import ReferTable from '../../components/RefControl/Table';
 @connect(state => ({ count: state.count }))
 class RefRender extends Component {
     renderComp = () => {
@@ -20,6 +20,7 @@ class RefRender extends Component {
             {
                 this.renderComp()
             }
+            <ReferTable />
         </div>);
     }
 }
