@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 // import RefMultipleTableBaseUI,{ SearchPanelItem } from 'ref-multiple-table-ui';
 // import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 import 'ref-core/css/refcorewithinput.css';
-import './a.css';
 import {FormControl,Button} from 'tinper-bee';
 import { refValParse } from '../util';
 // import request from './request';

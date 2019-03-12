@@ -37,12 +37,10 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "axios": "^0.18.0",
-    "less": "^3.9.0",
     "mini-store": "^2.0.0",
-    "node-sass": "^4.11.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "ref-core": "0.0.11",
+    "ref-core": "0.3.3-beta",
     "ref-multiple-table-ui": "^1.0.0",
     "tinper-bee": "^2.0.0-alpha.9"
   }
