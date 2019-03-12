@@ -1,18 +1,24 @@
 /**
- * 处理参照组件渲染 - 判断
+ * 处理参照组件渲染
  */
 
 import React, { Component } from 'react';
-import { connect } from 'mini-store';
-// import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
-import ReferTable from '../../components/RefControl/Table';
-@connect(state => ({ count: state.count }))
+import TableRender from './TableRender';
+
 class RefRender extends Component {
     renderComp = () => {
         let { refEntity, viewApplication, viewmodel } = this.props;
-        return <div>
-            ref
-        </div>
+        // 判断 refEntity 需要的参照模板类型
+        switch (refEntity.cTpltype) {
+            case 'Table':// 简单表格
+                return <TableRender
+                    refEntity={refEntity}
+                    viewApplication={viewApplication}
+                    viewmodel={viewmodel}
+                />
+            default:
+                return <div>参照渲染类型错误</div>
+        }
     }
     render() {
 
@@ -20,7 +26,6 @@ class RefRender extends Component {
             {
                 this.renderComp()
             }
-            <ReferTable />
         </div>);
     }
 }
