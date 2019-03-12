@@ -41,7 +41,7 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "ref-core": "0.3.3-beta",
-    "ref-multiple-table-ui": "^1.0.0",
+    "ref-multiple-table-ui": "^1.0.4",
     "tinper-bee": "^2.0.0-alpha.9"
   }
 }
