@@ -1,11 +1,22 @@
-import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
-import React, { Component } from 'react';
-import { Button } from 'tinper-bee';
+"use strict";
+
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _inheritsLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/inheritsLoose"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _tinperBee = require("tinper-bee");
 
 var MTLButton =
 /*#__PURE__*/
 function (_Component) {
-  _inheritsLoose(MTLButton, _Component);
+  (0, _inheritsLoose2.default)(MTLButton, _Component);
 
   function MTLButton() {
     return _Component.apply(this, arguments) || this;
@@ -14,12 +25,13 @@ function (_Component) {
   var _proto = MTLButton.prototype;
 
   _proto.render = function render() {
-    return React.createElement("div", null, React.createElement(Button, {
+    return _react.default.createElement("div", null, _react.default.createElement(_tinperBee.Button, {
       colors: "success"
     }, "\u6309\u94AE"));
   };
 
   return MTLButton;
-}(Component);
+}(_react.Component);
 
-export default MTLButton;
+var _default = MTLButton;
+exports.default = _default;

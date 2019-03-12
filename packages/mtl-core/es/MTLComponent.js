@@ -1,35 +1,50 @@
-import _regeneratorRuntime from "@babel/runtime/regenerator";
-import _asyncToGenerator from "@babel/runtime/helpers/asyncToGenerator";
-import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
-import React, { Component } from 'react';
-import { Provider, create, connect } from 'mini-store';
-import { getMeta } from './utils';
-import RenderEngine from './render-engine';
+"use strict";
+
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+var _inheritsLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/inheritsLoose"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _miniStore = require("mini-store");
+
+var _utils = require("./utils");
+
+var _renderEngine = _interopRequireDefault(require("./render-engine"));
 
 var MTLComponent =
 /*#__PURE__*/
 function (_Component) {
-  _inheritsLoose(MTLComponent, _Component);
+  (0, _inheritsLoose2.default)(MTLComponent, _Component);
 
   function MTLComponent(props) {
-    var _this2;
+    var _this;
 
-    _this2 = _Component.call(this, props) || this;
-    _this2.meta = {};
+    _this = _Component.call(this, props) || this;
+    _this.meta = {};
 
-    _this2.handleDynamicView = function (url) {
-      if (url) _this2.getMetaDataByCustomURL(url); // 该逻辑暂时无用，用于考虑后续的兼容性。
-      else _this2.getMetaDataByBrowserURL();
+    _this.handleDynamicView = function (url) {
+      if (url) _this.getMetaDataByCustomURL(url); // 该逻辑暂时无用，用于考虑后续的兼容性。
+      else _this.getMetaDataByBrowserURL();
     };
 
-    _this2.getMetaDataByBrowserURL =
+    _this.getMetaDataByBrowserURL =
     /*#__PURE__*/
-    _asyncToGenerator(
+    (0, _asyncToGenerator2.default)(
     /*#__PURE__*/
-    _regeneratorRuntime.mark(function _callee() {
+    _regenerator.default.mark(function _callee() {
       var pathnameArr, _billtype, _billno, _ref2, data;
 
-      return _regeneratorRuntime.wrap(function _callee$(_context) {
+      return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -41,7 +56,7 @@ function (_Component) {
               }
 
               _context.next = 4;
-              return getMeta("/meta?billtype=" + billtype + "&billno=" + billno);
+              return (0, _utils.getMeta)("/meta?billtype=" + billtype + "&billno=" + billno);
 
             case 4:
               _ref2 = _context.sent;
@@ -55,40 +70,35 @@ function (_Component) {
       }, _callee);
     }));
 
-    _this2.getMetaDataByCustomURL =
+    _this.getMetaDataByCustomURL =
     /*#__PURE__*/
     function () {
-      var _ref3 = _asyncToGenerator(
+      var _ref3 = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
-      _regeneratorRuntime.mark(function _callee2(url) {
+      _regenerator.default.mark(function _callee2(url) {
         var _ref4, data, isNeedRender;
 
-        return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return _regenerator.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return getMeta(url);
+                return (0, _utils.getMeta)(url);
 
               case 2:
                 _ref4 = _context2.sent;
                 data = _ref4.data;
-                isNeedRender = _this2.state.isNeedRender;
+                isNeedRender = _this.state.isNeedRender;
 
-                if (!(data.code == 200)) {
-                  _context2.next = 9;
-                  break;
+                if (data.code == 200) {
+                  _this.isRefer(data.data);
+
+                  _this.setState({
+                    isNeedRender: !isNeedRender
+                  });
                 }
 
-                _context2.next = 8;
-                return _this2.isRefer(data.data);
-
-              case 8:
-                _this2.setState({
-                  isNeedRender: !isNeedRender
-                });
-
-              case 9:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -101,11 +111,11 @@ function (_Component) {
       };
     }();
 
-    _this2.isRefer = function (data) {
+    _this.isRefer = function (data) {
       if (data.refEntity) {
         var refEntity = data.refEntity,
             gridMeta = data.gridMeta;
-        _this2.meta = {
+        _this.meta = {
           viewmodel: gridMeta.viewmodel,
           viewApplication: gridMeta.viewApplication,
           refEntity: refEntity
@@ -113,7 +123,7 @@ function (_Component) {
       } else {
         var viewmodel = data.viewmodel,
             viewApplication = data.viewApplication;
-        _this2.meta = {
+        _this.meta = {
           viewmodel: viewmodel,
           viewApplication: viewApplication,
           refEntity: {}
@@ -121,19 +131,23 @@ function (_Component) {
       }
     };
 
-    _this2.state = {
-      isNeedRender: false
+    _this.state = {
+      isNeedRender: false,
+      isLoading: false
     };
-    _this2.store = create({
+    _this.store = (0, _miniStore.create)({
       count: 0
     });
-    return _this2;
+    return _this;
   }
 
   var _proto = MTLComponent.prototype;
 
   _proto.componentWillMount = function componentWillMount() {
     var url = this.props.url || '';
+    this.setState({
+      isLoading: true
+    });
     this.handleDynamicView(url);
   }
   /**
@@ -145,16 +159,21 @@ function (_Component) {
   ;
 
   _proto.render = function render() {
-    var _this = this;
+    var isLoading = this.state.isLoading;
 
-    return React.createElement(Provider, {
-      store: this.store
-    }, React.createElement(RenderEngine, {
-      meta: _this.meta
-    }));
+    if (isLoading) {
+      return _react.default.createElement("p", null, "isLoading...");
+    } else {
+      return _react.default.createElement(_miniStore.Provider, {
+        store: this.store
+      }, _react.default.createElement(_renderEngine.default, {
+        meta: this.meta
+      }));
+    }
   };
 
   return MTLComponent;
-}(Component);
+}(_react.Component);
 
-export default MTLComponent;
+var _default = MTLComponent;
+exports.default = _default;

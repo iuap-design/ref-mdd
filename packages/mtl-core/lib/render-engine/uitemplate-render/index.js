@@ -12,8 +12,8 @@ export default class UITemplateRender extends Component {
 
         console.log(viewApplication)
         console.log(viewmodel)
-        
-        renturn (
+
+        return (
             <div>UITemplateRender</div>
         )
     }

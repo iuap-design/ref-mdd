@@ -8,21 +8,20 @@ class MTLComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isNeedRender: false
+            isNeedRender: false,
+            isLoading: true
         }
         this.store = create({
             count: 0
         });
         
     }
-    meta = { 
-        viewmodel: {},
-        viewApplication: {},
-        refEntity: {}
-    };
+    meta = {};
     componentWillMount() {
         let url = this.props.url || '';
+        
         this.handleDynamicView(url)
+        
     }
 
     /**
@@ -32,7 +31,6 @@ class MTLComponent extends Component {
      * 浏览器URL示例："/meta/:billtype/:billno"
      */
     handleDynamicView = url => {
-        console.log("url=======",url);
         if(url) this.getMetaDataByCustomURL(url)
         // 该逻辑暂时无用，用于考虑后续的兼容性。
         else this.getMetaDataByBrowserURL()
@@ -59,7 +57,6 @@ class MTLComponent extends Component {
 
         if (data.code == 200) {
             this.isRefer(data.data);
-            console.log("**fuzhi**",data.data,isNeedRender);
             this.setState({
                 isNeedRender: !isNeedRender
             });
@@ -72,32 +69,36 @@ class MTLComponent extends Component {
      * @param {object} data
      */
     isRefer = (data) => {
-        debugger
         if (data.refEntity) {
-            let { refEntity={}, gridMeta } = data;
+            let { refEntity, gridMeta } = data;
             this.meta = {
                 viewmodel: gridMeta.viewmodel,
                 viewApplication: gridMeta.viewApplication,
                 refEntity
             }
         } else {
-            let { viewmodel={}, viewApplication={} } = data;
+            let { viewmodel, viewApplication } = data;
             this.meta = {
                 viewmodel,
                 viewApplication,
                 refEntity: {}
             }
         }
-
+        this.setState({isLoading: false})
     }
 
     render() {
-        console.log('render**************',this.meta);
-        return (
-            <Provider store={this.store}>
-                <RenderEngine meta={this.meta} />
-            </Provider>
-        )
+        let {isLoading} = this.state
+        if(isLoading){
+            return <p>isLoading...</p>
+        }else{
+            return (
+                <Provider store={this.store}>
+                    <RenderEngine meta={this.meta} />
+                </Provider>
+            )
+        }
+        
     }
 }
 

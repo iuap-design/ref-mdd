@@ -1,10 +1,20 @@
-import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
-import React, { Component } from 'react';
+"use strict";
+
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _inheritsLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/inheritsLoose"));
+
+var _react = _interopRequireWildcard(require("react"));
 
 var UITemplateRender =
 /*#__PURE__*/
 function (_Component) {
-  _inheritsLoose(UITemplateRender, _Component);
+  (0, _inheritsLoose2.default)(UITemplateRender, _Component);
 
   function UITemplateRender(props) {
     return _Component.call(this, props) || this;
@@ -18,10 +28,10 @@ function (_Component) {
         viewmodel = _this$props.viewmodel;
     console.log(viewApplication);
     console.log(viewmodel);
-    renturn(React.createElement("div", null, "UITemplateRender"));
+    renturn(_react.default.createElement("div", null, "UITemplateRender"));
   };
 
   return UITemplateRender;
-}(Component);
+}(_react.Component);
 
-export { UITemplateRender as default };
+exports.default = UITemplateRender;
