@@ -1,19 +1,26 @@
+/**
+ * 处理参照组件渲染 - 判断
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'mini-store';
-import MTLButton from '../../components/MTLButton';
-import RefInput from '../../components/RefControl/RefInput';
+// import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 
 @connect(state => ({ count: state.count }))
 class RefRender extends Component {
-    render() {
+    renderComp = () => {
         let { refEntity, viewApplication, viewmodel } = this.props;
-        return (
-            <RefInput meta={{
-                refEntity,
-                viewApplication,
-                viewmodel
-            }} />
-        );
+        return <div>
+            ref
+        </div>
+    }
+    render() {
+
+        return (<div>
+            {
+                this.renderComp()
+            }
+        </div>);
     }
 }
 

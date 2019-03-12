@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios'), require('tinper-bee')) :
-	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios', 'tinper-bee'], factory) :
-	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios, global.TinperBee));
-}(this, function (React, miniStore, axios, tinperBee) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios')) :
+	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios'], factory) :
+	(global = global || self, global.MTLCore = factory(global.React, global.miniStore, global.axios));
+}(this, function (React, miniStore, axios) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
 	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
@@ -829,60 +829,45 @@
 	  });
 	}
 
-	var RefInput =
-	/*#__PURE__*/
-	function (_Component) {
-	  inheritsLoose(RefInput, _Component);
+	var _dec, _class, _temp;
 
-	  function RefInput() {
-	    return _Component.apply(this, arguments) || this;
-	  }
-
-	  var _proto = RefInput.prototype;
-
-	  _proto.render = function render() {
-	    console.log(this.props.meta); // 生成参照的元数据
-
-	    return React__default.createElement("div", null, React__default.createElement(tinperBee.FormControl, {
-	      value: this.props.meta.refEntity.name
-	    }));
-	  };
-
-	  return RefInput;
-	}(React.Component);
-
-	var _dec, _class;
 	var RefRender = (_dec = miniStore.connect(function (state) {
 	  return {
 	    count: state.count
 	  };
-	}), _dec(_class =
+	}), _dec(_class = (_temp =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RefRender, _Component);
 
 	  function RefRender() {
-	    return _Component.apply(this, arguments) || this;
+	    var _this;
+
+	    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+
+	    _this.renderComp = function () {
+	      var _this$props = _this.props,
+	          refEntity = _this$props.refEntity,
+	          viewApplication = _this$props.viewApplication,
+	          viewmodel = _this$props.viewmodel;
+	      return React__default.createElement("div", null, "ref");
+	    };
+
+	    return _this;
 	  }
 
 	  var _proto = RefRender.prototype;
 
 	  _proto.render = function render() {
-	    var _this$props = this.props,
-	        refEntity = _this$props.refEntity,
-	        viewApplication = _this$props.viewApplication,
-	        viewmodel = _this$props.viewmodel;
-	    return React__default.createElement(RefInput, {
-	      meta: {
-	        refEntity: refEntity,
-	        viewApplication: viewApplication,
-	        viewmodel: viewmodel
-	      }
-	    });
+	    return React__default.createElement("div", null, this.renderComp());
 	  };
 
 	  return RefRender;
-	}(React.Component)) || _class);
+	}(React.Component), _temp)) || _class);
 
 	var UITemplateRender =
 	/*#__PURE__*/
@@ -907,8 +892,8 @@
 	  return UITemplateRender;
 	}(React.Component);
 
-	var _dec$1, _class$1, _temp;
-	var RenderEngine = (_dec$1 = miniStore.connect(), _dec$1(_class$1 = (_temp =
+	var _dec$1, _class$1, _temp$1;
+	var RenderEngine = (_dec$1 = miniStore.connect(), _dec$1(_class$1 = (_temp$1 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RenderEngine, _Component);
@@ -925,8 +910,8 @@
 	          _this$props$meta$view = _this$props$meta.viewApplication,
 	          viewApplication = _this$props$meta$view === void 0 ? {} : _this$props$meta$view,
 	          _this$props$meta$view2 = _this$props$meta.viewmodel,
-	          viewmodel = _this$props$meta$view2 === void 0 ? {} : _this$props$meta$view2;
-	      console.log(refEntity, viewApplication); // 逻辑说明：
+	          viewmodel = _this$props$meta$view2 === void 0 ? {} : _this$props$meta$view2; // console.log(refEntity,viewApplication);
+	      // 逻辑说明：
 	      // 1、如果有 refEntity，则根据多端协议渲染出不同的参照组件
 	      // 2、如果无 refEntity，则该协议描述的为普通的UI模板，按正常流程进行渲染
 
@@ -954,7 +939,7 @@
 	  };
 
 	  return RenderEngine;
-	}(React.Component), _temp)) || _class$1);
+	}(React.Component), _temp$1)) || _class$1);
 
 	var MTLComponent =
 	/*#__PURE__*/
