@@ -38,8 +38,8 @@ export default {
               cssnext({ warnForDuplicates: false, }),
               cssnano(),
              ],
-      extra:true,
-      extensions: [ '.css' ],
+      extract: true,
+      extensions: [ '.css','.scss' ],
     }),
     resolve(),
 
