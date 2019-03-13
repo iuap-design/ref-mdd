@@ -1,4 +1,4 @@
-import MTLComponent from './MTLComponent'
+import MTLComponent from './MTLComponent';
 
 // 顶层对象
 let MTLCore = {

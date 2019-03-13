@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { actions } from 'mirrorx';
 import MtlCore, { MTLComponent } from 'mtl-core';
-import { Row, Col, FormControl } from 'tinper-bee';
+import { Row, Col, FormControl, Form } from 'tinper-bee';
+import RefTable from 'mtl-core/render-engine/refer-render/TableRender';
 
 
 import './index.less';
@@ -16,11 +17,16 @@ class App extends Component {
         //actions.app.getRef();
     }
 
+    submit = () => {
+        this.props.form.validateFields((error, value) => {
+            console.log(error, value);
+        });
+    }
     render() {
         const _this = this;
+        const { getFieldProps, getFieldError } = _this.props.form;
         return (
             <div className="home-wrap">
-
                 <Row>
                     <Col md={4} xs={6}>
                         <FormControl />
@@ -31,10 +37,10 @@ class App extends Component {
                 </Row>
                 <Row>
                     <Col md={4} xs={6}>
-                        <FormControl />
+                        <MTLComponent form={_this.props.form} url={this.url} />
                     </Col>
                     <Col md={4} xs={6}>
-                        <MTLComponent url={this.url} />
+                        <button onClick={this.submit}>提交</button>
                     </Col>
                 </Row>
             </div>
@@ -43,4 +49,4 @@ class App extends Component {
 }
 
 App.displayName = 'App';
-export default App;
+export default Form.createForm()(App);

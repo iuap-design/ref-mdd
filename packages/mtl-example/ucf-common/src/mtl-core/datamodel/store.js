@@ -1,9 +1,9 @@
 
 import { create } from 'mini-store';
 
-let store = create({
-    count: 0
-});
-
-export default store;
-
+export default function (meta) {
+    return create({
+        meta,
+        count: 0
+    });
+}
