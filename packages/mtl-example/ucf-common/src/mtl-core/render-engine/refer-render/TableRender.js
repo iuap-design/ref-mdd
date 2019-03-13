@@ -62,7 +62,7 @@ class TableRender extends Component {
             title: view.cTemplateTitle,
             backdrop: true,
             disabled: false,
-            multiple: false,
+            multiple: refEntity.bMultiSel,
             strictMode: true,
             miniSearch: true,
         }
