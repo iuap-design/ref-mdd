@@ -6,13 +6,12 @@ import RefTable from 'mtl-core/render-engine/refer-render/TableRender';
 
 
 import './index.less';
-const metaUrl = "/mock/717/dept/getRefMeta";
-const dataUrl = "/mock/717/dept/getRefData"
 class App extends Component {
     constructor(props) {
         super(props);
     }
-    url = "/mock/717/dept/getRefMeta";
+    metaUrl = "/mock/717/dept/getRefMeta";
+    dataUrl = "/mock/717/dept/getRefData";
     componentWillMount() {
         //actions.app.getMeta();
         //actions.app.getRef();
@@ -38,7 +37,7 @@ class App extends Component {
                 </Row>
                 <Row>
                     <Col md={4} xs={6}>
-                        <MTLComponent form={_this.props.form}url={this.metaUrl} dataUrl={this.dataUrl} />
+                        <MTLComponent form={_this.props.form} url={this.metaUrl} dataUrl={this.dataUrl} />
                     </Col>
                     <Col md={4} xs={6}>
                         <Button colors="info" onClick={this.submit}>获得参照值</Button>
