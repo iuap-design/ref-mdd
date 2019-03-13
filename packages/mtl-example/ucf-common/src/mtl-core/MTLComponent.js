@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Provider, connect } from 'mini-store';
-
+import { Provider, connect, create } from 'mini-store';
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
-import store from './datamodel/store'
+import store from './datamodel/store';
+
 
 class MTLComponent extends Component {
     constructor(props) {
@@ -12,11 +12,11 @@ class MTLComponent extends Component {
             isNeedRender: false,
             isLoading: true
         }
+
     }
     meta = {};
     componentWillMount() {
         let url = this.props.url || '';
-        
         this.handleDynamicView(url)
     }
 
@@ -27,7 +27,7 @@ class MTLComponent extends Component {
      * 浏览器URL示例："/meta/:billtype/:billno"
      */
     handleDynamicView = url => {
-        if(url) this.getMetaDataByCustomURL(url)
+        if (url) this.getMetaDataByCustomURL(url)
         // 该逻辑暂时无用，用于考虑后续的兼容性。
         else this.getMetaDataByBrowserURL()
     }
@@ -39,16 +39,15 @@ class MTLComponent extends Component {
      */
     getMetaDataByBrowserURL = async () => {
         let pathnameArr = window.location.pathname.split('/');
-        if(pathnameArr[1] == 'meta'){
+        if (pathnameArr[1] == 'meta') {
             let billtype = pathnameArr[2]
             let billno = pathnameArr[3]
         }
-
         let { data } = await getMeta(`/meta?billtype=${billtype}&billno=${billno}`);
     }
 
     getMetaDataByCustomURL = async url => {
-        let {data} = await getMeta(url);
+        let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
 
         if (data.code == 200) {
@@ -80,21 +79,23 @@ class MTLComponent extends Component {
                 refEntity: {}
             }
         }
-        this.setState({isLoading: false})
+
+        this.setState({ isLoading: false });
     }
 
     render() {
-        let {isLoading} = this.state
-        if(isLoading){
+        let { isLoading } = this.state;
+        let { form } = this.props;
+        if (isLoading) {
             return <p>数据请求中...</p>
-        }else{
+
+        } else {
             return (
-                <Provider store={store}>
-                    <RenderEngine meta={this.meta} />
+                <Provider store={store({ meta: this.meta, form })}>
+                    <RenderEngine />
                 </Provider>
             )
         }
-        
     }
 }
 

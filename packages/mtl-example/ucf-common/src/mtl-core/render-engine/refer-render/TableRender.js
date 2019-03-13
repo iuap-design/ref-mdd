@@ -3,11 +3,13 @@
  */
 import React, { Component } from 'react';
 import { FormControl, Form } from 'tinper-bee';
+import { connect } from 'mini-store';
 import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 import RefTable from '../../components/RefControl/Table';
 import 'ref-core/lib/refs/refcorewithinput.css';
 import 'ref-multiple-table-ui/dist/index.css';
 
+@connect()
 class TableRender extends Component {
     onSave = (item) => {
         console.log('save', item)
@@ -17,20 +19,22 @@ class TableRender extends Component {
     }
 
     render() {
+        let { store } = this.props;
+        let { viewApplication } = store.getState().meta;
         const { getFieldError, getFieldProps } = this.props.form;
-        const { cBillName, view } = this.props.viewApplication
+        const { cBillName, view } = viewApplication;
+
         const props = {
             placeholder: cBillName,
             title: view.cTemplateTitle,
             backdrop: true,
             disabled: false,
-            multiple: true,
+            multiple: false,
             strictMode: true,
-            miniSearch: false,
+            miniSearch: true,
         }
 
         return (
-            <div>
                 <RefWithInput
                     {...props}
                     onSave={this.onSave}
@@ -45,7 +49,6 @@ class TableRender extends Component {
                 >
                     <RefTable />
                 </RefWithInput>
-            </div>
         );
     }
 }
