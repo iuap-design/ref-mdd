@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { actions } from 'mirrorx';
 import MtlCore, { MTLComponent } from 'mtl-core';
-import { Row, Col, FormControl, Form } from 'tinper-bee';
+import { Row, Col, FormControl, Form,Button } from 'tinper-bee';
 import RefTable from 'mtl-core/render-engine/refer-render/TableRender';
 
 
@@ -40,7 +40,7 @@ class App extends Component {
                         <MTLComponent form={_this.props.form} url={this.url} />
                     </Col>
                     <Col md={4} xs={6}>
-                        <button onClick={this.submit}>提交</button>
+                        <Button colors="info" onClick={this.submit}>获得参照值</Button>
                     </Col>
                 </Row>
             </div>

@@ -1,9 +1,9 @@
 
 import { create } from 'mini-store';
 
-export default function (meta) {
+export default function (props) {
     return create({
-        meta,
+        ...props,
         count: 0
     });
 }
