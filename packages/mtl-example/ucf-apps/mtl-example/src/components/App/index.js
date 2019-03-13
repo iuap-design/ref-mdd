@@ -5,7 +5,8 @@ import { Row, Col, FormControl } from 'tinper-bee';
 
 
 import './index.less';
-
+const metaUrl = "/mock/717/dept/getRefMeta";
+const dataUrl = "/mock/717/dept/getRefData"
 class App extends Component {
     constructor(props) {
         super(props);
@@ -20,7 +21,6 @@ class App extends Component {
         const _this = this;
         return (
             <div className="home-wrap">
-
                 <Row>
                     <Col md={4} xs={6}>
                         <FormControl />
@@ -34,7 +34,7 @@ class App extends Component {
                         <FormControl />
                     </Col>
                     <Col md={4} xs={6}>
-                        <MTLComponent url={this.url} />
+                        <MTLComponent url={this.metaUrl} dataUrl={this.dataUrl} />
                     </Col>
                 </Row>
             </div>
