@@ -9,7 +9,7 @@ import RefTable from '../../components/RefControl/Table';
 import 'ref-core/lib/refs/refcorewithinput.css';
 import 'ref-multiple-table-ui/dist/index.css';
 
-@connect()
+@connect(state => ({ form: state.form }))
 class TableRender extends Component {
     onSave = (item) => {
         console.log('save', item)
@@ -35,22 +35,22 @@ class TableRender extends Component {
         }
 
         return (
-                <RefWithInput
-                    {...props}
-                    onSave={this.onSave}
-                    onCancel={this.onCancel}
-                    {...getFieldProps('valueField', {
-                        // initialValue:'{\"refname\":\"高级-T3\",\"refpk\":\"level5\"}',
-                        rules: [{
-                            message: '请输入姓名',
-                            pattern: /[^{"refname":"","refpk":""}]/
-                        }]
-                    })}
-                >
-                    <RefTable />
-                </RefWithInput>
+            <RefWithInput
+                {...props}
+                onSave={this.onSave}
+                onCancel={this.onCancel}
+                {...getFieldProps('valueField', {
+                    // initialValue:'{\"refname\":\"高级-T3\",\"refpk\":\"level5\"}',
+                    rules: [{
+                        message: '请输入姓名',
+                        pattern: /[^{"refname":"","refpk":""}]/
+                    }]
+                })}
+            >
+                <RefTable />
+            </RefWithInput>
         );
     }
 }
 
-export default Form.createForm()(TableRender);
+export default TableRender;
