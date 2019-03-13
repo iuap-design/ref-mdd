@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FormControl } from 'tinper-bee';
+import { connect } from 'mini-store';
 import RefMultipleTableBaseUI, { SearchPanelItem } from 'ref-multiple-table-ui';
 import { refValParse } from '../../utils';
 
@@ -17,6 +18,8 @@ const props = {
     displayField: "{refname}",
 
 }
+
+@connect(state => ({ view: state.meta.viewApplication.view }))
 class Table extends Component {
     columnsData = []//表头数据
     tableData = []//表格数据
@@ -91,20 +94,52 @@ class Table extends Component {
             console.error(e)
         });;
     }
+    /**
+     * 转换元数据参照表格数据为可识别的格式
+     *
+     * @param {object} view
+     */
+    convertMetaTableData = (view) => {
+        let strFieldCode = [], strFieldName = [];
+        let tpl = {
+            "refUIType": "RefTable",
+            "refCode": "new_bd_staff",
+            "defaultFieldCount": 4,
+            "strFieldCode": [
 
-    getTableHeader = () => {
-        let { refModelUrl, param, jsonp, headers } = props;
-        let data = { "refUIType": "RefTable", "refCode": "new_bd_staff", "defaultFieldCount": 4, "strFieldCode": ["code", "name", "email", "mobile"], "strFieldName": ["人员编码", "人员名称", "人员邮箱", "人员电话"], "rootName": "人员-平台表", "refName": "人员-平台表", "refClientPageInfo": { "pageSize": 100, "currPageIndex": 0, "pageCount": 0, "totalElements": 0 }, "refVertion": "NewRef" };
+            ],
+            "strFieldName": [
 
-        return new Promise((resolve, reject) => {
-            resolve(data)
+            ],
+            "rootName": "人员-平台表",
+            "refName": "人员-平台表",
+            "refClientPageInfo": {
+                "pageSize": 100,
+                "currPageIndex": 0,
+                "pageCount": 0,
+                "totalElements": 0
+            },
+            "refVertion": "NewRef"
+        }
+        console.log('view', view);
+
+        view.containers[0].controls.forEach(item => {
+            strFieldCode.push(item.cFieldName);
+            strFieldName.push(item.cCaption);
         });
-        // return request(refModelUrl.refInfo, {
-        //     method: 'get',
-        //     params: param,
-        //     jsonp: jsonp,
-        //     headers
-        // });
+        tpl['rootName'] = view.cTemplateTitle;
+        tpl['refName'] = view.cTemplateTitle;
+        tpl['defaultFieldCount'] = strFieldCode.length;
+        tpl['strFieldCode'] = strFieldCode;
+        tpl['strFieldName'] = strFieldName;
+        console.log('tpl',tpl);
+        return tpl;
+    }
+    getTableHeader = () => {
+        let { view } = this.props;
+        return new Promise((resolve, reject) => {
+            resolve(this.convertMetaTableData(view))
+        });
     }
 
     getTableData = (params) => {
@@ -283,9 +318,9 @@ class Table extends Component {
             searchFilterInfo: searchFilterInfo,
             emptyBut: true
         });
-        return(
+        return (
             <RefMultipleTableBaseUI
-                    {...childrenProps}    
+                {...childrenProps}
             />
         )
     }
