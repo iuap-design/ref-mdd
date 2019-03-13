@@ -2,7 +2,7 @@ require('@babel/polyfill');
 /**
  * UCF配置文件 更多说明文档请看 https://github.com/iuap-design/ucf-web/blob/master/packages/ucf-scripts/README.md
  */
-
+const path = require('path');
 module.exports = (env, argv) => {
     return {
         context: "",// 上下文对象
@@ -38,7 +38,7 @@ module.exports = (env, argv) => {
         },
         // 别名配置
         alias: {
-            //'ucf-apps': path.resolve(__dirname, 'ucf-apps/')
+            'mtl-core': path.resolve(__dirname, 'ucf-common/src/mtl-core/')
         },
         // 构建排除指定包
         externals: {
