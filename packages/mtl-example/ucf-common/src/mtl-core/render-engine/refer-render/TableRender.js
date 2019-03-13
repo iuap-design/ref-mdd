@@ -9,47 +9,20 @@ import RefTable from '../../components/RefControl/Table';
 import 'ref-core/lib/refs/refcorewithinput.css';
 import 'ref-multiple-table-ui/dist/index.css';
 import {getQueryParam} from "./util"
-import {querRefTableList} from "../../utils/service"
 @connect(state => ({ form: state.form }))
 class TableRender extends Component {
 
     constructor(props){
         super(props)
-        this.state={
-            data: []
-        }
     }
-    componentDidMount(){
-        // const { store } = this.props;
-        // const { refEntity } = store.getState().meta;
-       
-        // let queryParam = getQueryParam('grid',refEntity);
-        // queryParam.page = {
-        //     "pageSize": 10,
-        //     "pageIndex": 1
-        // }
-        // querRefTableList(dataURL,queryParam).then(rs=>{
-        //     console.log(rs);
-        //     if(rs.status){
-
-        //     }
-        // });
-    }
-
+    
     onSave = (item) => {
         console.log('save', item)
     }
     onCancel = () => {
 
     }
-    _getQueryParam=(refEntity)=>{
-        let queryParam = getQueryParam('grid',refEntity);
-        queryParam.page = {
-            "pageSize": 10,
-            "pageIndex": 1
-        }
-        return queryParam;
-    }
+
     render() {
         let { store } = this.props;
         let { viewApplication,refEntity } = store.getState().meta;

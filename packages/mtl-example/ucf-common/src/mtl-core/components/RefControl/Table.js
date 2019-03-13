@@ -238,7 +238,8 @@ class Table extends Component {
     // 复杂查询
     searchFilterInfo = (filterInfo) => {
         const _this = this;
-        let { refModelUrl: { tableBodyUrl }, param, jsonp, headers } = props;
+        let { refModelUrl: { tableBodyUrl }, param, jsonp, headers } = this.props;
+
         this.filterInfo = filterInfo;
         this.setState({
             showLoading: true,
@@ -315,7 +316,8 @@ class Table extends Component {
             dataNumSelect: dataNumSelect,
             handlePagination: handlePagination,
             searchFilterInfo: searchFilterInfo,
-            emptyBut: true
+            emptyBut: true,
+            valueField:'id'
         });
         return (
             <RefMultipleTableBaseUI
