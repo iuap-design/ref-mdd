@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormControl } from 'tinper-bee';
 import RefMultipleTableBaseUI, { SearchPanelItem } from 'ref-multiple-table-ui';
-import { refValParse } from '../util';
+import { refValParse } from '../../utils';
 
 const props = {
     param: {
