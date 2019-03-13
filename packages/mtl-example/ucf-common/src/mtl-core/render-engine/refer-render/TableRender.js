@@ -20,7 +20,7 @@ class TableRender extends Component {
 
     render() {
         let { store } = this.props;
-        let { viewApplication } = store.getState().meta;
+        let { viewApplication, refEntity } = store.getState().meta;
         const { getFieldError, getFieldProps } = this.props.form;
         const { cBillName, view } = viewApplication;
 
@@ -29,7 +29,7 @@ class TableRender extends Component {
             title: view.cTemplateTitle,
             backdrop: true,
             disabled: false,
-            multiple: false,
+            multiple: refEntity.bMultiSel,
             strictMode: true,
             miniSearch: true,
         }
