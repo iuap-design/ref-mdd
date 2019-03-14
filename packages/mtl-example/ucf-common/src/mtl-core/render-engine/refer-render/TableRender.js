@@ -44,7 +44,7 @@ class TableRender extends Component {
             tableBodyUrl:dataURL
         }
         const valueField = "id";
-        const displayField = "{name}-{id}";
+        const displayField = "{name}";
         return (
             <RefWithInput
                 {...props}

@@ -6,12 +6,11 @@ export function getReferData(){
  * @param {string} type 
  * @param {object} refEntity 
  */
-export function getQueryParam(type,refEntity){
+export function getQueryParam(type,refEntity,viewApplication){
     let rsParam = {};
     rsParam.dataType = type;
-    rsParam.refCode = refEntity.code;
-    // 目前找不到key对应的字段，跟refCode一致了
-    rsParam.key =  refEntity.key;
+    rsParam.refCode = refEntity.code; 
+    rsParam.key =  viewApplication.cCardKey;
     rsParam.billnum = refEntity.cBillnum;
     rsParam.externalData = "filter";
     return rsParam;
