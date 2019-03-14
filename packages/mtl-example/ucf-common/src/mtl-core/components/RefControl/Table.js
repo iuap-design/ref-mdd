@@ -4,16 +4,6 @@ import { connect } from 'mini-store';
 import RefMultipleTableBaseUI, { SearchPanelItem } from 'ref-multiple-table-ui';
 import { refValParse } from '../../utils';
 import request from '../../utils/request';
-const propsTemp = {
-    refModelUrl: {
-        tableBodyUrl: '/pap_basedoc/common-ref/blobRefTreeGrid',//表体请求
-        refInfo: '/pap_basedoc/common-ref/refInfo',//表头请求
-    },
-    matchUrl: '/pap_basedoc/common-ref/matchPKRefJSON',
-    filterUrl: '/pap_basedoc/common-ref/filterRefJSON',
-    valueField: "id",
-    displayField: "{refname}",
-}
 
 @connect(state => ({ view: state.meta.viewApplication.view }))
 class Table extends Component {
@@ -40,8 +30,7 @@ class Table extends Component {
         this.initComponent();
     }
     initComponent = () => {
-        let { jsonp, headers, value, matchUrl, onMatchInitValue } = propsTemp;
-        let {param,valueField,displayField} = this.props;
+        let {param,valueField,displayField,value,onMatchInitValue} = this.props;
         param.page = {
             "pageSize": 10,
             "pageIndex": 1
@@ -206,7 +195,7 @@ class Table extends Component {
         });
         this.tableData = tableData;
         this.pageCount = data.pageCount || 0;
-        this.currPageIndex = data.pageIndex + 1 || 0;
+        this.currPageIndex = data.pageIndex || 0;
         this.totalElements = data.recordCount || 0;
     }
     //加载getTableData
@@ -255,15 +244,16 @@ class Table extends Component {
  */
     handlePagination = (index) => {
         let { filterInfo } = this;
+        let {param} = this.props;
         Object.keys(filterInfo).forEach(key => {
             if (!filterInfo[key]) {
                 delete filterInfo[key];
             }
         });
 
-        let param = {
-            'refClientPageInfo.currPageIndex': index - 1,
-            'refClientPageInfo.pageSize': this.pageSize
+        param.page = {
+            "pageSize": this.pageSize,
+            "pageIndex": index - 1
         }
         if (Object.keys(filterInfo) > 0) {
             param.content = JSON.stringify(filterInfo);
@@ -286,6 +276,7 @@ class Table extends Component {
             "pageSize": pageSize,
             "pageIndex": this.currPageIndex - 1
         }
+        
         if (Object.keys(filterInfo) > 0) {
             param.content = JSON.stringify(filterInfo);
         }

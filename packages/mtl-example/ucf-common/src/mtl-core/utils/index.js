@@ -12,7 +12,7 @@ export function getMeta(url) {
 
 
 const refValParse = (value,valueField,displayField) => {
-    if(!value) return {displayField: '', valueField: ''};
+    if(!value) return {[displayField]: '', [valueField]: ''};
 
     try{
         let valueMap = JSON.parse(value);

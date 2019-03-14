@@ -1,0 +1,55 @@
+.walsin-btn {
+    &.u-button {
+        background: #004898;
+        color: #fff;
+        padding: 0 8px;
+        height: 26px;
+        line-height: 26px;
+        font-size: 14px;
+        border-radius: 3px;
+        min-width: 72px;
+        border: none;
+        transition: all 0.5s;
+        font {
+            vertical-align: unset !important;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            background: #0052CC;
+            color: #fff;
+            transition: all 0.5s;
+        }
+        i {
+            padding: 0;
+            margin: 0 8px 0 0;
+            line-height: 26px;
+            overflow: hidden;
+            float: left;
+        }
+        &.u-button-primary {
+            background: #004898;
+            &:hover,
+            &:active,
+            &:focus {
+                background: #0052CC;
+                color: #fff;
+            }
+        }
+        &[disabled] {
+            background: #a3b6d4;
+            color: #fff;
+            border: none;
+            &:hover,
+            &:active,
+            &:focus {
+                background: #a3b6d4;
+                color: #fff;
+            }
+        }
+    }
+    &.btn-authority-disabled {
+        background: #a3b6d4 !important;
+        border: none;
+    }
+}

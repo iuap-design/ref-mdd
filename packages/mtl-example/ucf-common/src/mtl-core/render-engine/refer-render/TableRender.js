@@ -39,7 +39,7 @@ class TableRender extends Component {
             strictMode: true,
             miniSearch: true,
         }
-        const queryParam = getQueryParam('grid',refEntity);
+        const queryParam = getQueryParam('grid',refEntity,viewApplication);
         const refModelUrl = {
             tableBodyUrl:dataURL
         }

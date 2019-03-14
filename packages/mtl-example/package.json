@@ -13,6 +13,10 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
+    "bee-complex-grid": "^2.0.2",
+    "bee-form": "^2.0.8",
+    "bee-modal": "^2.0.0",
+    "bee-table": "^2.0.5",
     "mini-store": "^2.0.0",
     "mirrorx": "^0.2.12",
     "react": "^16.8.4",

@@ -1,0 +1,129 @@
+// form 布局样式
+.form-panel {
+    margin-left: 10px;
+    margin-right: 10px;
+    .u-form-item {
+        min-width: 100%;
+        margin-bottom: 4px;
+        min-height: 48px;
+        height: 48px;
+        .u-form-control {
+            height: 32px;
+            width: 200px;
+        }
+        .u-label {
+            min-width: 90px;
+            display: inline-block;
+            text-align: right;
+            position: relative;
+            height: 32px;
+            line-height: 32px;
+            padding-right: 8px;
+        }
+        .u-label:after {
+            display: inline-block;
+            margin-right: 4px;
+            content: "  ";
+            line-height: 1;
+            font-size: 14px;
+            color: #f5222d;
+            font-family: monospace;
+            width: 5px;
+        }
+        .u-label+* {
+            width: 200px;
+            display: inline-block;
+        }
+        .mast:after {
+            content: "*";
+        }
+        .datepicker-input-group {
+            .u-form-control {
+                width: 100%;
+            }
+            .u-input-group-btn {
+                top: 4px;
+            }
+        }
+        .u-switch {
+            width: 44px;
+        }
+        .u-switch.is-checked {
+            border-color: #004898;
+            background-color: #004898;
+        }
+        .u-select {
+            width: 200px;
+            color: #424242;
+            .u-select-selection {
+                height: 32px;
+                .u-select-selection-rendered {
+                    line-height: 32px;
+                }
+            }
+        }
+        .u-select.u-select-disabled {
+            color: #bdbdbd;
+        }
+        .calendar-picker {
+            display: inline-block;
+            width: 200px;
+            input {
+                width: 100%;
+            }
+        }
+        .error {
+            margin-left: 90px;
+            color: #fff;
+            display: block;
+            font-size: 12px;
+            margin-top: 2px;
+            line-height: 14px;
+            background: red;
+            width: 200px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .u-form-control-close {
+            width: auto;
+            .u-form-control {
+                width: 100%;
+            }
+        }
+        .u-form-control[readonly="readonly"] {
+            background: #eee;
+            border-color: #e0e0e0;
+            color: #424242;
+            cursor: not-allowed;
+        }
+        .refInputWrap {
+            // 参照
+            input {
+                width: 200px;
+                min-width: auto;
+            }
+        }
+    }
+    .u-form-item.time {
+        .u-label {
+            bottom: 10px;
+        }
+        .error {
+            position: relative;
+            top: -10px;
+        }
+        .u-input-number {
+            .u-form-control {
+                width: 100%;
+            }
+        }
+        .u-input-number.u-input-group.simple {
+            .u-input-group-btn {
+                .icon-group {
+                    height: 32px;
+                }
+            }
+        }
+    }
+}
