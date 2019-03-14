@@ -11,18 +11,18 @@ export function getMeta(url) {
 
 
 
-const refValParse = (value) => {
-    if(!value) return {refname: '', refpk: ''};
+const refValParse = (value,valueField,displayField) => {
+    if(!value) return {displayField: '', valueField: ''};
 
     try{
         let valueMap = JSON.parse(value);
-        if(!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')){
-            return {refname: '', refpk: ''};
+        if(!valueMap.hasOwnProperty(displayField) || !valueMap.hasOwnProperty(valueField)){
+            return {[displayField]: '', [valueField]: ''};
         }else{
             return JSON.parse(value);
         }
     }catch(e) {
-        return {refname: '', refpk: ''};
+        return {[displayField]: '', [valueField]: ''};
     }
 }
 

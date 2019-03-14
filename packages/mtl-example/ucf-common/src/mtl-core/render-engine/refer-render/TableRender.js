@@ -15,7 +15,7 @@ class TableRender extends Component {
     constructor(props){
         super(props)
     }
-    
+
     onSave = (item) => {
         console.log('save', item)
     }
@@ -43,20 +43,26 @@ class TableRender extends Component {
         const refModelUrl = {
             tableBodyUrl:dataURL
         }
+        const valueField = "id";
+        const displayField = "{name}-{id}";
         return (
             <RefWithInput
                 {...props}
                 onSave={this.onSave}
                 onCancel={this.onCancel}
-                {...getFieldProps('valueField', {
+                refModelUrl={refModelUrl}
+                 param={queryParam} 
+                 valueField={valueField}  
+                 displayField={displayField}
+                {...getFieldProps(valueField, {
                     // initialValue:'{\"refname\":\"高级-T3\",\"refpk\":\"level5\"}',
                     rules: [{
                         message: '请输入姓名',
-                        pattern: /[^{"refname":"","refpk":""}]/
+                        pattern: /[^{displayField:"",valueField:""}]/
                     }]
                 })}
             >
-                <RefTable  refModelUrl={refModelUrl} param={queryParam}/>
+                <RefTable  />
             </RefWithInput>
         );
     }

@@ -4,17 +4,15 @@ import { connect } from 'mini-store';
 import RefMultipleTableBaseUI, { SearchPanelItem } from 'ref-multiple-table-ui';
 import { refValParse } from '../../utils';
 import request from '../../utils/request';
-const props = {
-
+const propsTemp = {
     refModelUrl: {
         tableBodyUrl: '/pap_basedoc/common-ref/blobRefTreeGrid',//表体请求
         refInfo: '/pap_basedoc/common-ref/refInfo',//表头请求
     },
     matchUrl: '/pap_basedoc/common-ref/matchPKRefJSON',
     filterUrl: '/pap_basedoc/common-ref/filterRefJSON',
-    valueField: "refpk",
+    valueField: "id",
     displayField: "{refname}",
-
 }
 
 @connect(state => ({ view: state.meta.viewApplication.view }))
@@ -42,8 +40,8 @@ class Table extends Component {
         this.initComponent();
     }
     initComponent = () => {
-        let { jsonp, headers, value, matchUrl, onMatchInitValue, valueField = "refpk" } = props;
-        let {param} = this.props;
+        let { jsonp, headers, value, matchUrl, onMatchInitValue } = propsTemp;
+        let {param,valueField,displayField} = this.props;
         param.page = {
             "pageSize": 10,
             "pageIndex": 1
@@ -53,8 +51,8 @@ class Table extends Component {
             _this.getTableHeader(),
             _this.getTableData(param),
         ];
-        let valueMap = refValParse(value);
-        if (_this.checkedArray.length == 0 && valueMap.refpk) {
+        let valueMap = refValParse(value,valueField,displayField);
+        if (_this.checkedArray.length == 0 && valueMap[valueField]) {
             requestList.push(new Promise((resolve, reject) => {
                 resolve({ data: [] });
             }));
@@ -62,7 +60,6 @@ class Table extends Component {
 
         Promise.all(requestList).then(([columnsData, bodyData, matchData]) => {
             if (_this.onAfterAjax) {
-                console.log(bodyData.data.recordList);
                 _this.onAfterAjax(bodyData)
             }
             if (matchData) {
@@ -146,7 +143,7 @@ class Table extends Component {
 
     getTableData = (params) => {
         let {param,refModelUrl} = this.props;
-        // let data = { "data": [{ "rownum_": 1, "code": "001", "name": "人员1", "mobile": "15011430230", "refcode": "001", "refpk": "cc791b77-bd18-49ab-b3ec-ee83cd40012a", "id": "cc791b77-bd18-49ab-b3ec-ee83cd40012a", "refname": "人员1", "email": "11@11.com" }, { "rownum_": 2, "code": "002", "name": "人员2", "mobile": "15011323234", "refcode": "002", "refpk": "de2d4d09-51ec-4108-8def-d6a6c5393c3b", "id": "de2d4d09-51ec-4108-8def-d6a6c5393c3b", "refname": "人员2", "email": "22@11.com" }, { "rownum_": 3, "code": "003", "name": "人员3", "mobile": "15011430232", "refcode": "003", "refpk": "004989bb-a705-45ce-88f3-662f87ee6e52", "id": "004989bb-a705-45ce-88f3-662f87ee6e52", "refname": "人员3", "email": "33@33.com" }, { "rownum_": 4, "code": "004", "name": "人员4", "mobile": "15011430234", "refcode": "004", "refpk": "3570cbde-0d43-49ce-ad53-ab27ee6ee7dd", "id": "3570cbde-0d43-49ce-ad53-ab27ee6ee7dd", "refname": "人员4", "email": "33@34.com" }, { "rownum_": 5, "code": "005", "name": "人员5", "mobile": "15011430235", "refcode": "005", "refpk": "5e3a85ec-5e14-4734-8b3a-1e6168426c89", "id": "5e3a85ec-5e14-4734-8b3a-1e6168426c89", "refname": "人员5", "email": "55@26.com" }, { "rownum_": 6, "code": "006", "name": "人员6", "mobile": "15011323232", "refcode": "006", "refpk": "112621b9-b7ae-41b9-9428-61779334c5d6", "id": "112621b9-b7ae-41b9-9428-61779334c5d6", "refname": "人员6", "email": "66@516.com" }, { "rownum_": 7, "code": "007", "name": "人员7", "mobile": "15011234567", "refcode": "007", "refpk": "394bba90-ed0f-4794-a44e-fd9ce6e9257d", "id": "394bba90-ed0f-4794-a44e-fd9ce6e9257d", "refname": "人员7", "email": "55@4.com" }, { "rownum_": 8, "code": "008", "name": "人员8", "mobile": "15011327890", "refcode": "008", "refpk": "a9f4c869-ca0b-4d12-847e-00eca08bfef6", "id": "a9f4c869-ca0b-4d12-847e-00eca08bfef6", "refname": "人员8", "email": "55@556.com" }, { "rownum_": 9, "code": "bpm01", "name": "张一", "mobile": "18777777777", "refcode": "bpm01", "refpk": "0dc47840-873a-4ed3-8ae7-c2335a76b385", "id": "0dc47840-873a-4ed3-8ae7-c2335a76b385", "refname": "张一", "email": "bpm01@qq.com" }, { "rownum_": 10, "code": "bpm02", "name": "张二", "mobile": "18788888888", "refcode": "bpm02", "refpk": "c97b59e2-9fa3-44d7-93b0-1be52f7aa550", "id": "c97b59e2-9fa3-44d7-93b0-1be52f7aa550", "refname": "张二", "email": "bpm02@qq.com" }], "page": { "pageSize": 10, "currPageIndex": 0, "pageCount": 2, "totalElements": 13 }, "allpks": null };
+        // let data = { "data": [{ "rownum_": 1, "code": "001", "name": "人员1", "mobile": "15011430230", "refcode": "001", "refpk": "cc791b77-bd18-49ab-b3ec-ee83cd40012a", "id": "cc791b77-bd18-49ab-b3ec-ee83cd40012a", "refname": "人员1", "email": "11@11.com" }, { "rownum_": 2, "code": "002", "name": "人员2", "mobile": "15011323234", "refcode": "002", "refpk": "de2d4d09-51ec-4108-8def-d6a6c5393c3b", "id": "de2d4d09-51ec-4108-8def-d6a6c5393c3b", "refname": "人员2", "email": "22@11.com" }, { "rownum_": 3, "code": "003", "name": "人员3", "mobile": "15011430232", "refcode": "003", "refpk": "004989bb-a705-45ce-88f3-662f87ee6e52", "id": "004989bb-a705-45ce-88f3-662f87ee6e52", "refname": "人员3", "email": "33@33.com" }, { "rownum_": 4, "code": "004", "name": "人员4", "mobile": "15011430234", "refcode": "004", "refpk": "3570cbde-0d43-49ce-ad53-ab27ee6ee7dd", "id": "3570cbde-0d43-49ce-ad53-ab27ee6ee7dd", "refname": "人员4", "email": "33@34.com" }, { "rownum_": 5, "code": "005", "name": "人员5", "mobile": "15011430235", "refcode": "005", "refpk": "5e3a85ec-5e14-4734-8b3a-1e6168426c89", "id": "5e3a85ec-5e14-4734-8b3a-1e6168426c89", "refname": "人员5", "email": "55@26.com" }, { "rownum_": 6, "code": "006", "name": "人员6", "mobile": "15011323232", "refcode": "006", "refpk": "112621b9-b7ae-41b9-9428-61779334c5d6", "id": "112621b9-b7ae-41b9-9428-61779334c5d6", "refname": "人员6", "email": "66@516.com" }, { "rownum_": 7, "code": "007", "name": "人员7", "mobile": "15011234567", "refcode": "007", "refpk": "394bba90-ed0f-4794-a44e-fd9ce6e9257d", "id": "394bba90-ed0f-4794-a44e-fd9ce6e9257d", "refname": "人员7", "email": "55@4.com" }, { "rownum_": 8, "code": "008", "name": "人员8", "mobile": "15011327890", "refcode": "008", "refpk": "a9f4c869-ca0b-4d12-847e-00eca08bfef6", "id": "a9f4c869-ca0b-4d12-847e-00eca08bfef6", "refname": "人员8", "email": "55@556.com" }, { "rownum_": 9, "code": "bpm01", "name": "张一", "mobile": "18777777777", "refcode": "bpm01", "refpk": "0dc47840-873a-4ed3-8ae7-c2335a76b385", "id": "0dc47840-873a-4ed3-8ae7-c2335a76b385", "refname": "张一", "email": "bpm01@qq.com" }, { "rownum_": 10, "code": "bpm02", "name": "张二", "mobile": "18788888888", "refcode": "bpm02", "": "c97b59e2-9fa3-44d7-93b0-1be52f7aa550", "id": "c97b59e2-9fa3-44d7-93b0-1be52f7aa550", "refname": "张二", "email": "bpm02@qq.com" }], "page": { "pageSize": 10, "currPageIndex": 0, "pageCount": 2, "totalElements": 13 }, "allpks": null };
         // return new Promise((resolve, reject) => {
         //     resolve(data);
         // });
@@ -202,7 +199,8 @@ class Table extends Component {
 	 */
     launchTableData = (response) => {
         if (!response) return;
-        let { valueField = "refpk" } = props;
+        let { valueField} = this.props;
+        // valueField = 'id';
         // let { data = [], page = {} } = response;
         let {data:{data}} = response;
         const tableData = data && data.recordList ?data.recordList:[];
