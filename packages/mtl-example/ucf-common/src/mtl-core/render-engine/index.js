@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'mini-store';
-import RefRender from './refer-render';
-import UITemplateRender from './uitemplate-render';
+
+import RefRender from './container/ReferRender';
+import UITemplateRender from './container/TemplateRender';
 
 @connect()
 class RenderEngine extends Component {

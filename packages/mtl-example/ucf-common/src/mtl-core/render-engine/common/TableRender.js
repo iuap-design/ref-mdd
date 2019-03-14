@@ -8,7 +8,9 @@ import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 import RefTable from '../../components/RefControl/Table';
 import 'ref-core/lib/refs/refcorewithinput.css';
 import 'ref-multiple-table-ui/dist/index.css';
-import {getQueryParam} from "./util"
+
+import { getQueryParam } from "./util"
+
 @connect(state => ({ form: state.form }))
 class TableRender extends Component {
 

@@ -7,6 +7,7 @@ import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 import RefTree from '../../components/RefControl/Tree';
 import 'ref-core/lib/refs/refcorewithinput.css';
 import { connect } from 'mini-store';
+
 const option = {
     title: '树',
     searchable: true,
