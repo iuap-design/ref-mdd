@@ -22,7 +22,12 @@ import './index.less';
 import MtlCore, { MTLComponent } from 'mtl-core';
 //所需变量
 const { FormItem } = Form;
-
+const mtlUrl = {
+    tableMetaUrl: "/mock/717/dept/getRefMeta",
+    tableDataUrl: "/mock/717/dept/getRefData",
+    treeMetaUrl: '/mock/717/deptTree/getRefMeta',
+    treeDataUrl: '/mock/717/deptTree/getRefData'
+}
 class SearchArea extends Component {
 
     constructor(props) {
@@ -31,8 +36,8 @@ class SearchArea extends Component {
 
         }
     }
-    metaUrl = "/mock/717/dept/getRefMeta";
-    dataUrl = "/mock/717/dept/getRefData";
+   
+    treeMetaUrl
     /** 执行查询方法回调
      * @param {array} error 校验是否成功
      * @param {json} values 表单数据
@@ -93,7 +98,14 @@ class SearchArea extends Component {
                     <Col md={4} xs={6}>
                         <FormItem>
                             <Label>部门</Label>
-                        <MTLComponent form={_this.props.form} url={this.metaUrl} dataUrl={this.dataUrl} />
+                        <MTLComponent form={_this.props.form} url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
+                        </FormItem>
+                    </Col>
+
+                    <Col md={4} xs={6}>
+                        <FormItem>
+                            <Label>组织</Label>
+                        <MTLComponent form={_this.props.form} url={mtlUrl.treeMetaUrl} dataUrl={mtlUrl.treeDataUrl} />
 
                         </FormItem>
                     </Col>

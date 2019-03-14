@@ -29,7 +29,12 @@ class TableRender extends Component {
         const dataURL =  store.getState().dataUrl;
         const { getFieldError, getFieldProps } = this.props.form;
         const { cBillName, view } = viewApplication;
-
+        const valueField = "id";
+        const displayField = "{name}";
+        const queryParam = getQueryParam('grid',refEntity,viewApplication);
+        const refModelUrl = {
+            tableBodyUrl:dataURL
+        }
         const props = {
             placeholder: cBillName,
             title: view.cTemplateTitle,
@@ -38,22 +43,17 @@ class TableRender extends Component {
             multiple: refEntity.bMultiSel,
             strictMode: true,
             miniSearch: true,
+            displayField:displayField,
+            valueField:valueField,
+            queryParam,
+            refModelUrl
         }
-        const queryParam = getQueryParam('grid',refEntity,viewApplication);
-        const refModelUrl = {
-            tableBodyUrl:dataURL
-        }
-        const valueField = "id";
-        const displayField = "{name}";
+
         return (
             <RefWithInput
                 {...props}
                 onSave={this.onSave}
                 onCancel={this.onCancel}
-                refModelUrl={refModelUrl}
-                 param={queryParam} 
-                 valueField={valueField}  
-                 displayField={displayField}
                 {...getFieldProps(valueField, {
                     // initialValue:'{\"refname\":\"高级-T3\",\"refpk\":\"level5\"}',
                     rules: [{

@@ -65,7 +65,7 @@ class MTLComponent extends Component {
      */
     isRefer = (data) => {
         if (data.refEntity) {
-            let { refEntity, gridMeta } = data;
+            let { refEntity, gridMeta={} } = data;
             this.meta = {
                 viewmodel: gridMeta.viewmodel,
                 viewApplication: gridMeta.viewApplication,
