@@ -59,3 +59,7 @@ typings/
 
 # next.js build output
 .next
+package-lock.json
+mtl-components/package-lock.json
+mtl-core/package-lock.json
+mtl-example/package-lock.json
