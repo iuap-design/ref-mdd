@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import Modal from 'bee-modal';
-import Icon from 'bee-icon';
-import Button from 'components/Button';
+import { Modal, Icon } from 'tinper-bee';
+import Button from 'bee-button';
 import './style.less';
 
 const ButtonBrand = Button;
@@ -61,11 +60,11 @@ class PopDialog extends Component {
         let _button = null, icon = {};
         da.icon ? icon.iconType = da.icon : "";
         let _className = da.className ? da.className : null;
-        let _defultAlphaButton = <ButtonDefaultLine key={"pop_btn" + i} {...icon} onClick={(e) => { this.btnClick(e, da) }} className={`${_className} ${btn}`} >{da.label}</ButtonDefaultLine>
+        let _defultAlphaButton = <ButtonDefaultLine colors="dark" key={"pop_btn" + i} onClick={(e) => { this.btnClick(e, da) }} className={`${_className} ${btn}`} >{da.label}</ButtonDefaultLine>
         if (this.props.type == "delete") {
-          _button = i === 0 ? <ButtonWarning key={"pop_btn" + i} {...icon} onClick={(e) => { this.btnClick(e, da) }} className={`${_className} ${btn}`} >{da.label}</ButtonWarning> : _defultAlphaButton;
+          _button = i === 0 ? <ButtonWarning colors="warning" key={"pop_btn" + i} onClick={(e) => { this.btnClick(e, da) }} className={`${_className} ${btn}`} >{da.label}</ButtonWarning> : _defultAlphaButton;
         } else {
-          _button = i === 0 ? <ButtonBrand {...icon} disabled={this.props.btnDisabled} key={"pop_btn" + i} onClick={(e) => { this.btnClick(e, da) }} className={`${_className} ${btn}`} >{da.label}</ButtonBrand> : _defultAlphaButton;
+          _button = i === 0 ? <ButtonBrand colors="primary" disabled={this.props.btnDisabled} key={"pop_btn" + i} onClick={(e) => { this.btnClick(e, da) }} className={`${_className} ${btn}`} >{da.label}</ButtonBrand> : _defultAlphaButton;
         }
         _btns.push(_button);
       })

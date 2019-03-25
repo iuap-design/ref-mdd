@@ -7,9 +7,8 @@ import React, { Component } from 'react';
 //状态管理
 import { actions } from "mirrorx";
 //Tinper-bee组件库
-import { Col, Row, FormControl, Label,Button } from "tinper-bee";
+import { Col, Row, FormControl, Label, Form } from "tinper-bee";
 //表单
-import Form from 'bee-form';
 
 //加载工具类
 import { deepClone } from "utils";
@@ -17,17 +16,18 @@ import { deepClone } from "utils";
 //其他
 import SearchPanel from 'components/SearchPanel';
 
-import './index.less';
-
 import MtlCore, { MTLComponent } from 'mtl-core';
-//所需变量
-const { FormItem } = Form;
+
+import './index.less';
 const mtlUrl = {
     tableMetaUrl: "/mock/717/dept/getRefMeta",
     tableDataUrl: "/mock/717/dept/getRefData",
     treeMetaUrl: '/mock/717/deptTree/getRefMeta',
     treeDataUrl: '/mock/717/deptTree/getRefData'
 }
+//所需变量
+const { FormItem } = Form;
+
 class SearchArea extends Component {
 
     constructor(props) {
@@ -36,8 +36,7 @@ class SearchArea extends Component {
 
         }
     }
-   
-    treeMetaUrl
+
     /** 执行查询方法回调
      * @param {array} error 校验是否成功
      * @param {json} values 表单数据
@@ -82,35 +81,31 @@ class SearchArea extends Component {
                 onCallback={onCallback}
                 search={this.search}>
                 <Row>
-                    <Col md={4} xs={6}>
+                    <Col md={6} xs={6}>
                         <FormItem>
                             <Label>编码</Label>
                             <FormControl placeholder="编码查询" {...getFieldProps('code', { initialValue: '' })} />
                         </FormItem>
                     </Col>
-                    <Col md={4} xs={6}>
+                    <Col md={6} xs={6}>
                         <FormItem>
                             <Label>名称</Label>
                             <FormControl placeholder="名称查询" {...getFieldProps('name', { initialValue: '' })} />
                         </FormItem>
                     </Col>
-              
-                    <Col md={4} xs={6}>
+                    <Col md={6} xs={6}>
                         <FormItem>
                             <Label>部门</Label>
-                        <MTLComponent form={_this.props.form} url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
+                            <MTLComponent form={_this.props.form} url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
                         </FormItem>
                     </Col>
 
-                    <Col md={4} xs={6}>
+                    <Col md={6} xs={6}>
                         <FormItem>
                             <Label>组织</Label>
-                        <MTLComponent form={_this.props.form} url={mtlUrl.treeMetaUrl} dataUrl={mtlUrl.treeDataUrl} />
-
+                            <MTLComponent form={_this.props.form} url={mtlUrl.treeMetaUrl} dataUrl={mtlUrl.treeDataUrl} />
                         </FormItem>
                     </Col>
-                 
-              
                 </Row>
             </SearchPanel>
         )

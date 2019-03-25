@@ -4,8 +4,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Panel } from 'tinper-bee';
-import Button from 'components/Button';
+import { Panel, Button, Icon } from 'tinper-bee';
 import classnames from 'classnames';
 import './index.less';
 
@@ -92,8 +91,12 @@ class SearchPanel extends Component {
             >
                 {children}
                 <div className='search-panel-btn'>
-                    <Button className='submit-btn' iconType="uf-search" onClick={this.search}>{searchName}</Button>
-                    <Button className='reset-btn' iconType="uf-repeat" onClick={this.reset}>{resetName}</Button>
+                    <Button colors="info" onClick={this.search}>
+                        <Icon type='uf-search' />{searchName}
+                    </Button>
+                    <Button colors="warning" onClick={this.reset}>
+                        <Icon type='uf-repeat' />{resetName}
+                    </Button>
                 </div>
             </Panel>
         )

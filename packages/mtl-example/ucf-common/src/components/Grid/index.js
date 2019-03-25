@@ -52,10 +52,10 @@ class Grid extends Component {
         paginationObj={paginationObj}
         ref={el => (this.grid = el)}
         emptyText={() => <Icon style={{ fontSize: "60px" }} type="uf-nodata" />}
-        columnFilterAble={false}//是否显示右侧隐藏行
-        showHeaderMenu={false}//是否显示菜单
-        dragborder={false}//是否调整列宽
-        draggable={false}//是否拖拽
+        columnFilterAble={true}//是否显示右侧隐藏行
+        showHeaderMenu={true}//是否显示菜单
+        dragborder={true}//是否调整列宽
+        draggable={true}//是否拖拽
         syncHover={true}//是否同步状态
       />
     );

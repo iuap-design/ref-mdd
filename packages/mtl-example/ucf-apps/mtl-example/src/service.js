@@ -5,30 +5,12 @@ import request from "ucf-request";
 import { actions } from 'mirrorx';
 //定义接口地址
 const URL = {
-    "GET_META": `/mock/717/bill`,
-    "GET_REF": `/mock/717/dept`,
-    "POST_LIST": `${GROBAL_HTTP_PREFIX}/iuap/org/list`,
+    "POST_LIST": `${GROBAL_HTTP_PREFIX}/mock/843/iuap/org/list`,
     "POST_DELETE": `${GROBAL_HTTP_PREFIX}/iuap/org/delete`,
     "POST_INSERT": `${GROBAL_HTTP_PREFIX}/iuap/org/add`,
     "POST_UPDATE": `${GROBAL_HTTP_PREFIX}/iuap/org/update`
 }
 
-/**
- * 获取主列表
- * @param {object} params
- */
-export const getMeta = (params) => {
-    return request(URL.GET_META, {
-        method: "get",
-        params
-    });
-}
-export const getRef = (params) => {
-    return request(URL.GET_REF, {
-        method: "get",
-        params
-    });
-}
 /**
  * 获取主列表
  * @param {object} params

@@ -2,9 +2,8 @@
  * 弹出编辑
  */
 import React, { Component } from 'react';
-import { Col, Row, FormControl, Label } from "tinper-bee";
+import { Col, Row, FormControl, Label, Form } from "tinper-bee";
 import { actions } from "mirrorx";
-import Form from 'bee-form';
 import { Error, Info } from 'utils';
 import PopDialog from 'components/Pop';
 import FormError from 'components/FormError';

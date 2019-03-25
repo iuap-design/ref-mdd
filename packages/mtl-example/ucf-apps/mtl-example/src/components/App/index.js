@@ -5,10 +5,9 @@
 import React, { Component } from 'react';
 import mirror, { actions } from 'mirrorx';
 import { getHeight, Warning, Error, Info, deepClone } from 'utils';
-import { Loading, Icon } from 'tinper-bee';
+import { Loading, Icon, Button } from 'tinper-bee';
 import Grid from 'components/Grid';
 import Header from 'components/Header';
-import Button from 'components/Button';
 import Alert from 'components/Alert';
 import OrgModal from '../OrgModal';
 import SearchArea from '../SearchArea';
@@ -26,13 +25,12 @@ class App extends Component {
             rowData: {},//修改的时候数据
         }
     }
-  
     componentWillMount() {
         //计算表格滚动条高度
         this.resetTableHeight(true);
     }
     componentDidMount() {
-        // actions.app.loadList();
+        actions.app.loadList();
     }
     //定义Grid的Columns
     column = [
@@ -78,11 +76,6 @@ class App extends Component {
         this.setState({ tableHeight });
     }
 
-    submit = () => {
-        this.props.form.validateFields((error, value) => {
-            console.log(error, value);
-        });
-    }
     /**
      * 添加组织数据（Modal）
      *
@@ -224,8 +217,12 @@ class App extends Component {
                     onCallback={this.resetTableHeight}
                 />
                 <div className="org-buttons">
-                    <Button iconType="uf-plus" onClick={this.handlerAdd}>新增</Button>
-                    <Button iconType="uf-del" onClick={this.handlerDelete}>删除</Button>
+                    <Button colors="success" onClick={this.handlerAdd}>
+                        <Icon type='uf-plus' />新增
+                    </Button>
+                    <Button colors="danger" onClick={this.handlerDelete}>
+                        <Icon type='uf-del' />删除
+                    </Button>
                     <Alert
                         show={showPop}
                         context="是否要删除 ?"
