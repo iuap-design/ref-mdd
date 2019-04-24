@@ -1,0 +1,33 @@
+{
+  "name": "mtl-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ucf-scripts start --homepage=mtl-example",
+    "build": "ucf-scripts build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "axios": "^0.18.0",
+    "bee-complex-grid": "^2.0.2",
+    "bee-form": "^2.0.8",
+    "bee-modal": "^2.0.0",
+    "bee-table": "^2.0.5",
+    "immutable": "^4.0.0-rc.12",
+    "mini-store": "^2.0.0",
+    "mirrorx": "^0.2.12",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "ref-core": "^0.3.3-beta",
+    "ref-mdd": "^1.0.0",
+    "ref-multiple-table": "^2.0.1-beta.4",
+    "ref-tree": "^2.0.1-beta.1",
+    "tinper-bee": "^2.0.3",
+    "ucf-request": "^1.0.0",
+    "ucf-scripts": "^1.1.1"
+  }
+}

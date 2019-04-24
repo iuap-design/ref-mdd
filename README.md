@@ -11,25 +11,29 @@
 ```
 import { MTLComponent } from 'ref-mdd';
 
-const LogicComponent = () => (
+const RefTableComponent = () => (
     <div className="home-wrap">
-        <MTLComponent url='url' />
+        <MTLComponent url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
     </div>
 );
-
 
 ```
 
 ### API 形式调用
 
+
+
 ### `UMD` 规范的通用 `CDN` 文件
 
-- 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/mtl-core/0.0.1/js/mtl-core.js"></script>`
+- 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/ref-mdd/0.0.1/js/ref-mdd.js"></script>`
 
 - 初始化：`window.MTLCore.initComponent(options)`
 
 ## 组件接口说明
-
+|参数|说明|类型|默认值|
+|:--|:---:|:--:|---:|
+|url|参照中获取的meta信息的url|string||
+|dataUrl|参照中获取的数据data信息的url|string||
 
 ## 协议说明
 
@@ -87,13 +91,13 @@ const LogicComponent = () => (
 $ npm run link
 ```
 
-然后到package/mtl-core中执行调试监听
+然后到package/ref-core中执行调试监听
 
 ```
 $ npm run dev
 ```
 
-最后到package/mtl-example中启动示例查看调试效果：
+最后到package/ref-example中启动示例查看调试效果：
 
 ```
 $ npm start
