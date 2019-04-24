@@ -36,7 +36,7 @@ const RefTableComponent = () => (
 |url|参照中获取的meta信息的url|string||
 |dataUrl|参照中获取的数据data信息的url|string||
 ## 整体流程
-![流程](https://raw.githubusercontent.com/whizbz11/Img/master/ref-mdd/ref-mdd.png =300x300)
+![流程](https://raw.githubusercontent.com/whizbz11/Img/master/ref-mdd/ref-mdd.png ){:height="200px"}
 ## 协议说明
 
 ```
