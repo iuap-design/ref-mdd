@@ -1,22 +1,15 @@
-# ref-mdd 基于多端协议的模型驱动开发框架
+# ref-mdd 基于统一协议的参照组件实现
 
-基于多端协议的模型驱动开发方式，简称为 `UCF-MDD`，即通过`UI`元数据（`viewapplication`）来描述页面UI的布局效果，通过数据模型（`viewmodel`）来描述页面交互逻辑及数据模型。标准化的多端协议接口将以上信息通送达到前端（多端），端上再通过一套渲染引擎SDK通过协议解析并与标准组件绑定后实现`UI`渲染，并提供给开发者一定的`UI`扩展操作和数据扩展操作的能力。
+## 关键特性
 
-## PACKAGES 
-
-- `mtl-core`：`datamodel` 数据模型层封装、`render-engine` 基于`UI`元数据的解析渲染、公共工具方法等。
-- `mtl-components`：元数据中存放的组件（`container`类、`controls`类），如果`tinper-bee`和`tinper-acs`已有则复用，没有则在这里添加维护
-- `mtl-example`：`ref-mdd` 的示例工程。
-
-[验证场景及需求描述](./docs/整体需求描述.md)
+- 基于统一的参照描述协议实现可扩展的组件解析渲染
+- 支持树型、表型参照，树表型、combobox 型待支持
 
 ## 如何使用
 
-
-### `Package` 组件包方式
-
+### 组件方式调用
 ```
-import { MTLComponent } from 'mtl-core';
+import { MTLComponent } from 'ref-mdd';
 
 const LogicComponent = () => (
     <div className="home-wrap">
@@ -24,17 +17,10 @@ const LogicComponent = () => (
     </div>
 );
 
-// 大组件：UI模板
-ReactDOM.render(<LogicComponent />, root)
-
-// 小组件：纯组件，被引用
-<Form>
-    <Input />
-    <LogicComponent />
-    <Button>提交</Button>
-</Form>
 
 ```
+
+### API 形式调用
 
 ### `UMD` 规范的通用 `CDN` 文件
 
@@ -42,9 +28,51 @@ ReactDOM.render(<LogicComponent />, root)
 
 - 初始化：`window.MTLCore.initComponent(options)`
 
-### API 
+## 组件接口说明
 
 
+## 协议说明
+
+```
+
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": {
+    "refEntity": {
+      "id": 1000002,
+      "code": "dept",
+      "name": "部门",
+      "description": "部门",
+      "refType": "dept",
+	    ...
+    },
+    "gridMeta": {
+      "viewmodel": {
+        "iBillId": 1001283066,
+        "cBillName": "部门参照",
+        "cBillNo": "deptref",
+        "cBillType": "Archive",
+        "cSubId": "AA",
+        "bBatchOperate": true,
+        "entities": [...]
+        "actions": [...]
+      },
+      "viewApplication": {
+        "billid": 1001283066,
+        "cBillName": "部门参照",
+        "cBillType": "Archive",
+        "cBillNo": "deptref",
+        "bAllowMultiTpl": false,
+        "cSubId": "AA",
+        "cCardKey": "dept",
+        "view": { ... },
+        "extscripturls": [...]
+      }
+    }
+  }
+}
+``
 
 ## 参与开发
 
