@@ -26,7 +26,7 @@ const RefTableComponent = () => (
 
 ### `UMD` 规范的通用 `CDN` 文件
 
-- 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/ref-mdd/0.0.1/js/ref-mdd.js"></script>`
+- 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/ref-mdd/latest/ref-core.js"></script>`
 
 - 初始化：`window.MTLCore.initComponent(options)`
 
