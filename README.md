@@ -8,6 +8,7 @@
 ## 如何使用
 
 ### 组件方式调用
+
 ```
 import { MTLComponent } from 'ref-mdd';
 
@@ -76,7 +77,7 @@ const RefTableComponent = () => (
     }
   }
 }
-``
+```
 
 ## 参与开发
 
