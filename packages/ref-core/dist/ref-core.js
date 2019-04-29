@@ -794,6 +794,16 @@
 
 	var inheritsLoose = _inheritsLoose;
 
+	var axiosConfig = {
+	  headers: {
+	    'content-Type': 'application/json',
+	    "Accept": "/",
+	    "Cache-Control": "no-cache",
+	    "Cookie": document.cookie
+	  },
+	  credentials: "same-origin"
+	};
+	axios.defaults.withCredentials = true;
 	function getMeta(url) {
 	  return axios({
 	    timeout: 8000,
@@ -802,7 +812,7 @@
 	    params: {
 	      r: Math.random()
 	    }
-	  });
+	  }, axiosConfig);
 	}
 
 	var refValParse = function refValParse(value, valueField, displayField) {

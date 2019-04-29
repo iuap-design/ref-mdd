@@ -20,11 +20,14 @@ import MtlCore, { MTLComponent } from 'ref-mdd';
 
 import './index.less';
 const mtlUrl = {
-    tableMetaUrl: "/mock/717/dept/getRefMeta",
-    tableDataUrl: "/mock/717/dept/getRefData",
+    tableMetaUrl:'/uniform/pub/ref/getRefMeta',
+    tableDataUrl: "/uniform/bill/ref/getRefData",
     treeMetaUrl: '/mock/717/deptTree/getRefMeta',
     treeDataUrl: '/mock/717/deptTree/getRefData'
 }
+const serviceCode = 'bankdot_u8c';
+const refCode = 'bd_bankref';
+const tablecItemName='bank_name';
 //所需变量
 const { FormItem } = Form;
 
@@ -96,14 +99,14 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>部门</Label>
-                            <MTLComponent form={_this.props.form} url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
+                            <MTLComponent form={_this.props.form} url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} serviceCode={serviceCode} refCode={refCode} cItemName={tablecItemName}/>
                         </FormItem>
                     </Col>
 
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>组织</Label>
-                            <MTLComponent form={_this.props.form} url={mtlUrl.treeMetaUrl} dataUrl={mtlUrl.treeDataUrl} />
+                            <MTLComponent form={_this.props.form} url={mtlUrl.treeMetaUrl} dataUrl={mtlUrl.treeDataUrl} serviceCode={serviceCode} refCode={refCode}/>
                         </FormItem>
                     </Col>
                 </Row>
