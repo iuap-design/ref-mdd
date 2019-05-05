@@ -221,18 +221,15 @@ class Table extends Component {
     // 复杂查询
     searchFilterInfo = (filterInfo) => {
         const _this = this;
-        let { refModelUrl: { tableBodyUrl }, param, jsonp, headers } = this.props;
+        let { refModelUrl: { tableBodyUrl }, param } = this.props;
 
         this.filterInfo = filterInfo;
         this.setState({
             showLoading: true,
-            // tableIsSelecting: true
         }, function () {
             let { pageSize } = _this;
-            let paramWithFilter = Object.assign({}, param, { page: 0, pageSize: pageSize, content: '', 'refClientPageInfo.currPageIndex': 0, 'refClientPageInfo.pageSize': pageSize })
-            if (Object.keys(filterInfo).length > 0) {
-                paramWithFilter.content = JSON.stringify(filterInfo)
-            }
+            let paramWithFilter = Object.assign({}, param, {page:{pageIndex: 0, pageSize: pageSize}, likeValue: filterInfo })
+     
 
             _this.loadTableData(paramWithFilter);
         })
@@ -300,9 +297,8 @@ class Table extends Component {
             filterInfo: filterInfo,
             dataNumSelect: dataNumSelect,
             handlePagination: handlePagination,
-            searchFilterInfo: searchFilterInfo,
+            miniSearchFunc: searchFilterInfo,
             emptyBut: true,
-            valueField:'id'
         });
         return (
             <RefMultipleTableBaseUI

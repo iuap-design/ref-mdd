@@ -9,10 +9,9 @@ export function getReferData(){
 export function getQueryParam(type,refEntity,viewApplication){
     let rsParam = {};
     rsParam.dataType = type;
-    rsParam.refCode = refEntity.code; 
-    rsParam.key =  viewApplication.cCardKey;
+    rsParam.refCode = refEntity.refType; 
+    // rsParam.key =  viewApplication.cCardKey;
     rsParam.billnum = refEntity.cBillnum;
-    rsParam.externalData = "filter";
     return rsParam;
 
 }

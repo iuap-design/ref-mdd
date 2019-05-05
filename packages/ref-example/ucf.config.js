@@ -34,7 +34,7 @@ module.exports = (env, argv) => {
                 enable: true,
                 headers: {
                     "Referer": "https://u8cucf-daily.yyuap.com",
-                    "cookie":'_ga=GA1.2.1214828560.1545451044; locale=zh_CN; gr_user_id=8e520258-78de-4126-904c-dec7a3d15de2; grwng_uid=dc23e26e-13fb-4b14-8fc3-3dc6234e8e87; acw_tc=276aedc515562454477878132e3b041fc1220f9c6e79d8dd15d7fd3a977535; Hm_lvt_diwork=1556245449; SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; ck_safe_chaoke_csrf_token=4a45429889ddb26b6abbdfa7f53d5c8a; at=12d5f9e4d1cabb70af6eabe4b97732b4; yonyou_uid=4eb96061-ccc5-4012-9998-95d274440c00; yonyou_uname=vipkid0417%40test1988.com; JSESSIONID=node01mw4mtxc3h4rb1wyc36fkx45bz678.node0; yht_username=ST-20694-guVgRebapdiBtkqTopkb-cas01.example.org__4eb96061-ccc5-4012-9998-95d274440c00; yht_usertoken=S2j6Th%2FVvhJdu2s4%2FiLXu4sEdvnaIWBLFw4cozdKPtUqRbadaorqvR29TavO9qvIwg5fkcJCVMGmDCbv35%2BGAw%3D%3D; yht_access_token=btt6246f88c-3178-497b-b6b8-7066971d20c7__1556506607053; wb_at=LMjomsvqjftOfKdaZoch4sjpMnojajbZrmnkdwZlokdknqf; jwt_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaXdvcmsiLCJzZXNzaW9uIjoie1wiY2xpZW50SXBcIjpcIjEwLjMuNS41MVwiLFwiY3JlYXRlRGF0ZVwiOjE1NTY1MDY2MDYsXCJleHRcIjp7XCJvcmdTdGF0dXNcIjpcIm11bHRpXCIsXCJhZG1pblwiOnRydWUsXCJ5aHRfYWNjZXNzX3Rva2VuXCI6XCJidHQ2MjQ2Zjg4Yy0zMTc4LTQ5N2ItYjZiOC03MDY2OTcxZDIwYzdfXzE1NTY1MDY2MDcwNTNcIn0sXCJqd3RFeHBTZWNcIjo2MCxcImp3dFZhbGlkRGF0ZVwiOjAsXCJsYXN0RGF0ZVwiOjE1NTY1MDY2MDgsXCJsb2NhbGVcIjpcInpoX0NOXCIsXCJwcm9kdWN0TGluZVwiOlwidThjXCIsXCJzZXNzaW9uRXhwTWluXCI6MjE2MCxcInNlc3Npb25JZFwiOlwiTE1qb21zdnFqZnRPZktkYVpvY2g0c2pwTW5vamFqYlpybW5rZHdabG9rZGtucWZcIixcInNvdXJjZUlkXCI6XCJkaXdvcmtcIixcInRlbmFudElkXCI6XCJ6ZWR6bXNjbFwiLFwidXNlcklkXCI6XCI0ZWI5NjA2MS1jY2M1LTQwMTItOTk5OC05NWQyNzQ0NDBjMDBcIn0iLCJleHAiOjE1NTY1MDY2Njh9.w56Abl49TSLXVN5l3_-BAJd8PP1ycXsLB7APRUW-Uco; Hm_lpvt_diwork=1556506609; PHPSESSID=6nfmc87u70ijuq8dvj67488md7'
+                    "cookie":'acw_tc=3ccdc16515566030932683593e077dc701159bc0942a794a1d5bcd893843e1; locale=zh_CN; Hm_lvt_diwork=1556603095; SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; at=1f574a325eac79e5796de43a4869a9c0; yonyou_uid=804fc21c-cbc3-4b73-afc2-040c3f476e74; yonyou_uname=19433888888; JSESSIONID=node01dd3cznnaqk661k3ie4g24iocb1249.node0; yht_username=ST-21631-ZKvu2fMueFNSJAeBLaY3-cas01.example.org__804fc21c-cbc3-4b73-afc2-040c3f476e74; yht_usertoken=3CBNW5mgZhu4wyCj3RUF%2FzMoAQFoE9HonsrNORzbVzPYgPqJsAOXs8vUZfjYPCBJVPkd1AxMm866NL8TZSKBRg%3D%3D; yht_access_token=btt4397e535-3ac2-402b-a2b4-4e46d69aef51__1556603319228; wb_at=LMjonspnjSDutoeFtd8GLC3d4EZRpjbZrmnkdwZlokdknqf; jwt_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaXdvcmsiLCJzZXNzaW9uIjoie1wiY2xpZW50SXBcIjpcIjEwLjMuNS41MlwiLFwiY3JlYXRlRGF0ZVwiOjE1NTY2MDMzMTksXCJleHRcIjp7XCJvcmdTdGF0dXNcIjpcIm11bHRpXCIsXCJhZG1pblwiOnRydWUsXCJsb2dvXCI6XCJodHRwOi8vY2RuLnlvbnlvdWNsb3VkLmNvbS9kZXYvYXBjZW50ZXIvaW1nL2xvZ28vTE9HTy5wbmdcIixcInlodF9hY2Nlc3NfdG9rZW5cIjpcImJ0dDQzOTdlNTM1LTNhYzItNDAyYi1hMmI0LTRlNDZkNjlhZWY1MV9fMTU1NjYwMzMxOTIyOFwifSxcImp3dEV4cFNlY1wiOjYwLFwiand0VmFsaWREYXRlXCI6MCxcImxhc3REYXRlXCI6MTU1NjYwMzMyMCxcImxvY2FsZVwiOlwiemhfQ05cIixcInByb2R1Y3RMaW5lXCI6XCJ1OGNcIixcInNlc3Npb25FeHBNaW5cIjoyMTYwLFwic2Vzc2lvbklkXCI6XCJMTWpvbnNwbmpTRHV0b2VGdGQ4R0xDM2Q0RVpScGpiWnJtbmtkd1psb2tka25xZlwiLFwic291cmNlSWRcIjpcImRpd29ya1wiLFwidGVuYW50SWRcIjpcImVteHZycTMwXCIsXCJ1c2VySWRcIjpcIjgwNGZjMjFjLWNiYzMtNGI3My1hZmMyLTA0MGMzZjQ3NmU3NFwifSIsImV4cCI6MTU1NjYwMzM4MH0.tIL2hcJYhG_-VjVSy6BYEl0mwN3cFUwRfsE3H-uwO-Q; Hm_lpvt_diwork=1556603321; PHPSESSID=qke7mb8cqb7o4npdg01kgeoj17; ck_safe_chaoke_csrf_token=fc31e859568a347646d23988b57a7770'
                 },
                 //要代理访问的对方路由
                 router: [
@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
         },
         // 别名配置
         alias: {
-            'ref-mdd': path.resolve(__dirname, 'ucf-common/src/mtl-core/')
+            'ref-mdd1': path.resolve(__dirname, 'ucf-common/src/mtl-core/')
         },
         // 构建排除指定包
         externals: {
@@ -74,3 +74,5 @@ module.exports = (env, argv) => {
         buildPlugins: []
     }
 }
+
+

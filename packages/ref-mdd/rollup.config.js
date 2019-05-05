@@ -9,14 +9,15 @@ import postcss from 'rollup-plugin-postcss';
 // PostCSS plugins
 import simplevars from 'postcss-simple-vars';
 import nested from 'postcss-nested';
-import cssnext from 'postcss-cssnext';
+// import cssnext from 'postcss-cssnext';
+// import postcssPresetEnv from 'postcss-preset-env';
 import cssnano from 'cssnano';
 export default {
   input: 'lib/index.js',
   output: {
-    file: 'dist/ref-core.js',
+    file: 'dist/ref-mdd.js',
     format: 'umd',
-    name: 'RefCore',
+    name: 'RefMdd',
     globals: {
       react: 'React',
       axios: 'axios',
@@ -35,7 +36,6 @@ export default {
       plugins:[
               simplevars(),
               nested(),
-              cssnext({ warnForDuplicates: false, }),
               cssnano(),
              ],
       extract: true,
@@ -50,7 +50,12 @@ export default {
              '*.json'
       ],// only transpile our source code
     }),
-    commonjs()
+    commonjs({
+      include: 'node_modules/**',
+      namedExports: {
+        'node_modules/react-is/index.js': ['isValidElementType']
+      }
+    })
     // commonjs({
     //   namedExports: {
     //     // left-hand side can be an absolute path, a path

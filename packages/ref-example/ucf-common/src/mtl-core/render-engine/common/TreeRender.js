@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { FormControl, Form } from 'tinper-bee';
 import RefWithInput from 'ref-core/lib/refs/RefCoreWithInput';
 import RefTree from '../../components/RefControl/Tree';
-import 'ref-core/css/refcorewithinput.css';
+// import 'ref-core/css/refcorewithinput.css';
 import { connect } from 'mini-store';
 
 @connect(state => ({ form: state.form }))
@@ -32,11 +32,7 @@ class TreeRender extends Component {
         console.log(displayField,valueField);
         const dataURL =  store.getState().dataUrl;
         const { getFieldError, getFieldProps } = this.props.form;
-        // const { cBillName, view } = viewApplication;
-        // const queryParam = getQueryParam('grid',refEntity,viewApplication);
-        // const refModelUrl = {
-        //     tableBodyUrl:dataURL
-        // }
+      
 
         const option = {
             title: name,

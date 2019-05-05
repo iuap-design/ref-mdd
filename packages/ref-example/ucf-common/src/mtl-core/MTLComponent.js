@@ -49,6 +49,7 @@ class MTLComponent extends Component {
     getMetaDataByCustomURL = async url => {
         const {serviceCode,refCode} = this.props;
         url += `?serviceCode=${serviceCode}&refCode=${refCode}`;
+        console.log(url);
         let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
 

@@ -3,8 +3,8 @@ import { Provider, connect, create } from 'mini-store';
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
 import store from './datamodel/store';
-
-
+import "ref-tree/lib/theme-red.css";
+import './style/index.less';
 class MTLComponent extends Component {
     constructor(props) {
         super(props)
@@ -47,6 +47,8 @@ class MTLComponent extends Component {
     }
 
     getMetaDataByCustomURL = async url => {
+        const {serviceCode,refCode} = this.props;
+        url += `?serviceCode=${serviceCode}&refCode=${refCode}`;
         let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
 
@@ -85,13 +87,13 @@ class MTLComponent extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl } = this.props;
+        let { form,dataUrl,refCode,serviceCode ,cItemName} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
 
         } else {
             return (
-                <Provider store={store({ meta: this.meta, form ,dataUrl})}>
+                <Provider store={store({ meta: this.meta, form ,dataUrl,refCode,serviceCode,cItemName})}>
                     <RenderEngine />
                 </Provider>
             )

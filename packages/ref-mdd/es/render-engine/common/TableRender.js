@@ -11,7 +11,6 @@ import { FormControl, Form } from 'tinper-bee';
 import { connect } from 'mini-store';
 import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 import RefTable from '../../components/RefControl/Table';
-import 'ref-core/lib/refs/refcorewithinput.css';
 import 'ref-multiple-table/lib/index.css';
 import { getQueryParam } from "./util";
 var TableRender = (_dec = connect(function (state) {

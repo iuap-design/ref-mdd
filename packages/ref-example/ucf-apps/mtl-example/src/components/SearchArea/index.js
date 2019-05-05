@@ -17,7 +17,7 @@ import { deepClone } from "utils";
 import SearchPanel from 'components/SearchPanel';
 
 import MtlCore, { MTLComponent } from 'ref-mdd';
-
+import 'ref-mdd/dist/ref-core.css';
 import './index.less';
 const mtlUrl = {
     tableMetaUrl:'/uniform/pub/ref/getRefMeta',

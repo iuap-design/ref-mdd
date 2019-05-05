@@ -1,6 +1,6 @@
 {
   "name": "ref-mdd",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/ref-core.js",
   "scripts": {
@@ -37,11 +37,14 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "axios": "^0.18.0",
+    "less": "^3.9.0",
     "mini-store": "^2.0.0",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "ref-multiple-table": "^2.0.1-beta.4",
-    "ref-tree": "^2.0.1-beta.1",
-    "tinper-bee": "^2.0.0-alpha.9"
+    "postcss-preset-env": "^6.6.0",
+    "react": "16.8.4",
+    "react-dom": "16.8.4",
+    "ref-core": "^0.2.0",
+    "ref-multiple-table": "^2.0.1",
+    "ref-tree": "^2.0.2",
+    "tinper-bee": "^2.0.9"
   }
 }
