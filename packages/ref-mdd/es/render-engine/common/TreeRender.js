@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import { FormControl, Form } from 'tinper-bee';
 import RefWithInput from 'ref-core/lib/refs/refcorewithinput';
 import RefTree from '../../components/RefControl/Tree';
-import 'ref-core/lib/refs/refcorewithinput.css';
+import 'ref-core/css/refcorewithinput.css';
 import { connect } from 'mini-store';
 var TreeRender = (_dec = connect(function (state) {
   return {

@@ -9,8 +9,8 @@ import postcss from 'rollup-plugin-postcss';
 // PostCSS plugins
 import simplevars from 'postcss-simple-vars';
 import nested from 'postcss-nested';
-// import cssnext from 'postcss-cssnext';
-// import postcssPresetEnv from 'postcss-preset-env';
+import cssnext from 'postcss-cssnext';
+import postcssPresetEnv from 'postcss-preset-env';
 import cssnano from 'cssnano';
 export default {
   input: 'lib/index.js',

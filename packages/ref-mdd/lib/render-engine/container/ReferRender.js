@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import { connect } from 'mini-store';
 
 import TableRender from '../common/TableRender';
-import TreeRender from '../common/TreeRender';
+// import TreeRender from '../common/TreeRender';
 
 @connect()
 class RefRender extends Component {
@@ -18,8 +18,8 @@ class RefRender extends Component {
         switch (refEntity.cTpltype) {
             case 'Table':// 简单表格
                 return <TableRender />
-            case 'Tree':
-                return <TreeRender />
+            // case 'Tree':
+            //     return <TreeRender />
             default:
                 return <div>参照渲染类型错误</div>
         }

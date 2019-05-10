@@ -5,8 +5,8 @@
 import React, { Component } from 'react';
 import { connect } from 'mini-store';
 
-import TableRender from '../common/TableRender';
-import TreeRender from '../common/TreeRender';
+import TableRender from '../../components/RefControl/Table';
+import TreeRender from '../../components/RefControl/Tree';
 
 @connect()
 class RefRender extends Component {

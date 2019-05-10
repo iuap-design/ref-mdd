@@ -33,14 +33,14 @@ module.exports = (env, argv) => {
             },{
                 enable: true,
                 headers: {
-                    "Referer": "https://u8cucf-daily.yyuap.com",
-                    "cookie":'acw_tc=3ccdc16515566030932683593e077dc701159bc0942a794a1d5bcd893843e1; locale=zh_CN; Hm_lvt_diwork=1556603095; SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; at=1f574a325eac79e5796de43a4869a9c0; yonyou_uid=804fc21c-cbc3-4b73-afc2-040c3f476e74; yonyou_uname=19433888888; JSESSIONID=node01dd3cznnaqk661k3ie4g24iocb1249.node0; yht_username=ST-21631-ZKvu2fMueFNSJAeBLaY3-cas01.example.org__804fc21c-cbc3-4b73-afc2-040c3f476e74; yht_usertoken=3CBNW5mgZhu4wyCj3RUF%2FzMoAQFoE9HonsrNORzbVzPYgPqJsAOXs8vUZfjYPCBJVPkd1AxMm866NL8TZSKBRg%3D%3D; yht_access_token=btt4397e535-3ac2-402b-a2b4-4e46d69aef51__1556603319228; wb_at=LMjonspnjSDutoeFtd8GLC3d4EZRpjbZrmnkdwZlokdknqf; jwt_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaXdvcmsiLCJzZXNzaW9uIjoie1wiY2xpZW50SXBcIjpcIjEwLjMuNS41MlwiLFwiY3JlYXRlRGF0ZVwiOjE1NTY2MDMzMTksXCJleHRcIjp7XCJvcmdTdGF0dXNcIjpcIm11bHRpXCIsXCJhZG1pblwiOnRydWUsXCJsb2dvXCI6XCJodHRwOi8vY2RuLnlvbnlvdWNsb3VkLmNvbS9kZXYvYXBjZW50ZXIvaW1nL2xvZ28vTE9HTy5wbmdcIixcInlodF9hY2Nlc3NfdG9rZW5cIjpcImJ0dDQzOTdlNTM1LTNhYzItNDAyYi1hMmI0LTRlNDZkNjlhZWY1MV9fMTU1NjYwMzMxOTIyOFwifSxcImp3dEV4cFNlY1wiOjYwLFwiand0VmFsaWREYXRlXCI6MCxcImxhc3REYXRlXCI6MTU1NjYwMzMyMCxcImxvY2FsZVwiOlwiemhfQ05cIixcInByb2R1Y3RMaW5lXCI6XCJ1OGNcIixcInNlc3Npb25FeHBNaW5cIjoyMTYwLFwic2Vzc2lvbklkXCI6XCJMTWpvbnNwbmpTRHV0b2VGdGQ4R0xDM2Q0RVpScGpiWnJtbmtkd1psb2tka25xZlwiLFwic291cmNlSWRcIjpcImRpd29ya1wiLFwidGVuYW50SWRcIjpcImVteHZycTMwXCIsXCJ1c2VySWRcIjpcIjgwNGZjMjFjLWNiYzMtNGI3My1hZmMyLTA0MGMzZjQ3NmU3NFwifSIsImV4cCI6MTU1NjYwMzM4MH0.tIL2hcJYhG_-VjVSy6BYEl0mwN3cFUwRfsE3H-uwO-Q; Hm_lpvt_diwork=1556603321; PHPSESSID=qke7mb8cqb7o4npdg01kgeoj17; ck_safe_chaoke_csrf_token=fc31e859568a347646d23988b57a7770'
+                    "Referer": "http://ucfbasedoc-fe.test.app.yyuap.com",
+                    "cookie":'locale=zh_CN; SL_GWPT_Show_Hide_tmp=1; SL_wptGlobTipTmp=1; Hm_lvt_diwork=1557047341; PHPSESSID=a0bglf6vb14te0g4fr2mo81320; at=409bebc5caebea4c3f2b422982b7fb54; yonyou_uid=99ea7655-00a2-4bda-b23c-19ade37ea574; yonyou_uname=u8c_vip%40163.com; JSESSIONID=node01hstemnpsyy8biq19vrjmr8rn1082.node0; yht_username=ST-2215-yzbOhdYOwcKpTmglGRhI-cas01.example.org__99ea7655-00a2-4bda-b23c-19ade37ea574; yht_usertoken=vVKYw5AlnH3OxfcUNmDgtH4yT6wg99aEoledmd24Lb5BBE9VeqzzaXIc0F7Tzwuxp8f94KXfAaUrEf2KVpgCEQ%3D%3D; yht_access_token=bttf1ecb88f-3cce-4f41-8100-3c553608b742__1557369520724; wb_at=LMjoonrjxyaHgcRHvbDoMlfk9KgBjbZrmnkdwZlokdknqf; jwt_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaXdvcmsiLCJzZXNzaW9uIjoie1wiY2xpZW50SXBcIjpcIjEwLjYuMTkzLjExNVwiLFwiY3JlYXRlRGF0ZVwiOjE1NTczNjk1MjAsXCJleHRcIjp7XCJvcmdTdGF0dXNcIjpcIm11bHRpXCIsXCJhZG1pblwiOnRydWUsXCJsb2dvXCI6XCJodHRwczovL2ZpbGUtY2RuLnlvbnlvdWNsb3VkLmNvbS93b3JrYmVuY2gtaW1hZ2UtcGF0aC1hcHBsaWNhdGlvbkljb24vMjlkYTYzNzYtYTAwNS00YWRiLTgyMmItZDg3MmVmMGM5MjU5L3Bob3RvLmpwZ1wiLFwieWh0X2FjY2Vzc190b2tlblwiOlwiYnR0ZjFlY2I4OGYtM2NjZS00ZjQxLTgxMDAtM2M1NTM2MDhiNzQyX18xNTU3MzY5NTIwNzI0XCJ9LFwiand0RXhwU2VjXCI6NjAsXCJqd3RWYWxpZERhdGVcIjowLFwibGFzdERhdGVcIjoxNTU3MzY5NTIzLFwibG9jYWxlXCI6XCJ6aF9DTlwiLFwicHJvZHVjdExpbmVcIjpcInU4Y1wiLFwic2Vzc2lvbkV4cE1pblwiOjIxNjAsXCJzZXNzaW9uSWRcIjpcIkxNam9vbnJqeHlhSGdjUkh2YkRvTWxmazlLZ0JqYlpybW5rZHdabG9rZGtucWZcIixcInNvdXJjZUlkXCI6XCJkaXdvcmtcIixcInRlbmFudElkXCI6XCJhNjV4dHF3elwiLFwidXNlcklkXCI6XCI5OWVhNzY1NS0wMGEyLTRiZGEtYjIzYy0xOWFkZTM3ZWE1NzRcIn0iLCJleHAiOjE1NTczNjk1ODN9.z0RFcw0X18vtRKRDlh8R6Yvtc9kDWTou6Bkg08cYa3U; Hm_lpvt_diwork=1557369524'
                 },
                 //要代理访问的对方路由
                 router: [
                     '/uniform'
                 ],
-                url: 'https://u8cucf-daily.yyuap.com'
+                url: 'http://ucfbasedoc-fe.test.app.yyuap.com'
                 
             }
         ],
@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
         },
         // 别名配置
         alias: {
-            'ref-mdd1': path.resolve(__dirname, 'ucf-common/src/mtl-core/')
+            'ref-mdd': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
         },
         // 构建排除指定包
         externals: {

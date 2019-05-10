@@ -3,7 +3,6 @@ import { Provider, connect, create } from 'mini-store';
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
 import store from './datamodel/store';
-import "ref-tree/lib/theme-red.css";
 import './style/index.less';
 class MTLComponent extends Component {
     constructor(props) {

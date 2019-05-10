@@ -10,14 +10,14 @@ import {
   RefMultipleTableWithInput
 } from "ref-multiple-table/lib/index";
 // 工具类
-import { refValParse,getQueryParam } from "../../utils";
+import { refValParse,getQueryParam,initReferInfo } from "../../utils";
 import request from "../../utils/request";
 // 样式
 import "ref-multiple-table/lib/index.css";
 
 const dataType = "grid";
 @connect(state => ({ form: state.form }))
-class TableRender extends Component {
+class Table extends Component {
 
   constructor(props) {
     super(props);
@@ -27,19 +27,17 @@ class TableRender extends Component {
       mustRender: 0
     };
 
-    let { store } = this.props;
+    let { store ,getDataParams} = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
-    this.valueField = refEntity.cEntityKeyFld;//参照真实值
-    this.displayField = refEntity.cEntityNameFld;//参照显示值
-    this.param = getQueryParam(dataType, refEntity, viewApplication);//数据查询参数
+     initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams);
     this.view = viewApplication.view;
-    this.tableBodyUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
     this.tableData = []; //表格数据
     this.pageCount = 1; //总页数
     this.pageSize = "10"; //每页数据数
     this.currPageIndex = 1; //激活页码
-    this.fliterFormInputs = [];
+    this.filterFormInputs = [];
     this.filterInfo = {};
     this.checkedArray = [];
     this.checkedMap = {};
@@ -64,37 +62,13 @@ class TableRender extends Component {
     };
   
     let requestList = [_this.getTableHeader(), _this.getTableData(param)];
-    let valueMap = refValParse(value, valueField, displayField);
-    if (_this.checkedArray.length == 0 && valueMap[valueField]) {
-      requestList.push(
-        new Promise((resolve, reject) => {
-          resolve({ data: [] });
-        })
-      );
-    }
+
 
     Promise.all(requestList)
-      .then(([columnsData, bodyData, matchData]) => {
+      .then(([columnsData, bodyData]) => {
         // 请求完表体数据回调
         if (_this.onAfterAjax) {
           _this.onAfterAjax(bodyData);
-        }
-        if (matchData) {
-          let { data = [] } = matchData;
-          _this.checkedMap = {};
-          _this.checkedArray = data.map(item => {
-            item.key = item[valueField];
-            item._checked = true;
-            _this.checkedMap[item.key] = item;
-            return item;
-          });
-          // if (Object.prototype.toString.call(onMatchInitValue) === '[object Function]') {
-          //     onMatchInitValue(data);
-          // }
-          _this.setState({
-            selectedDataLength: this.checkedArray.length,
-            mustRender: Math.random()
-          });
         }
         _this.launchTableHeader(columnsData);
         _this.launchTableData(bodyData);
@@ -139,7 +113,7 @@ class TableRender extends Component {
   };
 
   getTableData = params => {
-    return request(this.tableBodyUrl, {
+    return request(this.dataUrl, {
       method: "post",
       data: params
     });
@@ -155,9 +129,9 @@ class TableRender extends Component {
     let keyList = data.strFieldCode || [];
     let titleList = data.strFieldName || [];
     const valueField = this.valueField;
-    this.fliterFormInputs = [];
+    this.filterFormInputs = [];
     let colunmsList = keyList.map((item, index) => {
-      this.fliterFormInputs.push(
+      this.filterFormInputs.push(
         <SearchPanelItem key={item} name={item} text={titleList[index]}>
           <FormControl />
         </SearchPanelItem>
@@ -223,7 +197,7 @@ class TableRender extends Component {
     });
     const _this = this;
 
-    this.getTableData(param)
+    _this.getTableData(param)
       .then(response => {
         _this.launchTableData(response);
         _this.setState({
@@ -241,7 +215,7 @@ class TableRender extends Component {
   // 复杂查询
   searchFilterInfo = filterInfo => {
     const _this = this;
-    let { tableBodyUrl, param } = this;
+    let { param } = this;
 
     this.filterInfo = filterInfo;
     this.setState(
@@ -265,8 +239,7 @@ class TableRender extends Component {
    * @param {number} index 跳转页数
    */
   handlePagination = index => {
-    let { filterInfo } = this;
-    let { param } = this.props;
+    let { filterInfo,param } = this;
     Object.keys(filterInfo).forEach(key => {
       if (!filterInfo[key]) {
         delete filterInfo[key];
@@ -275,7 +248,7 @@ class TableRender extends Component {
 
     param.page = {
       pageSize: this.pageSize,
-      pageIndex: index - 1
+      pageIndex: index
     };
     if (Object.keys(filterInfo) > 0) {
       param.content = JSON.stringify(filterInfo);
@@ -286,8 +259,7 @@ class TableRender extends Component {
    * 选择每页数据个数
    */
   dataNumSelect = (index, pageSize) => {
-    let { filterInfo } = this;
-    let { param } = this.props;
+    let { filterInfo,param } = this;
     Object.keys(filterInfo).forEach(key => {
       if (!filterInfo[key]) {
         delete filterInfo[key];
@@ -321,29 +293,24 @@ class TableRender extends Component {
       pageCount,
       pageSize,
       currPageIndex,
-      fliterFormInputs,
+      filterFormInputs,
       filterInfo,
     } = this;
     let { dataNumSelect, handlePagination, searchFilterInfo } = this;
-
+ 
     const props = {
       // placeholder: extendField.placeholder,
       title: cBillName,
-      backdrop: true,
-      disabled: false,
       multiple: refEntity.bMultiSel,
-      strictMode: true,
-      miniSearch: true,
-      displayField: displayField,
+      displayField: `{${displayField}}`,
       valueField: valueField,
-
       showLoading: showLoading,
       columnsData: columnsData,
       tableData: tableData,
       pageCount: pageCount,
       pageSize: pageSize,
       currPageIndex: currPageIndex,
-      fliterFormInputs: fliterFormInputs,
+      filterFormInputs: filterFormInputs,
       filterInfo: filterInfo,
       dataNumSelect: dataNumSelect,
       handlePagination: handlePagination,
@@ -352,7 +319,7 @@ class TableRender extends Component {
     };
     console.log(props);
     return (
-      <div>
+      <div className='ref-container'>
         <RefMultipleTableWithInput
           {...props}
           onSave={this.onSave}
@@ -373,4 +340,4 @@ class TableRender extends Component {
   }
 }
 
-export default TableRender;
+export default Table;

@@ -2,10 +2,10 @@
  * 树参照
  */
 import React, { Component } from 'react';
-// import { FormControl, Form } from 'tinper-bee';
+import { FormControl, Form } from 'tinper-bee';
 import RefWithInput from 'ref-core/lib/refs/RefCoreWithInput';
 import RefTree from '../../components/RefControl/Tree';
-import 'ref-core/css/refcorewithinput.css';
+// import 'ref-core/css/refcorewithinput.css';
 import { connect } from 'mini-store';
 
 @connect(state => ({ form: state.form }))
@@ -54,7 +54,6 @@ class TreeRender extends Component {
             },
             matchUrl: '',//查找已选中的数据的URL,没有这个字段
             filterUrl: '',//输入框搜索匹配的URL,没有这个字段
-            lazyModal: false,//是否是懒加载树
             strictMode: true,//是否调用之前缓存的数据，为true则不重新请求
             lang: 'zh_CN',
             defaultExpandAll:false

@@ -17,17 +17,34 @@ import { deepClone } from "utils";
 import SearchPanel from 'components/SearchPanel';
 
 import MtlCore, { MTLComponent } from 'ref-mdd';
-import 'ref-mdd/dist/ref-core.css';
+import 'ref-mdd/dist/ref-mdd.css';
 import './index.less';
 const mtlUrl = {
     tableMetaUrl:'/uniform/pub/ref/getRefMeta',
     tableDataUrl: "/uniform/bill/ref/getRefData",
-    treeMetaUrl: '/mock/717/deptTree/getRefMeta',
-    treeDataUrl: '/mock/717/deptTree/getRefData'
+    treeMetaUrl: '/uniform/pub/ref/getRefMeta',
+    treeDataUrl: '/uniform/bill/ref/getRefData'
 }
-const serviceCode = 'bankdot_u8c';
-const refCode = 'bd_bankref';
-const tablecItemName='bank_name';
+const serviceCode = 'GZTBDM061';
+const refCode = 'bd_countryref';
+const tablecItemName='country_name';
+
+const mtlInfo = {
+    table:{
+        metaUrl:'/uniform/pub/ref/getRefMeta',
+        dataUrl:'/uniform/bill/ref/getRefData',
+        serviceCode:'GZTBDM061',
+        refCode:'bd_countryref',
+        itemName:'country_name'
+    },
+    tree:{
+        metaUrl:'/uniform/pub/ref/getRefMeta',
+        dataUrl:'/uniform/bill/ref/getRefData',
+        serviceCode:'enterprise_bank_account_u8c',
+        refCode:'bd_financeorgtreeref',
+        itemName:'orgid_name'
+    }
+}
 //所需变量
 const { FormItem } = Form;
 
@@ -106,7 +123,7 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>组织</Label>
-                            <MTLComponent form={_this.props.form} url={mtlUrl.treeMetaUrl} dataUrl={mtlUrl.treeDataUrl} serviceCode={serviceCode} refCode={refCode}/>
+                            <MTLComponent form={_this.props.form} url={mtlInfo.tree.metaUrl} dataUrl={mtlInfo.tree.dataUrl} serviceCode={mtlInfo.tree.serviceCode} refCode={mtlInfo.tree.refCode} cItemName={mtlInfo.tree.itemName}/>
                         </FormItem>
                     </Col>
                 </Row>
