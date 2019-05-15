@@ -31,18 +31,24 @@ const tablecItemName='country_name';
 
 const mtlInfo = {
     table:{
-        metaUrl:'/uniform/pub/ref/getRefMeta',
-        dataUrl:'/uniform/bill/ref/getRefData',
+        metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=bttdc03621c-ced5-4d3d-b91c-66bdf35e356a__1557907203843',
+        dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=bttdc03621c-ced5-4d3d-b91c-66bdf35e356a__1557907203843',
         serviceCode:'GZTBDM061',
-        refCode:'bd_countryref',
+        refCode:'ucfbasedoc.bd_countryref',
         itemName:'country_name'
     },
     tree:{
         metaUrl:'/uniform/pub/ref/getRefMeta',
-        dataUrl:'/uniform/bill/ref/getRefData',
         serviceCode:'enterprise_bank_account_u8c',
         refCode:'bd_financeorgtreeref',
         itemName:'orgid_name'
+    },
+    treeTable:{
+        metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?token=bttcbc70fea-5232-41eb-9ee2-e6dd48e410f8__1557732213467',
+        dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?token=bttcbc70fea-5232-41eb-9ee2-e6dd48e410f8__1557732213467',
+        serviceCode:'GZTBDM111',
+        refCode:'pc_taxrevenueref',
+        itemName:'taxClass_Code'
     }
 }
 //所需变量
@@ -116,14 +122,20 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>部门</Label>
-                            <MTLComponent form={_this.props.form} url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} serviceCode={serviceCode} refCode={refCode} cItemName={tablecItemName}/>
+                            <MTLComponent form={_this.props.form} url={mtlInfo.table.metaUrl}  serviceCode={mtlInfo.table.serviceCode} refCode={mtlInfo.table.refCode} cItemName={mtlInfo.table.itemName}/>
                         </FormItem>
                     </Col>
 
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>组织</Label>
-                            <MTLComponent form={_this.props.form} url={mtlInfo.tree.metaUrl} dataUrl={mtlInfo.tree.dataUrl} serviceCode={mtlInfo.tree.serviceCode} refCode={mtlInfo.tree.refCode} cItemName={mtlInfo.tree.itemName}/>
+                            <MTLComponent form={_this.props.form} url={mtlInfo.tree.metaUrl}  serviceCode={mtlInfo.tree.serviceCode} refCode={mtlInfo.tree.refCode} cItemName={mtlInfo.tree.itemName}/>
+                        </FormItem>
+                    </Col>
+                    <Col md={6} xs={6}>
+                        <FormItem>
+                            <Label>税收分类码</Label>
+                            <MTLComponent form={_this.props.form} url={mtlInfo.treeTable.metaUrl} dataUrl={mtlInfo.treeTable.dataUrl} serviceCode={mtlInfo.treeTable.serviceCode} refCode={mtlInfo.treeTable.refCode} cItemName={mtlInfo.treeTable.itemName}/>
                         </FormItem>
                     </Col>
                 </Row>

@@ -16,8 +16,9 @@ class MTLComponent extends Component {
     }
     meta = {};
     componentWillMount() {
-        let url = this.props.url || '';
-        this.handleDynamicView(url)
+        let url = this.props.url || '/uniform/pub/ref/getRefMeta';
+        // this.handleDynamicView(url)
+        this.getMetaDataByCustomURL(url);
     }
 
     /**

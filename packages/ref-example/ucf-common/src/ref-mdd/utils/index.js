@@ -50,6 +50,9 @@ export function getQueryParam(type,refEntity,viewApplication,getDataParams={}){
 export function initReferInfo(dataType, refEntity, viewApplication,getDataParams){
     this.valueField = refEntity.cEntityKeyFld;//参照真实值
     this.displayField = refEntity.cEntityNameFld;//参照显示值
-    this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    if(!this.dataUrl){
+        this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    }
+   
     this.param = getQueryParam(dataType, refEntity, viewApplication,getDataParams);//数据查询参数
 }

@@ -29,6 +29,7 @@ class Table extends Component {
 
     let { store ,getDataParams} = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
+    this.dataUrl = store.getState().dataUrl;
      initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams);
     this.view = viewApplication.view;
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
@@ -45,26 +46,22 @@ class Table extends Component {
     this.value = ''; //默认值，初始化input框值后续加上
   }
   componentDidMount() {
-    this.initComponent();
+    // this.initComponent();
   }
   onSave = item => {
     console.log("save", item);
   };
   onCancel = () => {};
 
-  initComponent = () => {
-
+  initComponent = async () => {
     const _this = this;
     let { param, valueField, displayField, value } = _this;
     param.page = {
       pageSize: 10,
       pageIndex: 1
     };
-  
     let requestList = [_this.getTableHeader(), _this.getTableData(param)];
-
-
-    Promise.all(requestList)
+    await Promise.all(requestList)
       .then(([columnsData, bodyData]) => {
         // 请求完表体数据回调
         if (_this.onAfterAjax) {
@@ -84,6 +81,7 @@ class Table extends Component {
         });
         console.error(e);
       });
+    return true;
   };
   /**
    * 转换元数据参照表格数据为可识别的格式
@@ -324,6 +322,7 @@ class Table extends Component {
           {...props}
           onSave={this.onSave}
           onCancel={this.onCancel}
+          canClickGoOn={this.initComponent}
           {...getFieldProps(valueField, {
             initialValue: `{${displayField}:"",${valueField}:""}`,
             rules: [
