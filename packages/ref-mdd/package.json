@@ -1,6 +1,6 @@
 {
   "name": "ref-mdd",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "",
   "main": "dist/ref-mdd.js",
   "scripts": {
@@ -43,8 +43,9 @@
     "react": "16.8.4",
     "react-dom": "16.8.4",
     "ref-core": "^0.2.0",
-    "ref-multiple-table": "2.0.1-beta.5",
+    "ref-multiple-table": "^2.0.1",
     "ref-tree": "^2.0.2",
+    "ref-tree-table": "^2.0.5",
     "tinper-bee": "^2.0.9"
   }
 }

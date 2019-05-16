@@ -89,13 +89,13 @@ class MTLComponent extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl,refCode,serviceCode ,cItemName} = this.props;
+        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
 
         } else {
             return (
-                <Provider store={store({ meta: this.meta, form ,dataUrl,refCode,serviceCode,cItemName})}>
+                <Provider store={store({ meta: this.meta, form ,dataUrl,refCode,serviceCode,cItemName,onOk})}>
                     <RenderEngine />
                 </Provider>
             )

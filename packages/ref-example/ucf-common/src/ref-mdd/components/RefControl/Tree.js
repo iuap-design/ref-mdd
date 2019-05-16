@@ -63,9 +63,13 @@ class Tree extends Component {
     this.initComponent();
   }
   onSave = data => {
-	this.setState({
-		matchData:data
-	});
+    const {store} = this.props;
+    const onOk = store.getState().onOk;
+    this.setState({
+      matchData:data
+    });
+    // console.log("save", data);
+    onOk && onOk(data);
   };
   onCancel = () => {};
 

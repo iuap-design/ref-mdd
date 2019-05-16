@@ -1,12 +1,13 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('mini-store'), require('axios'), require('tinper-bee'), require('react-dom'), require('indexof'), require('ref-tree/lib/theme-red.less')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'react', 'mini-store', 'axios', 'tinper-bee', 'react-dom', 'indexof', 'ref-tree/lib/theme-red.less'], factory) :
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('mini-store'), require('axios'), require('tinper-bee'), require('react-dom'), require('indexof')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'react', 'mini-store', 'axios', 'tinper-bee', 'react-dom', 'indexof'], factory) :
 	(global = global || self, factory(global.RefMdd = {}, global.React, global.miniStore, global.axios, global.TinperBee, global.ReactDOM, global.indexof));
 }(this, function (exports, React, miniStore, axios, tinperBee, ReactDOM, indexof) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
 	var miniStore__default = 'default' in miniStore ? miniStore['default'] : miniStore;
 	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
+	var tinperBee__default = 'default' in tinperBee ? tinperBee['default'] : tinperBee;
 	var ReactDOM__default = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
 	indexof = indexof && indexof.hasOwnProperty('default') ? indexof['default'] : indexof;
 
@@ -822,41 +823,44 @@
 	    }
 	  });
 	}
-
-	var refValParse = function refValParse(value, valueField, displayField) {
-	  var _ref;
-
-	  if (!value) return _ref = {}, _ref[displayField] = '', _ref[valueField] = '', _ref;
-
-	  try {
-	    var valueMap = JSON.parse(value);
-
-	    if (!valueMap.hasOwnProperty(displayField) || !valueMap.hasOwnProperty(valueField)) {
-	      var _ref2;
-
-	      return _ref2 = {}, _ref2[displayField] = '', _ref2[valueField] = '', _ref2;
-	    } else {
-	      return JSON.parse(value);
-	    }
-	  } catch (e) {
-	    var _ref3;
-
-	    return _ref3 = {}, _ref3[displayField] = '', _ref3[valueField] = '', _ref3;
-	  }
-	};
 	/**
 	 * 根据refEntity生成请求数据的参数
 	 * @param {string} type 
 	 * @param {object} refEntity 
 	 */
 
-	function getQueryParam(type, refEntity, viewApplication) {
-	  var rsParam = {};
-	  rsParam.dataType = type;
-	  rsParam.refCode = refEntity.refType; // rsParam.key =  viewApplication.cCardKey;
+	function getQueryParam(type, refEntity, viewApplication, getDataParams) {
+	  if (getDataParams === void 0) {
+	    getDataParams = {};
+	  }
 
+	  var rsParam = {},
+	      defaultDataParams = getDataParams;
+	  rsParam.dataType = type;
+	  rsParam.refCode = refEntity.refType;
 	  rsParam.billnum = refEntity.cBillnum;
+
+	  if (typeof getDataParams == 'function') {
+	    defaultDataParams = getDataParams();
+	  }
+
+	  rsParam = Object.assign({}, rsParam, defaultDataParams);
 	  return rsParam;
+	}
+	/**
+	 * 初始化参照信息
+	 */
+
+	function initReferInfo(dataType, refEntity, viewApplication, getDataParams) {
+	  this.valueField = refEntity.cEntityKeyFld; //参照真实值
+
+	  this.displayField = refEntity.cEntityNameFld; //参照显示值
+
+	  if (!this.dataUrl) {
+	    this.dataUrl = '/uniform/' + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
+	  }
+
+	  this.param = getQueryParam(dataType, refEntity, viewApplication, getDataParams); //数据查询参数
 	}
 
 	var _extends_1 = createCommonjsModule(function (module) {
@@ -26942,6 +26946,198 @@
 	unwrapExports(Modal_1);
 	var Modal_2 = Modal_1.destroyFns;
 
+	var Button_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+	    /**
+	     * @title 尺寸
+	     */
+	    size: _propTypes2["default"].oneOf(['sm', 'md', 'xg', 'lg']),
+	    /**
+	     * @title 样式
+	     */
+	    style: _propTypes2["default"].object,
+	    /**
+	     * @title 形状
+	     */
+	    shape: _propTypes2["default"].oneOf(['block', 'round', 'border', 'squared', 'floating', 'pillRight', 'pillLeft', 'icon']),
+
+	    bordered: _propTypes2["default"].bool,
+	    /**
+	    * @title 类型
+	    */
+	    colors: _propTypes2["default"].oneOf(['primary', 'secondary', 'accent', 'success', 'info', 'warning', 'danger', 'dark', 'light', 'default']),
+	    /**
+	     * @title 是否禁用
+	     * @veIgnore
+	     */
+	    disabled: _propTypes2["default"].bool,
+	    /**
+	     * @title 类名
+	     * @veIgnore
+	     */
+	    className: _propTypes2["default"].string,
+
+	    /**
+	     * @title <button> 的 type
+	     * @veIgnore
+	     */
+	    htmlType: _propTypes2["default"].oneOf(['submit', 'button', 'reset']),
+	    isSubmit: _propTypes2["default"].bool //是否作为form的提交按钮
+	};
+
+	var defaultProps = {
+	    disabled: false,
+	    htmlType: 'button',
+	    clsPrefix: 'u-button',
+	    bordered: false,
+	    isSubmit: false
+	};
+
+	var sizeMap = {
+	    sm: 'sm',
+	    md: 'md',
+	    xg: 'xg',
+	    lg: 'lg'
+	},
+	    colorsMap = {
+	    primary: 'primary',
+	    secondary: 'secondary',
+	    accent: 'accent',
+	    success: 'success',
+	    info: 'info',
+	    warning: 'warning',
+	    danger: 'danger',
+	    dark: 'dark',
+	    light: 'light'
+	},
+	    shapeMap = {
+	    block: 'block',
+	    round: 'round',
+	    border: 'border',
+	    squared: 'squared',
+	    floating: 'floating',
+	    pillRight: 'pill-right',
+	    pillLeft: 'pill-left',
+	    icon: 'icon'
+	};
+
+	var Button = function (_Component) {
+	    _inherits(Button, _Component);
+
+	    function Button(props) {
+	        _classCallCheck(this, Button);
+
+	        return _possibleConstructorReturn(this, _Component.call(this, props));
+	    }
+
+	    Button.prototype.render = function render() {
+	        var _props = this.props,
+	            colors = _props.colors,
+	            shape = _props.shape,
+	            disabled = _props.disabled,
+	            className = _props.className,
+	            size = _props.size,
+	            bordered = _props.bordered,
+	            children = _props.children,
+	            htmlType = _props.htmlType,
+	            clsPrefix = _props.clsPrefix,
+	            isSubmit = _props.isSubmit,
+	            others = _objectWithoutProperties(_props, ['colors', 'shape', 'disabled', 'className', 'size', 'bordered', 'children', 'htmlType', 'clsPrefix', 'isSubmit']);
+
+	        var clsObj = {};
+	        if (className) {
+	            clsObj[className] = true;
+	        }
+	        if (sizeMap[size]) {
+	            clsObj[clsPrefix + '-' + sizeMap[size]] = true;
+	        }
+
+	        if (shapeMap[shape]) {
+	            clsObj[clsPrefix + '-' + shapeMap[shape]] = true;
+	        }
+	        if (colorsMap[colors]) {
+	            clsObj[clsPrefix + '-' + colorsMap[colors]] = true;
+	        }
+	        if (bordered) {
+	            clsObj[clsPrefix + '-border'] = bordered;
+	        }
+	        var classes = (0, _classnames2["default"])(clsPrefix, clsObj);
+	        return _react2["default"].createElement(
+	            'button',
+	            _extends({
+	                type: htmlType,
+	                className: classes,
+	                disabled: disabled
+	            }, others),
+	            this.props.children
+	        );
+	    };
+
+	    return Button;
+	}(React__default.Component);
+
+	Button.propTypes = propTypes$1;
+	Button.defaultProps = defaultProps;
+
+	exports["default"] = Button;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(Button_1$1);
+
+	var build$8 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _Button2 = _interopRequireDefault(Button_1$1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _Button2["default"];
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(build$8);
+
 	var confirm_1 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -26970,7 +27166,7 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build);
+	var _beeButton2 = _interopRequireDefault(build$8);
 
 
 
@@ -27152,7 +27348,7 @@
 
 	unwrapExports(confirm_1);
 
-	var build$8 = createCommonjsModule(function (module, exports) {
+	var build$9 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -27234,7 +27430,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$8);
+	unwrapExports(build$9);
 
 	var PaginationButton_1 = createCommonjsModule(function (module, exports) {
 
@@ -27349,7 +27545,7 @@
 
 	unwrapExports(PaginationButton_1);
 
-	var Button_1$1 = createCommonjsModule(function (module, exports) {
+	var Button_1$2 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -27521,9 +27717,9 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(Button_1$1);
+	unwrapExports(Button_1$2);
 
-	var build$9 = createCommonjsModule(function (module, exports) {
+	var build$a = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -27531,7 +27727,7 @@
 
 
 
-	var _Button2 = _interopRequireDefault(Button_1$1);
+	var _Button2 = _interopRequireDefault(Button_1$2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -27539,7 +27735,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$9);
+	unwrapExports(build$a);
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -28377,7 +28573,7 @@
 
 	unwrapExports(Animate_1);
 
-	var build$a = createCommonjsModule(function (module, exports) {
+	var build$b = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -28393,7 +28589,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$a);
+	unwrapExports(build$b);
 
 	var _extends$4 = createCommonjsModule(function (module, exports) {
 
@@ -36496,7 +36692,7 @@
 
 	unwrapExports(Animate_1$1);
 
-	var build$b = createCommonjsModule(function (module, exports) {
+	var build$c = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -36512,7 +36708,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$b);
+	unwrapExports(build$c);
 
 	var LazyRenderBox_1 = createCommonjsModule(function (module, exports) {
 
@@ -36700,7 +36896,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$b);
+	var _beeAnimate2 = _interopRequireDefault(build$c);
 
 
 
@@ -38196,7 +38392,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$a);
+	var _beeAnimate2 = _interopRequireDefault(build$b);
 
 
 
@@ -39891,7 +40087,7 @@
 
 	unwrapExports(Select_1);
 
-	var build$c = createCommonjsModule(function (module, exports) {
+	var build$d = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -39919,7 +40115,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$c);
+	unwrapExports(build$d);
 
 	var Icon_1$1 = createCommonjsModule(function (module, exports) {
 
@@ -39997,7 +40193,7 @@
 
 	unwrapExports(Icon_1$1);
 
-	var build$d = createCommonjsModule(function (module, exports) {
+	var build$e = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -40013,7 +40209,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$d);
+	unwrapExports(build$e);
 
 	var i18n = {
 	    'lang': 'zh-cn',
@@ -40100,15 +40296,15 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$9);
+	var _beeButton2 = _interopRequireDefault(build$a);
 
 
 
-	var _beeSelect2 = _interopRequireDefault(build$c);
+	var _beeSelect2 = _interopRequireDefault(build$d);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$d);
+	var _beeIcon2 = _interopRequireDefault(build$e);
 
 
 
@@ -40645,7 +40841,7 @@
 
 	unwrapExports(Pagination_1);
 
-	var build$e = createCommonjsModule(function (module, exports) {
+	var build$f = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -40661,7 +40857,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$e);
+	unwrapExports(build$f);
 
 	/** Detect free variable `global` from Node.js. */
 	var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
@@ -49769,7 +49965,7 @@
 
 	unwrapExports(TodayButton_1);
 
-	var Button_1$2 = createCommonjsModule(function (module, exports) {
+	var Button_1$3 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -49941,9 +50137,9 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(Button_1$2);
+	unwrapExports(Button_1$3);
 
-	var build$f = createCommonjsModule(function (module, exports) {
+	var build$g = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -49951,7 +50147,7 @@
 
 
 
-	var _Button2 = _interopRequireDefault(Button_1$2);
+	var _Button2 = _interopRequireDefault(Button_1$3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -49959,7 +50155,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$f);
+	unwrapExports(build$g);
 
 	var OkButton_1 = createCommonjsModule(function (module, exports) {
 
@@ -49974,7 +50170,7 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$f);
+	var _beeButton2 = _interopRequireDefault(build$g);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -51629,7 +51825,7 @@
 
 	unwrapExports(FormControl_1$1);
 
-	var build$g = createCommonjsModule(function (module, exports) {
+	var build$h = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -51645,7 +51841,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$g);
+	unwrapExports(build$h);
 
 	var Header_1 = createCommonjsModule(function (module, exports) {
 
@@ -52855,7 +53051,7 @@
 
 	unwrapExports(InputGroup_1$1);
 
-	var build$h = InputGroup_1$1;
+	var build$i = InputGroup_1$1;
 
 	var zh_CN = createCommonjsModule(function (module, exports) {
 
@@ -52925,7 +53121,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$g);
+	var _beeFormControl2 = _interopRequireDefault(build$h);
 
 
 
@@ -52945,7 +53141,7 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$h);
+	var _beeInputGroup2 = _interopRequireDefault(build$i);
 
 
 
@@ -53549,7 +53745,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$g);
+	var _beeFormControl2 = _interopRequireDefault(build$h);
 
 
 
@@ -53557,7 +53753,7 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$h);
+	var _beeInputGroup2 = _interopRequireDefault(build$i);
 
 
 
@@ -54973,7 +55169,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$g);
+	var _beeFormControl2 = _interopRequireDefault(build$h);
 
 
 
@@ -54981,7 +55177,7 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$h);
+	var _beeInputGroup2 = _interopRequireDefault(build$i);
 
 
 
@@ -55284,7 +55480,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$g);
+	var _beeFormControl2 = _interopRequireDefault(build$h);
 
 
 
@@ -55300,7 +55496,7 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$h);
+	var _beeInputGroup2 = _interopRequireDefault(build$i);
 
 
 
@@ -55584,11 +55780,11 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$g);
+	var _beeFormControl2 = _interopRequireDefault(build$h);
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$h);
+	var _beeInputGroup2 = _interopRequireDefault(build$i);
 
 
 
@@ -55823,7 +56019,7 @@
 
 	unwrapExports(YearPicker_1);
 
-	var build$i = createCommonjsModule(function (module, exports) {
+	var build$j = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -55864,7 +56060,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$i);
+	unwrapExports(build$j);
 
 	var Icon_1$2 = createCommonjsModule(function (module, exports) {
 
@@ -55942,7 +56138,7 @@
 
 	unwrapExports(Icon_1$2);
 
-	var build$j = createCommonjsModule(function (module, exports) {
+	var build$k = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -55958,7 +56154,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$j);
+	unwrapExports(build$k);
 
 	var FormControl_1$2 = createCommonjsModule(function (module, exports) {
 
@@ -55978,7 +56174,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$j);
+	var _beeIcon2 = _interopRequireDefault(build$k);
 
 
 
@@ -56244,7 +56440,7 @@
 
 	unwrapExports(FormControl_1$2);
 
-	var build$k = createCommonjsModule(function (module, exports) {
+	var build$l = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -56260,7 +56456,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$k);
+	unwrapExports(build$l);
 
 	var InputGroupButton_1$2 = createCommonjsModule(function (module, exports) {
 
@@ -56403,7 +56599,7 @@
 
 	unwrapExports(InputGroup_1$2);
 
-	var build$l = InputGroup_1$2;
+	var build$m = InputGroup_1$2;
 
 	var FormControl_1$3 = createCommonjsModule(function (module, exports) {
 
@@ -56689,7 +56885,7 @@
 
 	unwrapExports(FormControl_1$3);
 
-	var build$m = createCommonjsModule(function (module, exports) {
+	var build$n = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -56705,7 +56901,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$m);
+	unwrapExports(build$n);
 
 	var InputNumber_1 = createCommonjsModule(function (module, exports) {
 
@@ -56725,11 +56921,11 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$l);
+	var _beeInputGroup2 = _interopRequireDefault(build$m);
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$m);
+	var _beeFormControl2 = _interopRequireDefault(build$n);
 
 
 
@@ -57252,7 +57448,7 @@
 
 	unwrapExports(InputNumber_1);
 
-	var build$n = createCommonjsModule(function (module, exports) {
+	var build$o = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -57268,7 +57464,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$n);
+	unwrapExports(build$o);
 
 	var placement = createCommonjsModule(function (module, exports) {
 
@@ -57546,7 +57742,7 @@
 
 	unwrapExports(Dropdown_1);
 
-	var build$o = createCommonjsModule(function (module, exports) {
+	var build$p = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -57562,7 +57758,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$o);
+	unwrapExports(build$p);
 
 	var util$5 = createCommonjsModule(function (module, exports) {
 
@@ -60503,7 +60699,7 @@
 
 	unwrapExports(VerticalMenu);
 
-	var build$p = createCommonjsModule(function (module, exports) {
+	var build$q = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -60519,9 +60715,9 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$p);
+	unwrapExports(build$q);
 
-	var Button_1$3 = createCommonjsModule(function (module, exports) {
+	var Button_1$4 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -60693,9 +60889,9 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(Button_1$3);
+	unwrapExports(Button_1$4);
 
-	var build$q = createCommonjsModule(function (module, exports) {
+	var build$r = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -60703,7 +60899,7 @@
 
 
 
-	var _Button2 = _interopRequireDefault(Button_1$3);
+	var _Button2 = _interopRequireDefault(Button_1$4);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -60711,7 +60907,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$q);
+	unwrapExports(build$r);
 
 	var i18n$1 = {
 	    'lang': 'zh-cn',
@@ -60820,19 +61016,19 @@
 
 
 
-	var _beeDropdown2 = _interopRequireDefault(build$o);
+	var _beeDropdown2 = _interopRequireDefault(build$p);
 
 
 
-	var _beeMenus2 = _interopRequireDefault(build$p);
+	var _beeMenus2 = _interopRequireDefault(build$q);
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$q);
+	var _beeButton2 = _interopRequireDefault(build$r);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$j);
+	var _beeIcon2 = _interopRequireDefault(build$k);
 
 
 
@@ -61143,7 +61339,7 @@
 
 
 
-	var _beeDatepicker2 = _interopRequireDefault(build$i);
+	var _beeDatepicker2 = _interopRequireDefault(build$j);
 
 
 
@@ -61151,15 +61347,15 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$k);
+	var _beeFormControl2 = _interopRequireDefault(build$l);
 
 
 
-	var _beeSelect2 = _interopRequireDefault(build$c);
+	var _beeSelect2 = _interopRequireDefault(build$d);
 
 
 
-	var _beeInputNumber2 = _interopRequireDefault(build$n);
+	var _beeInputNumber2 = _interopRequireDefault(build$o);
 
 
 
@@ -63009,7 +63205,7 @@
 
 	unwrapExports(Loading_1);
 
-	var build$r = createCommonjsModule(function (module, exports) {
+	var build$s = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -63025,7 +63221,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$r);
+	unwrapExports(build$s);
 
 	var Table_1 = createCommonjsModule(function (module, exports) {
 
@@ -63075,11 +63271,11 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$r);
+	var _beeLoading2 = _interopRequireDefault(build$s);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$j);
+	var _beeIcon2 = _interopRequireDefault(build$k);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -64497,7 +64693,7 @@
 	Table_1.Column = Column_1;
 	Table_1.ColumnGroup = ColumnGroup_1;
 
-	var build$s = Table_1;
+	var build$t = Table_1;
 
 	var util$6 = createCommonjsModule(function (module, exports) {
 
@@ -69633,7 +69829,7 @@
 
 	unwrapExports(FormItem_1);
 
-	var build$t = createCommonjsModule(function (module, exports) {
+	var build$u = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -69654,7 +69850,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$t);
+	unwrapExports(build$u);
 
 	var Label_1 = createCommonjsModule(function (module, exports) {
 
@@ -69734,7 +69930,7 @@
 
 	unwrapExports(Label_1);
 
-	var build$u = createCommonjsModule(function (module, exports) {
+	var build$v = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -69750,7 +69946,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$u);
+	unwrapExports(build$v);
 
 	var Col_1 = createCommonjsModule(function (module, exports) {
 
@@ -70093,7 +70289,7 @@
 
 	unwrapExports(Layout);
 
-	var build$v = createCommonjsModule(function (module, exports) {
+	var build$w = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -70119,10 +70315,10 @@
 	exports.Con = _Layout2["default"];
 	});
 
-	unwrapExports(build$v);
-	var build_1$1 = build$v.Con;
-	var build_2$1 = build$v.Row;
-	var build_3$1 = build$v.Col;
+	unwrapExports(build$w);
+	var build_1$1 = build$w.Con;
+	var build_2$1 = build$w.Row;
+	var build_3$1 = build$w.Col;
 
 	var classnames$1 = createCommonjsModule(function (module) {
 	/*!
@@ -70912,7 +71108,7 @@
 
 	unwrapExports(Fade_1$1);
 
-	var build$w = createCommonjsModule(function (module, exports) {
+	var build$x = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -70938,10 +71134,10 @@
 	exports.Fade = _Fade3["default"];
 	});
 
-	unwrapExports(build$w);
-	var build_1$2 = build$w.Fade;
-	var build_2$2 = build$w.Collapse;
-	var build_3$2 = build$w.Transition;
+	unwrapExports(build$x);
+	var build_1$2 = build$x.Fade;
+	var build_2$2 = build$x.Collapse;
+	var build_3$2 = build$x.Transition;
 
 	var ChildrenUtils$2 = createCommonjsModule(function (module, exports) {
 
@@ -71618,7 +71814,7 @@
 
 	unwrapExports(Animate_1$2);
 
-	var build$x = createCommonjsModule(function (module, exports) {
+	var build$y = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -71634,7 +71830,101 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$x);
+	unwrapExports(build$y);
+
+	var Icon_1$3 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+		type: _propTypes2["default"].string
+
+	};
+	/**
+	 *  badge 默认显示内容1
+	 */
+	var defaultProps = {
+		clsPrefix: 'uf'
+	};
+
+	var Icon = function (_Component) {
+		_inherits(Icon, _Component);
+
+		function Icon(props) {
+			_classCallCheck(this, Icon);
+
+			return _possibleConstructorReturn(this, _Component.call(this, props));
+		}
+
+		Icon.prototype.render = function render() {
+			var _props = this.props,
+			    type = _props.type,
+			    className = _props.className,
+			    clsPrefix = _props.clsPrefix,
+			    others = _objectWithoutProperties(_props, ['type', 'className', 'clsPrefix']);
+
+			var classNames = (0, _classnames2["default"])(clsPrefix, type);
+
+			return _react2["default"].createElement('i', _extends({}, others, { className: (0, _classnames2["default"])(classNames, className) }));
+		};
+
+		return Icon;
+	}(React__default.Component);
+
+	Icon.defaultProps = defaultProps;
+	Icon.propTypes = propTypes$1;
+
+	exports["default"] = Icon;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(Icon_1$3);
+
+	var build$z = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _Icon2 = _interopRequireDefault(Icon_1$3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _Icon2["default"];
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(build$z);
 
 	var Notice_1 = createCommonjsModule(function (module, exports) {
 
@@ -71653,6 +71943,10 @@
 
 
 	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	var _beeIcon2 = _interopRequireDefault(build$z);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -71759,7 +72053,11 @@
 	      closable ? _react2["default"].createElement(
 	        'a',
 	        { tabIndex: '0', onClick: this.close, className: componentClass + '-close' },
-	        _react2["default"].createElement('span', { className: componentClass + '-close-x' })
+	        _react2["default"].createElement(
+	          'span',
+	          { className: componentClass + '-close-x' },
+	          _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-close' })
+	        )
 	      ) : null
 	    );
 	  };
@@ -71798,7 +72096,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$x);
+	var _beeAnimate2 = _interopRequireDefault(build$y);
 
 
 
@@ -72019,7 +72317,7 @@
 
 	unwrapExports(Notification_1);
 
-	var build$y = createCommonjsModule(function (module, exports) {
+	var build$A = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -72035,7 +72333,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$y);
+	unwrapExports(build$A);
 
 	var Message = createCommonjsModule(function (module, exports) {
 
@@ -72051,7 +72349,7 @@
 
 
 
-	var _beeNotification2 = _interopRequireDefault(build$y);
+	var _beeNotification2 = _interopRequireDefault(build$A);
 
 
 
@@ -72061,11 +72359,11 @@
 
 	var defaultDuration = 1.5;
 	var newDuration = void 0;
-	var defaultTop = 0;
+	var defaultTop = 24;
 	var defaultBottom = 48;
 	var bottom = 90;
 	var padding = 30;
-	var width = 200;
+	var width = 240;
 	var messageInstance = void 0;
 	var key = 1;
 	var clsPrefix = 'u-message';
@@ -72074,21 +72372,21 @@
 	var positionObj = {
 	    "top": {
 	        messageStyle: {
-	            width: "100%"
+	            transform: 'translateX( -50%)'
 	        },
 	        notificationStyle: {
 	            top: defaultTop,
-	            width: "100%"
+	            left: '50%'
 	        },
 	        transitionName: 'top'
 	    },
 	    "bottom": {
 	        messageStyle: {
-	            width: "100%"
+	            transform: 'translateX( -50%)'
 	        },
 	        notificationStyle: {
 	            bottom: defaultBottom,
-	            width: "100%"
+	            left: '50%'
 	        },
 	        transitionName: 'bottom'
 	    },
@@ -72172,7 +72470,7 @@
 	        clsPrefix: clsPrefix,
 	        transitionName: clsPrefix + '-' + positionObj[position].transitionName,
 	        style: style, // 覆盖原来的样式
-	        position: ''
+	        position: position
 	    };
 	    if (typeof keyboard === 'boolean') {
 	        instanceObj.keyboard = keyboard;
@@ -72190,14 +72488,14 @@
 	    var iconType = {
 	        info: 'uf uf-i-c-2',
 	        success: 'uf uf-correct',
-	        danger: 'uf uf-close-c',
+	        danger: 'uf uf-exc-c',
 	        warning: 'uf uf-exc-t',
 	        light: 'uf uf-notification',
-	        dark: 'uf uf-bubble',
+	        dark: 'uf uf-notification',
 	        news: 'uf uf-bell',
 	        infolight: 'uf uf-i-c-2',
 	        successlight: 'uf uf-correct',
-	        dangerlight: 'uf uf-close-c',
+	        dangerlight: 'uf uf-exc-c',
 	        warninglight: 'uf uf-exc-t'
 	    }[type];
 
@@ -72243,11 +72541,11 @@
 	        }
 	        var content = obj.content || '';
 	        var duration = typeof obj.duration == 'undefined' ? defaultDuration : obj.duration;
-	        var color = obj.color || 'dark';
+	        var color = obj.color || 'light';
 	        var onClose = obj.onClose || noop;
 	        var position = obj.position || "top";
 	        var style = obj.style || {};
-	        var showIcon = obj.showIcon || false;
+	        var showIcon = obj.showIcon || true;
 	        return notice(content, duration, color, onClose, position, style, obj.keyboard, obj.onEscapeKeyUp, showIcon);
 	    },
 	    config: function config(options) {
@@ -72283,7 +72581,7 @@
 
 	unwrapExports(Message);
 
-	var build$z = createCommonjsModule(function (module, exports) {
+	var build$B = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -72299,7 +72597,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$z);
+	unwrapExports(build$B);
 
 	var toggleSelection = function () {
 	  var selection = document.getSelection();
@@ -72451,7 +72749,7 @@
 
 
 
-	var _beeMessage2 = _interopRequireDefault(build$z);
+	var _beeMessage2 = _interopRequireDefault(build$B);
 
 
 
@@ -72618,7 +72916,7 @@
 
 	  Panel.prototype.renderCollapsibleBody = function renderCollapsibleBody(id, expanded, role, children, clsPrefix, copyable, animationHooks) {
 	    return _react2["default"].createElement(
-	      build$w.Collapse,
+	      build$x.Collapse,
 	      _extends({ 'in': expanded }, animationHooks),
 	      _react2["default"].createElement(
 	        'div',
@@ -72888,7 +73186,7 @@
 
 	unwrapExports(PanelGroup_1);
 
-	var build$A = createCommonjsModule(function (module, exports) {
+	var build$C = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -72909,9 +73207,9 @@
 	exports.PanelGroup = _PanelGroup3["default"];
 	});
 
-	unwrapExports(build$A);
-	var build_1$3 = build$A.PanelGroup;
-	var build_2$3 = build$A.Panel;
+	unwrapExports(build$C);
+	var build_1$3 = build$C.PanelGroup;
+	var build_2$3 = build$C.Panel;
 
 	var AdvancedContainer_1 = createCommonjsModule(function (module, exports) {
 
@@ -73319,7 +73617,7 @@
 	                this._HeadContainer
 	            ),
 	            _react2["default"].createElement(
-	                build$A.Panel,
+	                build$C.Panel,
 	                {
 	                    collapsible: true,
 	                    expanded: this.state.expanded,
@@ -73350,7 +73648,7 @@
 
 	unwrapExports(SearchPanel_1);
 
-	var build$B = createCommonjsModule(function (module, exports) {
+	var build$D = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -73377,7 +73675,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$B);
+	unwrapExports(build$D);
 
 	var RefSearchPanel_1 = createCommonjsModule(function (module, exports) {
 
@@ -73408,17 +73706,17 @@
 
 
 
-	var _beeForm2 = _interopRequireDefault(build$t);
+	var _beeForm2 = _interopRequireDefault(build$u);
 
 
 
-	var _beeLabel2 = _interopRequireDefault(build$u);
+	var _beeLabel2 = _interopRequireDefault(build$v);
 
 
 
 
 
-	var _beeSearchPanel2 = _interopRequireDefault(build$B);
+	var _beeSearchPanel2 = _interopRequireDefault(build$D);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -73466,16 +73764,15 @@
 	  var getFieldProps = form.getFieldProps;
 
 	  return _react2["default"].createElement(
-	    build$v.Col,
-	    { md: 5, xs: 12, sm: 12 },
+	    build$w.Col,
+	    { md: 4, xs: 12, sm: 12 },
 	    _react2["default"].createElement(
 	      'div',
 	      { className: 'formItemCustomed' },
 	      _react2["default"].createElement(
 	        _beeLabel2["default"],
 	        null,
-	        others.text,
-	        ':'
+	        others.text
 	      ),
 	      _react2["default"].createElement(
 	        'div',
@@ -73552,7 +73849,7 @@
 	          _beeForm2["default"],
 	          null,
 	          _react2["default"].createElement(
-	            build$v.Row,
+	            build$w.Row,
 	            null,
 	            _react2["default"].Children.map(this.props.children, function (item) {
 	              return _react2["default"].cloneElement(item, {
@@ -73653,15 +73950,15 @@
 
 
 
-	var _beeModal2 = _interopRequireDefault(build$8);
+	var _beeModal2 = _interopRequireDefault(build$9);
 
 
 
-	var _beePagination2 = _interopRequireDefault(build$e);
+	var _beePagination2 = _interopRequireDefault(build$f);
 
 
 
-	var _beeTable2 = _interopRequireDefault(build$s);
+	var _beeTable2 = _interopRequireDefault(build$t);
 
 
 
@@ -73669,7 +73966,7 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$r);
+	var _beeLoading2 = _interopRequireDefault(build$s);
 
 
 
@@ -73703,31 +74000,6 @@
 	    _this2.currPageIndex = 1;
 	    _this2.fliterFormInputs = [];
 	    _this2.filterInfo = {};
-
-	    _this2.initComponent = function () {
-	      var _this2$props = _this2.props,
-	          value = _this2$props.value,
-	          _this2$props$matchDat = _this2$props.matchData,
-	          matchData = _this2$props$matchDat === undefined ? [] : _this2$props$matchDat,
-	          _this2$props$valueFie = _this2$props.valueField,
-	          valueField = _this2$props$valueFie === undefined ? "refpk" : _this2$props$valueFie;
-
-	      var valueMap = (0, utils$3.refValParse)(value);
-	      if (_this2.checkedArray.length == 0 && valueMap[valueField]) {
-	        if (matchData.length > 0) {
-	          _this2.checkedMap = {};
-	          _this2.checkedArray = matchData.map(function (item) {
-	            item.key = item[valueField];
-	            item._checked = true;
-	            _this2.checkedMap[item.key] = item;
-	            return item;
-	          });
-	          _this2.setState({
-	            selectedDataLength: _this2.checkedArray.length,
-	            mustRender: Math.random()
-	          });
-	        }
-	      }    };
 
 	    _this2.handleBtnSave = function () {
 	      _this2.props.onSave((0, _assign2["default"])([], _this2.checkedArray));
@@ -73782,8 +74054,8 @@
 	    _this2.getSelectedDataFunc = function (checkedArray, recode) {
 	      if (!_this2.props.multiple) return;
 	      var _this = _this2;
-	      var _this2$props$valueFie2 = _this2.props.valueField,
-	          valueField = _this2$props$valueFie2 === undefined ? "refpk" : _this2$props$valueFie2;
+	      var _this2$props$valueFie = _this2.props.valueField,
+	          valueField = _this2$props$valueFie === undefined ? "refpk" : _this2$props$valueFie;
 
 	      if (recode) {
 	        //单条操作
@@ -73846,8 +74118,8 @@
 
 	    _this2.onRowDoubleClick = function (record) {
 	      if (_this2.props.multiple) return;
-	      var _this2$props$valueFie3 = _this2.props.valueField,
-	          valueField = _this2$props$valueFie3 === undefined ? "refpk" : _this2$props$valueFie3;
+	      var _this2$props$valueFie2 = _this2.props.valueField,
+	          valueField = _this2$props$valueFie2 === undefined ? "refpk" : _this2$props$valueFie2;
 
 	      record._checked = true;
 	      _this2.checkedArray = [record];
@@ -73895,7 +74167,7 @@
 
 	  RefMultipleTableBase.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps, nextState) {
 	    // let result  = !shallowequal(nextState, this.state);
-	    //使用state是因为mustRender不同必须重新渲染，this中的三种data不一致也必须更新
+	    // 使用state是因为mustRender不同必须重新渲染，this中的三种data不一致也必须更新
 	    var dataEqual = nextProps.tableData === this.props.tableData && nextProps.columnsData === this.props.columnsData && nextProps.fliterFormInputs === this.props.fliterFormInputs;
 	    return !(0, _shallowequal2["default"])(nextProps, this.props) || !(0, _shallowequal2["default"])(nextState, this.state) || !dataEqual || nextProps.showModal !== this.props.showModal;
 	  };
@@ -73912,27 +74184,21 @@
 
 	    if (nextProps.showModal && !this.props.showModal) {
 	      //正在打开弹窗
-	      if (strictMode || !this.columnsData.length || this.currPageIndex !== 1) {
-	        //开启严格模式 或 表头信息没有获取到，即初始化失败是必须重置
-	        this.initComponent();
-	      }
-	      // 	//内部缓存已选择值，不通过 state 缓存，表格缓存状态自动实现
-	      // 	this.checkedArray = Object.assign(this.checkedArray,  nextProps.checkedArray || []);
-	      // 	//内部缓存已选择值，缓存成 Map 便于检索
-	      // 	this.checkedMap = {};
-	      // 	this.checkedArray.forEach(item=>{
-	      //     this.checkedMap[item[valueField]] = item;
-	      //   });
-	      //   this.setState({selectedDataLength:this.checkedArray.length,tableIsSelecting: true})
+	      // if( strictMode || !this.columnsData.length || this.currPageIndex !== 1 ) {
+	      // 	//开启严格模式 或 表头信息没有获取到，即初始化失败是必须重置
+	      // 	this.initComponent();
 	      // }
-	      //这里改用matchData，由于第一次运行到这里选中可能从value中取值
+	      //这里改用matchData，第一次运行也不在value中取值了，一切向matchData看齐
 	      this.checkedArray = (0, _assign2["default"])([], nextProps.matchData || []);
 	      this.checkedMap = {};
 	      this.checkedArray.forEach(function (item) {
 	        _this3.checkedMap[item[valueField]] = item;
 	      });
 	      //内部缓存已选择值，缓存成 Map 便于检索
-	      this.setState({ selectedDataLength: this.checkedArray.length, tableIsSelecting: true });
+	      this.setState({
+	        selectedDataLength: this.checkedArray.length,
+	        tableIsSelecting: true
+	      });
 	    }
 	  };
 	  /**start:按钮操作 */
@@ -73985,7 +74251,8 @@
 	        showModal = _props.showModal,
 	        _props$lang = _props.lang,
 	        lang = _props$lang === undefined ? 'zh_CN' : _props$lang,
-	        valueField = _props.valueField,
+	        _props$valueField = _props.valueField,
+	        valueField = _props$valueField === undefined ? 'refpk' : _props$valueField,
 	        _props$emptyBut = _props.emptyBut,
 	        emptyBut = _props$emptyBut === undefined ? false : _props$emptyBut,
 	        buttons = _props.buttons,
@@ -82847,96 +83114,91 @@
 
 	var _dec, _class$1, _temp;
 	var dataType = "grid";
-	var TableRender = (_dec = miniStore.connect(function (state) {
+	var Table = (_dec = miniStore.connect(function (state) {
 	  return {
 	    form: state.form
 	  };
 	}), _dec(_class$1 = (_temp =
 	/*#__PURE__*/
 	function (_Component) {
-	  inheritsLoose(TableRender, _Component);
+	  inheritsLoose(Table, _Component);
 
-	  function TableRender(props) {
+	  function Table(props) {
 	    var _this2;
 
 	    _this2 = _Component.call(this, props) || this;
 
-	    _this2.onSave = function (item) {
-	      console.log("save", item);
+	    _this2.onSave = function (data) {
+	      var store = _this2.props.store;
+	      var onOk = store.getState().onOk;
+
+	      _this2.setState({
+	        matchData: data
+	      }); // console.log("save", data);
+
+
+	      onOk && onOk(data);
 	    };
 
 	    _this2.onCancel = function () {};
 
-	    _this2.initComponent = function () {
-	      var _this = assertThisInitialized(_this2);
+	    _this2.initComponent =
+	    /*#__PURE__*/
+	    asyncToGenerator(
+	    /*#__PURE__*/
+	    regenerator.mark(function _callee() {
+	      var _this, param, valueField, displayField, value, requestList;
 
-	      var param = _this.param,
-	          valueField = _this.valueField,
-	          displayField = _this.displayField,
-	          value = _this.value;
-	      param.page = {
-	        pageSize: 10,
-	        pageIndex: 1
-	      };
-	      var requestList = [_this.getTableHeader(), _this.getTableData(param)];
-	      var valueMap = refValParse(value, valueField, displayField);
+	      return regenerator.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              _this = assertThisInitialized(_this2);
+	              param = _this.param, valueField = _this.valueField, displayField = _this.displayField, value = _this.value;
+	              param.page = {
+	                pageSize: 10,
+	                pageIndex: 1
+	              };
+	              requestList = [_this.getTableHeader(), _this.getTableData(param)];
+	              _context.next = 6;
+	              return Promise.all(requestList).then(function (_ref2) {
+	                var columnsData = _ref2[0],
+	                    bodyData = _ref2[1];
 
-	      if (_this.checkedArray.length == 0 && valueMap[valueField]) {
-	        requestList.push(new Promise(function (resolve, reject) {
-	          resolve({
-	            data: []
-	          });
-	        }));
-	      }
+	                // 请求完表体数据回调
+	                if (_this.onAfterAjax) {
+	                  _this.onAfterAjax(bodyData);
+	                }
 
-	      Promise.all(requestList).then(function (_ref) {
-	        var columnsData = _ref[0],
-	            bodyData = _ref[1],
-	            matchData = _ref[2];
+	                _this.launchTableHeader(columnsData);
 
-	        // 请求完表体数据回调
-	        if (_this.onAfterAjax) {
-	          _this.onAfterAjax(bodyData);
+	                _this.launchTableData(bodyData);
+
+	                _this.setState({
+	                  showLoading: false
+	                });
+	              }).catch(function (e) {
+	                _this.launchTableHeader({});
+
+	                _this.launchTableData({});
+
+	                _this.setState({
+	                  showLoading: false
+	                });
+
+	                console.error(e);
+	              });
+
+	            case 6:
+	              return _context.abrupt("return", true);
+
+	            case 7:
+	            case "end":
+	              return _context.stop();
+	          }
 	        }
-
-	        if (matchData) {
-	          var _matchData$data = matchData.data,
-	              data = _matchData$data === void 0 ? [] : _matchData$data;
-	          _this.checkedMap = {};
-	          _this.checkedArray = data.map(function (item) {
-	            item.key = item[valueField];
-	            item._checked = true;
-	            _this.checkedMap[item.key] = item;
-	            return item;
-	          }); // if (Object.prototype.toString.call(onMatchInitValue) === '[object Function]') {
-	          //     onMatchInitValue(data);
-	          // }
-
-	          _this.setState({
-	            selectedDataLength: _this2.checkedArray.length,
-	            mustRender: Math.random()
-	          });
-	        }
-
-	        _this.launchTableHeader(columnsData);
-
-	        _this.launchTableData(bodyData);
-
-	        _this.setState({
-	          showLoading: false
-	        });
-	      }).catch(function (e) {
-	        _this.launchTableHeader({});
-
-	        _this.launchTableData({});
-
-	        _this.setState({
-	          showLoading: false
-	        });
-
-	        console.error(e);
-	      });
-	    };
+	      }, _callee);
+	    }));
 
 	    _this2.convertMetaTableData = function () {
 	      var _assertThisInitialize = assertThisInitialized(_this2),
@@ -82964,7 +83226,7 @@
 	    };
 
 	    _this2.getTableData = function (params) {
-	      return request$1(_this2.tableBodyUrl, {
+	      return request$1(_this2.dataUrl, {
 	        method: "post",
 	        data: params
 	      });
@@ -82976,9 +83238,9 @@
 	      var keyList = data.strFieldCode || [];
 	      var titleList = data.strFieldName || [];
 	      var valueField = _this2.valueField;
-	      _this2.fliterFormInputs = [];
+	      _this2.filterFormInputs = [];
 	      var colunmsList = keyList.map(function (item, index) {
-	        _this2.fliterFormInputs.push(React__default.createElement(lib_1$1, {
+	        _this2.filterFormInputs.push(React__default.createElement(lib_1$1, {
 	          key: item,
 	          name: item,
 	          text: titleList[index]
@@ -83043,7 +83305,7 @@
 
 	      var _this = assertThisInitialized(_this2);
 
-	      _this2.getTableData(param).then(function (response) {
+	      _this.getTableData(param).then(function (response) {
 	        _this.launchTableData(response);
 
 	        _this.setState({
@@ -83062,7 +83324,6 @@
 	      var _this = assertThisInitialized(_this2);
 
 	      var _assertThisInitialize2 = assertThisInitialized(_this2),
-	          tableBodyUrl = _assertThisInitialize2.tableBodyUrl,
 	          param = _assertThisInitialize2.param;
 
 	      _this2.filterInfo = filterInfo;
@@ -83085,9 +83346,9 @@
 
 	    _this2.handlePagination = function (index) {
 	      var _assertThisInitialize3 = assertThisInitialized(_this2),
-	          filterInfo = _assertThisInitialize3.filterInfo;
+	          filterInfo = _assertThisInitialize3.filterInfo,
+	          param = _assertThisInitialize3.param;
 
-	      var param = _this2.props.param;
 	      Object.keys(filterInfo).forEach(function (key) {
 	        if (!filterInfo[key]) {
 	          delete filterInfo[key];
@@ -83095,7 +83356,7 @@
 	      });
 	      param.page = {
 	        pageSize: _this2.pageSize,
-	        pageIndex: index - 1
+	        pageIndex: index
 	      };
 
 	      if (Object.keys(filterInfo) > 0) {
@@ -83107,9 +83368,9 @@
 
 	    _this2.dataNumSelect = function (index, pageSize) {
 	      var _assertThisInitialize4 = assertThisInitialized(_this2),
-	          filterInfo = _assertThisInitialize4.filterInfo;
+	          filterInfo = _assertThisInitialize4.filterInfo,
+	          param = _assertThisInitialize4.param;
 
-	      var param = _this2.props.param;
 	      Object.keys(filterInfo).forEach(function (key) {
 	        if (!filterInfo[key]) {
 	          delete filterInfo[key];
@@ -83134,18 +83395,17 @@
 	      selectedDataLength: 0,
 	      mustRender: 0
 	    };
-	    var store = _this2.props.store;
-	    var _store$getState$meta = store.getState().meta,
+	    var _this2$props = _this2.props,
+	        _store = _this2$props.store,
+	        getDataParams = _this2$props.getDataParams;
+
+	    var _store$getState$meta = _store.getState().meta,
 	        viewApplication = _store$getState$meta.viewApplication,
 	        refEntity = _store$getState$meta.refEntity;
-	    _this2.valueField = refEntity.cEntityKeyFld; //参照真实值
 
-	    _this2.displayField = refEntity.cEntityNameFld; //参照显示值
-
-	    _this2.param = getQueryParam(dataType, refEntity, viewApplication); //数据查询参数
-
-	    _this2.view = viewApplication.view;
-	    _this2.tableBodyUrl = '/uniform/' + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
+	    _this2.dataUrl = _store.getState().dataUrl;
+	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, getDataParams);
+	    _this2.view = viewApplication.view; // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
 
 	    _this2.columnsData = []; //表头数据
 
@@ -83157,7 +83417,7 @@
 
 	    _this2.currPageIndex = 1; //激活页码
 
-	    _this2.fliterFormInputs = [];
+	    _this2.filterFormInputs = [];
 	    _this2.filterInfo = {};
 	    _this2.checkedArray = [];
 	    _this2.checkedMap = {};
@@ -83167,10 +83427,9 @@
 	    return _this2;
 	  }
 
-	  var _proto = TableRender.prototype;
+	  var _proto = Table.prototype;
 
-	  _proto.componentDidMount = function componentDidMount() {
-	    this.initComponent();
+	  _proto.componentDidMount = function componentDidMount() {// this.initComponent();
 	  };
 
 	  _proto.render = function render() {
@@ -83193,7 +83452,7 @@
 	        pageCount = this.pageCount,
 	        pageSize = this.pageSize,
 	        currPageIndex = this.currPageIndex,
-	        fliterFormInputs = this.fliterFormInputs,
+	        filterFormInputs = this.filterFormInputs,
 	        filterInfo = this.filterInfo;
 	    var dataNumSelect = this.dataNumSelect,
 	        handlePagination = this.handlePagination,
@@ -83201,12 +83460,8 @@
 	    var props = {
 	      // placeholder: extendField.placeholder,
 	      title: cBillName,
-	      backdrop: true,
-	      disabled: false,
 	      multiple: refEntity.bMultiSel,
-	      strictMode: true,
-	      miniSearch: true,
-	      displayField: displayField,
+	      displayField: "{" + displayField + "}",
 	      valueField: valueField,
 	      showLoading: showLoading,
 	      columnsData: columnsData,
@@ -83214,7 +83469,7 @@
 	      pageCount: pageCount,
 	      pageSize: pageSize,
 	      currPageIndex: currPageIndex,
-	      fliterFormInputs: fliterFormInputs,
+	      filterFormInputs: filterFormInputs,
 	      filterInfo: filterInfo,
 	      dataNumSelect: dataNumSelect,
 	      handlePagination: handlePagination,
@@ -83223,9 +83478,12 @@
 
 	    };
 	    console.log(props);
-	    return React__default.createElement("div", null, React__default.createElement(lib_6$1, _extends_1({}, props, {
+	    return React__default.createElement("div", {
+	      className: "ref-container"
+	    }, React__default.createElement(lib_6$1, _extends_1({}, props, {
 	      onSave: this.onSave,
-	      onCancel: this.onCancel
+	      onCancel: this.onCancel,
+	      canClickGoOn: this.initComponent
 	    }, getFieldProps(valueField, {
 	      initialValue: "{" + displayField + ":\"\"," + valueField + ":\"\"}",
 	      rules: [{
@@ -83237,12 +83495,8239 @@
 	    }, getFieldError(valueField)));
 	  };
 
-	  return TableRender;
+	  return Table;
 	}(React.Component), _temp)) || _class$1);
+
+	var utils$4 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var refValParse = function refValParse(value) {
+	    if (!value) return { refname: '', refpk: '' };
+
+	    try {
+	        var valueMap = JSON.parse(value);
+	        if (!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')) {
+	            return { refname: '', refpk: '' };
+	        } else {
+	            return JSON.parse(value);
+	        }
+	    } catch (e) {
+	        return { refname: '', refpk: '' };
+	    }
+	};
+
+	exports.refValParse = refValParse;
+	});
+
+	unwrapExports(utils$4);
+	var utils_1$3 = utils$4.refValParse;
+
+
+
+	var refcoreerror$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoreerror$1);
+
+	var RefCoreError_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var RefCoreError = function RefCoreError(props) {
+	  var language = props.language,
+	      show = props.show;
+
+	  var nodata = "没有查询到数据";
+	  switch (language) {
+	    case "zh_CN":
+	      nodata = '没有查询到数据';
+
+	      break;
+	    case "en_US":
+	      nodata = 'No query to data';
+	      break;
+	    case "zh_TW":
+	      nodata = '沒有査詢到數據';
+	      break;
+	    case "fr_FR":
+	      nodata = 'Pas de données';
+	      break;
+	    case "de_DE":
+	      nodata = 'Keine abfrage zu Daten';
+	      break;
+	    case "ja_JP":
+	      nodata = 'データが検索されていません';
+	      break;
+	    default:
+	      nodata = '没有查询到数据';
+	  }
+	  return _react2["default"].createElement(
+	    'div',
+	    { className: show ? 'ref-core-error' : 'ref-core-error-hide' },
+	    nodata
+	  );
+	};
+	exports["default"] = RefCoreError;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreError_1$1);
+
+	var util$7 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.browser = browser;
+	exports.getOffset = getOffset;
+	exports.loopAllChildren = loopAllChildren;
+	exports.isInclude = isInclude;
+	exports.filterParentPosition = filterParentPosition;
+	exports.handleCheckState = handleCheckState;
+	exports.getCheck = getCheck;
+	exports.getStrictlyValue = getStrictlyValue;
+	exports.arraysEqual = arraysEqual;
+	exports.closest = closest;
+	exports.isTreeNode = isTreeNode;
+	exports.toArray = toArray;
+	exports.getNodeChildren = getNodeChildren;
+	exports.warnOnlyTreeNode = warnOnlyTreeNode;
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function browser(navigator) {
+	  var tem = void 0;
+	  var ua = navigator.userAgent;
+	  var M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+	  if (/trident/i.test(M[1])) {
+	    tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+	    return 'IE ' + (tem[1] || '');
+	  }
+	  if (M[1] === 'Chrome') {
+	    tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+	    if (tem) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+	  }
+	  M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+	  tem = ua.match(/version\/(\d+)/i);
+	  if (tem) {
+	    M.splice(1, 1, tem[1]);
+	  }
+	  return M.join(' ');
+	}
+
+	// export function getOffset(el) {
+	//   const obj = el.getBoundingClientRect();
+	//   return {
+	//     left: obj.left + document.body.scrollLeft,
+	//     top: obj.top + document.body.scrollTop,
+	//     width: obj.width,
+	//     height: obj.height
+	//   };
+	// }
+
+	// // iscroll offset
+	// offset = function (el) {
+	//   var left = -el.offsetLeft,
+	//     top = -el.offsetTop;
+
+	//   // jshint -W084
+	//   while (el = el.offsetParent) {
+	//     left -= el.offsetLeft;
+	//     top -= el.offsetTop;
+	//   }
+	//   // jshint +W084
+
+	//   return {
+	//     left: left,
+	//     top: top
+	//   };
+	// }
+
+	/* eslint-disable */
+	/* eslint no-loop-func: 0*/
+
+	function getOffset(ele) {
+	  var doc = void 0,
+	      win = void 0,
+	      docElem = void 0,
+	      rect = void 0;
+
+	  if (!ele.getClientRects().length) {
+	    return { top: 0, left: 0 };
+	  }
+
+	  rect = ele.getBoundingClientRect();
+
+	  if (rect.width || rect.height) {
+	    doc = ele.ownerDocument;
+	    win = doc.defaultView;
+	    docElem = doc.documentElement;
+
+	    return {
+	      top: rect.top + win.pageYOffset - docElem.clientTop,
+	      left: rect.left + win.pageXOffset - docElem.clientLeft
+	    };
+	  }
+
+	  return rect;
+	}
+	/* eslint-enable */
+
+	function getChildrenlength(children) {
+	  var len = 1;
+	  if (Array.isArray(children)) {
+	    len = children.length;
+	  }
+	  return len;
+	}
+
+	function getSiblingPosition(index, len, siblingPosition) {
+	  if (len === 1) {
+	    siblingPosition.first = true;
+	    siblingPosition.last = true;
+	  } else {
+	    siblingPosition.first = index === 0;
+	    siblingPosition.last = index === len - 1;
+	  }
+	  return siblingPosition;
+	}
+
+	function loopAllChildren(childs, callback, parent) {
+	  var loop = function loop(children, level, _parent) {
+	    var len = getChildrenlength(children);
+	    _react2["default"].Children.forEach(children, function (item, index) {
+	      var pos = level + '-' + index;
+	      if (item.props.children && item.type && item.type.isTreeNode) {
+	        loop(item.props.children, pos, { node: item, pos: pos });
+	      }
+	      callback(item, index, pos, item.key || pos, getSiblingPosition(index, len, {}), _parent);
+	    });
+	  };
+	  loop(childs, 0, parent);
+	}
+
+	function isInclude(smallArray, bigArray) {
+	  return smallArray.every(function (ii, i) {
+	    return ii === bigArray[i];
+	  });
+	}
+	// console.log(isInclude(['0', '1'], ['0', '10', '1']));
+
+
+	// arr.length === 628, use time: ~20ms
+	function filterParentPosition(arr) {
+	  var levelObj = {};
+	  arr.forEach(function (item) {
+	    var posLen = item.split('-').length;
+	    if (!levelObj[posLen]) {
+	      levelObj[posLen] = [];
+	    }
+	    levelObj[posLen].push(item);
+	  });
+	  var levelArr = Object.keys(levelObj).sort();
+
+	  var _loop = function _loop(i) {
+	    if (levelArr[i + 1]) {
+	      levelObj[levelArr[i]].forEach(function (ii) {
+	        var _loop2 = function _loop2(j) {
+	          levelObj[levelArr[j]].forEach(function (_i, index) {
+	            if (isInclude(ii.split('-'), _i.split('-'))) {
+	              levelObj[levelArr[j]][index] = null;
+	            }
+	          });
+	          levelObj[levelArr[j]] = levelObj[levelArr[j]].filter(function (p) {
+	            return p;
+	          });
+	        };
+
+	        for (var j = i + 1; j < levelArr.length; j++) {
+	          _loop2(j);
+	        }
+	      });
+	    }
+	  };
+
+	  for (var i = 0; i < levelArr.length; i++) {
+	    _loop(i);
+	  }
+	  var nArr = [];
+	  levelArr.forEach(function (i) {
+	    nArr = nArr.concat(levelObj[i]);
+	  });
+	  return nArr;
+	}
+	// console.log(filterParentPosition(
+	//   ['0-2', '0-3-3', '0-10', '0-10-0', '0-0-1', '0-0', '0-1-1', '0-1']
+	// ));
+
+
+	function stripTail(str) {
+	  var arr = str.match(/(.+)(-[^-]+)$/);
+	  var st = '';
+	  if (arr && arr.length === 3) {
+	    st = arr[1];
+	  }
+	  return st;
+	}
+	function splitPosition(pos) {
+	  return pos.split('-');
+	}
+
+	function handleCheckState(obj, checkedPositionArr, checkIt) {
+	  // console.log(stripTail('0-101-000'));
+	  var objKeys = Object.keys(obj);
+	  // let s = Date.now();
+	  objKeys.forEach(function (i, index) {
+	    var iArr = splitPosition(i);
+	    var saved = false;
+	    checkedPositionArr.forEach(function (_pos) {
+	      // 设置子节点，全选或全不选
+	      var _posArr = splitPosition(_pos);
+	      if (iArr.length > _posArr.length && isInclude(_posArr, iArr)) {
+	        obj[i].halfChecked = false;
+	        obj[i].checked = checkIt;
+	        objKeys[index] = null;
+	      }
+	      if (iArr[0] === _posArr[0] && iArr[1] === _posArr[1]) {
+	        // 如果
+	        saved = true;
+	      }
+	    });
+	    if (!saved) {
+	      objKeys[index] = null;
+	    }
+	  });
+	  // TODO: 循环 2470000 次耗时约 1400 ms。 性能瓶颈！
+	  // console.log(Date.now()-s, checkedPositionArr.length * objKeys.length);
+	  objKeys = objKeys.filter(function (i) {
+	    return i;
+	  }); // filter non null;
+
+	  var _loop3 = function _loop3(_pIndex) {
+	    // 循环设置父节点的 选中 或 半选状态
+	    var loop = function loop(__pos) {
+	      var _posLen = splitPosition(__pos).length;
+	      if (_posLen <= 2) {
+	        // e.g. '0-0', '0-1'
+	        return;
+	      }
+	      var sibling = 0;
+	      var siblingChecked = 0;
+	      var parentPosition = stripTail(__pos);
+	      objKeys.forEach(function (i /* , index*/) {
+	        var iArr = splitPosition(i);
+	        if (iArr.length === _posLen && isInclude(splitPosition(parentPosition), iArr)) {
+	          sibling++;
+	          if (obj[i].checked) {
+	            siblingChecked++;
+	            var _i = checkedPositionArr.indexOf(i);
+	            if (_i > -1) {
+	              checkedPositionArr.splice(_i, 1);
+	              if (_i <= _pIndex) {
+	                _pIndex--;
+	              }
+	            }
+	          } else if (obj[i].halfChecked) {
+	            siblingChecked += 0.5;
+	          }
+	          // objKeys[index] = null;
+	        }
+	      });
+	      // objKeys = objKeys.filter(i => i); // filter non null;
+	      var parent = obj[parentPosition];
+	      // sibling 不会等于0
+	      // 全不选 - 全选 - 半选
+	      if (siblingChecked === 0) {
+	        parent.checked = false;
+	        parent.halfChecked = false;
+	      } else if (siblingChecked === sibling) {
+	        parent.checked = true;
+	        parent.halfChecked = false;
+	      } else {
+	        parent.halfChecked = true;
+	        parent.checked = false;
+	      }
+	      loop(parentPosition);
+	    };
+	    loop(checkedPositionArr[_pIndex], _pIndex);
+	    pIndex = _pIndex;
+	  };
+
+	  for (var pIndex = 0; pIndex < checkedPositionArr.length; pIndex++) {
+	    _loop3(pIndex);
+	  }
+	  // console.log(Date.now()-s, objKeys.length, checkIt);
+	}
+
+	function getCheck(treeNodesStates) {
+	  var halfCheckedKeys = [];
+	  var checkedKeys = [];
+	  var checkedNodes = [];
+	  var checkedNodesPositions = [];
+	  Object.keys(treeNodesStates).forEach(function (item) {
+	    var itemObj = treeNodesStates[item];
+	    if (itemObj.checked) {
+	      checkedKeys.push(itemObj.key);
+	      checkedNodes.push(itemObj.node);
+	      checkedNodesPositions.push({ node: itemObj.node, pos: item });
+	    } else if (itemObj.halfChecked) {
+	      halfCheckedKeys.push(itemObj.key);
+	    }
+	  });
+	  return {
+	    halfCheckedKeys: halfCheckedKeys, checkedKeys: checkedKeys, checkedNodes: checkedNodes, checkedNodesPositions: checkedNodesPositions, treeNodesStates: treeNodesStates
+	  };
+	}
+
+	function getStrictlyValue(checkedKeys, halfChecked) {
+	  if (halfChecked) {
+	    return { checked: checkedKeys, halfChecked: halfChecked };
+	  }
+	  return checkedKeys;
+	}
+
+	function arraysEqual(a, b) {
+	  if (a === b) return true;
+	  if (a === null || typeof a === 'undefined' || b === null || typeof b === 'undefined') {
+	    return false;
+	  }
+	  if (a.length !== b.length) return false;
+
+	  // If you don't care about the order of the elements inside
+	  // the array, you should sort both arrays here.
+
+	  for (var i = 0; i < a.length; ++i) {
+	    if (a[i] !== b[i]) return false;
+	  }
+	  return true;
+	}
+
+	function closest(el, selector) {
+	  var matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+
+	  while (el) {
+	    if (matchesSelector.call(el, selector)) {
+	      return el;
+	    } else {
+	      el = el.parentElement;
+	    }
+	  }
+	  return null;
+	}
+
+	function isTreeNode(node) {
+	  return node && node.type && node.type.isTreeNode;
+	}
+
+	function toArray(children) {
+	  var ret = [];
+	  _react2["default"].Children.forEach(children, function (c) {
+	    ret.push(c);
+	  });
+	  return ret;
+	}
+
+	function getNodeChildren(children) {
+	  return toArray(children).filter(isTreeNode);
+	}
+
+	var onlyTreeNodeWarned = false;
+
+	function warnOnlyTreeNode() {
+	  if (onlyTreeNodeWarned) return;
+	  onlyTreeNodeWarned = true;
+	  console.warn('Tree only accept TreeNode as children.');
+	}
+	});
+
+	unwrapExports(util$7);
+	var util_1$8 = util$7.browser;
+	var util_2$4 = util$7.getOffset;
+	var util_3$4 = util$7.loopAllChildren;
+	var util_4$3 = util$7.isInclude;
+	var util_5$3 = util$7.filterParentPosition;
+	var util_6$3 = util$7.handleCheckState;
+	var util_7$3 = util$7.getCheck;
+	var util_8$3 = util$7.getStrictlyValue;
+	var util_9$3 = util$7.arraysEqual;
+	var util_10$2 = util$7.closest;
+	var util_11$1 = util$7.isTreeNode;
+	var util_12$1 = util$7.toArray;
+	var util_13$1 = util$7.getNodeChildren;
+	var util_14$1 = util$7.warnOnlyTreeNode;
+
+	var Tree_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); } /* eslint no-console:0 */
+
+
+	function noop() {}
+
+	var Tree = function (_React$Component) {
+	  _inherits(Tree, _React$Component);
+
+	  function Tree(props) {
+	    _classCallCheck(this, Tree);
+
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+
+	    ['onKeyDown', 'onCheck', "onUlFocus", "_focusDom", "onUlMouseEnter", "onUlMouseLeave"].forEach(function (m) {
+	      _this[m] = _this[m].bind(_this);
+	    });
+	    _this.contextmenuKeys = [];
+	    _this.checkedKeysChange = true;
+	    _this.selectKeyDomPos = '0-0';
+	    _this.state = {
+	      expandedKeys: _this.getDefaultExpandedKeys(props),
+	      checkedKeys: _this.getDefaultCheckedKeys(props),
+	      selectedKeys: _this.getDefaultSelectedKeys(props),
+	      dragNodesKeys: '',
+	      dragOverNodeKey: '',
+	      dropNodeKey: ''
+	    };
+	    return _this;
+	  }
+
+	  Tree.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    var expandedKeys = this.getDefaultExpandedKeys(nextProps, true);
+	    var checkedKeys = this.getDefaultCheckedKeys(nextProps, true);
+	    var selectedKeys = this.getDefaultSelectedKeys(nextProps, true);
+	    var st = {};
+	    // 用于记录这次data内容有没有变化
+	    this.dataChange = false;
+	    if (expandedKeys) {
+	      st.expandedKeys = expandedKeys;
+	    }
+	    if (checkedKeys) {
+	      if (nextProps.checkedKeys === this.props.checkedKeys) {
+	        this.checkedKeysChange = false;
+	      } else {
+	        this.checkedKeysChange = true;
+	      }
+	      st.checkedKeys = checkedKeys;
+	    }
+	    if (selectedKeys) {
+	      st.selectedKeys = selectedKeys;
+	    }
+	    if (nextProps.children !== this.props.children) {
+	      this.dataChange = true;
+	    }
+	    this.setState(st);
+	  };
+
+	  Tree.prototype.onDragStart = function onDragStart(e, treeNode) {
+	    this.dragNode = treeNode;
+	    this.dragNodesKeys = this.getDragNodes(treeNode);
+	    var st = {
+	      dragNodesKeys: this.dragNodesKeys
+	    };
+	    var expandedKeys = this.getExpandedKeys(treeNode, false);
+	    if (expandedKeys) {
+	      // Controlled expand, save and then reset
+	      this.getRawExpandedKeys();
+	      st.expandedKeys = expandedKeys;
+	    }
+	    this.setState(st);
+	    this.props.onDragStart({
+	      event: e,
+	      node: treeNode
+	    });
+	    this._dropTrigger = false;
+	  };
+
+	  Tree.prototype.onDragEnterGap = function onDragEnterGap(e, treeNode) {
+	    var offsetTop = (0, util$7.getOffset)(treeNode.refs.selectHandle).top;
+	    var offsetHeight = treeNode.refs.selectHandle.offsetHeight;
+	    var pageY = e.pageY;
+	    var gapHeight = 2;
+	    if (pageY > offsetTop + offsetHeight - gapHeight) {
+	      this.dropPosition = 1;
+	      return 1;
+	    }
+	    if (pageY < offsetTop + gapHeight) {
+	      this.dropPosition = -1;
+	      return -1;
+	    }
+	    this.dropPosition = 0;
+	    return 0;
+	  };
+
+	  Tree.prototype.onDragEnter = function onDragEnter(e, treeNode) {
+	    var enterGap = this.onDragEnterGap(e, treeNode);
+	    if (this.dragNode.props.eventKey === treeNode.props.eventKey && enterGap === 0) {
+	      this.setState({
+	        dragOverNodeKey: ''
+	      });
+	      return;
+	    }
+	    var st = {
+	      dragOverNodeKey: treeNode.props.eventKey
+	    };
+	    var expandedKeys = this.getExpandedKeys(treeNode, true);
+	    if (expandedKeys) {
+	      this.getRawExpandedKeys();
+	      st.expandedKeys = expandedKeys;
+	    }
+	    this.setState(st);
+	    this.props.onDragEnter({
+	      event: e,
+	      node: treeNode,
+	      expandedKeys: expandedKeys && [].concat(_toConsumableArray(expandedKeys)) || [].concat(_toConsumableArray(this.state.expandedKeys))
+	    });
+	  };
+
+	  Tree.prototype.onDragOver = function onDragOver(e, treeNode) {
+	    this.props.onDragOver({
+	      event: e,
+	      node: treeNode
+	    });
+	  };
+
+	  Tree.prototype.onDragLeave = function onDragLeave(e, treeNode) {
+	    this.props.onDragLeave({
+	      event: e,
+	      node: treeNode
+	    });
+	  };
+
+	  Tree.prototype.onDrop = function onDrop(e, treeNode) {
+	    var key = treeNode.props.eventKey;
+	    this.setState({
+	      dragOverNodeKey: '',
+	      dropNodeKey: key
+	    });
+	    if (this.dragNodesKeys.indexOf(key) > -1) {
+	      if (console.warn) {
+	        console.warn('can not drop to dragNode(include it\'s children node)');
+	      }
+	      return false;
+	    }
+
+	    var posArr = treeNode.props.pos.split('-');
+	    var res = {
+	      event: e,
+	      node: treeNode,
+	      dragNode: this.dragNode,
+	      dragNodesKeys: [].concat(_toConsumableArray(this.dragNodesKeys)),
+	      dropPosition: this.dropPosition + Number(posArr[posArr.length - 1])
+	    };
+	    if (this.dropPosition !== 0) {
+	      res.dropToGap = true;
+	    }
+	    if ('expandedKeys' in this.props) {
+	      res.rawExpandedKeys = [].concat(_toConsumableArray(this._rawExpandedKeys)) || [].concat(_toConsumableArray(this.state.expandedKeys));
+	    }
+	    this.props.onDrop(res);
+	    this._dropTrigger = true;
+	  };
+
+	  Tree.prototype.onDragEnd = function onDragEnd(e, treeNode) {
+	    this.setState({
+	      dragOverNodeKey: ''
+	    });
+	    this.props.onDragEnd({
+	      event: e,
+	      node: treeNode
+	    });
+	  };
+	  /**
+	   *
+	   *
+	   * @param {*} treeNode 当前操作的节点
+	   * @param {*} keyType 键盘事件通用的key类型 left 为收起，right为展开
+	   * @returns
+	   * @memberof Tree
+	   */
+
+
+	  Tree.prototype.onExpand = function onExpand(treeNode, keyType) {
+	    var _this2 = this;
+
+	    var expanded = !treeNode.props.expanded;
+	    var controlled = 'expandedKeys' in this.props;
+	    var expandedKeys = [].concat(_toConsumableArray(this.state.expandedKeys));
+	    var index = expandedKeys.indexOf(treeNode.props.eventKey);
+
+	    if (keyType == 'left') {
+	      expanded = false;
+	    } else if (keyType == 'right') {
+	      expanded = true;
+	    }
+
+	    if (expanded && index === -1) {
+	      expandedKeys.push(treeNode.props.eventKey);
+	    } else if (!expanded && index > -1) {
+	      expandedKeys.splice(index, 1);
+	    }
+	    if (!controlled) {
+	      this.setState({
+	        expandedKeys: expandedKeys
+	      });
+	    }
+	    this.props.onExpand(expandedKeys, {
+	      node: treeNode,
+	      expanded: expanded
+	    });
+
+	    // after data loaded, need set new expandedKeys
+	    if (expanded && this.props.loadData) {
+	      return this.props.loadData(treeNode).then(function () {
+	        if (!controlled) {
+	          _this2.setState({
+	            expandedKeys: expandedKeys
+	          });
+	        }
+	      });
+	    }
+	  };
+
+	  Tree.prototype.onCheck = function onCheck(treeNode) {
+	    var _this3 = this;
+
+	    var checked = !treeNode.props.checked;
+	    if (treeNode.props.halfChecked) {
+	      checked = true;
+	    }
+	    var key = treeNode.props.eventKey;
+	    var checkedKeys = [].concat(_toConsumableArray(this.state.checkedKeys));
+	    var index = checkedKeys.indexOf(key);
+
+	    var newSt = {
+	      event: 'check',
+	      node: treeNode,
+	      checked: checked
+	    };
+
+	    if (this.props.checkStrictly) {
+	      if (checked && index === -1) {
+	        checkedKeys.push(key);
+	      }
+	      if (!checked && index > -1) {
+	        checkedKeys.splice(index, 1);
+	      }
+	      this.treeNodesStates[treeNode.props.pos].checked = checked;
+	      newSt.checkedNodes = [];
+	      (0, util$7.loopAllChildren)(this.props.children, function (item, ind, pos, keyOrPos) {
+	        if (checkedKeys.indexOf(keyOrPos) !== -1) {
+	          newSt.checkedNodes.push(item);
+	        }
+	      });
+	      if (!('checkedKeys' in this.props)) {
+	        this.setState({
+	          checkedKeys: checkedKeys
+	        });
+	      }
+	      var halfChecked = this.props.checkedKeys ? this.props.checkedKeys.halfChecked : [];
+	      this.props.onCheck((0, util$7.getStrictlyValue)(checkedKeys, halfChecked), newSt);
+	    } else {
+	      if (checked && index === -1) {
+	        this.treeNodesStates[treeNode.props.pos].checked = true;
+	        var checkedPositions = [];
+	        Object.keys(this.treeNodesStates).forEach(function (i) {
+	          if (_this3.treeNodesStates[i].checked) {
+	            checkedPositions.push(i);
+	          }
+	        });
+	        (0, util$7.handleCheckState)(this.treeNodesStates, (0, util$7.filterParentPosition)(checkedPositions), true);
+	      }
+	      if (!checked) {
+	        this.treeNodesStates[treeNode.props.pos].checked = false;
+	        this.treeNodesStates[treeNode.props.pos].halfChecked = false;
+	        (0, util$7.handleCheckState)(this.treeNodesStates, [treeNode.props.pos], false);
+	      }
+	      var checkKeys = (0, util$7.getCheck)(this.treeNodesStates);
+	      newSt.checkedNodes = checkKeys.checkedNodes;
+	      newSt.checkedNodesPositions = checkKeys.checkedNodesPositions;
+	      newSt.halfCheckedKeys = checkKeys.halfCheckedKeys;
+	      this.checkKeys = checkKeys;
+
+	      this._checkedKeys = checkedKeys = checkKeys.checkedKeys;
+	      if (!('checkedKeys' in this.props)) {
+	        this.setState({
+	          checkedKeys: checkedKeys
+	        });
+	      }
+	      this.props.onCheck(checkedKeys, newSt);
+	    }
+	  };
+
+	  Tree.prototype.onSelect = function onSelect(treeNode) {
+	    var props = this.props;
+	    var selectedKeys = [].concat(_toConsumableArray(this.state.selectedKeys));
+	    var eventKey = treeNode.props.eventKey || treeNode.key;
+	    var index = selectedKeys.indexOf(eventKey);
+	    var selected = void 0;
+	    //cancelUnSelect为true时第二次点击时不取消选中
+	    if (props.cancelUnSelect) {
+	      if (index == -1) {
+	        selected = true;
+	        if (!props.multiple) {
+	          selectedKeys.length = 0;
+	        }
+	        selectedKeys.push(eventKey);
+	      }
+	    } else {
+	      if (index !== -1) {
+	        selected = false;
+	        selectedKeys.splice(index, 1);
+	      } else {
+	        selected = true;
+	        if (!props.multiple) {
+	          selectedKeys.length = 0;
+	        }
+	        selectedKeys.push(eventKey);
+	      }
+	    }
+
+	    var selectedNodes = [];
+	    if (selectedKeys.length) {
+	      (0, util$7.loopAllChildren)(this.props.children, function (item) {
+	        if (selectedKeys.indexOf(item.key) !== -1) {
+	          selectedNodes.push(item);
+	        }
+	      });
+	    }
+	    var newSt = {
+	      event: 'select',
+	      node: treeNode,
+	      selected: selected,
+	      selectedNodes: selectedNodes
+	    };
+	    if (!('selectedKeys' in this.props)) {
+	      this.setState({
+	        selectedKeys: selectedKeys
+	      });
+	    }
+	    props.onSelect(selectedKeys, newSt);
+	  };
+
+	  Tree.prototype.onDoubleClick = function onDoubleClick(treeNode) {
+	    var props = this.props;
+	    var eventKey = treeNode.props.eventKey;
+	    var newSt = {
+	      event: 'dblclick',
+	      node: treeNode
+	    };
+	    props.onDoubleClick(eventKey, newSt);
+	  };
+
+	  Tree.prototype.onMouseEnter = function onMouseEnter(e, treeNode) {
+	    this.props.onMouseEnter({
+	      event: e,
+	      node: treeNode
+	    });
+	  };
+
+	  Tree.prototype.onMouseLeave = function onMouseLeave(e, treeNode) {
+	    this.props.onMouseLeave({
+	      event: e,
+	      node: treeNode
+	    });
+	  };
+
+	  Tree.prototype.onContextMenu = function onContextMenu(e, treeNode) {
+	    var selectedKeys = [].concat(_toConsumableArray(this.state.selectedKeys));
+	    var eventKey = treeNode.props.eventKey;
+	    if (this.contextmenuKeys.indexOf(eventKey) === -1) {
+	      this.contextmenuKeys.push(eventKey);
+	    }
+	    this.contextmenuKeys.forEach(function (key) {
+	      var index = selectedKeys.indexOf(key);
+	      if (index !== -1) {
+	        selectedKeys.splice(index, 1);
+	      }
+	    });
+	    if (selectedKeys.indexOf(eventKey) === -1) {
+	      selectedKeys.push(eventKey);
+	    }
+	    this.setState({
+	      selectedKeys: selectedKeys
+	    });
+	    this.props.onRightClick({
+	      event: e,
+	      node: treeNode
+	    });
+	  };
+
+	  Tree.prototype.getTreeNode = function getTreeNode() {
+	    var props = this.props;
+	  };
+
+	  Tree.prototype.goDown = function goDown(currentPos, currentIndex, e, treeNode) {
+	    var props = this.props;
+	    var nextIndex = parseInt(currentIndex) + 1;
+
+	    var nextPos = void 0,
+	        backNextPos = void 0;
+	    var nextTreeNode = void 0;
+	    var backNextPosArr = [],
+	        backNextTreeNodeArr = [],
+	        tempBackNextPosArr = [];
+	    //是否为展开的节点，如果展开获取第一个子节点的信息，如果没有取相邻节点，若也没有相邻节点则获取父节点的下一个节点
+	    if (props.expandedKeys.indexOf(treeNode.props.eventKey) > -1) {
+	      nextPos = currentPos + '-0';
+	    } else {
+	      nextPos = currentPos.substr(0, currentPos.lastIndexOf('-') + 1) + nextIndex;
+	    }
+	    //若向下的节点没有了，找到父级相邻节点
+	    var tempPosArr = currentPos.split('-');
+	    var tempPosArrLength = tempPosArr.length;
+	    //将可能是下一个节点的的位置都备份一遍
+	    while (tempPosArrLength > 1) {
+	      backNextPos = tempPosArrLength > 1 && tempPosArr.slice(0, tempPosArrLength - 1).join('-') + '-' + (parseInt(tempPosArr[tempPosArrLength - 1]) + 1);
+	      tempBackNextPosArr.push(backNextPos);
+	      tempPosArr = tempPosArr.slice(0, tempPosArrLength - 1);
+	      tempPosArrLength = tempPosArr.length;
+	    }
+	    //选中下一个相邻的节点
+	    (0, util$7.loopAllChildren)(props.children, function (itemNode, index, pos, newKey) {
+	      if (pos == nextPos) {
+	        nextTreeNode = itemNode;
+	      }
+	      tempBackNextPosArr.forEach(function (item) {
+	        if (item && item == pos) {
+	          // backNextTreeNode = item;
+	          backNextTreeNodeArr.push(itemNode);
+	          backNextPosArr.push(pos);
+	        }
+	      });
+	    });
+	    //如果没有下一个节点，则获取父节点的下一个节点
+	    if (!nextTreeNode) {
+	      for (var i = 0; i < backNextTreeNodeArr.length; i++) {
+	        if (backNextTreeNodeArr[i]) {
+	          nextTreeNode = backNextTreeNodeArr[i];
+	          nextPos = backNextPosArr[i];
+	          break;
+	        }
+	      }
+	    }
+
+	    //查询的下一个节点不为空的话，则选中
+	    if (nextTreeNode) {
+	      var queryInfo = 'a[pos="' + nextPos + '"]';
+	      var parentEle = (0, util$7.closest)(e.target, ".u-tree");
+	      var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
+	      focusEle && focusEle.focus();
+	      this.onSelect(nextTreeNode);
+	    }
+	  };
+
+	  Tree.prototype.goUp = function goUp(currentPos, currentIndex, e, treeNode) {
+	    var props = this.props;
+	    if (currentIndex == 0 && currentPos.length === 3) {
+	      return;
+	    }
+	    // 向上键Up
+	    var preIndex = parseInt(currentIndex) - 1;
+	    var prePos = void 0;
+	    if (preIndex >= 0) {
+	      prePos = currentPos.substr(0, currentPos.lastIndexOf('-') + 1) + preIndex;
+	    } else {
+	      prePos = currentPos.substr(0, currentPos.lastIndexOf('-'));
+	    }
+
+	    var prevTreeNode = void 0,
+	        preElement = void 0;
+	    //选中上一个相邻的节点
+	    (0, util$7.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	      if (pos == prePos) {
+	        prevTreeNode = item;
+	      }
+	    });
+	    //查询的上一个节点不为空的话，则选中
+	    if (prevTreeNode) {
+	      if (preIndex >= 0) {
+	        //如果上面的节点展开则默认选择最后一个子节点
+	        if (props.expandedKeys.indexOf(prevTreeNode.key) > -1) {
+	          var preElementArr = e.target.parentElement.previousElementSibling.querySelectorAll('a');
+	          preElement = preElementArr[preElementArr.length - 1];
+	          prePos = preElement.getAttribute('pos');
+	          (0, util$7.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	            if (pos == prePos) {
+	              prevTreeNode = item;
+	            }
+	          });
+	        } else {
+	          //上一个节点没有展开
+	          preElement = e.target.parentElement.previousElementSibling.querySelector('a');
+	        }
+	      } else {
+	        // 不存在上一个节点时，选中它的父节点
+	        preElement = e.target.parentElement.parentElement.parentElement.querySelector('a');
+	      }
+	    }
+	    preElement && preElement.focus();
+	    this.onSelect(prevTreeNode);
+	  };
+	  // all keyboard events callbacks run from here at first
+
+
+	  Tree.prototype.onKeyDown = function onKeyDown(e, treeNode) {
+	    // e.stopPropagation();
+
+	    var props = this.props;
+	    var currentPos = treeNode.props.pos;
+	    var currentIndex = currentPos.substr(currentPos.lastIndexOf('-') + 1);
+	    //向下键down
+	    if (e.keyCode == lib$1.KeyCode.DOWN) {
+	      this.goDown(currentPos, currentIndex, e, treeNode);
+	    } else if (e.keyCode == lib$1.KeyCode.UP) {
+	      this.goUp(currentPos, currentIndex, e, treeNode);
+	    } else if (e.keyCode == lib$1.KeyCode.LEFT && !treeNode.props.isLeaf) {
+	      // 收起树节点
+	      this.onExpand(treeNode, 'left');
+	    } else if (e.keyCode == lib$1.KeyCode.RIGHT && !treeNode.props.isLeaf) {
+	      // 展开树节点
+	      this.onExpand(treeNode, 'right');
+	    } else if (e.keyCode == lib$1.KeyCode.SPACE && props.checkable) {
+	      // 如果是多选tree则进行选中或者反选该节点
+	      this.onCheck(treeNode);
+	    } else if (e.keyCode == lib$1.KeyCode.ENTER) {
+	      this.onDoubleClick(treeNode);
+	    }
+	    this.props.keyFun && this.props.keyFun(e, treeNode);
+	    // e.preventDefault();
+	  };
+
+	  Tree.prototype._focusDom = function _focusDom(selectKeyDomPos, targetDom) {
+	    var queryInfo = 'a[pos="' + selectKeyDomPos + '"]';
+	    var parentEle = (0, util$7.closest)(targetDom, ".u-tree");
+	    var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
+	    focusEle && focusEle.focus();
+	  };
+
+	  Tree.prototype.onUlFocus = function onUlFocus(e) {
+	    var _this4 = this;
+
+	    var targetDom = e.target;
+	    if (this.tree == targetDom && !this.isIn) {
+	      var onFocus = this.props.onFocus;
+	      var _state$selectedKeys = this.state.selectedKeys,
+	          selectedKeys = _state$selectedKeys === undefined ? [] : _state$selectedKeys;
+
+	      var tabIndexKey = selectedKeys[0];
+	      var isExist = false;
+	      if (this.selectKeyDomExist && tabIndexKey || !tabIndexKey) {
+	        isExist = true;
+	        var queryInfo = 'a[pos="' + this.selectKeyDomPos + '"]';
+	        var parentEle = (0, util$7.closest)(e.target, ".u-tree");
+	        var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
+	        focusEle && focusEle.focus();
+	      }
+	      var onFocusRes = onFocus && onFocus(isExist);
+	      if (onFocusRes instanceof Promise) {
+	        onFocusRes.then(function () {
+	          _this4._focusDom(_this4.selectKeyDomPos, targetDom);
+	        });
+	      } else {
+	        this._focusDom(this.selectKeyDomPos, targetDom);
+	      }
+	    }
+	  };
+
+	  Tree.prototype.onUlMouseEnter = function onUlMouseEnter(e) {
+	    this.isIn = true;
+	  };
+
+	  Tree.prototype.onUlMouseLeave = function onUlMouseLeave(e) {
+	    this.isIn = false;
+	  };
+
+	  Tree.prototype.getFilterExpandedKeys = function getFilterExpandedKeys(props, expandKeyProp, expandAll) {
+	    var keys = props[expandKeyProp];
+	    if (!expandAll && !props.autoExpandParent) {
+	      return keys || [];
+	    }
+	    var expandedPositionArr = [];
+	    if (props.autoExpandParent) {
+	      (0, util$7.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	        if (keys.indexOf(newKey) > -1) {
+	          expandedPositionArr.push(pos);
+	        }
+	      });
+	    }
+	    var filterExpandedKeys = [];
+	    (0, util$7.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	      if (expandAll) {
+	        filterExpandedKeys.push(newKey);
+	      } else if (props.autoExpandParent) {
+	        expandedPositionArr.forEach(function (p) {
+	          if ((p.split('-').length > pos.split('-').length && (0, util$7.isInclude)(pos.split('-'), p.split('-')) || pos === p) && filterExpandedKeys.indexOf(newKey) === -1) {
+	            filterExpandedKeys.push(newKey);
+	          }
+	        });
+	      }
+	    });
+	    return filterExpandedKeys.length ? filterExpandedKeys : keys;
+	  };
+
+	  Tree.prototype.getDefaultExpandedKeys = function getDefaultExpandedKeys(props, willReceiveProps) {
+	    var expandedKeys = willReceiveProps ? undefined : this.getFilterExpandedKeys(props, 'defaultExpandedKeys', props.defaultExpandedKeys.length ? false : props.defaultExpandAll);
+	    if ('expandedKeys' in props) {
+	      expandedKeys = (props.autoExpandParent ? this.getFilterExpandedKeys(props, 'expandedKeys', false) : props.expandedKeys) || [];
+	    }
+	    return expandedKeys;
+	  };
+
+	  Tree.prototype.getDefaultCheckedKeys = function getDefaultCheckedKeys(props, willReceiveProps) {
+	    var checkedKeys = willReceiveProps ? undefined : props.defaultCheckedKeys;
+	    if ('checkedKeys' in props) {
+	      checkedKeys = props.checkedKeys || [];
+	      if (props.checkStrictly) {
+	        if (props.checkedKeys.checked) {
+	          checkedKeys = props.checkedKeys.checked;
+	        } else if (!Array.isArray(props.checkedKeys)) {
+	          checkedKeys = [];
+	        }
+	      }
+	    }
+	    return checkedKeys;
+	  };
+
+	  Tree.prototype.getDefaultSelectedKeys = function getDefaultSelectedKeys(props, willReceiveProps) {
+	    var getKeys = function getKeys(keys) {
+	      if (props.multiple) {
+	        return [].concat(_toConsumableArray(keys));
+	      }
+	      if (keys.length) {
+	        return [keys[0]];
+	      }
+	      return keys;
+	    };
+	    var selectedKeys = willReceiveProps ? undefined : getKeys(props.defaultSelectedKeys);
+	    if ('selectedKeys' in props) {
+	      selectedKeys = getKeys(props.selectedKeys);
+	    }
+	    return selectedKeys;
+	  };
+
+	  Tree.prototype.getRawExpandedKeys = function getRawExpandedKeys() {
+	    if (!this._rawExpandedKeys && 'expandedKeys' in this.props) {
+	      this._rawExpandedKeys = [].concat(_toConsumableArray(this.state.expandedKeys));
+	    }
+	  };
+
+	  Tree.prototype.getOpenTransitionName = function getOpenTransitionName() {
+	    var props = this.props;
+	    var transitionName = props.openTransitionName;
+	    var animationName = props.openAnimation;
+	    if (!transitionName && typeof animationName === 'string') {
+	      transitionName = props.prefixCls + '-open-' + animationName;
+	    }
+	    return transitionName;
+	  };
+
+	  Tree.prototype.getDragNodes = function getDragNodes(treeNode) {
+	    var dragNodesKeys = [];
+	    var tPArr = treeNode.props.pos.split('-');
+	    (0, util$7.loopAllChildren)(this.props.children, function (item, index, pos, newKey) {
+	      var pArr = pos.split('-');
+	      if (treeNode.props.pos === pos || tPArr.length < pArr.length && (0, util$7.isInclude)(tPArr, pArr)) {
+	        dragNodesKeys.push(newKey);
+	      }
+	    });
+	    return dragNodesKeys;
+	  };
+
+	  Tree.prototype.getExpandedKeys = function getExpandedKeys(treeNode, expand) {
+	    var key = treeNode.props.eventKey;
+	    var expandedKeys = this.state.expandedKeys;
+	    var expandedIndex = expandedKeys.indexOf(key);
+	    var exKeys = void 0;
+	    if (expandedIndex > -1 && !expand) {
+	      exKeys = [].concat(_toConsumableArray(expandedKeys));
+	      exKeys.splice(expandedIndex, 1);
+	      return exKeys;
+	    }
+	    if (expand && expandedKeys.indexOf(key) === -1) {
+	      return expandedKeys.concat([key]);
+	    }
+	  };
+
+	  Tree.prototype.filterTreeNode = function filterTreeNode(treeNode) {
+	    var filterTreeNode = this.props.filterTreeNode;
+	    if (typeof filterTreeNode !== 'function' || treeNode.props.disabled) {
+	      return false;
+	    }
+	    return filterTreeNode.call(this, treeNode);
+	  };
+
+	  Tree.prototype.renderTreeNode = function renderTreeNode(child, index) {
+	    var level = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+	    var pos = level + '-' + index;
+	    var key = child.key || pos;
+
+	    var state = this.state;
+	    var props = this.props;
+	    var _state$selectedKeys2 = this.state.selectedKeys,
+	        selectedKeys = _state$selectedKeys2 === undefined ? [] : _state$selectedKeys2;
+
+	    var tabIndexKey = selectedKeys[0];
+	    if (tabIndexKey && key == tabIndexKey) {
+	      this.selectKeyDomExist = true;
+	      this.selectKeyDomPos = pos;
+	    }
+	    // prefer to child's own selectable property if passed
+	    var selectable = props.selectable;
+	    if (child.props.hasOwnProperty('selectable')) {
+	      selectable = child.props.selectable;
+	    }
+	    var draggable = props.draggable;
+	    if (child.props.hasOwnProperty('draggable')) {
+	      draggable = child.props.draggable;
+	    }
+
+	    var cloneProps = {
+	      root: this,
+	      eventKey: key,
+	      pos: pos,
+	      selectable: selectable,
+	      loadData: props.loadData,
+	      onMouseEnter: props.onMouseEnter,
+	      onMouseLeave: props.onMouseLeave,
+	      onRightClick: props.onRightClick,
+	      onDoubleClick: props.onDoubleClick,
+	      onKeyDown: props.onKeyDown,
+	      prefixCls: props.prefixCls,
+	      showLine: props.showLine,
+	      showIcon: props.showIcon,
+	      draggable: draggable,
+	      dragOver: state.dragOverNodeKey === key && this.dropPosition === 0,
+	      dragOverGapTop: state.dragOverNodeKey === key && this.dropPosition === -1,
+	      dragOverGapBottom: state.dragOverNodeKey === key && this.dropPosition === 1,
+	      _dropTrigger: this._dropTrigger,
+	      expanded: state.expandedKeys.indexOf(key) !== -1,
+	      selected: state.selectedKeys.indexOf(key) !== -1,
+	      openTransitionName: this.getOpenTransitionName(),
+	      openAnimation: props.openAnimation,
+	      filterTreeNode: this.filterTreeNode.bind(this),
+	      openIcon: props.openIcon,
+	      closeIcon: props.closeIcon,
+	      focusable: props.focusable,
+	      tabIndexKey: state.selectedKeys[0],
+	      tabIndexValue: props.tabIndexValue
+	    };
+	    if (props.checkable) {
+	      cloneProps.checkable = props.checkable;
+	      if (props.checkStrictly) {
+	        if (state.checkedKeys) {
+	          cloneProps.checked = state.checkedKeys.indexOf(key) !== -1 || false;
+	        }
+	        if (props.checkedKeys && props.checkedKeys.halfChecked) {
+	          cloneProps.halfChecked = props.checkedKeys.halfChecked.indexOf(key) !== -1 || false;
+	        } else {
+	          cloneProps.halfChecked = false;
+	        }
+	      } else {
+	        if (this.checkedKeys) {
+	          cloneProps.checked = this.checkedKeys.indexOf(key) !== -1 || false;
+	        }
+	        cloneProps.halfChecked = this.halfCheckedKeys.indexOf(key) !== -1;
+	      }
+	    }
+	    if (this.treeNodesStates && this.treeNodesStates[pos]) {
+	      _extends(cloneProps, this.treeNodesStates[pos].siblingPosition);
+	    }
+	    return _react2["default"].cloneElement(child, cloneProps);
+	  };
+
+	  Tree.prototype.render = function render() {
+	    var _this5 = this;
+
+	    var props = this.props;
+	    var showLineCls = "";
+	    if (props.showLine) {
+	      showLineCls = props.prefixCls + '-show-line';
+	    }
+	    var domProps = {
+	      className: (0, _classnames2["default"])(props.className, props.prefixCls, showLineCls),
+	      role: 'tree-node'
+	    };
+
+	    domProps.onFocus = this.onUlFocus;
+	    domProps.onMouseEnter = this.onUlMouseEnter;
+	    domProps.onMouseLeave = this.onUlMouseLeave;
+	    // if (props.focusable) {
+	    //   // domProps.tabIndex = '0';//需求改成了默认选择第一个节点或者选中的节点
+	    //   // domProps.onKeyDown = this.onKeyDown;//添加到具体的treeNode上了
+	    // }
+	    var getTreeNodesStates = function getTreeNodesStates() {
+	      _this5.treeNodesStates = {};
+	      (0, util$7.loopAllChildren)(props.children, function (item, index, pos, keyOrPos, siblingPosition) {
+	        _this5.treeNodesStates[pos] = {
+	          siblingPosition: siblingPosition
+	        };
+	      });
+	    };
+	    if (props.showLine && !props.checkable) {
+	      getTreeNodesStates();
+	    }
+	    if (props.checkable && (this.checkedKeysChange || props.loadData || this.dataChange)) {
+	      if (props.checkStrictly) {
+	        getTreeNodesStates();
+	      } else if (props._treeNodesStates) {
+	        this.treeNodesStates = props._treeNodesStates.treeNodesStates;
+	        this.halfCheckedKeys = props._treeNodesStates.halfCheckedKeys;
+	        this.checkedKeys = props._treeNodesStates.checkedKeys;
+	      } else {
+	        var checkedKeys = this.state.checkedKeys;
+	        var checkKeys = void 0;
+	        if (!props.loadData && this.checkKeys && this._checkedKeys && (0, util$7.arraysEqual)(this._checkedKeys, checkedKeys)) {
+	          // if checkedKeys the same as _checkedKeys from onCheck, use _checkedKeys.
+	          checkKeys = this.checkKeys;
+	        } else {
+	          var checkedPositions = [];
+	          this.treeNodesStates = {};
+	          (0, util$7.loopAllChildren)(props.children, function (item, index, pos, keyOrPos, siblingPosition) {
+	            _this5.treeNodesStates[pos] = {
+	              node: item,
+	              key: keyOrPos,
+	              checked: false,
+	              halfChecked: false,
+	              siblingPosition: siblingPosition
+	            };
+	            if (checkedKeys.indexOf(keyOrPos) !== -1) {
+	              _this5.treeNodesStates[pos].checked = true;
+	              checkedPositions.push(pos);
+	            }
+	          });
+	          // if the parent node's key exists, it all children node will be checked
+	          (0, util$7.handleCheckState)(this.treeNodesStates, (0, util$7.filterParentPosition)(checkedPositions), true);
+	          checkKeys = (0, util$7.getCheck)(this.treeNodesStates);
+	        }
+	        this.halfCheckedKeys = checkKeys.halfCheckedKeys;
+	        this.checkedKeys = checkKeys.checkedKeys;
+	      }
+	    }
+	    this.selectKeyDomExist = false;
+	    return _react2["default"].createElement(
+	      'ul',
+	      _extends({}, domProps, { unselectable: 'true', ref: function ref(el) {
+	          _this5.tree = el;
+	        }, tabIndex: props.focusable && props.tabIndexValue }),
+	      _react2["default"].Children.map(props.children, this.renderTreeNode, this)
+	    );
+	  };
+
+	  return Tree;
+	}(_react2["default"].Component);
+
+	Tree.propTypes = {
+	  prefixCls: _propTypes2["default"].string,
+	  children: _propTypes2["default"].any,
+	  showLine: _propTypes2["default"].bool,
+	  showIcon: _propTypes2["default"].bool,
+	  selectable: _propTypes2["default"].bool,
+	  multiple: _propTypes2["default"].bool,
+	  checkable: _propTypes2["default"].oneOfType([_propTypes2["default"].bool, _propTypes2["default"].node]),
+	  _treeNodesStates: _propTypes2["default"].object,
+	  checkStrictly: _propTypes2["default"].bool,
+	  draggable: _propTypes2["default"].bool,
+	  autoExpandParent: _propTypes2["default"].bool,
+	  defaultExpandAll: _propTypes2["default"].bool,
+	  defaultExpandedKeys: _propTypes2["default"].arrayOf(_propTypes2["default"].string),
+	  expandedKeys: _propTypes2["default"].arrayOf(_propTypes2["default"].string),
+	  defaultCheckedKeys: _propTypes2["default"].arrayOf(_propTypes2["default"].string),
+	  checkedKeys: _propTypes2["default"].oneOfType([_propTypes2["default"].arrayOf(_propTypes2["default"].string), _propTypes2["default"].object]),
+	  defaultSelectedKeys: _propTypes2["default"].arrayOf(_propTypes2["default"].string),
+	  selectedKeys: _propTypes2["default"].arrayOf(_propTypes2["default"].string),
+	  onExpand: _propTypes2["default"].func,
+	  onCheck: _propTypes2["default"].func,
+	  onSelect: _propTypes2["default"].func,
+	  loadData: _propTypes2["default"].func,
+	  onMouseEnter: _propTypes2["default"].func,
+	  onMouseLeave: _propTypes2["default"].func,
+	  onRightClick: _propTypes2["default"].func,
+	  onDragStart: _propTypes2["default"].func,
+	  onDragEnter: _propTypes2["default"].func,
+	  onDragOver: _propTypes2["default"].func,
+	  onDragLeave: _propTypes2["default"].func,
+	  onDrop: _propTypes2["default"].func,
+	  onDragEnd: _propTypes2["default"].func,
+	  filterTreeNode: _propTypes2["default"].func,
+	  openTransitionName: _propTypes2["default"].string,
+	  focusable: _propTypes2["default"].bool,
+	  openAnimation: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].object])
+	};
+
+	Tree.defaultProps = {
+	  prefixCls: 'rc-tree',
+	  showLine: false,
+	  showIcon: true,
+	  selectable: true,
+	  multiple: false,
+	  checkable: false,
+	  checkStrictly: false,
+	  draggable: false,
+	  autoExpandParent: true,
+	  defaultExpandAll: false,
+	  defaultExpandedKeys: [],
+	  defaultCheckedKeys: [],
+	  defaultSelectedKeys: [],
+	  onExpand: noop,
+	  onCheck: noop,
+	  onSelect: noop,
+	  onDragStart: noop,
+	  onDragEnter: noop,
+	  onDragOver: noop,
+	  onDragLeave: noop,
+	  onDrop: noop,
+	  onDragEnd: noop,
+	  tabIndexValue: 0
+	};
+
+	exports["default"] = Tree;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(Tree_1);
+
+	var TreeNode_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _beeAnimate2 = _interopRequireDefault(build$b);
+
+
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var browserUa = typeof window !== 'undefined' ? (0, util$7.browser)(window.navigator) : '';
+	var ieOrEdge = /.*(IE|Edge).+/.test(browserUa);
+	// const uaArray = browserUa.split(' ');
+	// const gtIE8 = uaArray.length !== 2 || uaArray[0].indexOf('IE') === -1 || Number(uaArray[1]) > 8;
+
+	var defaultTitle = '---';
+
+	var TreeNode = function (_React$Component) {
+	  _inherits(TreeNode, _React$Component);
+
+	  function TreeNode(props) {
+	    _classCallCheck(this, TreeNode);
+
+	    var _this2 = _possibleConstructorReturn(this, _React$Component.call(this, props));
+
+	    _this2.getNodeChildren = function () {
+	      var children = _this2.props.children;
+
+	      var originList = (0, util$7.toArray)(children).filter(function (node) {
+	        return node;
+	      });
+	      var targetList = (0, util$7.getNodeChildren)(originList);
+
+	      if (originList.length !== targetList.length) {
+	        (0, util$7.warnOnlyTreeNode)();
+	      }
+
+	      return targetList;
+	    };
+
+	    ['onExpand', 'onCheck', 'onContextMenu', 'onMouseEnter', 'onMouseLeave', 'onDragStart', 'onDragEnter', 'onDragOver', 'onDragLeave', 'onDrop', 'onDragEnd', 'onDoubleClick', 'onKeyDown'].forEach(function (m) {
+	      _this2[m] = _this2[m].bind(_this2);
+	    });
+	    _this2.state = {
+	      dataLoading: false,
+	      dragNodeHighlight: false
+	    };
+	    return _this2;
+	  }
+
+	  TreeNode.prototype.componentDidMount = function componentDidMount() {
+	    if (!this.props.root._treeNodeInstances) {
+	      this.props.root._treeNodeInstances = [];
+	    }
+	    this.props.root._treeNodeInstances.push(this);
+	  };
+	  // shouldComponentUpdate(nextProps) {
+	  //   if (!nextProps.expanded) {
+	  //     return false;
+	  //   }
+	  //   return true;
+	  // }
+
+	  TreeNode.prototype.onCheck = function onCheck() {
+
+	    this.props.root.onCheck(this);
+	  };
+
+	  TreeNode.prototype.onSelect = function onSelect() {
+	    clearTimeout(this.doubleClickFlag);
+	    var _this = this;
+	    if (this.props.onDoubleClick) {
+	      //执行延时
+	      this.doubleClickFlag = setTimeout(function () {
+	        //do function在此处写单击事件要执行的代码
+	        _this.props.root.onSelect(_this);
+	      }, 300);
+	    } else {
+	      _this.props.root.onSelect(_this);
+	    }
+	  };
+
+	  TreeNode.prototype.onDoubleClick = function onDoubleClick() {
+	    clearTimeout(this.doubleClickFlag);
+	    this.props.root.onDoubleClick(this);
+	  };
+
+	  TreeNode.prototype.onMouseEnter = function onMouseEnter(e) {
+	    e.preventDefault();
+	    this.props.root.onMouseEnter(e, this);
+	  };
+
+	  TreeNode.prototype.onMouseLeave = function onMouseLeave(e) {
+	    e.preventDefault();
+	    this.props.root.onMouseLeave(e, this);
+	  };
+
+	  TreeNode.prototype.onContextMenu = function onContextMenu(e) {
+	    e.preventDefault();
+	    this.props.root.onContextMenu(e, this);
+	  };
+
+	  TreeNode.prototype.onDragStart = function onDragStart(e) {
+	    // console.log('dragstart', this.props.eventKey, e);
+	    // e.preventDefault();
+	    e.stopPropagation();
+	    this.setState({
+	      dragNodeHighlight: true
+	    });
+	    this.props.root.onDragStart(e, this);
+	    try {
+	      // ie throw error
+	      // firefox-need-it
+	      e.dataTransfer.setData('text/plain', '');
+	    } finally {
+	      // empty
+	    }
+	  };
+
+	  TreeNode.prototype.onDragEnter = function onDragEnter(e) {
+	    e.preventDefault();
+	    e.stopPropagation();
+	    this.props.root.onDragEnter(e, this);
+	  };
+
+	  TreeNode.prototype.onDragOver = function onDragOver(e) {
+	    // todo disabled
+	    e.preventDefault();
+	    e.stopPropagation();
+	    this.props.root.onDragOver(e, this);
+	    return false;
+	  };
+
+	  TreeNode.prototype.onDragLeave = function onDragLeave(e) {
+	    e.stopPropagation();
+	    this.props.root.onDragLeave(e, this);
+	  };
+
+	  TreeNode.prototype.onDrop = function onDrop(e) {
+	    e.preventDefault();
+	    e.stopPropagation();
+	    this.setState({
+	      dragNodeHighlight: false
+	    });
+	    this.props.root.onDrop(e, this);
+	  };
+
+	  TreeNode.prototype.onDragEnd = function onDragEnd(e) {
+	    e.stopPropagation();
+	    this.setState({
+	      dragNodeHighlight: false
+	    });
+	    this.props.root.onDragEnd(e, this);
+	  };
+
+	  TreeNode.prototype.onExpand = function onExpand() {
+	    var _this3 = this;
+
+	    var callbackPromise = this.props.root.onExpand(this);
+	    if (callbackPromise && (typeof callbackPromise === 'undefined' ? 'undefined' : _typeof(callbackPromise)) === 'object') {
+	      var setLoading = function setLoading(dataLoading) {
+	        _this3.setState({
+	          dataLoading: dataLoading
+	        });
+	      };
+	      setLoading(true);
+	      callbackPromise.then(function () {
+	        setLoading(false);
+	      }, function () {
+	        setLoading(false);
+	      });
+	    }
+	  };
+
+	  // keyboard event support
+
+
+	  TreeNode.prototype.onKeyDown = function onKeyDown(e) {
+	    this.props.root.onKeyDown(e, this);
+	    if (e.keyCode == lib$1.KeyCode.SPACE || e.keyCode == lib$1.KeyCode.DOWN || e.keyCode == lib$1.KeyCode.LEFT || e.keyCode == lib$1.KeyCode.RIGHT || e.keyCode == lib$1.KeyCode.UP) {
+	      e.preventDefault();
+	    }
+	  };
+
+	  TreeNode.prototype.renderSwitcher = function renderSwitcher(props, expandedState) {
+	    var stateIcon = void 0;
+	    var prefixCls = props.prefixCls;
+	    var switcherCls = _defineProperty({}, prefixCls + '-switcher', true);
+	    if (!props.showLine) {
+	      switcherCls[prefixCls + '-noline_' + expandedState] = true;
+	    } else if (props.pos === '0-0') {
+	      switcherCls[prefixCls + '-roots_' + expandedState] = true;
+	    } else {
+	      switcherCls[prefixCls + '-center_' + expandedState] = !props.last;
+	      switcherCls[prefixCls + '-bottom_' + expandedState] = props.last;
+	    }
+
+	    if (expandedState === 'open' && props.openIcon) {
+	      stateIcon = props.openIcon;
+	      switcherCls['icon-none'] = true;
+	    }
+	    if (expandedState === 'close' && props.closeIcon) {
+	      stateIcon = props.closeIcon;
+	      switcherCls['icon-none'] = true;
+	    }
+	    //switcherCls[stateIcon] = stateIcon;
+	    props.switcherClass ? switcherCls['' + props.switcherClass] = true : '';
+	    if (props.disabled) {
+	      switcherCls[prefixCls + '-switcher-disabled'] = true;
+	      return _react2["default"].createElement(
+	        'span',
+	        { className: (0, _classnames2["default"])(switcherCls), style: props.switcherStyle },
+	        stateIcon
+	      );
+	    }
+	    return _react2["default"].createElement(
+	      'span',
+	      { className: (0, _classnames2["default"])(switcherCls), style: props.switcherStyle, onClick: this.onExpand },
+	      stateIcon
+	    );
+	  };
+
+	  TreeNode.prototype.renderCheckbox = function renderCheckbox(props) {
+	    var prefixCls = props.prefixCls;
+	    var checkboxCls = _defineProperty({}, prefixCls + '-checkbox', true);
+	    if (props.checked) {
+	      checkboxCls[prefixCls + '-checkbox-checked'] = true;
+	    } else if (props.halfChecked) {
+	      checkboxCls[prefixCls + '-checkbox-indeterminate'] = true;
+	    }
+	    var customEle = null;
+	    if (typeof props.checkable !== 'boolean') {
+	      customEle = props.checkable;
+	    }
+	    if (props.disabled || props.disableCheckbox) {
+	      checkboxCls[prefixCls + '-checkbox-disabled'] = true;
+	      return _react2["default"].createElement(
+	        'span',
+	        { className: (0, _classnames2["default"])(checkboxCls) },
+	        customEle
+	      );
+	    }
+	    return _react2["default"].createElement(
+	      'span',
+	      {
+	        className: (0, _classnames2["default"])(checkboxCls),
+	        onClick: this.onCheck
+	      },
+	      customEle
+	    );
+	  };
+
+	  TreeNode.prototype.renderChildren = function renderChildren(props) {
+	    var renderFirst = this.renderFirst;
+	    this.renderFirst = 1;
+	    var transitionAppear = true;
+	    if (!renderFirst && props.expanded) {
+	      transitionAppear = false;
+	    }
+	    var children = props.children;
+	    var newChildren = children;
+	    // 确定所有子节点是否是TreeNode
+	    var allTreeNode = false;
+	    if (Array.isArray(children)) {
+	      for (var index = 0; index < children.length; index++) {
+	        var item = children[index];
+	        allTreeNode = item.type.isTreeNode == 1;
+	        if (!allTreeNode) {
+	          //当检查到子节点中有不是 TreeNode 的，则直接结束检查。同时不会渲染所有子节点
+	          break;
+	        }
+	      }
+	    } else if (children && children.type && children.type.isTreeNode == 1) {
+	      allTreeNode = true;
+	    }
+	    //  如果props.children的长度大于0才可以生成子对象
+	    if (allTreeNode && _react2["default"].Children.count(children)) {
+	      var _cls;
+
+	      var cls = (_cls = {}, _defineProperty(_cls, props.prefixCls + '-child-tree', true), _defineProperty(_cls, props.prefixCls + '-child-tree-open', props.expanded), _cls);
+	      if (props.showLine) {
+	        cls[props.prefixCls + '-line'] = !props.last;
+	      }
+	      var animProps = {};
+	      if (props.openTransitionName) {
+	        animProps.transitionName = props.openTransitionName;
+	      } else if (_typeof(props.openAnimation) === 'object') {
+	        animProps.animation = _extends({}, props.openAnimation);
+	        if (!transitionAppear) {
+	          delete animProps.animation.appear;
+	        }
+	      }
+	      newChildren = _react2["default"].createElement(
+	        _beeAnimate2["default"],
+	        _extends({}, animProps, {
+	          showProp: 'data-expanded',
+	          transitionAppear: transitionAppear,
+	          component: ''
+	        }),
+	        !props.expanded ? null : _react2["default"].createElement(
+	          'ul',
+	          { className: (0, _classnames2["default"])(cls), 'data-expanded': props.expanded },
+	          _react2["default"].Children.map(children, function (item, index) {
+	            return props.root.renderTreeNode(item, index, props.pos);
+	          }, props.root)
+	        )
+	      );
+	    }
+	    return newChildren;
+	  };
+
+	  /**
+	   *判断是否为叶子节点，isLeaf的优先级>props.children。如果是异步加载是根据isLeaf的值进行判断的
+	   *
+	   * @returns
+	   * @memberof TreeNode
+	   */
+	  TreeNode.prototype.checkIsLeaf = function checkIsLeaf() {
+	    var _props = this.props,
+	        isLeaf = _props.isLeaf,
+	        loadData = _props.loadData;
+
+
+	    var hasChildren = this.getNodeChildren().length !== 0;
+
+	    if (isLeaf === false) {
+	      return false;
+	    }
+
+	    return isLeaf || !loadData && !hasChildren;
+	  };
+
+	  TreeNode.prototype.render = function render() {
+	    var _iconEleCls,
+	        _this4 = this;
+
+	    var props = this.props;
+	    var prefixCls = props.prefixCls;
+	    var expandedState = props.expanded ? 'open' : 'close';
+	    var iconState = expandedState;
+
+	    var canRenderSwitcher = true;
+	    var content = props.title;
+	    var newChildren = this.renderChildren(props);
+
+	    // if (!newChildren || newChildren === props.children) {
+	    //   // content = newChildren;
+	    //   newChildren = null;
+	    //   if (!props.loadData || props.isLeaf) {
+	    //     canRenderSwitcher = false;
+	    //     iconState = 'docu';
+	    //   }
+	    // }
+	    if (this.checkIsLeaf()) {
+	      canRenderSwitcher = false;
+	      iconState = 'docu';
+	    }
+	    // For performance, does't render children into dom when `!props.expanded` (move to Animate)
+	    // if (!props.expanded) {
+	    //   newChildren = null;
+	    // }
+
+	    var iconEleCls = (_iconEleCls = {}, _defineProperty(_iconEleCls, prefixCls + '-iconEle', true), _defineProperty(_iconEleCls, prefixCls + '-icon_loading', this.state.dataLoading), _defineProperty(_iconEleCls, prefixCls + '-icon__' + iconState, true), _iconEleCls);
+	    var selectHandle = function selectHandle() {
+	      var titleClass = props.titleClass ? prefixCls + '-title' + ' ' + props.className : prefixCls + '-title';
+	      // const icon = (props.showIcon || props.loadData && this.state.dataLoading) ?
+	      //   <span className={classNames(iconEleCls)}></span> : null;
+	      var icon = void 0;
+	      if (props.showIcon && props.icon) {
+	        icon = _react2["default"].createElement(
+	          'span',
+	          {
+	            className: (0, _classnames2["default"])(prefixCls + '-iconEle', prefixCls + '-icon__customize')
+	          },
+	          typeof currentIcon === 'function' ? _react2["default"].createElement(props.icon, _extends({}, _this4.props)) : props.icon
+	        );
+	      } else if (props.showIcon || props.loadData && _this4.state.dataLoading) {
+	        icon = _react2["default"].createElement('span', { className: (0, _classnames2["default"])(iconEleCls) });
+	      }
+	      var title = _react2["default"].createElement(
+	        'span',
+	        { className: titleClass, style: props.titleStyle },
+	        content
+	      );
+	      var wrap = prefixCls + '-node-content-wrapper';
+	      var domProps = {
+	        className: wrap + ' ' + wrap + '-' + (iconState === expandedState ? iconState : 'normal')
+	      };
+	      if (!props.disabled) {
+	        if (props.selected || !props._dropTrigger && _this4.state.dragNodeHighlight) {
+	          domProps.className += ' ' + prefixCls + '-node-selected';
+	        }
+	        domProps.onClick = function (e) {
+	          var _this = _this4;
+	          e.preventDefault();
+	          if (props.selectable) {
+	            _this.onSelect();
+	          }
+
+	          // not fire check event
+	          // if (props.checkable) {
+	          //   this.onCheck();
+	          // }
+	        };
+
+	        if (props.onDoubleClick) {
+	          domProps.onDoubleClick = _this4.onDoubleClick;
+	        }
+
+	        if (props.onRightClick) {
+	          domProps.onContextMenu = _this4.onContextMenu;
+	        }
+	        if (props.onMouseEnter) {
+	          domProps.onMouseEnter = _this4.onMouseEnter;
+	        }
+	        if (props.onMouseLeave) {
+	          domProps.onMouseLeave = _this4.onMouseLeave;
+	        }
+
+	        if (props.draggable) {
+	          domProps.className += ' draggable';
+	          if (ieOrEdge) {
+	            // ie bug!
+	            domProps.href = '#';
+	          }
+	          domProps.draggable = true;
+	          domProps['aria-grabbed'] = true;
+	          domProps.onDragStart = _this4.onDragStart;
+	        }
+	      }
+	      //设置tabIndex
+	      if (props.focusable) {
+	        domProps.onKeyDown = _this4.onKeyDown;
+	        domProps.tabIndex = -1;
+	        if (props.tabIndexKey) {
+	          if (props.eventKey == props.tabIndexKey) {
+	            domProps.tabIndex = props.tabIndexValue;
+	          }
+	        } else if (props.pos == '0-0') {
+	          domProps.tabIndex = props.tabIndexValue;
+	        }
+	      }
+
+	      return _react2["default"].createElement(
+	        'a',
+	        _extends({ ref: function ref(el) {
+	            _this4.selectHandle = el;
+	          }, pos: props.pos, title: typeof content === 'string' ? content : '' }, domProps),
+	        icon,
+	        title
+	      );
+	    };
+
+	    var liProps = {};
+	    if (props.liAttr) {
+	      liProps = _extends({}, props.liAttr);
+	    }
+	    if (props.draggable) {
+	      liProps.onDragEnter = this.onDragEnter;
+	      liProps.onDragOver = this.onDragOver;
+	      liProps.onDragLeave = this.onDragLeave;
+	      liProps.onDrop = this.onDrop;
+	      liProps.onDragEnd = this.onDragEnd;
+	    }
+	    var disabledCls = '';
+	    var dragOverCls = '';
+	    if (props.disabled) {
+	      disabledCls = prefixCls + '-treenode-disabled';
+	    } else if (props.dragOver) {
+	      dragOverCls = 'drag-over';
+	    } else if (props.dragOverGapTop) {
+	      dragOverCls = 'drag-over-gap-top';
+	    } else if (props.dragOverGapBottom) {
+	      dragOverCls = 'drag-over-gap-bottom';
+	    }
+
+	    var filterCls = props.filterTreeNode(this) ? 'filter-node' : '';
+
+	    var noopSwitcher = function noopSwitcher() {
+	      var _cls2;
+
+	      var cls = (_cls2 = {}, _defineProperty(_cls2, prefixCls + '-switcher', true), _defineProperty(_cls2, prefixCls + '-switcher-noop', true), _cls2);
+	      if (props.showLine) {
+	        // console.log('line---------');
+	        cls[prefixCls + '-center_docu'] = !props.last;
+	        cls[prefixCls + '-bottom_docu'] = props.last;
+	      } else {
+	        cls[prefixCls + '-noline_docu'] = true;
+	      }
+	      return _react2["default"].createElement('span', { className: (0, _classnames2["default"])(cls) });
+	    };
+	    var selectedCls = props.selected ? prefixCls + '-treenode-selected' : '';
+	    return _react2["default"].createElement(
+	      'li',
+	      _extends({}, liProps, { style: props.style,
+	        className: (0, _classnames2["default"])(props.className, disabledCls, dragOverCls, filterCls, selectedCls)
+	      }),
+	      canRenderSwitcher ? this.renderSwitcher(props, expandedState) : noopSwitcher(),
+	      props.checkable ? this.renderCheckbox(props) : null,
+	      selectHandle(),
+	      newChildren
+	    );
+	  };
+
+	  return TreeNode;
+	}(_react2["default"].Component);
+
+	TreeNode.isTreeNode = 1;
+
+	TreeNode.propTypes = {
+	  prefixCls: _propTypes2["default"].string,
+	  disabled: _propTypes2["default"].bool,
+	  disableCheckbox: _propTypes2["default"].bool,
+	  expanded: _propTypes2["default"].bool,
+	  isLeaf: _propTypes2["default"].bool,
+	  root: _propTypes2["default"].object,
+	  onSelect: _propTypes2["default"].func,
+	  openIcon: _propTypes2["default"].element,
+	  closeIcon: _propTypes2["default"].element,
+	  style: _propTypes2["default"].object,
+	  className: _propTypes2["default"].string,
+	  titleClass: _propTypes2["default"].string,
+	  titleStyle: _propTypes2["default"].object,
+	  switcherClass: _propTypes2["default"].string,
+	  switcherStyle: _propTypes2["default"].object
+	};
+
+	TreeNode.defaultProps = {
+	  title: defaultTitle,
+	  tabIndexValue: 0
+	};
+
+	exports["default"] = TreeNode;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(TreeNode_1);
+
+	var openAnimation$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	function animate(node, show, done) {
+	  var height = void 0;
+	  return (0, lib$1.cssAnimation)(node, 'u-motion-collapse', {
+	    start: function start() {
+	      if (!show) {
+	        node.style.height = node.offsetHeight + 'px';
+	      } else {
+	        height = node.offsetHeight;
+	        node.style.height = 0;
+	      }
+	    },
+	    active: function active() {
+	      node.style.height = (show ? height : 0) + 'px';
+	    },
+	    end: function end() {
+	      node.style.height = '';
+	      done();
+	    }
+	  });
+	}
+
+	var animation = {
+	  enter: function enter(node, done) {
+	    return animate(node, true, done);
+	  },
+	  leave: function leave(node, done) {
+	    return animate(node, false, done);
+	  },
+	  appear: function appear(node, done) {
+	    return animate(node, true, done);
+	  }
+	};
+
+	exports["default"] = animation;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(openAnimation$1);
+
+	var build$E = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _Tree2 = _interopRequireDefault(Tree_1);
+
+
+
+	var _TreeNode2 = _interopRequireDefault(TreeNode_1);
+
+
+
+	var _openAnimation2 = _interopRequireDefault(openAnimation$1);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var TreeProps = {
+	  showLine: _propTypes2["default"].bool,
+	  className: _propTypes2["default"].string,
+	  /** 是否支持多选 */
+	  multiple: _propTypes2["default"].bool,
+	  /** 是否自动展开父节点 */
+	  autoExpandParent: _propTypes2["default"].bool,
+	  /** checkable状态下节点选择完全受控（父子节点选中状态不再关联）*/
+	  checkStrictly: _propTypes2["default"].bool,
+	  /** 是否支持选中 */
+	  checkable: _propTypes2["default"].bool,
+	  /** 默认展开所有树节点 */
+	  defaultExpandAll: _propTypes2["default"].bool,
+	  /** 默认展开指定的树节点 */
+	  defaultExpandedKeys: _propTypes2["default"].array,
+	  /** （受控）展开指定的树节点 */
+	  expandedKeys: _propTypes2["default"].array,
+	  /** （受控）选中复选框的树节点 */
+	  checkedKeys: _propTypes2["default"].oneOfType([_propTypes2["default"].array, _propTypes2["default"].object]),
+	  /** 默认选中复选框的树节点 */
+	  defaultCheckedKeys: _propTypes2["default"].array,
+	  /** （受控）设置选中的树节点 */
+	  selectedKeys: _propTypes2["default"].array,
+	  /** 默认选中的树节点 */
+	  defaultSelectedKeys: _propTypes2["default"].array,
+	  /** 展开/收起节点时触发 */
+	  onExpand: _propTypes2["default"].func,
+	  /** 点击复选框触发 */
+	  onCheck: _propTypes2["default"].func,
+	  /** 点击树节点触发 */
+	  onSelect: _propTypes2["default"].func,
+	  /** filter some AntTreeNodes as you need. it should return true */
+	  filterAntTreeNode: _propTypes2["default"].func,
+	  /** 异步加载数据 */
+	  loadData: _propTypes2["default"].func,
+	  /** 响应右键点击 */
+	  onRightClick: _propTypes2["default"].func,
+	  /** 设置节点可拖拽（IE>8）*/
+	  draggable: _propTypes2["default"].bool,
+	  /** 开始拖拽时调用 */
+	  onDragStart: _propTypes2["default"].func,
+	  /** dragenter 触发时调用 */
+	  onDragEnter: _propTypes2["default"].func,
+	  /** dragover 触发时调用 */
+	  onDragOver: _propTypes2["default"].func,
+	  /** dragleave 触发时调用 */
+	  onDragLeave: _propTypes2["default"].func,
+	  /** drop 触发时调用 */
+	  onDrop: _propTypes2["default"].func,
+	  style: _react2["default"].CSSProperties,
+	  prefixCls: _propTypes2["default"].string,
+	  filterTreeNode: _propTypes2["default"].func
+	};
+
+	var defaultProps = {
+	  prefixCls: 'u-tree',
+	  checkable: false,
+	  showIcon: false,
+	  openAnimation: _openAnimation2["default"]
+	};
+
+	var Tree = function (_Component) {
+	  _inherits(Tree, _Component);
+
+	  function Tree() {
+	    _classCallCheck(this, Tree);
+
+	    return _possibleConstructorReturn(this, _Component.apply(this, arguments));
+	  }
+
+	  Tree.prototype.render = function render() {
+	    var props = this.props;
+	    var checkable = props.checkable;
+	    return _react2["default"].createElement(
+	      _Tree2["default"],
+	      _extends({}, props, {
+	        checkable: checkable ? _react2["default"].createElement('span', { className: props.prefixCls + '-checkbox-inner' }) : checkable
+	      }),
+	      this.props.children
+	    );
+	  };
+
+	  return Tree;
+	}(React__default.Component);
+
+	Tree.TreeNode = _TreeNode2["default"];
+	Tree.TreeProps = TreeProps;
+	Tree.defaultProps = defaultProps;
+	exports["default"] = Tree;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(build$E);
+
+
+
+	var Tree = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	var polyfill_shim$1 = createCommonjsModule(function (module) {
+
+
+
+	var _iterator2 = _interopRequireDefault(iterator$1);
+
+
+
+	var _symbol2 = _interopRequireDefault(symbol$1);
+
+
+
+	var _fill2 = _interopRequireDefault(fill$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+	var _typeof = typeof _symbol2["default"] === "function" && typeof _iterator2["default"] === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2["default"] === "function" && obj.constructor === _symbol2["default"] && obj !== _symbol2["default"].prototype ? "symbol" : typeof obj; };
+
+
+
+	var _objectAssign2 = _interopRequireDefault(objectAssign);
+
+
+
+	var _promisePolyfill2 = _interopRequireDefault(Promise$2);
+
+
+
+	var _arrayPrototype2 = _interopRequireDefault(array_prototype_fill);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	if (typeof _assign2["default"] === 'undefined' || _assign2["default"] === "undefined") {
+	    Object.assign = _objectAssign2["default"];
+	}
+	if (typeof window.Promise === 'undefined') {
+	    window.Promise = _promisePolyfill2["default"];
+	}
+	if (typeof _fill2["default"] === 'undefined') {
+	    Array.fill = _arrayPrototype2["default"];
+	}
+
+	/**
+	 * var template1="我是{0}，今年{1}了";
+	  var template2="我是{name}，今年{age}了";
+	  var result1=template1.format("loogn",22);
+	  var result2=template2.format({name:"loogn",age:22});
+	 */
+	String.prototype.format = function (args) {
+	    var result = this;
+	    if (arguments.length > 0) {
+	        if (arguments.length == 1 && (typeof args === 'undefined' ? 'undefined' : _typeof(args)) == "object") {
+	            for (var key in args) {
+	                if (args[key] != undefined) {
+	                    var reg = new RegExp("({" + key + "})", "g");
+	                    result = result.replace(reg, args[key]);
+	                }
+	            }
+	        } else {
+	            for (var i = 0; i < arguments.length; i++) {
+	                if (arguments[i] != undefined) {
+	                    //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+	                    var reg = new RegExp("({)" + i + "(})", "g");
+	                    result = result.replace(reg, arguments[i]);
+	                }
+	            }
+	        }
+	    }
+	    return result;
+	};
+	});
+
+	unwrapExports(polyfill_shim$1);
+
+
+
+	var refcoretree = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(Tree);
+
+	getCjsExportFromNamespace(refcoretree);
+
+	var RefCoreTree_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _beeTree2 = _interopRequireDefault(build$E);
+
+
+
+
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+	// import {Tree} from 'tinper-bee';
+
+
+	var TreeNode = _beeTree2["default"].TreeNode;
+
+
+	var nodeKeysFunc = function nodeKeysFunc(item, index) {
+		return item.id || index;
+	};
+
+	var RefCoreTree = function (_Component) {
+		_inherits(RefCoreTree, _Component);
+
+		function RefCoreTree(props) {
+			_classCallCheck(this, RefCoreTree);
+
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this.onMouseEnter = function (e) {
+
+				// return
+				_this.setState({
+					isHover: e.node.props.eventKey
+				});
+			};
+
+			_this.onDoubleClick = function (record, index, event) {
+
+				_this.props.onDoubleClick(record, index, event);
+			};
+
+			_this.onMouseLeave = function (e, treenode) {
+
+				// return
+				_this.setState({
+					isHover: "",
+					editKey: ""
+				});
+			};
+
+			_this.loop = function (datas) {
+				var _this$props = _this.props,
+				    checkable = _this$props.checkable,
+				    _this$props$nodeKeys = _this$props.nodeKeys,
+				    nodeKeys = _this$props$nodeKeys === undefined ? nodeKeysFunc : _this$props$nodeKeys,
+				    _this$props$displayFi = _this$props.displayField,
+				    displayField = _this$props$displayFi === undefined ? "refname" : _this$props$displayFi;
+
+				return datas.map(function (item, i) {
+					var key = nodeKeys(item, i);
+					var text = '';
+					if (typeof displayField === 'function') {
+						text = displayField(item);
+					} else {
+						text = displayField.format(item);
+					}
+					if (item.children && item.children.length) {
+						return _react2["default"].createElement(
+							TreeNode,
+							{ className: 'ref-core-tree-node', key: key, title: _react2["default"].createElement(
+									'div',
+									{ className: 'ref-core-tree-node-text' },
+									text,
+									checkable ? '' : _react2["default"].createElement('i', { className: 'ref-core-tree-node-selected' })
+								), attr: item, isLeaf: !!item.isLeaf },
+							_this.loop(item.children)
+						);
+					}
+					return _react2["default"].createElement(TreeNode, { className: 'ref-core-tree-node', key: key, title: _react2["default"].createElement(
+							'div',
+							{ className: 'ref-core-tree-node-text' },
+							text,
+							checkable ? '' : _react2["default"].createElement('i', { className: 'ref-core-tree-node-selected' })
+						), attr: item, isLeaf: !!item.isLeaf });
+				});
+			};
+
+			_this.state = {
+				isHover: "",
+				editKey: "",
+				checkedKey: []
+			};
+			_this.children = [];
+			_this.children = _this.loop(props.data || []);
+			return _this;
+		}
+
+		RefCoreTree.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps, nextState) {
+			if (!(0, Immutable.is)(nextState, this.state) || !(0, Immutable.is)(nextProps, this.props)) {
+				this.children = this.loop(nextProps.data || []);
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		RefCoreTree.prototype.checkAllchildren = function checkAllchildren(v, id) {
+			// return
+			var _state = this.state,
+			    checkedKey = _state.checkedKey,
+			    isHover = _state.isHover;
+
+			if (v) {
+				checkedKey.push(id);
+			} else {
+				checkedKey.splice(id, 1);
+			}
+			this.setState({
+				checkedKey: checkedKey
+			});
+			this.props.checkAllchildrenFun(v, id);
+		};
+
+		// looploadData = datas => {
+
+		// 	let { parentNodeDisableCheck } = this.props;
+		// 	return datas.map((item) => {
+		// 		if (item.children && item.children.length) {
+		// 			return <TreeNode className="ref-core-tree-node" key={item.id} title={item.refname} attr={item} disableCheckbox={parentNodeDisableCheck}>{this.looploadData(item.children)}</TreeNode>;
+		// 		}
+		// 		return <TreeNode className="ref-core-tree-node"  key={item.id} title={item.refname} attr={item} isLeaf={item.isLeaf} />;
+		// 	});
+		// }
+		RefCoreTree.prototype.render = function render() {
+			var _props = this.props,
+			    data = _props.data,
+			    _props$show = _props.show,
+			    show = _props$show === undefined ? true : _props$show,
+			    others = _objectWithoutProperties(_props, ['data', 'show']);
+
+			return _react2["default"].createElement(
+				'div',
+				{ className: 'ref-core-tree ' + (show ? '' : 'ref-core-tree-hide') },
+				_react2["default"].createElement(
+					_beeTree2["default"],
+					_extends({}, others, { onMouseLeave: this.onMouseLeave, onMouseEnter: this.onMouseEnter, onDoubleClick: this.onDoubleClick.bind(this) }),
+					this.children.map(function (item) {
+						return item;
+					})
+				)
+			);
+		};
+
+		return RefCoreTree;
+	}(React__default.Component);
+
+	exports["default"] = RefCoreTree;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreTree_1);
+
+
+
+	var refcoresearch$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoresearch$1);
+
+	var RefCoreSearch_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _beeFormControl2 = _interopRequireDefault(build$2);
+
+
+
+	var _beeInputGroup2 = _interopRequireDefault(build$4);
+
+
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+	// import {FormControl,InputGroup} from 'tinper-bee';
+
+
+	var RefCoreSearch = function (_Component) {
+		_inherits(RefCoreSearch, _Component);
+
+		function RefCoreSearch(props) {
+			_classCallCheck(this, RefCoreSearch);
+
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this.onChange = function (value) {
+				_this.setState({ value: value });
+				if (_this.props.onChange) {
+					_this.props.onChange(value);
+				}
+			};
+
+			_this.onClear = function () {
+				_this.setState({ value: '' });
+			};
+
+			_this.keypress = function (e) {
+				if (e.which !== 13) return;
+				_this.onSearch(_this.state.value);
+			};
+
+			_this.onSearch = function () {
+				if (_this.props.onSearch) {
+					_this.props.onSearch(_this.state.value);
+				}
+			};
+
+			_this.state = {
+				value: props.value || ""
+			};
+			return _this;
+		}
+
+		RefCoreSearch.prototype.render = function render() {
+			var _props = this.props,
+			    _props$language = _props.language,
+			    language = _props$language === undefined ? '' : _props$language,
+			    _props$placeholder = _props.placeholder,
+			    placeholder = _props$placeholder === undefined ? '' : _props$placeholder,
+			    _props$className = _props.className,
+			    className = _props$className === undefined ? '' : _props$className,
+			    _props$show = _props.show,
+			    show = _props$show === undefined ? true : _props$show;
+
+			if (!placeholder) {
+				switch (language) {
+					case "en_US":
+						placeholder = 'Search';
+						break;
+					case "fr_FR":
+						placeholder = 'Recherche';
+						break;
+					case "de_DE":
+						placeholder = 'Suche';
+						break;
+					case "ja_JP":
+						placeholder = '検索';
+						break;
+					case "zh_TW":
+					case "zh_CN":
+					default:
+						placeholder = '搜索';
+				}
+			}
+
+			return _react2["default"].createElement(
+				_beeInputGroup2["default"],
+				{ simple: true,
+					className: 'ref-core-search ' + className + ' ' + (show ? '' : 'ref-core-search-hide')
+				},
+				_react2["default"].createElement(_beeFormControl2["default"], {
+					className: 'ref-core-search-input',
+					value: this.state.value,
+					onChange: this.onChange,
+					onKeyPress: this.keypress,
+					placeholder: placeholder,
+					type: 'text'
+				}),
+				_react2["default"].createElement(
+					_beeInputGroup2["default"].Button,
+					{ shape: 'border', onClick: this.onSearch.bind(this) },
+					_react2["default"].createElement(
+						'span',
+						{ className: 'uf uf-search' },
+						' '
+					)
+				)
+			);
+		};
+
+		return RefCoreSearch;
+	}(React__default.Component);
+
+	exports["default"] = RefCoreSearch;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreSearch_1$1);
+
+
+
+	var Button$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+
+
+	var refcorebutton$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(Button$1);
+
+	getCjsExportFromNamespace(refcorebutton$1);
+
+	var RefCoreButton_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _beeButton2 = _interopRequireDefault(build$8);
+
+
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	// const propTypes = {
+	//   buttons: PropTypes.object,
+	//   ishasemptyBtn: PropTypes.bool,
+	//   language: PropTypes.string,
+	// }
+
+	// const defaultProps = {
+	//   buttons: {
+	//     okText: "确认",
+	//     cancelText: "取消",
+	//     clearText: "清空已选",
+	//   },
+	//   ishasemptyBtn: true,
+	//   language: 'zh_CN'
+	// }
+
+	// import {Button} from 'tinper-bee';
+	function RefCoreButton(props) {
+		var buttons = props.buttons,
+		    language = props.language,
+		    onClickBtn = props.onClickBtn,
+		    _props$emptyBut = props.emptyBut,
+		    emptyBut = _props$emptyBut === undefined ? true : _props$emptyBut;
+
+		var saveButton = '';
+		var cancelButton = '';
+		var clearButton = '';
+
+		switch (language) {
+			case "en_US":
+				saveButton = 'Ok';
+				cancelButton = 'Cancel';
+				clearButton = 'Empty';
+				break;
+			case "zh_TW":
+				saveButton = '確認';
+				cancelButton = "取消";
+				clearButton = '清空已選';
+				break;
+			case "fr_FR":
+				saveButton = 'Confirmation';
+				cancelButton = 'Annuler';
+				clearButton = 'Videz';
+				break;
+			case "de_DE":
+				saveButton = 'Bestätigt';
+				cancelButton = 'Abgesagt';
+				clearButton = 'Leer';
+				break;
+			case "ja_JP":
+				saveButton = '確認する';
+				cancelButton = '取り消す';
+				clearButton = '空を清める';
+				break;
+			case "zh_CN":
+			default:
+				saveButton = "确认";
+				cancelButton = "取消";
+				clearButton = '清空已选';
+		}
+		if (buttons) {
+			saveButton = buttons.okText || "确认";
+			cancelButton = buttons.cancelText || "取消";
+			clearButton = buttons.clearText || '清空已选';
+		}
+		return _react2["default"].createElement(
+			'div',
+			{ className: 'ref-core-button' },
+			emptyBut ? _react2["default"].createElement(
+				_beeButton2["default"],
+				{ className: 'ref-core-button-empty', shape: 'border', onClick: function onClick() {
+						return onClickBtn('clear');
+					} },
+				clearButton
+			) : '',
+			_react2["default"].createElement(
+				_beeButton2["default"],
+				{ shape: 'border', onClick: function onClick() {
+						return onClickBtn('cancel');
+					} },
+				cancelButton
+			),
+			_react2["default"].createElement(
+				_beeButton2["default"],
+				{ colors: 'primary', onClick: function onClick() {
+						return onClickBtn('save');
+					} },
+				saveButton
+			)
+		);
+	}
+	exports["default"] = RefCoreButton;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreButton_1$1);
+
+	var RefTreeBaseUI_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+
+
+	var _RefCoreError2 = _interopRequireDefault(RefCoreError_1$1);
+
+
+
+	var _RefCoreTree2 = _interopRequireDefault(RefCoreTree_1);
+
+
+
+	var _RefCoreSearch2 = _interopRequireDefault(RefCoreSearch_1$1);
+
+
+
+	var _RefCoreButton2 = _interopRequireDefault(RefCoreButton_1$1);
+
+
+
+	var _beeLoading2 = _interopRequireDefault(build$s);
+
+
+
+	var _beeModal2 = _interopRequireDefault(build$9);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var noop = function noop() {};
+	var propTypes$1 = {
+	  title: _propTypes2["default"].string,
+	  backdrop: _propTypes2["default"].bool,
+	  className: _propTypes2["default"].string,
+	  showLoading: _propTypes2["default"].bool,
+	  searchable: _propTypes2["default"].bool, //  是否应用搜索 默认 false,
+	  valueField: _propTypes2["default"].string,
+	  checkStrictly: _propTypes2["default"].bool,
+	  showLine: _propTypes2["default"].bool,
+	  lazyModal: _propTypes2["default"].bool,
+	  showModal: _propTypes2["default"].bool,
+	  lang: _propTypes2["default"].string,
+	  defaultExpandAll: _propTypes2["default"].bool, // 数默认展开
+	  nodeDisplay: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].func]),
+	  buttons: _propTypes2["default"].object,
+	  emptyBut: _propTypes2["default"].bool, //清空按钮
+	  getRefTreeData: _propTypes2["default"].func,
+	  multiple: _propTypes2["default"].bool, //  默认单选
+	  checkedArray: _propTypes2["default"].array,
+	  treeData: _propTypes2["default"].array, //接收树的数据
+	  onLoadData: _propTypes2["default"].func
+	};
+	var defaultProps = {
+	  title: '弹窗标题',
+	  searchable: false, //  是否应用搜索 默认 false,
+	  multiple: false, //  默认单选
+	  showLine: false, //  默认单选
+	  defaultExpandAll: true, // 数默认展开
+	  checkStrictly: false,
+	  checkedArray: [], //  指定已选择数据id
+	  lazyModal: false,
+	  emptyBut: false,
+	  onCancel: noop,
+	  onSave: noop,
+	  lang: 'zh_CN',
+	  nodeDisplay: '{refname}',
+	  treeData: [],
+	  onLoadData: function onLoadData() {},
+	  getRefTreeData: function getRefTreeData() {}
+	};
+
+	var RefTreeBaseUI = function (_Component) {
+	  _inherits(RefTreeBaseUI, _Component);
+
+	  function RefTreeBaseUI(props) {
+	    _classCallCheck(this, RefTreeBaseUI);
+
+	    var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	    _initialiseProps.call(_this);
+
+	    var checkedArray = props.checkedArray,
+	        valueField = props.valueField,
+	        showLoading = props.showLoading;
+
+	    _this.state = {
+	      selectedArray: checkedArray || [], //  记录保存的选择项
+	      checkedKeys: checkedArray.map(function (item) {
+	        return item[valueField];
+	      }),
+	      onSaveCheckItems: [],
+	      showLoading: showLoading
+	    };
+
+	    _this.treeData = props.treeData;
+	    return _this;
+	  }
+	  // shouldComponentUpdate(nextProps, nextState){
+	  // 	return !is(nextState, this.state) || nextProps.showModal !== this.props.showModal;
+	  // }
+
+
+	  RefTreeBaseUI.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    var strictMode = nextProps.strictMode,
+	        value = nextProps.value,
+	        valueField = nextProps.valueField,
+	        _nextProps$matchData = nextProps.matchData,
+	        matchData = _nextProps$matchData === undefined ? [] : _nextProps$matchData;
+	    //严格模式下每次打开必须重置数据
+
+	    if (nextProps.showModal && !this.props.showModal) {
+	      //正在打开弹窗
+	      if (strictMode || !this.treeData.length) {
+	        //开启严格模式 
+	        // this.setState({
+	        // 	showLoading: true
+	        // },() => {
+	        // 	this.initComponent();
+	        // });
+	        this.initComponent();
+	      }
+	      //20190124因為不再走constructor，导致checkedKeys和selectedArray不一致,20190409baseui不会再走initcomponent但是选中需要添加
+	      var valueMap = (0, utils$4.refValParse)(value);
+	      if (matchData.length > 0 || this.state.checkedKeys.length === 0 && valueMap[valueField]) {
+	        if (matchData.length > 0) {
+	          this.setState({
+	            selectedArray: matchData || [], //  记录保存的选择项
+	            checkedKeys: matchData.map(function (item) {
+	              return item[valueField];
+	            })
+	          });
+	        } else {
+	          this.setState({
+	            checkedArray: [valueMap],
+	            selectedArray: [valueMap],
+	            showLoading: false,
+	            checkedKeys: valueMap.refpk.split(',')
+	          });
+	        }
+	      }
+	    }
+	  };
+
+	  //  tree EventHandler
+	  RefTreeBaseUI.prototype.onCheck = function onCheck(selectedKeys, event) {
+	    var multiple = this.props.multiple;
+
+	    if (!multiple) {
+	      //单选
+	      this.setState({
+	        selectedArray: [event.node.props.attr],
+	        checkedKeys: [event.node.props.eventKey],
+	        onSaveCheckItems: [event.node.props.attr]
+	      });
+	    } else {
+	      var valueField = this.props.valueField;
+
+	      var allProcessCheckedArray = [].concat(this.state.selectedArray);
+	      var key = event.node.props.attr[valueField];
+	      var currentNode = event.node.props.attr;
+	      if (event.checked) {
+	        //新增操作
+	        allProcessCheckedArray.push(currentNode);
+	      } else {
+	        //删除操作
+	        allProcessCheckedArray = allProcessCheckedArray.filter(function (item) {
+	          return item[valueField] !== key;
+	        });
+	      }
+	      this.setState({
+	        selectedArray: allProcessCheckedArray,
+	        checkedKeys: selectedKeys,
+	        onSaveCheckItems: allProcessCheckedArray
+	      });
+	    }
+	  };
+
+	  RefTreeBaseUI.prototype.onDoubleClick = function onDoubleClick(selectedKeys, event) {
+	    var _this2 = this;
+
+	    var item = event.node.props;
+	    var arr = [_extends({}, item.attr, { refpk: item.eventKey, id: item.eventKey })];
+	    this.setState({
+	      selectedArray: arr,
+	      checkedKeys: [item.eventKey]
+	    }, function () {
+	      _this2.onClickBtn('save');
+	    });
+	  };
+
+	  RefTreeBaseUI.prototype.onSelect = function onSelect(selectedKeys, event) {
+	    var _props = this.props,
+	        checkAllChildren = _props.checkAllChildren,
+	        multiple = _props.multiple;
+
+	    var eventKey = event.node.props.eventKey;
+	    var onSaveCheckItems = this.state.onSaveCheckItems;
+
+	    var ishaskey = false;
+	    var keyIndex = void 0;
+	    if (multiple) return;
+	    onSaveCheckItems.forEach(function (v, i) {
+	      if (v.id == eventKey) {
+	        keyIndex = i;
+	      }
+	      if (v.id == eventKey && v.checkAllchildren) {
+	        ishaskey = true;
+	        return false;
+	      }
+	    });
+	    if (ishaskey) {
+	      this.setState({
+	        checkedKeys: selectedKeys
+	      });
+	      return false;
+	    }
+	    if (!checkAllChildren) {
+	      var arr = event.selectedNodes.map(function (item) {
+	        return _extends({}, item.props.attr, { refpk: item.key, id: item.key });
+	      });
+	      this.setState({
+	        selectedArray: arr,
+	        checkedKeys: selectedKeys
+	      });
+	    } else {
+	      var _arr = {};
+	      event.selectedNodes.forEach(function (item) {
+	        if (item.key == eventKey) {
+	          _arr = _extends({}, item.props.attr, { refname: item.props.title, refpk: item.key, id: item.key });
+	        }
+	      });
+	      if (selectedKeys.indexOf(eventKey) > -1) {
+	        onSaveCheckItems.push(_arr);
+	      } else {
+
+	        onSaveCheckItems.splice(keyIndex, 1);
+	      }
+
+	      this.setState({
+	        selectedArray: onSaveCheckItems,
+	        checkedKeys: selectedKeys,
+	        onSaveCheckItems: onSaveCheckItems
+	      });
+	    }
+	  };
+
+	  RefTreeBaseUI.prototype.render = function render() {
+	    var _this3 = this;
+
+	    var _props2 = this.props,
+	        title = _props2.title,
+	        backdrop = _props2.backdrop,
+	        className = _props2.className,
+	        showLoading = _props2.showLoading,
+	        searchable = _props2.searchable,
+	        valueField = _props2.valueField,
+	        checkStrictly = _props2.checkStrictly,
+	        showLine = _props2.showLine,
+	        lazyModal = _props2.lazyModal,
+	        showModal = _props2.showModal,
+	        lang = _props2.lang,
+	        defaultExpandAll = _props2.defaultExpandAll,
+	        _props2$nodeDisplay = _props2.nodeDisplay,
+	        nodeDisplay = _props2$nodeDisplay === undefined ? "{refname}" : _props2$nodeDisplay,
+	        buttons = _props2.buttons,
+	        emptyBut = _props2.emptyBut,
+	        multiple = _props2.multiple,
+	        treeData = _props2.treeData,
+	        _props2$theme = _props2.theme,
+	        theme = _props2$theme === undefined ? 'ref-red' : _props2$theme;
+
+	    this.treeData = treeData;
+	    var checkedKeys = this.state.checkedKeys;
+
+	    if (checkedKeys.length === 0) emptyBut = false; //20190226没有选中数据清空按钮不展示
+	    return _react2["default"].createElement(
+	      _beeModal2["default"],
+	      {
+	        show: showModal,
+	        size: 'sm',
+	        className: theme + ' ' + className + ' ref-core  ref-core-modal ref-tree',
+	        backdrop: backdrop,
+	        onHide: function onHide() {
+	          return _this3.onClickBtn('cancel');
+	        },
+	        autoFocus: false
+	      },
+	      _react2["default"].createElement(
+	        _beeModal2["default"].Header,
+	        { closeButton: true },
+	        _react2["default"].createElement(
+	          _beeModal2["default"].Title,
+	          null,
+	          ' ',
+	          title,
+	          ' '
+	        )
+	      ),
+	      _react2["default"].createElement(
+	        _beeModal2["default"].Body,
+	        { ref: function ref(_ref) {
+	            return _this3.modalRef = _ref;
+	          } },
+	        _react2["default"].createElement(_beeLoading2["default"], { container: this.modalRef, show: showLoading }),
+	        _react2["default"].createElement(_RefCoreSearch2["default"], {
+	          show: searchable,
+	          onSearch: this.onSearchClick,
+	          onChange: this.onSearchChange,
+	          language: lang
+	        }),
+	        this.treeData.length ? _react2["default"].createElement(_RefCoreTree2["default"], {
+	          show: Boolean(this.treeData.length),
+	          nodeKeys: function nodeKeys(item) {
+	            return item[valueField];
+	          },
+	          displayField: nodeDisplay,
+	          data: this.treeData,
+	          defaultExpandAll: lazyModal ? false : defaultExpandAll,
+	          checkable: multiple,
+	          multiple: multiple,
+	          onCheck: this.onCheck.bind(this),
+	          onSelect: this.onSelect.bind(this),
+	          onDoubleClick: this.onDoubleClick.bind(this),
+	          checkedKeys: checkedKeys,
+	          selectedKeys: checkedKeys,
+	          checkStrictly: checkStrictly,
+	          showLine: showLine,
+	          loadData: lazyModal ? this.props.onLoadData : null
+	        }) : _react2["default"].createElement(_RefCoreError2["default"], { show: !Boolean(this.treeData.length), language: lang })
+	      ),
+	      _react2["default"].createElement(
+	        _beeModal2["default"].Footer,
+	        { className: 'ref-core-modal-footer' },
+	        _react2["default"].createElement(_RefCoreButton2["default"], { language: lang, onClickBtn: this.onClickBtn, buttons: buttons, emptyBut: emptyBut })
+	      )
+	    );
+	  };
+
+	  return RefTreeBaseUI;
+	}(React__default.Component);
+
+	var _initialiseProps = function _initialiseProps() {
+	  var _this4 = this;
+
+	  this.initComponent = function () {
+	    var _props3 = _this4.props,
+	        _props3$matchData = _props3.matchData,
+	        matchData = _props3$matchData === undefined ? [] : _props3$matchData,
+	        checkedArray = _props3.checkedArray,
+	        value = _props3.value,
+	        treeData = _props3.treeData;
+	    //当有已选值，不做校验，即二次打开弹出层不做校验
+
+	    var valueMap = (0, utils$4.refValParse)(value);
+	    if (checkedArray.length != 0 || !valueMap.refpk) return;
+	    if (matchData.length > 0) {
+	      _this4.setState({
+	        checkedArray: matchData,
+	        selectedArray: matchData,
+	        showLoading: false,
+	        checkedKeys: matchData.map(function (item) {
+	          return item.refpk;
+	        })
+	      });
+	    } else {
+	      //当时不使用 matchUrl 做校验时，直接使用默认数护具标记选项，但数据完整性会变弱。
+	      _this4.setState({
+	        checkedArray: [valueMap],
+	        selectedArray: [valueMap],
+	        showLoading: false,
+	        checkedKeys: valueMap.refpk.split(',')
+	      });
+	    }
+	  };
+
+	  this.onSearchClick = function (value) {
+	    _this4.props.getRefTreeData(value);
+	  };
+
+	  this.onSearchChange = function (value) {
+	    _this4.props.getRefTreeData(value);
+	  };
+
+	  this.onClickBtn = function (type) {
+	    var _props4 = _this4.props,
+	        onCancel = _props4.onCancel,
+	        onSave = _props4.onSave;
+
+	    switch (type) {
+	      case 'save':
+	        onSave(_this4.state.selectedArray);
+	        break;
+	      case 'cancel':
+	        _this4.setState({
+	          selectedArray: [],
+	          checkedKeys: [],
+	          onSaveCheckItems: [] //20190124不保存那么选中的数据清空
+	        }, function () {
+	          onCancel();
+	        });
+	        break;
+	      case 'clear':
+	        _this4.setState({
+	          selectedArray: [],
+	          checkedKeys: []
+	        }, function () {});
+	        break;
+	      default:
+	        _this4.setState({ selectedArray: [] }, function () {});
+	    }
+	  };
+	};
+
+	RefTreeBaseUI.propTypes = propTypes$1;
+	RefTreeBaseUI.defaultProps = defaultProps;
+	exports["default"] = RefTreeBaseUI;
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(RefTreeBaseUI_1);
+
+	var request$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _iterator2 = _interopRequireDefault(iterator$1);
+
+
+
+	var _symbol2 = _interopRequireDefault(symbol$1);
+
+
+
+	var _promise2 = _interopRequireDefault(promise$1);
+
+
+
+	var _stringify2 = _interopRequireDefault(stringify$1);
+
+
+
+	var _keys2 = _interopRequireDefault(keys$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _typeof = typeof _symbol2["default"] === "function" && typeof _iterator2["default"] === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2["default"] === "function" && obj.constructor === _symbol2["default"] && obj !== _symbol2["default"].prototype ? "symbol" : typeof obj; };
+
+	exports.post = post;
+	exports.get = get;
+	exports.fetchJ = fetchJ;
+
+
+
+	var _fetchJsonp2 = _interopRequireDefault(fetchJsonp);
+
+
+
+	var _axios2 = _interopRequireDefault(axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var fetchTools = {
+	  params: function params(_params) {
+	    try {
+	      return (0, _keys2["default"])(_params).map(function (key) {
+	        var param = _params[key];
+	        switch (typeof param === 'undefined' ? 'undefined' : _typeof(param)) {
+	          case 'object':
+	            param = escape((0, _stringify2["default"])(param));
+	            break;
+	          case 'undefined':
+	            param = '';
+	            break;
+	          default:
+	            break;
+	        }
+	        return key + '=' + param;
+	      }).join('&');
+	    } catch (e) {
+	      // console.log('error in urlParams');
+	      return '';
+	    }
+	  },
+	  fetch: function (_fetch) {
+	    function fetch(_x, _x2) {
+	      return _fetch.apply(this, arguments);
+	    }
+
+	    fetch.toString = function () {
+	      return _fetch.toString();
+	    };
+
+	    return fetch;
+	  }(function (url, options) {
+	    return fetch(url, options).then(function (response) {
+	      if (response.ok) {
+	        return response.text().then(function (text) {
+	          try {
+	            return JSON.parse(text);
+	          } catch (e) {
+	            return _promise2["default"].reject(new Error('接口返回数据无法解析'));
+	          }
+	        });
+	      }
+	      return _promise2["default"].reject(new Error('请求失败'));
+	    }, function (error) {
+	      throw error;
+	    });
+	  }),
+	  options: function options() {
+	    var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'get';
+
+	    var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	    return _extends({
+	      method: method.toUpperCase(),
+	      credentials: 'include',
+	      cache: 'no-cache',
+	      headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+	      }
+	    }, _options);
+	  }
+	};
+
+	function post(url) {
+	  var oriParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var fetch = fetchTools.fetch,
+	      options = fetchTools.options;
+
+	  try {
+	    return fetch(url, options('post', {
+	      headers: {
+	        'Content-Type': 'application/json;charset=UTF-8'
+	      },
+	      body: (0, _stringify2["default"])(oriParams)
+	    }));
+	  } catch (e) {
+	    return _promise2["default"].reject(e);
+	  }
+	}
+
+	function get(url) {
+	  var oriParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var params = fetchTools.params,
+	      fetch = fetchTools.fetch,
+	      options = fetchTools.options;
+
+
+	  var data = params(oriParams);
+
+	  if (data) {
+	    return fetch(url + '?' + data, options());
+	  }
+	  return fetch(url, options());
+	}
+
+	function fetchJ(url) {
+	  var oriParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var params = fetchTools.params;
+
+
+	  var data = params(oriParams);
+
+	  return (0, _fetchJsonp2["default"])(url + '?' + data).then(function (response) {
+	    return response.json();
+	  }).then(function (json) {
+	    console.log('parsed json', json);
+	    return json;
+	  })["catch"](function (ex) {
+	    console.log('parsing failed', ex);
+	  });
+	}
+
+	exports["default"] = function (url, options) {
+	  return (0, _axios2["default"])({
+	    method: options.method,
+	    url: url,
+	    data: options.data,
+	    params: options.param
+	  })["catch"](function (err) {
+	    console.log(err);
+	  });
+	};
+
+	// var csrfDefense = function(){
+	// 	window.x_xsrf_token = "";
+	// 	window.random_num = Math.random();
+	// 	$.ajaxSetup({
+	// 		cache:false,
+	// 		beforeSend: function (xhr) {
+	// 			xhr.setRequestHeader('x-xsrf-token', x_xsrf_token);//added by yany head名称不能下划线
+	// 			xhr.setRequestHeader('random-num', random_num);
+	// 			var centerContent='<i class="uf uf-fluffycloudsilhouette u-loader-centerContent"></i>';
+	// 			var opt1={
+	// 				hasback:true,
+	// 				hasDesc:true,//是否含有加载内容描述
+	// 				centerContent:centerContent
+	// 			};
+	// 			u.showLoader(opt1);
+	// 		},
+	// 		complete: function (xhr, status) {
+	// 			setTimeout("u.hideLoader({hasback:true});",200 );
+	// 			var inner_x_xsrf_token = xhr.getResponseHeader('x-xsrf-token');//added by yany
+	// 			if(inner_x_xsrf_token && inner_x_xsrf_token != ""){
+	// 				window.x_xsrf_token = inner_x_xsrf_token;
+	// 			}
+	// 		}
+	// 	});
+	// }
+	});
+
+	unwrapExports(request$2);
+	var request_1$1 = request$2.post;
+	var request_2$1 = request$2.get;
+	var request_3$1 = request$2.fetchJ;
+
+
+
+	var Icon$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+
+
+	var refcorewithInput = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(Icon$1);
+
+	getCjsExportFromNamespace(refcorewithInput);
+
+	var RefCoreWithInput_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _stringify2 = _interopRequireDefault(stringify$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+
+
+	var _beeInputGroup2 = _interopRequireDefault(build$4);
+
+
+
+	var _beeFormControl2 = _interopRequireDefault(build$2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var refValParse = function refValParse(value) {
+		if (!value) return { refname: '', refpk: '' };
+
+		try {
+			var valueMap = JSON.parse(value);
+			if (!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')) {
+				return { refname: '', refpk: '' };
+			} else {
+				return valueMap;
+			}
+		} catch (e) {
+			return { refname: '', refpk: '' };
+		}
+	};
+
+	var propTypes$1 = {
+		matchUrl: _propTypes2["default"].string,
+		param: _propTypes2["default"].object,
+		style: _propTypes2["default"].object,
+		// displayField: PropTypes.string,//显示内容的键
+		valueField: _propTypes2["default"].string, //真实 value 的键
+		filterUrl: _propTypes2["default"].string,
+		value: _propTypes2["default"].string,
+		wrapClassName: _propTypes2["default"].string,
+		canClickGoOn: _propTypes2["default"].func,
+		canInputGoOn: _propTypes2["default"].func,
+		filterData: _propTypes2["default"].array,
+		filterUrlFunc: _propTypes2["default"].func
+	};
+
+	var defaultProps = {
+		className: '',
+		backdrop: true,
+		style: {
+			width: 200
+		},
+		param: {
+			refCode: 'test_common' //test_common||test_grid||test_tree||test_treeTable
+		},
+		onCancel: function onCancel(p) {},
+		onSave: function onSave(sels) {},
+		value: '',
+		// displayField: 'refname',//显示内容的键
+		valueField: 'refpk', //真实 value 的键
+		//将 filterRefUrl 改为 mactchUrl
+		matchUrl: '',
+		filterUrl: '',
+		wrapClassName: '',
+		canClickGoOn: function canClickGoOn() {
+			return true;
+		},
+		canInputGoOn: function canInputGoOn() {
+			return true;
+		},
+		filterData: [],
+		filterUrlFunc: function filterUrlFunc(value) {}
+	};
+
+	var FilterItem = function FilterItem(props) {
+		return _react2["default"].createElement(
+			'li',
+			{
+				className: 'ref-filter-item',
+				onClick: function onClick(e) {
+					if (e.target.dataset.type !== 'filteritem') {
+						e.target.dataset.type = 'filteritem';
+					}
+				},
+				'data-value': props.value,
+				'data-type': 'filteritem'
+
+			},
+			props.text
+		);
+	};
+
+	var getFilterData = function getFilterData(data, valueField, displayField) {
+		var filterItems = [],
+		    filterDataMap = {};
+		data.forEach(function (item) {
+			var values = item[valueField];
+			//displayField 存在两种形态，通过字符匹配和函数匹配来获得展示的字段
+			var names = '';
+			if (typeof displayField === 'function') {
+				names = displayField(item);
+			} else {
+				names = displayField.format(item);
+			}
+			filterItems.push(_react2["default"].createElement(FilterItem, { key: values, text: names, value: values }));
+			filterDataMap[values] = item;
+		});
+		return { filterItems: filterItems, filterDataMap: filterDataMap };
+	};
+
+	var RefCoreWithInput = function (_Component) {
+		_inherits(RefCoreWithInput, _Component);
+
+		function RefCoreWithInput(props) {
+			_classCallCheck(this, RefCoreWithInput);
+
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this.handleChange = function (values, record) {
+				var _this$props = _this.props,
+				    onChange = _this$props.onChange,
+				    value = _this$props.value;
+
+				if (values === value) return;
+				if (onChange) {
+					onChange(values, record);
+				}
+			};
+
+			_this.onCancelModal = function (p) {
+
+				_this.setState({
+					isClick: false,
+					showModal: false
+				});
+				_this.props.onCancel(p, _this.refDom);
+			};
+
+			_this.onSaveModal = function (result) {
+				var _this$props2 = _this.props,
+				    _this$props2$displayF = _this$props2.displayField,
+				    displayField = _this$props2$displayF === undefined ? '{refname}' : _this$props2$displayF,
+				    valueField = _this$props2.valueField,
+				    onSave = _this$props2.onSave;
+
+				var values = result.map(function (item) {
+					return item[valueField];
+				}).join(',');
+				var names = result.map(function (item) {
+					if (typeof displayField === 'function') {
+						return displayField(item);
+					} else {
+						return displayField.format(item);
+					}
+				}).join(';');
+
+				_this.setState({
+					checkedArray: result,
+					savedData: values,
+					savedShow: names,
+					isClick: false,
+					showModal: false
+				}, function () {
+					onSave(result, names, _this.refDom);
+					_this.handleChange((0, _stringify2["default"])({
+						refname: names,
+						refpk: values
+					}), result);
+				});
+			};
+
+			_this.handleClick = function () {
+				var isClick = _this.state.isClick;
+
+				if (_this.props.disabled || isClick) {
+					return;
+				}
+				if (!_this.props.canClickGoOn()) return;
+				_this.setState({
+					isClick: true,
+					showModal: true
+				});
+			};
+
+			_this.onClickFilterItem = function (e) {
+				e.stopPropagation();
+				var _e$target$dataset = e.target.dataset,
+				    dataset = _e$target$dataset === undefined ? {} : _e$target$dataset;
+
+				if (dataset.type !== 'filteritem') {
+					return;
+				}
+				var filterDataMap = _this.state.filterDataMap;
+				var _this$props3 = _this.props,
+				    _this$props3$displayF = _this$props3.displayField,
+				    displayField = _this$props3$displayF === undefined ? "{refname}" : _this$props3$displayF,
+				    valueField = _this$props3.valueField,
+				    onSave = _this$props3.onSave;
+
+				var filterDataItem = filterDataMap[dataset.value];
+				var savedData = filterDataItem[valueField];
+				//displayField 存在两种形态，通过字符匹配和函数匹配来获得展示的字段
+				var savedShow = '';
+				if (typeof displayField === 'function') {
+					savedShow = displayField(filterDataItem);
+				} else {
+					savedShow = displayField.format(filterDataItem);
+				}
+				_this.setState({
+					savedData: savedData, savedShow: savedShow,
+					filtering: false,
+					checkedArray: [filterDataMap[dataset.value]]
+				}, function () {
+
+					_this.handleChange((0, _stringify2["default"])({
+						refname: savedShow,
+						refpk: dataset.value
+					}));
+					onSave([filterDataItem]);
+				});
+			};
+
+			_this.onFilter = function (content) {
+				var _this$props4 = _this.props,
+				    filterUrl = _this$props4.filterUrl,
+				    param = _this$props4.param,
+				    valueField = _this$props4.valueField,
+				    _this$props4$displayF = _this$props4.displayField,
+				    displayField = _this$props4$displayF === undefined ? "{refname}" : _this$props4$displayF;
+				//20190417这里修改逻辑，如果filterUrl存在，使用下面逻辑，否则回调然后用户传数据进来
+
+				if (!filterUrl) {
+					_this.props.filterUrlFunc(content);
+					return false;
+				}
+				if (!content) return;
+				(0, request$2.get)(filterUrl, _extends({}, param, {
+					refCode: param.refCode,
+					content: content
+				})).then(function (response) {
+					var data = response.data;
+
+					var _getFilterData = getFilterData(data, valueField, displayField),
+					    filterItems = _getFilterData.filterItems,
+					    filterDataMap = _getFilterData.filterDataMap;
+
+					_this.setState({
+						filterItems: filterItems,
+						filterDataMap: filterDataMap
+					});
+				});
+			};
+
+			_this.onChangeFormControl = function (value) {
+				if (!_this.props.canInputGoOn(value)) return;
+				_this.setState({
+					filterText: value,
+					filtering: true
+				});
+				_this.onFilter(value);
+			};
+
+			_this.onBlurFormControl = function () {
+				_this.setState({
+					filterText: '',
+					filtering: Boolean(_this.selectFilter)
+				});
+			};
+
+			_this.onFocusFormControl = function () {};
+
+			_this.onFilterMouseEnter = function () {
+				_this.selectFilter = true;
+			};
+
+			_this.onFilterMouseLeave = function () {
+				_this.selectFilter = false;
+			};
+
+			_this.onMatchInitValue = function (checkedArray) {
+				_this.setState({ checkedArray: checkedArray });
+			};
+
+			var valueMap = refValParse(props.value) || {};
+			_this.state = {
+				checkedArray: [],
+				savedData: '',
+				savedShow: valueMap.refname,
+				filterText: '',
+				filterItems: [],
+				filterData: props.filterUrl ? [] : props.filterData || [],
+				filterDataMap: {},
+				filtering: false,
+				showModal: false
+			};
+			_this.childrenComponent = _this.props.children;
+			return _this;
+		}
+
+		RefCoreWithInput.prototype.componentDidMount = function componentDidMount() {}
+		// this.setValues();
+		// this.initComponent(this.props)
+
+		// shouldComponentUpdate(nextProps, nextState){
+		// 	return true;
+		// }
+		;
+
+		RefCoreWithInput.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+			var _this2 = this;
+
+			var _props = this.props,
+			    valueField = _props.valueField,
+			    _props$displayField = _props.displayField,
+			    displayField = _props$displayField === undefined ? "{refname}" : _props$displayField,
+			    filterUrl = _props.filterUrl;
+
+			if (nextProps.value !== this.props.value) {
+				var valueMap = refValParse(nextProps.value) || {};
+				// let { valueField } = this.props;
+				var checkedArray = this.state.checkedArray;
+
+				var diffValue = checkedArray.some(function (item) {
+					return !Boolean(~valueMap.refpk.indexOf(item[valueField]));
+				});
+				if (!(0, Immutable.is)(this.state.filterData, nextProps.filterData) && !filterUrl) {
+					var _getFilterData2 = getFilterData(nextProps.filterData, valueField, displayField),
+					    filterItems = _getFilterData2.filterItems,
+					    filterDataMap = _getFilterData2.filterDataMap;
+
+					this.setState({
+						filterItems: filterItems,
+						filterDataMap: filterDataMap,
+						filterData: nextProps.filterData,
+						checkedArray: diffValue ? [] : checkedArray,
+						savedShow: valueMap.refname
+					}, function () {
+						_this2.handleChange(nextProps.value);
+					});
+				} else {
+					this.setState({
+						checkedArray: diffValue ? [] : checkedArray,
+						savedShow: valueMap.refname
+					}, function () {
+						_this2.handleChange(nextProps.value);
+					});
+				}
+			} else {
+				//filterUrl不存在，只传入filterData
+				if (!(0, Immutable.is)(this.state.filterData, nextProps.filterData) && !filterUrl) {
+					var _getFilterData3 = getFilterData(nextProps.filterData, valueField, displayField),
+					    _filterItems = _getFilterData3.filterItems,
+					    _filterDataMap = _getFilterData3.filterDataMap;
+
+					this.setState({
+						filterItems: _filterItems,
+						filterDataMap: _filterDataMap,
+						filterData: nextProps.filterData
+					});
+				}
+				return false;
+			}
+			return true;
+		};
+		// componentWillReceiveProps(nextProp) {
+		// 	if (nextProp.value !== this.props.value) {
+		// 		this.initComponent(nextProp);
+		// 	}
+		// }
+
+		/**
+	  * 点击打开参照弹出层时，做字段校验。
+	  */
+
+		/**
+	  * 控制模糊匹配时选择匹配项文本框失去焦点后 blur 先于 click 触发造成的选择未生效问题
+	  */
+
+
+		RefCoreWithInput.prototype.render = function render() {
+			var _state = this.state,
+			    savedShow = _state.savedShow,
+			    savedData = _state.savedData,
+			    filterItems = _state.filterItems,
+			    filtering = _state.filtering,
+			    filterText = _state.filterText,
+			    checkedArray = _state.checkedArray,
+			    showModal = _state.showModal;
+			var _props2 = this.props,
+			    displayField = _props2.displayField,
+			    valueField = _props2.valueField,
+			    form = _props2.form,
+			    rules = _props2.rules,
+			    className = _props2.className,
+			    wrapClassName = _props2.wrapClassName,
+			    disabled = _props2.disabled,
+			    style = _props2.style,
+			    placeholder = _props2.placeholder;
+
+			var childrenProps = _extends(_extends({}, this.props), {
+				showModal: showModal,
+				checkedArray: checkedArray,
+				onCancel: this.onCancelModal,
+				onSave: this.onSaveModal,
+				onMatchInitValue: this.onMatchInitValue
+			});
+			delete childrenProps.children;
+			return _react2["default"].createElement(
+				'div',
+				{ className: 'ref-input-wrap ' + wrapClassName,
+					style: _extends({}, style)
+				},
+				_react2["default"].createElement(
+					_beeInputGroup2["default"],
+					{ simple: true,
+						style: {
+							width: '100%'
+						} },
+					_react2["default"].createElement(_beeFormControl2["default"], _extends({
+						disabled: disabled,
+						type: 'text',
+						style: {
+							width: '100%'
+						}
+					}, savedShow ? { readOnly: "readonly" } : '', {
+						placeholder: placeholder,
+						value: filtering ? filterText : savedShow,
+						onFocus: this.onFocusFormControl,
+						onChange: this.onChangeFormControl,
+						onBlur: this.onBlurFormControl
+					})),
+					_react2["default"].createElement(
+						_beeInputGroup2["default"].Button,
+						{ shape: 'border', onClick: this.handleClick },
+						_react2["default"].createElement(
+							'span',
+							{ className: 'uf uf-navmenu ' + (disabled ? 'ref-input-wrap-display' : '') },
+							' '
+						)
+					)
+				),
+				_react2["default"].cloneElement(this.childrenComponent, childrenProps),
+				_react2["default"].createElement(
+					'div',
+					{ className: 'ref-input-wrap-filter-panel', style: { display: filtering ? '' : 'none', width: style.width || 200 } },
+					_react2["default"].createElement(
+						'ul',
+						{
+							onClick: this.onClickFilterItem,
+							onMouseEnter: this.onFilterMouseEnter,
+							onMouseLeave: this.onFilterMouseLeave
+						},
+						filterItems.length ? filterItems.map(function (item) {
+							return item;
+						}) : _react2["default"].createElement(
+							'li',
+							{ className: 'ref-filter-empty' },
+							'\u6CA1\u6709\u5339\u914D\u5230\u6570\u636E'
+						)
+					)
+				)
+			);
+		};
+
+		return RefCoreWithInput;
+	}(React__default.Component);
+
+	RefCoreWithInput.propTypes = propTypes$1;
+	RefCoreWithInput.defaultProps = defaultProps;
+	exports["default"] = RefCoreWithInput;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreWithInput_1$1);
+
+	var createApi$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createRefInput = exports.createRefModal = undefined;
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	//监听者模式对象
+	function Listenter() {
+	    this.events = {};
+	    this.on = function (type, handler) {
+	        if (typeof this.events[type] == "undefined") {
+	            this.events[type] = [];
+	        }
+	        this.events[type].push(handler);
+	    };
+	    this.fire = function (event) {
+	        if (this.events[event] instanceof Array) {
+	            var events = this.events[event];
+	            for (var i = 0, len = events.length; i < len; i++) {
+	                events[i](event);
+	            }
+	        }
+	    };
+	    return this;
+	}
+
+	//监听队列
+	var Queue = {};
+
+	//用于监听触发时间的 ReactJS 容器
+
+	var Container = function (_Component) {
+	    _inherits(Container, _Component);
+
+	    function Container(props) {
+	        _classCallCheck(this, Container);
+
+	        var _this2 = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	        _this2.onCancelModal = function (p) {
+	            var onCancel = _this2.props.onCancel;
+
+	            _this2.setState({
+	                showModal: false
+	            });
+	            if (onCancel) {
+	                onCancel();
+	            }
+	        };
+
+	        _this2.onSaveModal = function (record) {
+	            var onSave = _this2.props.onSave;
+
+	            _this2.setState({
+	                checkedArray: record,
+	                showModal: false
+	            });
+	            if (onSave) {
+	                onSave(record);
+	            }
+	        };
+
+	        _this2.state = props;
+	        return _this2;
+	    }
+
+	    Container.prototype.componentDidMount = function componentDidMount() {
+	        var _this3 = this;
+
+	        var _this = this;
+	        var listener = Queue[this.props.eventId].listener;
+
+	        if (!listener) {
+	            listener = Queue[this.props.eventId] = new Listenter();
+	        }
+	        listener.on("show", function () {
+	            _this.setState({
+	                showModal: true
+	            });
+	        });
+	        listener.on("hide", function () {
+	            _this.setState({
+	                showModal: false
+	            }, function () {
+	                var onCancel = _this3.props.onCancel;
+
+	                if (onCancel) {
+	                    onCancel();
+	                }
+	            });
+	        });
+	    };
+
+	    Container.prototype.render = function render() {
+	        var children = this.props.children;
+
+	        return _react2["default"].cloneElement(children, _extends({}, this.state, {
+	            onSave: this.onSaveModal,
+	            onCancel: this.onCancelModal
+	        }));
+	    };
+
+	    return Container;
+	}(React__default.Component);
+
+	function createRefInput(selector, component, props) {
+	    var dom = document.getElementById(selector);
+	    var destory = function destory() {
+	        try {
+	            dom.parentNode.removeChild(dom);
+	        } catch (e) {
+	            console.log(e);
+	        }
+	    };
+
+	    _reactDom2["default"].render(_react2["default"].cloneElement(component, _extends({}, props)), dom);
+	    return {
+	        destory: destory,
+	        dom: dom
+	    };
+	}
+	function createRefModal(_ref, callback) {
+	    var component = _ref.component,
+	        props = _objectWithoutProperties(_ref, ['component']);
+
+	    var modalContainer = document.createElement('div');
+	    document.body.appendChild(modalContainer);
+	    //随机生成队列ID
+	    var eventId = 'listener-' + Math.random();
+
+	    Queue[eventId] = new Listenter();
+	    var param = {
+	        show: function show() {
+	            if (!Queue[eventId]) {
+	                return false;
+	            } else {
+	                Queue[eventId].fire('show');
+	                return true;
+	            }
+	        },
+	        hide: function hide() {
+	            if (!Queue[eventId]) {
+	                return false;
+	            } else {
+	                Queue[eventId].fire('hide');
+	                return true;
+	            }
+	        },
+	        destory: function destory() {
+	            if (!Queue[eventId]) {
+	                return false;
+	            } else {
+	                delete Queue[eventId];
+	                return true;
+	            }
+	        }
+	    };
+	    _reactDom2["default"].render(_react2["default"].createElement(
+	        Container,
+	        _extends({}, props, {
+
+	            eventId: eventId
+	        }),
+	        _react2["default"].cloneElement(component)
+	    ), modalContainer, function () {
+	        if (typeof callback === 'function') {
+	            callback(param);
+	        }
+	    });
+	    return param;
+	}
+
+	exports.createRefModal = createRefModal;
+	exports.createRefInput = createRefInput;
+	});
+
+	unwrapExports(createApi$1);
+	var createApi_1$1 = createApi$1.createRefInput;
+	var createApi_2$1 = createApi$1.createRefModal;
+
+	var RefCoreGlobal_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var RefCoreGlobal = function (_Component) {
+	    _inherits(RefCoreGlobal, _Component);
+
+	    function RefCoreGlobal(props) {
+	        _classCallCheck(this, RefCoreGlobal);
+
+	        var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	        _this.state = {
+	            // checkedArray: props.checkedArray,
+	        };
+	        return _this;
+	    }
+
+	    RefCoreGlobal.prototype.componentDidMount = function componentDidMount() {
+	        // var self = this;
+	        // var { refType , checkedArray } = this.props;
+	        // var tempCheckedArray = checkedArray;
+	        // if(this.props.onBeforeAjax){
+	        //     this.props.onBeforeAjax('begin')
+	        // }
+	        // //对checkedArray作判断
+	        // function ajaxWrap(val){
+	        //     var value = {};
+	        //     var url = option.refModelUrl.totalDataUrl
+	        //     fetchJ(url,{
+	        //         ...option.param,
+	        //         pk_val:val,
+	        //     })
+	        //     // .then( (response) => { return JSON.parse(response); })
+	        //     .then( ({ data }) => {
+	        //         var checkedArray = data.filter(({refpk})=>{
+	        //             return tempCheckedArray.indexOf(refpk)>-1
+	        //         })
+	        //         checkedArray = checkedArray.map((v,k)=>{
+	        //             v.key = v.refpk;
+	        //             return v
+	        //         })
+	        //         self.setState({
+	        //             checkedArray,
+	        //         })
+	        //         // return checkedArray;
+	        //     })
+	        //     .catch(()=>{
+	        //         self.setState({
+	        //             checkedArray:[]
+	        //         })
+	        //     })
+	        // }
+	        // if(!checkedArray || checkedArray==[] || checkedArray.length === 0 ){
+	        //     checkedArray = [];
+	        // }else{
+	        //     if(typeof(checkedArray[0]) === 'object'){
+	        //         //todo nothing
+	        //     }else{
+	        //         ajaxWrap(checkedArray);
+	        //     }
+	        // }
+	    };
+
+	    RefCoreGlobal.prototype.render = function render() {
+	        // var { checkedArray } = this.state;
+	        return _react2["default"].createElement(
+	            'div',
+	            null,
+	            _react2["default"].cloneElement(this.props.children, _extends({}, this.props))
+	        );
+	    };
+
+	    return RefCoreGlobal;
+	}(React__default.Component);
+
+	exports["default"] = RefCoreGlobal;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreGlobal_1$1);
+
+
+
+	var refcore$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcore$1);
+
+	var lib$4 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createRefTreeWithInput = exports.createRefTree = exports.RefTree = exports.RefTreeWithInput = undefined;
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _RefTreeBaseUI2 = _interopRequireDefault(RefTreeBaseUI_1);
+
+
+
+	var _RefCoreWithInput2 = _interopRequireDefault(RefCoreWithInput_1$1);
+
+
+
+
+
+	var _RefCoreGlobal2 = _interopRequireDefault(RefCoreGlobal_1$1);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	// import './index.less'; //webpack打包放开
+	var RefTree = function RefTree(props) {
+	    return _react2["default"].createElement(
+	        _RefCoreGlobal2["default"],
+	        props,
+	        _react2["default"].createElement(_RefTreeBaseUI2["default"], null)
+	    );
+	};
+
+	function createRefTree(props, callback) {
+	    return (0, createApi$1.createRefModal)(_extends({
+	        component: _react2["default"].createElement(RefTree, null)
+	    }, props), function (param) {
+	        if (typeof callback === 'function') {
+	            callback(param);
+	        }
+	    });
+	}
+	function createRefTreeWithInput(selector, props, callback) {
+	    return (0, createApi$1.createRefInput)(selector, _react2["default"].createElement(RefTreeWithInput, null), props, function (param) {
+	        if (typeof callback === 'function') {
+	            callback(param);
+	        }
+	    });
+	}
+
+	function RefTreeWithInput(props) {
+	    return _react2["default"].createElement(
+	        _RefCoreWithInput2["default"],
+	        props,
+	        _react2["default"].createElement(RefTree, null)
+	    );
+	}
+
+	exports["default"] = _RefTreeBaseUI2["default"];
+	exports.RefTreeWithInput = RefTreeWithInput;
+	exports.RefTree = RefTree;
+	exports.createRefTree = createRefTree;
+	exports.createRefTreeWithInput = createRefTreeWithInput;
+	});
+
+	unwrapExports(lib$4);
+	var lib_1$2 = lib$4.createRefTreeWithInput;
+	var lib_2$2 = lib$4.createRefTree;
+	var lib_3$2 = lib$4.RefTree;
+	var lib_4$2 = lib$4.RefTreeWithInput;
 
 	var _dec$1, _class$2, _temp$1;
 
-	var RefRender = (_dec$1 = miniStore.connect(), _dec$1(_class$2 = (_temp$1 =
+	var noop$7 = function noop() {};
+
+	var getTreeList = function getTreeList(url, param, content) {
+	  if (content === void 0) {
+	    content = "";
+	  }
+
+	  content.length && (param.likeValue = content);
+	  return request$1(url, {
+	    method: "POST",
+	    data: param
+	  });
+	};
+
+	var propTypes$1 = {
+	  param: propTypes.object,
+	  lazyModal: propTypes.bool,
+	  onCancel: propTypes.func,
+	  onSave: propTypes.func,
+	  value: propTypes.string,
+	  onAfterAjax: propTypes.func //请求完数据的回调，暂不需要
+
+	};
+	var defaultProps = {
+	  checkStrictly: false,
+	  lazyModal: false,
+	  param: {
+	    refCode: ""
+	  },
+	  onCancel: noop$7,
+	  onSave: noop$7,
+	  value: ""
+	};
+	var dataType$1 = "tree";
+	var Tree$1 = (_dec$1 = miniStore.connect(function (state) {
+	  return {
+	    form: state.form
+	  };
+	}), _dec$1(_class$2 = (_temp$1 =
+	/*#__PURE__*/
+	function (_Component) {
+	  inheritsLoose(Tree, _Component);
+
+	  function Tree(props) {
+	    var _this;
+
+	    _this = _Component.call(this, props) || this;
+
+	    _this.onSave = function (data) {
+	      var store = _this.props.store;
+	      var onOk = store.getState().onOk;
+
+	      _this.setState({
+	        matchData: data
+	      }); // console.log("save", data);
+
+
+	      onOk && onOk(data);
+	    };
+
+	    _this.onCancel = function () {};
+
+	    _this.initComponent = function () {
+	      _this.getRefTreeData();
+	    };
+
+	    _this.getRefTreeData = function (value) {
+	      var _assertThisInitialize = assertThisInitialized(_this),
+	          param = _assertThisInitialize.param,
+	          dataUrl = _assertThisInitialize.dataUrl,
+	          lazyModal = _assertThisInitialize.lazyModal,
+	          onAfterAjax = _assertThisInitialize.onAfterAjax;
+
+	      param = Object.assign(param, {
+	        treeNode: "",
+	        treeloadData: lazyModal
+	      });
+	      getTreeList(dataUrl, param, value).then(function (res) {
+	        if (onAfterAjax && !_this.state.isAfterAjax) {
+	          onAfterAjax(res);
+
+	          _this.setState({
+	            isAfterAjax: true
+	          });
+	        }
+
+	        var _res$data$data = res.data.data,
+	            data = _res$data$data === void 0 ? [] : _res$data$data;
+	        _this.treeData = data;
+
+	        _this._changeLoadingState(false);
+	      }).catch(function () {
+	        _this.treeData = [];
+
+	        _this._changeLoadingState(false);
+	      });
+	    };
+
+	    _this._changeLoadingState = function (loadingValue) {
+	      _this.setState({
+	        showLoading: loadingValue
+	      });
+	    };
+
+	    _this.searchData = function () {
+	      console.log('++=========');
+
+	      var _assertThisInitialize2 = assertThisInitialized(_this),
+	          treeData = _assertThisInitialize2.treeData;
+
+	      _this.setState({
+	        filterData: treeData
+	      });
+	    };
+
+	    var _this$props = _this.props,
+	        _store = _this$props.store,
+	        getDataParams = _this$props.getDataParams;
+
+	    var _store$getState$meta = _store.getState().meta,
+	        viewApplication = _store$getState$meta.viewApplication,
+	        refEntity = _store$getState$meta.refEntity;
+
+	    _this.dataUrl = _store.getState().dataUrl;
+	    initReferInfo.call(assertThisInitialized(_this), dataType$1, refEntity, viewApplication, getDataParams);
+	    _this.state = {
+	      isAfterAjax: false,
+	      showLoading: false
+	    };
+	    _this.treeData = [];
+	    return _this;
+	  }
+
+	  var _proto = Tree.prototype;
+
+	  _proto.componentDidMount = function componentDidMount() {
+	    this.initComponent();
+	  };
+
+	  _proto.render = function render() {
+	    var _this2 = this;
+
+	    var store = this.props.store;
+	    var refEntity = store.getState().meta.refEntity;
+	    var _refEntity$bMultiSel = refEntity.bMultiSel,
+	        bMultiSel = _refEntity$bMultiSel === void 0 ? false : _refEntity$bMultiSel,
+	        code = refEntity.code,
+	        name = refEntity.name;
+	    var showLoading = this.state.showLoading;
+	    var option = {
+	      title: name,
+	      searchable: true,
+	      //默认搜索输入框，没有这个字段
+	      multiple: bMultiSel,
+	      //refEntity: bMultiSel
+	      param: {
+	        refCode: code //refEntity: code
+
+	      },
+	      nodeDisplay: function nodeDisplay(record) {
+	        //树节点显示的名字
+	        return record[_this2.displayField];
+	      },
+	      displayField: function displayField(record) {
+	        //输入框的名字
+	        return record[_this2.displayField];
+	      },
+	      //显示内容的键
+	      valueField: this.valueField,
+	      //真实 value 的键
+	      filterUrl: "",
+	      //输入框搜索匹配的URL,没有这个字段
+	      strictMode: true,
+	      //是否调用之前缓存的数据，为true则不重新请求
+	      defaultExpandAll: false,
+	      treeData: this.treeData,
+	      filterData: this.state.filterData,
+	      showLoading: showLoading
+	    };
+	    return React__default.createElement(lib_4$2, _extends_1({}, option, {
+	      getRefTreeData: this.getRefTreeData,
+	      filterUrlFunc: this.searchData,
+	      onSave: this.onSave,
+	      matchData: this.state.matchData
+	    }));
+	  };
+
+	  return Tree;
+	}(React.Component), _temp$1)) || _class$2);
+	Tree$1.defaultProps = defaultProps;
+	Tree$1.propTypes = propTypes$1;
+
+
+
+	var refcorebutton$2 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcorebutton$2);
+
+	var RefCoreButton_1$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _beeButton2 = _interopRequireDefault(build$8);
+
+
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	// const propTypes = {
+	//   buttons: PropTypes.object,
+	//   ishasemptyBtn: PropTypes.bool,
+	//   language: PropTypes.string,
+	// }
+
+	// const defaultProps = {
+	//   buttons: {
+	//     okText: "确认",
+	//     cancelText: "取消",
+	//     clearText: "清空已选",
+	//   },
+	//   ishasemptyBtn: true,
+	//   language: 'zh_CN'
+	// }
+
+	// import {Button} from 'tinper-bee';
+	function RefCoreButton(props) {
+		var buttons = props.buttons,
+		    language = props.language,
+		    onClickBtn = props.onClickBtn,
+		    _props$emptyBut = props.emptyBut,
+		    emptyBut = _props$emptyBut === undefined ? true : _props$emptyBut;
+
+		var saveButton = '';
+		var cancelButton = '';
+		var clearButton = '';
+
+		switch (language) {
+			case "en_US":
+				saveButton = 'Ok';
+				cancelButton = 'Cancel';
+				clearButton = 'Empty';
+				break;
+			case "zh_TW":
+				saveButton = '確認';
+				cancelButton = "取消";
+				clearButton = '清空已選';
+				break;
+			case "fr_FR":
+				saveButton = 'Confirmation';
+				cancelButton = 'Annuler';
+				clearButton = 'Videz';
+				break;
+			case "de_DE":
+				saveButton = 'Bestätigt';
+				cancelButton = 'Abgesagt';
+				clearButton = 'Leer';
+				break;
+			case "ja_JP":
+				saveButton = '確認する';
+				cancelButton = '取り消す';
+				clearButton = '空を清める';
+				break;
+			case "zh_CN":
+			default:
+				saveButton = "确认";
+				cancelButton = "取消";
+				clearButton = '清空已选';
+		}
+		if (buttons) {
+			saveButton = buttons.okText || "确认";
+			cancelButton = buttons.cancelText || "取消";
+			clearButton = buttons.clearText || '清空已选';
+		}
+		return _react2["default"].createElement(
+			'div',
+			{ className: 'ref-core-button' },
+			emptyBut ? _react2["default"].createElement(
+				_beeButton2["default"],
+				{ className: 'ref-core-button-empty', shape: 'border', onClick: function onClick() {
+						return onClickBtn('clear');
+					} },
+				clearButton
+			) : '',
+			_react2["default"].createElement(
+				_beeButton2["default"],
+				{ shape: 'border', onClick: function onClick() {
+						return onClickBtn('cancel');
+					} },
+				cancelButton
+			),
+			_react2["default"].createElement(
+				_beeButton2["default"],
+				{ colors: 'primary', onClick: function onClick() {
+						return onClickBtn('save');
+					} },
+				saveButton
+			)
+		);
+	}
+	exports["default"] = RefCoreButton;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreButton_1$2);
+
+
+
+	var refcoreerror$2 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoreerror$2);
+
+	var RefCoreError_1$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var RefCoreError = function RefCoreError(props) {
+	  var language = props.language,
+	      show = props.show;
+
+	  var nodata = "没有查询到数据";
+	  switch (language) {
+	    case "zh_CN":
+	      nodata = '没有查询到数据';
+
+	      break;
+	    case "en_US":
+	      nodata = 'No query to data';
+	      break;
+	    case "zh_TW":
+	      nodata = '沒有査詢到數據';
+	      break;
+	    case "fr_FR":
+	      nodata = 'Pas de données';
+	      break;
+	    case "de_DE":
+	      nodata = 'Keine abfrage zu Daten';
+	      break;
+	    case "ja_JP":
+	      nodata = 'データが検索されていません';
+	      break;
+	    default:
+	      nodata = '没有查询到数据';
+	  }
+	  return _react2["default"].createElement(
+	    'div',
+	    { className: show ? 'ref-core-error' : 'ref-core-error-hide' },
+	    nodata
+	  );
+	};
+	exports["default"] = RefCoreError;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreError_1$2);
+
+
+
+	var refcoretab$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoretab$1);
+
+	var RefCoreTab_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+	    show: _propTypes2["default"].bool,
+	    onSelectTabItem: _propTypes2["default"].func,
+	    selectedData: _propTypes2["default"].array,
+	    selecteing: _propTypes2["default"].bool
+	};
+
+	var defaultProps = {
+	    show: true,
+	    onSelectTabItem: function onSelectTabItem() {},
+	    selectedData: [],
+	    selecteing: true
+	};
+
+	var RefCoreTab = function (_Component) {
+	    _inherits(RefCoreTab, _Component);
+
+	    function RefCoreTab(props) {
+	        _classCallCheck(this, RefCoreTab);
+
+	        var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	        _this.onSelectTabItem = function () {
+	            var _this$props = _this.props,
+	                onSelectTabItem = _this$props.onSelectTabItem,
+	                selectedData = _this$props.selectedData,
+	                selecteing = _this$props.selecteing;
+
+	            onSelectTabItem(selectedData, selecteing ? 'selected' : 'selecting');
+	        };
+
+	        _this.Alreadychosen = '';
+	        _this.Hidechosen = '';
+
+	        var language = props.language;
+
+	        switch (language) {
+	            case "zh_CN":
+	                _this.Alreadychosen = '已选';
+	                _this.Hidechosen = "收起已选";
+	                break;
+	            case "en_US":
+	                _this.Alreadychosen = 'chosen';
+	                _this.Hidechosen = "Hide";
+	                break;
+	            case "zh_TW":
+	                _this.Alreadychosen = '已選';
+	                _this.Hidechosen = "收起已選";
+	                break;
+	            case "fr_FR":
+	                _this.Alreadychosen = 'Choisissez';
+	                _this.Hidechosen = "Cacher";
+	                break;
+	            case "de_DE":
+	                _this.Alreadychosen = 'Gewählt Hat';
+	                _this.Hidechosen = "Versteckt";
+	                break;
+	            case "ja_JP":
+	                _this.Alreadychosen = '選択した';
+	                _this.Hidechosen = "隠して";
+	                break;
+	            default:
+	                _this.Alreadychosen = '已选';
+	                _this.Hidechosen = "收起已选";
+	        }
+	        return _this;
+	    }
+
+	    RefCoreTab.prototype.render = function render() {
+	        var _props = this.props,
+	            className = _props.className,
+	            selectedData = _props.selectedData,
+	            show = _props.show,
+	            selecteing = _props.selecteing;
+
+	        return _react2["default"].createElement(
+	            'div',
+	            { className: 'ref-tabs-panel ' + (show ? '' : 'ref-tabs-hide') + ' ' + className },
+	            this.props.children,
+	            _react2["default"].createElement(
+	                'a',
+	                { className: 'selectedItemSum',
+	                    onClick: this.onSelectTabItem },
+	                !selecteing ? this.Hidechosen : this.Alreadychosen + ('\uFF1A' + selectedData.length)
+	            )
+	        );
+	    };
+
+	    return RefCoreTab;
+	}(React__default.Component);
+
+	RefCoreTab.propTypes = propTypes$1;
+	RefCoreTab.defaultProps = defaultProps;
+	exports["default"] = RefCoreTab;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreTab_1$1);
+
+
+
+	var refcoresearch$2 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoresearch$2);
+
+	var RefCoreSearch_1$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _beeFormControl2 = _interopRequireDefault(build$2);
+
+
+
+	var _beeInputGroup2 = _interopRequireDefault(build$4);
+
+
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+	// import {FormControl,InputGroup} from 'tinper-bee';
+
+
+	var RefCoreSearch = function (_Component) {
+		_inherits(RefCoreSearch, _Component);
+
+		function RefCoreSearch(props) {
+			_classCallCheck(this, RefCoreSearch);
+
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this.onChange = function (value) {
+				_this.setState({ value: value });
+				if (_this.props.onChange) {
+					_this.props.onChange(value);
+				}
+			};
+
+			_this.onClear = function () {
+				_this.setState({ value: '' });
+			};
+
+			_this.keypress = function (e) {
+				if (e.which !== 13) return;
+				_this.onSearch(_this.state.value);
+			};
+
+			_this.onSearch = function () {
+				if (_this.props.onSearch) {
+					_this.props.onSearch(_this.state.value);
+				}
+			};
+
+			_this.state = {
+				value: props.value || ""
+			};
+			return _this;
+		}
+
+		RefCoreSearch.prototype.render = function render() {
+			var _props = this.props,
+			    _props$language = _props.language,
+			    language = _props$language === undefined ? '' : _props$language,
+			    _props$placeholder = _props.placeholder,
+			    placeholder = _props$placeholder === undefined ? '' : _props$placeholder,
+			    _props$className = _props.className,
+			    className = _props$className === undefined ? '' : _props$className,
+			    _props$show = _props.show,
+			    show = _props$show === undefined ? true : _props$show;
+
+			if (!placeholder) {
+				switch (language) {
+					case "en_US":
+						placeholder = 'Search';
+						break;
+					case "fr_FR":
+						placeholder = 'Recherche';
+						break;
+					case "de_DE":
+						placeholder = 'Suche';
+						break;
+					case "ja_JP":
+						placeholder = '検索';
+						break;
+					case "zh_TW":
+					case "zh_CN":
+					default:
+						placeholder = '搜索';
+				}
+			}
+
+			return _react2["default"].createElement(
+				_beeInputGroup2["default"],
+				{ simple: true,
+					className: 'ref-core-search ' + className + ' ' + (show ? '' : 'ref-core-search-hide')
+				},
+				_react2["default"].createElement(_beeFormControl2["default"], {
+					className: 'ref-core-search-input',
+					value: this.state.value,
+					onChange: this.onChange,
+					onKeyPress: this.keypress,
+					placeholder: placeholder,
+					type: 'text'
+				}),
+				_react2["default"].createElement(
+					_beeInputGroup2["default"].Button,
+					{ shape: 'border', onClick: this.onSearch.bind(this) },
+					_react2["default"].createElement(
+						'span',
+						{ className: 'uf uf-search' },
+						' '
+					)
+				)
+			);
+		};
+
+		return RefCoreSearch;
+	}(React__default.Component);
+
+	exports["default"] = RefCoreSearch;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreSearch_1$2);
+
+	var locale$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.paginationLocale = paginationLocale;
+	/**这里是国际化 */
+
+	function paginationLocale(lang) {
+	  switch (lang.toLocaleLowerCase()) {
+	    case "zh_cn":
+	      return {
+	        'lang': 'zh-cn',
+	        'total': '共',
+	        'items': '条',
+	        'show': '显示',
+	        'goto': '跳至',
+	        'page': '页',
+	        'ok': '确认'
+	      };
+	      break;
+	    case "en_us":
+	      return {
+	        'lang': 'en',
+	        'total': 'Total',
+	        'items': 'Items',
+	        'show': 'page',
+	        'goto': 'goto',
+	        'page': '',
+	        'ok': 'ok'
+	      };
+	      break;
+	    case "zh_tw":
+	      return {
+	        'total': '共',
+	        'items': '條',
+	        'show': '顯示',
+	        'goto': '跳至',
+	        'ok': '確認'
+	      };
+	      break;
+	    default:
+	      return {
+	        'lang': 'zh-cn',
+	        'total': '共',
+	        'items': '条',
+	        'show': '显示',
+	        'goto': '跳至',
+	        'page': '页',
+	        'ok': '确认'
+	      };
+	  }
+	}
+	});
+
+	unwrapExports(locale$1);
+	var locale_1$1 = locale$1.paginationLocale;
+
+	var utils$5 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	var refValParse = function refValParse(value) {
+	    if (!value) return { refname: '', refpk: '' };
+
+	    try {
+	        var valueMap = JSON.parse(value);
+	        if (!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')) {
+	            return { refname: '', refpk: '' };
+	        } else {
+	            return JSON.parse(value);
+	        }
+	    } catch (e) {
+	        return { refname: '', refpk: '' };
+	    }
+	};
+
+	exports.refValParse = refValParse;
+	});
+
+	unwrapExports(utils$5);
+	var utils_1$4 = utils$5.refValParse;
+
+	var RefMultipleTableBaseUI_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _stringify2 = _interopRequireDefault(stringify$1);
+
+
+
+	var _keys2 = _interopRequireDefault(keys$1);
+
+	var _class, _temp, _initialiseProps;
+	// import './RefMultipleTableBase.less'
+
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	var _RefCoreError2 = _interopRequireDefault(RefCoreError_1$2);
+
+
+
+	var _RefCoreTab2 = _interopRequireDefault(RefCoreTab_1$1);
+
+
+
+	var _RefCoreSearch2 = _interopRequireDefault(RefCoreSearch_1$2);
+
+
+
+
+
+	var _beeLoading2 = _interopRequireDefault(build$s);
+
+
+
+	var _beePagination2 = _interopRequireDefault(build$f);
+
+
+
+	var _beeCheckbox2 = _interopRequireDefault(build$5);
+
+
+
+	var _beeTable2 = _interopRequireDefault(build$t);
+
+
+
+	var _multiSelect2 = _interopRequireDefault(multiSelect_1);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// const MultiSelectTable = multiSelect(Table, Checkbox);
+	var noop = function noop() {};
+	var propTypes$1 = {
+		loadTableData: _propTypes2["default"].func, //分页下拉或者跳转的回调
+		onTableSearch: _propTypes2["default"].func,
+		columnsData: _propTypes2["default"].array,
+		tableData: _propTypes2["default"].array
+	};
+	var defaultProps = {
+		loadTableData: noop,
+		onTableSearch: noop,
+		columnsData: [],
+		tableData: []
+	};
+	var RefMultipleTableBaseUI = (_temp = _class = function (_Component) {
+		_inherits(RefMultipleTableBaseUI, _Component);
+
+		//每页数据数
+		//表格数据
+		function RefMultipleTableBaseUI(props) {
+			_classCallCheck(this, RefMultipleTableBaseUI);
+
+			var _this2 = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_initialiseProps.call(_this2);
+
+			_this2.state = {
+				tableIsSelecting: true,
+				selectedDataLength: props.matchData.length
+			};
+			_this2.filterInfo = '';
+			_this2.checkedArray = [];
+			_this2.checkedMap = {};
+			_this2.TableView = props.multiple ? (0, _multiSelect2["default"])(_beeTable2["default"], _beeCheckbox2["default"]) : _beeTable2["default"];
+			_this2.initMatchData = false;
+			//每次打开参照会走此处的逻辑
+			if (props.showModal) {
+				var _props$matchData = props.matchData,
+				    matchData = _props$matchData === undefined ? [] : _props$matchData,
+				    _props$valueField = props.valueField,
+				    valueField = _props$valueField === undefined ? 'refpk' : _props$valueField;
+
+				_this2.checkedMap = {};
+				_this2.checkedArray = matchData.map(function (item) {
+					item.key = item[valueField];
+					item._checked = true;
+					_this2.checkedMap[item.key] = item;
+					return item;
+				});
+				props.onChange(_this2.checkedArray);
+			}
+
+			return _this2;
+		} //激活页码
+		//总页数
+		//表头数据
+
+
+		RefMultipleTableBaseUI.prototype.componentDidMount = function componentDidMount() {
+			if (this.props.showModal) this.initComponent(this.props);
+		};
+
+		RefMultipleTableBaseUI.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+			if (nextProps.showModal) {
+				this.initComponent(nextProps);
+			}
+		};
+		/**
+	  * 跳转到制定页数的操作
+	  * @param {number} index 跳转页数
+	  */
+
+		/**
+	  * 选择每页数据个数
+	  * 
+	  * 没有启用
+	  */
+
+		/**
+	  * 多选状态下表格只能通过选择 checkbox 来选值，同时触发改方法
+	  * @function
+	  * @param checkedArray  已勾选值，表格中自动去除未勾选值
+	  * @param recode  当前操作的行数据
+	  */
+
+		/**
+	  * 双击行选择该行数据，只在单选状态生效
+	  * @record {object} 该行数据
+	  */
+
+		/**
+	  * 单击行选择该行数据，只在单选状态生效
+	  * @record {object} 该行数据
+	  */
+
+		/**
+	  * 为选中行增加背景色，只在单选状态生效
+	  * @record {object} 该行数据
+	  */
+
+		/**
+	  * 为数据增加 key
+	  * @record {object} 该行数据
+	  */
+
+
+		RefMultipleTableBaseUI.prototype.render = function render() {
+			var _this = this;
+			var _state = this.state,
+			    tableIsSelecting = _state.tableIsSelecting,
+			    selectedDataLength = _state.selectedDataLength;
+			var _props = this.props,
+			    className = _props.className,
+			    _props$lang = _props.lang,
+			    lang = _props$lang === undefined ? 'zh_CN' : _props$lang,
+			    valueField = _props.valueField,
+			    showLoading = _props.showLoading;
+			var tableData = _this.tableData,
+			    pageCount = _this.pageCount,
+			    currPageIndex = _this.currPageIndex,
+			    columnsData = _this.columnsData,
+			    totalElements = _this.totalElements,
+			    checkedArray = _this.checkedArray;
+
+			var _tableData = tableData.map(function (item) {
+				item._checked = _this.checkedMap.hasOwnProperty(item[valueField]);
+				return item;
+			});
+			checkedArray.forEach(function (item) {
+				item._checked = true;
+			});
+			return _react2["default"].createElement(
+				'div',
+				{ className: className + ' ref-core ref-tree-table-base' },
+				_react2["default"].createElement(
+					_RefCoreTab2["default"],
+					{
+						className: 'ref-tree-table-base-tab',
+						selectedData: _this.checkedArray,
+						onSelectTabItem: _this.onSelectTabItem,
+						selectedDataLength: selectedDataLength,
+						selecteing: tableIsSelecting,
+						language: lang
+					},
+					_react2["default"].createElement(_RefCoreSearch2["default"], {
+						onSearch: _this.miniSearchFunc,
+						onChange: _this.miniSearchFunc,
+						language: lang
+					})
+				),
+				columnsData && columnsData.length ? _react2["default"].createElement(_this.TableView, {
+					bordered: true,
+					rowKey: this.putRowKey,
+					columns: columnsData,
+					getSelectedDataFunc: this.getSelectedDataFunc,
+					rowClassName: this.renderRowClassName,
+					data: tableIsSelecting ? _tableData : _this.checkedArray,
+					onRowDoubleClick: this.onRowDoubleClick,
+					onRowClick: this.onRowClick,
+					scroll: { x: false, y: true }
+				}) : _react2["default"].createElement(_RefCoreError2["default"], { show: !Boolean(tableData.length), language: lang }),
+				_react2["default"].createElement(
+					'div',
+					{ className: 'ref-tree-table-base-pagination' },
+					_react2["default"].createElement(_beePagination2["default"], {
+						first: true,
+						last: true,
+						prev: true,
+						next: true,
+						showJump: false,
+						boundaryLinks: true,
+						className: Boolean(columnsData.length) && tableIsSelecting ? '' : 'ref-tree-table-base-pagination-hide',
+						items: pageCount,
+						maxButtons: 3,
+						total: totalElements,
+						activePage: currPageIndex,
+						onDataNumSelect: this.dataNumSelect,
+						onSelect: this.handlePagination,
+						locale: (0, locale$1.paginationLocale)(lang)
+					})
+				)
+			);
+		};
+
+		return RefMultipleTableBaseUI;
+	}(React__default.Component), _initialiseProps = function _initialiseProps() {
+		var _this3 = this;
+
+		this.columnsData = [];
+		this.tableData = [];
+		this.pageCount = 1;
+		this.pageSize = '10';
+		this.currPageIndex = 1;
+		this.filterInfo = '';
+
+		this.initComponent = function (props) {
+			//内部缓存已选择值，不通过 state 缓存，表格缓存状态自动实现
+			var columnsData = props.columnsData,
+			    tableData = props.tableData,
+			    page = props.page,
+			    valueField = props.valueField,
+			    _props$matchData2 = props.matchData,
+			    value = props.value;
+
+			_this3.columnsData = columnsData;
+			_this3.tableData = tableData;
+			_this3.pageCount = page.pageCount || 0;
+			_this3.currPageIndex = page.currPageIndex + 1 || 0;
+			_this3.totalElements = page.totalElements || 0;
+		};
+
+		this.onChange = function (checkedArray) {
+			var onChange = _this3.props.onChange;
+
+			onChange(checkedArray);
+		};
+
+		this.handlePagination = function (index) {
+			var filterInfo = _this3.filterInfo;
+
+
+			var param = {
+				'refClientPageInfo.currPageIndex': index - 1,
+				'refClientPageInfo.pageSize': _this3.pageSize,
+				content: filterInfo
+			};
+			_this3.props.loadTableData(param);
+		};
+
+		this.dataNumSelect = function (index, pageSize) {
+			var filterInfo = _this3.filterInfo;
+
+			(0, _keys2["default"])(filterInfo).forEach(function (key) {
+				if (!filterInfo[key]) {
+					delete filterInfo[key];
+				}
+			});
+
+			var param = {
+				condition: _this3.props.condition,
+				'refClientPageInfo.currPageIndex': index,
+				'refClientPageInfo.pageSize': pageSize
+			};
+			if ((0, _keys2["default"])(filterInfo) > 0) {
+				param.content = (0, _stringify2["default"])(filterInfo);
+			}
+			_this3.pageSize = pageSize;
+			_this3.props.loadTableData(param);
+		};
+
+		this.miniSearchFunc = function (value) {
+			_this3.filterInfo = value;
+			_this3.props.onTableSearch(value);
+		};
+
+		this.getSelectedDataFunc = function (checkedArray, recode) {
+			if (!_this3.props.multiple) return;
+			var _this = _this3;
+			var _props$valueField2 = _this3.props.valueField,
+			    valueField = _props$valueField2 === undefined ? "refpk" : _props$valueField2;
+
+			if (recode) {
+				//单条操作
+				if (recode._checked && !_this.checkedMap[recode[valueField]]) {
+					_this.checkedArray.push(recode);
+					_this.checkedMap[recode[valueField]] = recode;
+				} else if (!recode._checked && _this3.checkedMap[recode[valueField]]) {
+
+					delete _this.checkedMap[recode[valueField]];
+					_this.checkedArray = [];
+					(0, _keys2["default"])(_this.checkedMap).forEach(function (item) {
+						_this.checkedArray.push(_this3.checkedMap[item]);
+					});
+				}
+			} else {
+				//多条操作
+				_this.checkedArray = [];
+				var tableIsSelecting = _this3.state.tableIsSelecting;
+
+				if (tableIsSelecting) {
+					//选择中...
+					if (checkedArray.length > 0) {
+						//全选操作 
+						//去重操作
+						//直接操作当前页数据
+						_this.tableData.forEach(function (item) {
+							if (!_this.checkedMap.hasOwnProperty(item[valueField])) {
+								_this.checkedMap[item[valueField]] = item;
+							}
+						});
+					} else {
+						//全取消操作
+						//去重操作
+						//直接操作当前页数据
+						_this.tableData.forEach(function (item) {
+							if (_this.checkedMap.hasOwnProperty(item[valueField])) {
+								delete _this.checkedMap[item[valueField]];
+							}
+						});
+					}
+					//组装已选数据
+					_this.checkedArray = (0, _keys2["default"])(_this.checkedMap).map(function (item) {
+						return _this.checkedMap[item];
+					});
+				} else {
+					//查看已选择
+					if (checkedArray.length <= 0) {
+						//查看时只有取消选择操作，全选操作不会出现这里可考虑取消这个判断
+						_this.checkedMap = {};
+						_this.checkedArray = [];
+					}
+				}
+			}
+			_this.setState({
+				selectedDataLength: checkedArray.length,
+				mustRender: Math.random()
+			});
+			_this3.onChange(_this3.checkedArray);
+		};
+
+		this.onRowDoubleClick = function (record) {
+			if (_this3.props.multiple) return;
+			var _props$valueField3 = _this3.props.valueField,
+			    valueField = _props$valueField3 === undefined ? "refpk" : _props$valueField3;
+
+			record._checked = true;
+			_this3.checkedArray = [record];
+			_this3.checkedMap = {};
+			_this3.checkedMap[record[valueField]] = record;
+			_this3.setState({
+				checkedArray: _this3.checkedArray
+			});
+			_this3.onChange(_this3.checkedArray);
+		};
+
+		this.onRowClick = function (record) {
+			if (_this3.props.multiple) return;
+			var _this = _this3;
+			var _this$props$valueFiel = _this.props.valueField,
+			    valueField = _this$props$valueFiel === undefined ? "refpk" : _this$props$valueFiel;
+
+			//点击同一行数据时取消选择
+
+			if (_this.checkedMap.hasOwnProperty(record[valueField])) {
+				_this.checkedArray = [];
+				_this.checkedMap = {};
+				_this.setState({
+					mustRender: Math.random()
+				});
+			} else {
+				var checkedRecord = (0, _assign2["default"])({ _checked: true }, record);
+				_this.checkedArray = [checkedRecord];
+				_this.checkedMap = {};
+				_this.checkedMap[checkedRecord[valueField]] = checkedRecord;
+				_this.setState({
+					mustRender: Math.random()
+				});
+			}
+			_this3.onChange(_this3.checkedArray);
+		};
+
+		this.renderRowClassName = function (recode) {
+			if (_this3.props.multiple) return;
+			return recode._checked ? 'ref-multiple-table-row-selected' : '';
+		};
+
+		this.putRowKey = function (record, i) {
+			return record.key;
+		};
+
+		this.onSelectTabItem = function (a, state) {
+			if (state === 'selecting') {
+				_this3.pageCount = Math.ceil(_this3.totalElements / _this3.pageSize);
+				_this3.setState({
+					tableIsSelecting: true
+				});
+			} else {
+				_this3.pageCount = 1;
+				_this3.setState({
+					tableIsSelecting: false
+				});
+			}
+		};
+	}, _temp);
+
+	RefMultipleTableBaseUI.propTypes = propTypes$1;
+	RefMultipleTableBaseUI.defaultProps = defaultProps;
+	exports["default"] = RefMultipleTableBaseUI;
+	});
+
+	unwrapExports(RefMultipleTableBaseUI_1);
+
+	var polyfill_shim$2 = createCommonjsModule(function (module) {
+
+
+
+	var _iterator2 = _interopRequireDefault(iterator$1);
+
+
+
+	var _symbol2 = _interopRequireDefault(symbol$1);
+
+
+
+	var _fill2 = _interopRequireDefault(fill$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+	var _typeof = typeof _symbol2["default"] === "function" && typeof _iterator2["default"] === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2["default"] === "function" && obj.constructor === _symbol2["default"] && obj !== _symbol2["default"].prototype ? "symbol" : typeof obj; };
+
+
+
+	var _objectAssign2 = _interopRequireDefault(objectAssign);
+
+
+
+	var _promisePolyfill2 = _interopRequireDefault(Promise$2);
+
+
+
+	var _arrayPrototype2 = _interopRequireDefault(array_prototype_fill);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	if (typeof _assign2["default"] === 'undefined' || _assign2["default"] === "undefined") {
+	    Object.assign = _objectAssign2["default"];
+	}
+	if (typeof window.Promise === 'undefined') {
+	    window.Promise = _promisePolyfill2["default"];
+	}
+	if (typeof _fill2["default"] === 'undefined') {
+	    Array.fill = _arrayPrototype2["default"];
+	}
+
+	/**
+	 * var template1="我是{0}，今年{1}了";
+	  var template2="我是{name}，今年{age}了";
+	  var result1=template1.format("loogn",22);
+	  var result2=template2.format({name:"loogn",age:22});
+	 */
+	String.prototype.format = function (args) {
+	    var result = this;
+	    if (arguments.length > 0) {
+	        if (arguments.length == 1 && (typeof args === 'undefined' ? 'undefined' : _typeof(args)) == "object") {
+	            for (var key in args) {
+	                if (args[key] != undefined) {
+	                    var reg = new RegExp("({" + key + "})", "g");
+	                    result = result.replace(reg, args[key]);
+	                }
+	            }
+	        } else {
+	            for (var i = 0; i < arguments.length; i++) {
+	                if (arguments[i] != undefined) {
+	                    //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+	                    var reg = new RegExp("({)" + i + "(})", "g");
+	                    result = result.replace(reg, arguments[i]);
+	                }
+	            }
+	        }
+	    }
+	    return result;
+	};
+	});
+
+	unwrapExports(polyfill_shim$2);
+
+
+
+	var refcoretree$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoretree$1);
+
+	var RefCoreTree_1$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _beeTree2 = _interopRequireDefault(build$E);
+
+
+
+
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+	// import {Tree} from 'tinper-bee';
+
+
+	var TreeNode = _beeTree2["default"].TreeNode;
+
+
+	var nodeKeysFunc = function nodeKeysFunc(item, index) {
+		return item.id || index;
+	};
+
+	var RefCoreTree = function (_Component) {
+		_inherits(RefCoreTree, _Component);
+
+		function RefCoreTree(props) {
+			_classCallCheck(this, RefCoreTree);
+
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this.onMouseEnter = function (e) {
+
+				// return
+				_this.setState({
+					isHover: e.node.props.eventKey
+				});
+			};
+
+			_this.onDoubleClick = function (record, index, event) {
+
+				_this.props.onDoubleClick(record, index, event);
+			};
+
+			_this.onMouseLeave = function (e, treenode) {
+
+				// return
+				_this.setState({
+					isHover: "",
+					editKey: ""
+				});
+			};
+
+			_this.loop = function (datas) {
+				var _this$props = _this.props,
+				    checkable = _this$props.checkable,
+				    _this$props$nodeKeys = _this$props.nodeKeys,
+				    nodeKeys = _this$props$nodeKeys === undefined ? nodeKeysFunc : _this$props$nodeKeys,
+				    _this$props$displayFi = _this$props.displayField,
+				    displayField = _this$props$displayFi === undefined ? "refname" : _this$props$displayFi;
+
+				return datas.map(function (item, i) {
+					var key = nodeKeys(item, i);
+					var text = '';
+					if (typeof displayField === 'function') {
+						text = displayField(item);
+					} else {
+						text = displayField.format(item);
+					}
+					if (item.children && item.children.length) {
+						return _react2["default"].createElement(
+							TreeNode,
+							{ className: 'ref-core-tree-node', key: key, title: _react2["default"].createElement(
+									'div',
+									{ className: 'ref-core-tree-node-text' },
+									text,
+									checkable ? '' : _react2["default"].createElement('i', { className: 'ref-core-tree-node-selected' })
+								), attr: item, isLeaf: !!item.isLeaf },
+							_this.loop(item.children)
+						);
+					}
+					return _react2["default"].createElement(TreeNode, { className: 'ref-core-tree-node', key: key, title: _react2["default"].createElement(
+							'div',
+							{ className: 'ref-core-tree-node-text' },
+							text,
+							checkable ? '' : _react2["default"].createElement('i', { className: 'ref-core-tree-node-selected' })
+						), attr: item, isLeaf: !!item.isLeaf });
+				});
+			};
+
+			_this.state = {
+				isHover: "",
+				editKey: "",
+				checkedKey: []
+			};
+			_this.children = [];
+			_this.children = _this.loop(props.data || []);
+			return _this;
+		}
+
+		RefCoreTree.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps, nextState) {
+			if (!(0, Immutable.is)(nextState, this.state) || !(0, Immutable.is)(nextProps, this.props)) {
+				this.children = this.loop(nextProps.data || []);
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		RefCoreTree.prototype.checkAllchildren = function checkAllchildren(v, id) {
+			// return
+			var _state = this.state,
+			    checkedKey = _state.checkedKey,
+			    isHover = _state.isHover;
+
+			if (v) {
+				checkedKey.push(id);
+			} else {
+				checkedKey.splice(id, 1);
+			}
+			this.setState({
+				checkedKey: checkedKey
+			});
+			this.props.checkAllchildrenFun(v, id);
+		};
+
+		// looploadData = datas => {
+
+		// 	let { parentNodeDisableCheck } = this.props;
+		// 	return datas.map((item) => {
+		// 		if (item.children && item.children.length) {
+		// 			return <TreeNode className="ref-core-tree-node" key={item.id} title={item.refname} attr={item} disableCheckbox={parentNodeDisableCheck}>{this.looploadData(item.children)}</TreeNode>;
+		// 		}
+		// 		return <TreeNode className="ref-core-tree-node"  key={item.id} title={item.refname} attr={item} isLeaf={item.isLeaf} />;
+		// 	});
+		// }
+		RefCoreTree.prototype.render = function render() {
+			var _props = this.props,
+			    data = _props.data,
+			    _props$show = _props.show,
+			    show = _props$show === undefined ? true : _props$show,
+			    others = _objectWithoutProperties(_props, ['data', 'show']);
+
+			return _react2["default"].createElement(
+				'div',
+				{ className: 'ref-core-tree ' + (show ? '' : 'ref-core-tree-hide') },
+				_react2["default"].createElement(
+					_beeTree2["default"],
+					_extends({}, others, { onMouseLeave: this.onMouseLeave, onMouseEnter: this.onMouseEnter, onDoubleClick: this.onDoubleClick.bind(this) }),
+					this.children.map(function (item) {
+						return item;
+					})
+				)
+			);
+		};
+
+		return RefCoreTree;
+	}(React__default.Component);
+
+	exports["default"] = RefCoreTree;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreTree_1$1);
+
+	var RefTreeBaseUI_1$1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _class, _temp, _initialiseProps;
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+
+
+	var _beeLoading2 = _interopRequireDefault(build$s);
+
+
+
+	var _RefCoreError2 = _interopRequireDefault(RefCoreError_1$2);
+
+
+
+	var _RefCoreTree2 = _interopRequireDefault(RefCoreTree_1$1);
+
+
+
+	var _RefCoreSearch2 = _interopRequireDefault(RefCoreSearch_1$2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var noop = function noop() {};
+	var propTypes$1 = {
+	  title: _propTypes2["default"].string,
+	  multiple: _propTypes2["default"].bool, //  默认单选
+	  showLine: _propTypes2["default"].bool,
+	  defaultExpandAll: _propTypes2["default"].bool, // 数默认展开
+	  checkStrictly: _propTypes2["default"].bool,
+	  checkedArray: _propTypes2["default"].array, //  指定已选择数据id
+	  treeData: _propTypes2["default"].array, //  指定已选择数据id
+	  lazyModal: _propTypes2["default"].bool,
+	  onCancel: _propTypes2["default"].func,
+	  onSave: _propTypes2["default"].func,
+	  lang: _propTypes2["default"].string,
+	  //重命名属性
+	  searchable: _propTypes2["default"].bool, //  是否应用搜索 默认 false,
+	  onTreeChange: _propTypes2["default"].func, //树操作的时候节点选中返回
+	  onTreeSearch: _propTypes2["default"].func //搜索
+	};
+	var defaultProps = {
+	  title: '弹窗标题',
+	  searchable: false, //  是否应用搜索 默认 false,
+	  multiple: false, //  默认单选
+	  showLine: false, //  默认单选
+	  defaultExpandAll: true, // 数默认展开
+	  checkStrictly: false,
+	  checkedArray: [], //  指定已选择数据id
+	  treeData: [],
+	  lazyModal: false,
+	  onCancel: noop,
+	  onSave: noop,
+	  lang: 'zh_CN',
+	  onTreeChange: function onTreeChange() {},
+	  onTreeSearch: function onTreeSearch() {}
+	};
+
+	var RefTreeBaseUI = (_temp = _class = function (_Component) {
+	  _inherits(RefTreeBaseUI, _Component);
+
+	  function RefTreeBaseUI(props) {
+	    _classCallCheck(this, RefTreeBaseUI);
+
+	    var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	    _initialiseProps.call(_this);
+
+	    var checkedArray = props.checkedArray,
+	        multiple = props.multiple,
+	        checkStrictly = props.checkStrictly,
+	        defaultExpandAll = props.defaultExpandAll,
+	        valueField = props.valueField;
+
+	    _this.state = {
+	      selectedArray: checkedArray || [], //  记录保存的选择项
+	      defaultExpandAll: defaultExpandAll,
+	      multiple: multiple,
+	      checkStrictly: checkStrictly,
+	      checkedKeys: checkedArray.map(function (item) {
+	        return item[valueField];
+	      }),
+	      onSaveCheckItems: []
+	    };
+	    _this.treeData = props.treeData || [];
+	    _this.treeDataCache = {};
+	    return _this;
+	  }
+
+	  // shouldComponentUpdate(nextProps, nextState){
+	  // 	return !is(nextState, this.state) || nextProps.showModal !== this.props.showModal;
+	  // }
+
+
+	  RefTreeBaseUI.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps, nextState) {
+	    if (!(0, Immutable.is)(nextState, this.state)) {
+	      this.treeData = nextProps.treeData;
+	      this.setState({ mustRender: Math.random() });
+	    }
+	  };
+
+	  RefTreeBaseUI.prototype.onCheck = function onCheck(selectedKeys, event) {
+	    var _this2 = this;
+
+	    var multiple = this.props.multiple;
+
+	    if (!multiple) {
+	      //单选
+	      this.setState({
+	        selectedArray: [event.node.props.attr],
+	        checkedKeys: [event.node.props.eventKey],
+	        onSaveCheckItems: [event.node.props.attr]
+	      }, function () {
+	        _this2.onSelectNode([event.node.props.attr]);
+	      });
+	    } else {
+	      this.setState({
+	        selectedArray: event.checkedNodes.map(function (item) {
+	          return item.props.attr;
+	        }),
+	        checkedKeys: selectedKeys,
+	        onSaveCheckItems: event.checkedNodes.map(function (item) {
+	          return item.props.attr;
+	        })
+	      }, function () {
+	        _this2.onSelectNode([event.node.props.attr]);
+	      });
+	    }
+	  };
+
+	  RefTreeBaseUI.prototype.onDoubleClick = function onDoubleClick(selectedKeys, event) {
+	    var _this3 = this;
+
+	    var item = event.node.props;
+	    var arr = [_extends({}, item.attr, { refpk: item.eventKey, id: item.eventKey })];
+	    this.setState({
+	      selectedArray: arr,
+	      checkedKeys: [item.eventKey]
+	    }, function () {
+	      _this3.onSelectNode(arr);
+	    });
+	  };
+
+	  RefTreeBaseUI.prototype.onSelect = function onSelect(selectedKeys, event) {
+	    var _props = this.props,
+	        checkAllChildren = _props.checkAllChildren,
+	        multiple = _props.multiple;
+
+	    var eventKey = event.node.props.eventKey;
+	    var onSaveCheckItems = this.state.onSaveCheckItems;
+
+	    var ishaskey = false;
+	    var keyIndex = void 0;
+	    // if (multiple) return;
+	    onSaveCheckItems.forEach(function (v, i) {
+	      if (v.id == eventKey) {
+	        keyIndex = i;
+	      }
+	      if (v.id == eventKey && v.checkAllchildren) {
+	        ishaskey = true;
+	        return false;
+	      }
+	    });
+	    if (ishaskey) {
+	      this.setState({
+	        checkedKeys: selectedKeys
+	      });
+	      this.onSelectNode(this.state.selectedArray);
+	      return false;
+	    }
+	    if (!checkAllChildren) {
+	      var arr = event.selectedNodes.map(function (item) {
+	        return _extends({}, item.props.attr, { refpk: item.key, id: item.key });
+	      });
+	      this.setState({
+	        selectedArray: arr,
+	        checkedKeys: selectedKeys
+	      });
+	      this.onSelectNode(arr);
+	    } else {
+	      var _arr = {};
+	      event.selectedNodes.forEach(function (item) {
+	        if (item.key == eventKey) {
+	          _arr = _extends({}, item.props.attr, { refname: item.props.title, refpk: item.key, id: item.key });
+	        }
+	      });
+	      if (selectedKeys.indexOf(eventKey) > -1) {
+	        onSaveCheckItems.push(_arr);
+	      } else {
+
+	        onSaveCheckItems.splice(keyIndex, 1);
+	      }
+
+	      this.setState({
+	        selectedArray: onSaveCheckItems,
+	        checkedKeys: selectedKeys,
+	        onSaveCheckItems: onSaveCheckItems
+	      });
+	      this.onSelectNode(onSaveCheckItems);
+	    }
+	  };
+
+	  RefTreeBaseUI.prototype.render = function render() {
+	    var _props2 = this.props,
+	        className = _props2.className,
+	        searchable = _props2.searchable,
+	        valueField = _props2.valueField,
+	        showLine = _props2.showLine,
+	        lazyModal = _props2.lazyModal,
+	        showLoading = _props2.showLoading,
+	        lang = _props2.lang,
+	        defaultExpandAll = _props2.defaultExpandAll,
+	        _props2$nodeDisplay = _props2.nodeDisplay,
+	        nodeDisplay = _props2$nodeDisplay === undefined ? "{refname}" : _props2$nodeDisplay,
+	        nodeKeysFunc = _props2.nodeKeysFunc;
+	    var _state = this.state,
+	        checkedKeys = _state.checkedKeys,
+	        checkStrictly = _state.checkStrictly;
+
+	    return _react2["default"].createElement(
+	      'div',
+	      {
+	        className: className + ' ref-core ref-tree-table-base '
+	      },
+	      _react2["default"].createElement(_RefCoreSearch2["default"], {
+	        show: searchable,
+	        onSearch: this.onSearchChange,
+	        onChange: this.onSearchChange,
+	        language: lang
+	      }),
+	      this.treeData.length ? _react2["default"].createElement(_RefCoreTree2["default"], {
+	        show: Boolean(this.treeData.length),
+	        nodeKeys: function nodeKeys(item) {
+	          return item[valueField];
+	        },
+	        displayField: nodeDisplay,
+	        data: this.treeData,
+	        defaultExpandAll: lazyModal ? false : defaultExpandAll,
+	        checkable: false,
+	        multiple: false,
+	        onCheck: this.onCheck.bind(this),
+	        onSelect: this.onSelect.bind(this),
+	        onDoubleClick: this.onDoubleClick.bind(this),
+	        checkedKeys: checkedKeys,
+	        selectedKeys: checkedKeys,
+	        checkStrictly: checkStrictly,
+	        showLine: showLine,
+	        loadData: lazyModal ? this.props.onLoadData : null
+	      }) : _react2["default"].createElement(_RefCoreError2["default"], { show: !Boolean(this.treeData.length), language: lang })
+	    );
+	  };
+
+	  return RefTreeBaseUI;
+	}(React__default.Component), _initialiseProps = function _initialiseProps() {
+	  var _this4 = this;
+
+	  this.onSearchChange = function (value) {
+	    _this4.props.onTreeSearch(value);
+	  };
+
+	  this.onSelectNode = function (checkedArray) {
+	    var onTreeChange = _this4.props.onTreeChange;
+
+	    onTreeChange(checkedArray);
+	  };
+	}, _temp);
+
+	RefTreeBaseUI.propTypes = propTypes$1;
+	RefTreeBaseUI.defaultProps = defaultProps;
+	exports["default"] = RefTreeBaseUI;
+	});
+
+	unwrapExports(RefTreeBaseUI_1$1);
+
+	var RefTreeTableBaseUI_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+
+
+	var _beeLoading2 = _interopRequireDefault(build$s);
+
+
+
+	var _RefCoreButton2 = _interopRequireDefault(RefCoreButton_1$2);
+
+
+
+	var _RefMultipleTableBaseUI2 = _interopRequireDefault(RefMultipleTableBaseUI_1);
+
+
+
+	var _RefTreeBaseUI2 = _interopRequireDefault(RefTreeBaseUI_1$1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var propTypes$1 = {
+		title: _propTypes2["default"].string,
+		searchable: _propTypes2["default"].bool,
+		// emptyBut: PropTypes.bool,
+		param: _propTypes2["default"].object,
+		checkedArray: _propTypes2["default"].array,
+		onCancel: _propTypes2["default"].func,
+		onSave: _propTypes2["default"].func,
+		lang: _propTypes2["default"].string,
+		menuTitle: _propTypes2["default"].string,
+		tableTitle: _propTypes2["default"].string,
+		valueField: _propTypes2["default"].string,
+		className: _propTypes2["default"].string,
+		backdrop: _propTypes2["default"].bool,
+		showLine: _propTypes2["default"].bool,
+		multiple: _propTypes2["default"].bool,
+		destory: _propTypes2["default"].func,
+		matchData: _propTypes2["default"].array
+	};
+	var defaultProps = {
+		title: '弹窗标题',
+		searchable: true,
+		// emptyBut: false,
+		param: {//url请求参数
+		},
+		checkedArray: [],
+		onCancel: function onCancel(p) {},
+		onSave: function onSave(sels) {},
+		lang: 'zh_CN',
+		menuTitle: '',
+		tableTitle: '',
+		valueField: 'refpk',
+		classNam: '',
+		backdrop: true,
+		showLine: false,
+		multiple: false,
+		matchData: [],
+		destory: function destory() {}
+	};
+
+	var RefTreeTableBaseUI = function (_Component) {
+		_inherits(RefTreeTableBaseUI, _Component);
+
+		function RefTreeTableBaseUI(props) {
+			_classCallCheck(this, RefTreeTableBaseUI);
+
+			var _this2 = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this2.onSelectChange = function (record) {
+				_this2.checkedArray = record;
+			};
+
+			_this2.onClickBtn = function (type) {
+				var _this2$props = _this2.props,
+				    onCancel = _this2$props.onCancel,
+				    onSave = _this2$props.onSave;
+
+				switch (type) {
+					case 'save':
+						onSave(_this2.checkedArray);
+						break;
+					case 'cancel':
+						onCancel();
+						break;
+					case 'clear':
+						_this2.checkedArray = [];
+						_this2.setState({
+							reander: Math.random()
+						});
+						break;
+					default:
+				}
+			};
+
+			_this2.handleBtnCancel = function () {
+				_this2.props.onCancel();
+			};
+
+			return _this2;
+		}
+
+		RefTreeTableBaseUI.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {};
+		//table的所有点击
+
+
+		RefTreeTableBaseUI.prototype.render = function render() {
+			var _this3 = this;
+
+			var _this = this;
+			var _props = this.props,
+			    className = _props.className,
+			    showModal = _props.showModal,
+			    searchable = _props.searchable,
+			    backdrop = _props.backdrop,
+			    title = _props.title,
+			    showLine = _props.showLine,
+			    multiple = _props.multiple,
+			    menuTitle = _props.menuTitle,
+			    tableTitle = _props.tableTitle,
+			    valueField = _props.valueField,
+			    value = _props.value,
+			    lang = _props.lang,
+			    buttons = _props.buttons,
+			    checkStrictly = _props.checkStrictly,
+			    defaultExpandAll = _props.defaultExpandAll,
+			    nodeDisplay = _props.nodeDisplay,
+			    lazyModal = _props.lazyModal,
+			    onLoadData = _props.onLoadData;
+			var _props2 = this.props,
+			    showLoading = _props2.showLoading,
+			    treeData = _props2.treeData,
+			    onTreeChange = _props2.onTreeChange,
+			    onTreeSearch = _props2.onTreeSearch,
+			    matchData = _props2.matchData;
+			var _props3 = this.props,
+			    columnsData = _props3.columnsData,
+			    tableData = _props3.tableData,
+			    page = _props3.page,
+			    loadTableData = _props3.loadTableData,
+			    onTableSearch = _props3.onTableSearch,
+			    condition = _props3.condition,
+			    _props3$theme = _props3.theme,
+			    theme = _props3$theme === undefined ? "ref-red" : _props3$theme;
+
+			var treeProps = (0, _assign2["default"])({}, {
+				className: className,
+				searchable: searchable,
+				showLine: showLine,
+				multiple: multiple,
+				lang: lang,
+				checkStrictly: checkStrictly,
+				valueField: valueField,
+				showLoading: showLoading,
+				nodeDisplay: nodeDisplay,
+				defaultExpandAll: defaultExpandAll,
+				treeData: treeData,
+				onTreeChange: onTreeChange,
+				onTreeSearch: onTreeSearch,
+				lazyModal: lazyModal,
+				onLoadData: onLoadData
+			});
+			var tableProps = (0, _assign2["default"])({}, {
+				className: className,
+				lang: lang,
+				valueField: valueField,
+				showLoading: showLoading,
+				multiple: multiple,
+				showModal: showModal, //就是为了update，不对外
+				condition: condition,
+				columnsData: columnsData,
+				tableData: tableData,
+				page: page,
+				loadTableData: loadTableData,
+				onTableSearch: onTableSearch,
+				matchData: matchData,
+				value: value
+			});
+			return _react2["default"].createElement(
+				tinperBee__default.Modal,
+				{
+					show: showModal, className: theme + '  ' + className + ' ref-core ref-core-modal ref-tree-table',
+					backdrop: backdrop,
+					size: 'xlg',
+					onHide: this.handleBtnCancel,
+					autoFocus: false
+				},
+				_react2["default"].createElement(
+					tinperBee__default.Modal.Header,
+					{ closeButton: true },
+					_react2["default"].createElement(
+						tinperBee__default.Modal.Title,
+						null,
+						title
+					)
+				),
+				_react2["default"].createElement(
+					tinperBee__default.Modal.Body,
+					{ ref: function ref(_ref) {
+							return _this3.modalRef = _ref;
+						} },
+					_react2["default"].createElement(_beeLoading2["default"], { container: this.modalRef, show: showLoading }),
+					_react2["default"].createElement(
+						'div',
+						{ className: 'ref-tree-table-layout' },
+						_react2["default"].createElement(
+							'div',
+							{ className: 'ref-tree-table-layout-col' },
+							menuTitle && _react2["default"].createElement(
+								'div',
+								{ className: 'ref-tree-table-layout-col-title' },
+								menuTitle
+							),
+							_react2["default"].createElement(_RefTreeBaseUI2["default"], _extends({
+								onTreeChange: onTreeChange
+							}, treeProps))
+						),
+						_react2["default"].createElement(
+							'div',
+							{ className: 'ref-tree-table-layout-col' },
+							tableTitle && _react2["default"].createElement(
+								'div',
+								{ className: 'ref-tree-table-layout-col-title' },
+								tableTitle || ''
+							),
+							_react2["default"].createElement(_RefMultipleTableBaseUI2["default"], _extends({}, tableProps, {
+								onChange: _this.onSelectChange
+							}))
+						)
+					)
+				),
+				_react2["default"].createElement(
+					tinperBee__default.Modal.Footer,
+					{ className: 'ref-core-modal-footer ' },
+					_react2["default"].createElement(_RefCoreButton2["default"], {
+						language: lang,
+						onClickBtn: _this.onClickBtn,
+						buttons: buttons,
+						emptyBut: false
+					})
+				)
+			);
+		};
+
+		return RefTreeTableBaseUI;
+	}(React__default.Component);
+
+	RefTreeTableBaseUI.propTypes = propTypes$1;
+	RefTreeTableBaseUI.defaultProps = defaultProps;
+	exports["default"] = RefTreeTableBaseUI;
+	});
+
+	unwrapExports(RefTreeTableBaseUI_1);
+
+	var request$3 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _iterator2 = _interopRequireDefault(iterator$1);
+
+
+
+	var _symbol2 = _interopRequireDefault(symbol$1);
+
+
+
+	var _promise2 = _interopRequireDefault(promise$1);
+
+
+
+	var _stringify2 = _interopRequireDefault(stringify$1);
+
+
+
+	var _keys2 = _interopRequireDefault(keys$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _typeof = typeof _symbol2["default"] === "function" && typeof _iterator2["default"] === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2["default"] === "function" && obj.constructor === _symbol2["default"] && obj !== _symbol2["default"].prototype ? "symbol" : typeof obj; };
+
+	exports.post = post;
+	exports.get = get;
+	exports.fetchJ = fetchJ;
+
+
+
+	var _fetchJsonp2 = _interopRequireDefault(fetchJsonp);
+
+
+
+	var _axios2 = _interopRequireDefault(axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var fetchTools = {
+	  params: function params(_params) {
+	    try {
+	      return (0, _keys2["default"])(_params).map(function (key) {
+	        var param = _params[key];
+	        switch (typeof param === 'undefined' ? 'undefined' : _typeof(param)) {
+	          case 'object':
+	            param = escape((0, _stringify2["default"])(param));
+	            break;
+	          case 'undefined':
+	            param = '';
+	            break;
+	          default:
+	            break;
+	        }
+	        return key + '=' + param;
+	      }).join('&');
+	    } catch (e) {
+	      // console.log('error in urlParams');
+	      return '';
+	    }
+	  },
+	  fetch: function (_fetch) {
+	    function fetch(_x, _x2) {
+	      return _fetch.apply(this, arguments);
+	    }
+
+	    fetch.toString = function () {
+	      return _fetch.toString();
+	    };
+
+	    return fetch;
+	  }(function (url, options) {
+	    return fetch(url, options).then(function (response) {
+	      if (response.ok) {
+	        return response.text().then(function (text) {
+	          try {
+	            return JSON.parse(text);
+	          } catch (e) {
+	            return _promise2["default"].reject(new Error('接口返回数据无法解析'));
+	          }
+	        });
+	      }
+	      return _promise2["default"].reject(new Error('请求失败'));
+	    }, function (error) {
+	      throw error;
+	    });
+	  }),
+	  options: function options() {
+	    var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'get';
+
+	    var _options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	    return _extends({
+	      method: method.toUpperCase(),
+	      credentials: 'include',
+	      cache: 'no-cache',
+	      headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+	      }
+	    }, _options);
+	  }
+	};
+
+	function post(url) {
+	  var oriParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var fetch = fetchTools.fetch,
+	      options = fetchTools.options;
+
+	  try {
+	    return fetch(url, options('post', {
+	      headers: {
+	        'Content-Type': 'application/json;charset=UTF-8'
+	      },
+	      body: (0, _stringify2["default"])(oriParams)
+	    }));
+	  } catch (e) {
+	    return _promise2["default"].reject(e);
+	  }
+	}
+
+	function get(url) {
+	  var oriParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var params = fetchTools.params,
+	      fetch = fetchTools.fetch,
+	      options = fetchTools.options;
+
+
+	  var data = params(oriParams);
+
+	  if (data) {
+	    return fetch(url + '?' + data, options());
+	  }
+	  return fetch(url, options());
+	}
+
+	function fetchJ(url) {
+	  var oriParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var params = fetchTools.params;
+
+
+	  var data = params(oriParams);
+
+	  return (0, _fetchJsonp2["default"])(url + '?' + data).then(function (response) {
+	    return response.json();
+	  }).then(function (json) {
+	    console.log('parsed json', json);
+	    return json;
+	  })["catch"](function (ex) {
+	    console.log('parsing failed', ex);
+	  });
+	}
+
+	exports["default"] = function (url, options) {
+	  return (0, _axios2["default"])({
+	    method: options.method,
+	    url: url,
+	    data: options.data,
+	    params: options.param
+	  })["catch"](function (err) {
+	    console.log(err);
+	  });
+	};
+
+	// var csrfDefense = function(){
+	// 	window.x_xsrf_token = "";
+	// 	window.random_num = Math.random();
+	// 	$.ajaxSetup({
+	// 		cache:false,
+	// 		beforeSend: function (xhr) {
+	// 			xhr.setRequestHeader('x-xsrf-token', x_xsrf_token);//added by yany head名称不能下划线
+	// 			xhr.setRequestHeader('random-num', random_num);
+	// 			var centerContent='<i class="uf uf-fluffycloudsilhouette u-loader-centerContent"></i>';
+	// 			var opt1={
+	// 				hasback:true,
+	// 				hasDesc:true,//是否含有加载内容描述
+	// 				centerContent:centerContent
+	// 			};
+	// 			u.showLoader(opt1);
+	// 		},
+	// 		complete: function (xhr, status) {
+	// 			setTimeout("u.hideLoader({hasback:true});",200 );
+	// 			var inner_x_xsrf_token = xhr.getResponseHeader('x-xsrf-token');//added by yany
+	// 			if(inner_x_xsrf_token && inner_x_xsrf_token != ""){
+	// 				window.x_xsrf_token = inner_x_xsrf_token;
+	// 			}
+	// 		}
+	// 	});
+	// }
+	});
+
+	unwrapExports(request$3);
+	var request_1$2 = request$3.post;
+	var request_2$2 = request$3.get;
+	var request_3$2 = request$3.fetchJ;
+
+
+
+	var refcorewithinput$1 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcorewithinput$1);
+
+	var RefCoreWithInput_1$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+
+
+	var _stringify2 = _interopRequireDefault(stringify$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+
+
+	var _beeInputGroup2 = _interopRequireDefault(build$4);
+
+
+
+	var _beeFormControl2 = _interopRequireDefault(build$2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var refValParse = function refValParse(value) {
+		if (!value) return { refname: '', refpk: '' };
+
+		try {
+			var valueMap = JSON.parse(value);
+			if (!valueMap.hasOwnProperty('refname') || !valueMap.hasOwnProperty('refpk')) {
+				return { refname: '', refpk: '' };
+			} else {
+				return valueMap;
+			}
+		} catch (e) {
+			return { refname: '', refpk: '' };
+		}
+	};
+
+	var propTypes$1 = {
+		matchUrl: _propTypes2["default"].string,
+		param: _propTypes2["default"].object,
+		style: _propTypes2["default"].object,
+		// displayField: PropTypes.string,//显示内容的键
+		valueField: _propTypes2["default"].string, //真实 value 的键
+		filterUrl: _propTypes2["default"].string,
+		value: _propTypes2["default"].string,
+		wrapClassName: _propTypes2["default"].string,
+		canClickGoOn: _propTypes2["default"].func,
+		canInputGoOn: _propTypes2["default"].func,
+		filterData: _propTypes2["default"].array,
+		filterUrlFunc: _propTypes2["default"].func
+	};
+
+	var defaultProps = {
+		className: '',
+		backdrop: true,
+		style: {
+			width: 200
+		},
+		param: {
+			refCode: 'test_common' //test_common||test_grid||test_tree||test_treeTable
+		},
+		onCancel: function onCancel(p) {},
+		onSave: function onSave(sels) {},
+		value: '',
+		// displayField: 'refname',//显示内容的键
+		valueField: 'refpk', //真实 value 的键
+		//将 filterRefUrl 改为 mactchUrl
+		matchUrl: '',
+		filterUrl: '',
+		wrapClassName: '',
+		canClickGoOn: function canClickGoOn() {
+			return true;
+		},
+		canInputGoOn: function canInputGoOn() {
+			return true;
+		},
+		filterData: [],
+		filterUrlFunc: function filterUrlFunc(value) {}
+	};
+
+	var FilterItem = function FilterItem(props) {
+		return _react2["default"].createElement(
+			'li',
+			{
+				className: 'ref-filter-item',
+				onClick: function onClick(e) {
+					if (e.target.dataset.type !== 'filteritem') {
+						e.target.dataset.type = 'filteritem';
+					}
+				},
+				'data-value': props.value,
+				'data-type': 'filteritem'
+
+			},
+			props.text
+		);
+	};
+
+	var getFilterData = function getFilterData(data, valueField, displayField) {
+		var filterItems = [],
+		    filterDataMap = {};
+		data.forEach(function (item) {
+			var values = item[valueField];
+			//displayField 存在两种形态，通过字符匹配和函数匹配来获得展示的字段
+			var names = '';
+			if (typeof displayField === 'function') {
+				names = displayField(item);
+			} else {
+				names = displayField.format(item);
+			}
+			filterItems.push(_react2["default"].createElement(FilterItem, { key: values, text: names, value: values }));
+			filterDataMap[values] = item;
+		});
+		return { filterItems: filterItems, filterDataMap: filterDataMap };
+	};
+
+	var RefCoreWithInput = function (_Component) {
+		_inherits(RefCoreWithInput, _Component);
+
+		function RefCoreWithInput(props) {
+			_classCallCheck(this, RefCoreWithInput);
+
+			var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+			_this.handleChange = function (values, record) {
+				var _this$props = _this.props,
+				    onChange = _this$props.onChange,
+				    value = _this$props.value;
+
+				if (values === value) return;
+				if (onChange) {
+					onChange(values, record);
+				}
+			};
+
+			_this.onCancelModal = function (p) {
+
+				_this.setState({
+					isClick: false,
+					showModal: false
+				});
+				_this.props.onCancel(p, _this.refDom);
+			};
+
+			_this.onSaveModal = function (result) {
+				var _this$props2 = _this.props,
+				    _this$props2$displayF = _this$props2.displayField,
+				    displayField = _this$props2$displayF === undefined ? '{refname}' : _this$props2$displayF,
+				    valueField = _this$props2.valueField,
+				    onSave = _this$props2.onSave;
+
+				var values = result.map(function (item) {
+					return item[valueField];
+				}).join(',');
+				var names = result.map(function (item) {
+					if (typeof displayField === 'function') {
+						return displayField(item);
+					} else {
+						return displayField.format(item);
+					}
+				}).join(';');
+
+				_this.setState({
+					checkedArray: result,
+					savedData: values,
+					savedShow: names,
+					isClick: false,
+					showModal: false
+				}, function () {
+					onSave(result, names, _this.refDom);
+					_this.handleChange((0, _stringify2["default"])({
+						refname: names,
+						refpk: values
+					}), result);
+				});
+			};
+
+			_this.handleClick = function () {
+				var isClick = _this.state.isClick;
+
+				if (_this.props.disabled || isClick) {
+					return;
+				}
+				if (!_this.props.canClickGoOn()) return;
+				_this.setState({
+					isClick: true,
+					showModal: true
+				});
+			};
+
+			_this.onClickFilterItem = function (e) {
+				e.stopPropagation();
+				var _e$target$dataset = e.target.dataset,
+				    dataset = _e$target$dataset === undefined ? {} : _e$target$dataset;
+
+				if (dataset.type !== 'filteritem') {
+					return;
+				}
+				var filterDataMap = _this.state.filterDataMap;
+				var _this$props3 = _this.props,
+				    _this$props3$displayF = _this$props3.displayField,
+				    displayField = _this$props3$displayF === undefined ? "{refname}" : _this$props3$displayF,
+				    valueField = _this$props3.valueField,
+				    onSave = _this$props3.onSave;
+
+				var filterDataItem = filterDataMap[dataset.value];
+				var savedData = filterDataItem[valueField];
+				//displayField 存在两种形态，通过字符匹配和函数匹配来获得展示的字段
+				var savedShow = '';
+				if (typeof displayField === 'function') {
+					savedShow = displayField(filterDataItem);
+				} else {
+					savedShow = displayField.format(filterDataItem);
+				}
+				_this.setState({
+					savedData: savedData, savedShow: savedShow,
+					filtering: false,
+					checkedArray: [filterDataMap[dataset.value]]
+				}, function () {
+
+					_this.handleChange((0, _stringify2["default"])({
+						refname: savedShow,
+						refpk: dataset.value
+					}));
+					onSave([filterDataItem]);
+				});
+			};
+
+			_this.onFilter = function (content) {
+				var _this$props4 = _this.props,
+				    filterUrl = _this$props4.filterUrl,
+				    param = _this$props4.param,
+				    valueField = _this$props4.valueField,
+				    _this$props4$displayF = _this$props4.displayField,
+				    displayField = _this$props4$displayF === undefined ? "{refname}" : _this$props4$displayF;
+				//20190417这里修改逻辑，如果filterUrl存在，使用下面逻辑，否则回调然后用户传数据进来
+
+				if (!filterUrl) {
+					_this.props.filterUrlFunc(content);
+					return false;
+				}
+				if (!content) return;
+				(0, request$3.get)(filterUrl, _extends({}, param, {
+					refCode: param.refCode,
+					content: content
+				})).then(function (response) {
+					var data = response.data;
+
+					var _getFilterData = getFilterData(data, valueField, displayField),
+					    filterItems = _getFilterData.filterItems,
+					    filterDataMap = _getFilterData.filterDataMap;
+
+					_this.setState({
+						filterItems: filterItems,
+						filterDataMap: filterDataMap
+					});
+				});
+			};
+
+			_this.onChangeFormControl = function (value) {
+				if (!_this.props.canInputGoOn(value)) return;
+				_this.setState({
+					filterText: value,
+					filtering: true
+				});
+				_this.onFilter(value);
+			};
+
+			_this.onBlurFormControl = function () {
+				_this.setState({
+					filterText: '',
+					filtering: Boolean(_this.selectFilter)
+				});
+			};
+
+			_this.onFocusFormControl = function () {};
+
+			_this.onFilterMouseEnter = function () {
+				_this.selectFilter = true;
+			};
+
+			_this.onFilterMouseLeave = function () {
+				_this.selectFilter = false;
+			};
+
+			_this.onMatchInitValue = function (checkedArray) {
+				_this.setState({ checkedArray: checkedArray });
+			};
+
+			var valueMap = refValParse(props.value) || {};
+			_this.state = {
+				checkedArray: [],
+				savedData: '',
+				savedShow: valueMap.refname,
+				filterText: '',
+				filterItems: [],
+				filterData: props.filterUrl ? [] : props.filterData || [],
+				filterDataMap: {},
+				filtering: false,
+				showModal: false
+			};
+			_this.childrenComponent = _this.props.children;
+			return _this;
+		}
+
+		RefCoreWithInput.prototype.componentDidMount = function componentDidMount() {}
+		// this.setValues();
+		// this.initComponent(this.props)
+
+		// shouldComponentUpdate(nextProps, nextState){
+		// 	return true;
+		// }
+		;
+
+		RefCoreWithInput.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+			var _this2 = this;
+
+			var _props = this.props,
+			    valueField = _props.valueField,
+			    _props$displayField = _props.displayField,
+			    displayField = _props$displayField === undefined ? "{refname}" : _props$displayField,
+			    filterUrl = _props.filterUrl;
+
+			if (nextProps.value !== this.props.value) {
+				var valueMap = refValParse(nextProps.value) || {};
+				// let { valueField } = this.props;
+				var checkedArray = this.state.checkedArray;
+
+				var diffValue = checkedArray.some(function (item) {
+					return !Boolean(~valueMap.refpk.indexOf(item[valueField]));
+				});
+				if (!(0, Immutable.is)(this.state.filterData, nextProps.filterData) && !filterUrl) {
+					var _getFilterData2 = getFilterData(nextProps.filterData, valueField, displayField),
+					    filterItems = _getFilterData2.filterItems,
+					    filterDataMap = _getFilterData2.filterDataMap;
+
+					this.setState({
+						filterItems: filterItems,
+						filterDataMap: filterDataMap,
+						filterData: nextProps.filterData,
+						checkedArray: diffValue ? [] : checkedArray,
+						savedShow: valueMap.refname
+					}, function () {
+						_this2.handleChange(nextProps.value);
+					});
+				} else {
+					this.setState({
+						checkedArray: diffValue ? [] : checkedArray,
+						savedShow: valueMap.refname
+					}, function () {
+						_this2.handleChange(nextProps.value);
+					});
+				}
+			} else {
+				//filterUrl不存在，只传入filterData
+				if (!(0, Immutable.is)(this.state.filterData, nextProps.filterData) && !filterUrl) {
+					var _getFilterData3 = getFilterData(nextProps.filterData, valueField, displayField),
+					    _filterItems = _getFilterData3.filterItems,
+					    _filterDataMap = _getFilterData3.filterDataMap;
+
+					this.setState({
+						filterItems: _filterItems,
+						filterDataMap: _filterDataMap,
+						filterData: nextProps.filterData
+					});
+				}
+				return false;
+			}
+			return true;
+		};
+		// componentWillReceiveProps(nextProp) {
+		// 	if (nextProp.value !== this.props.value) {
+		// 		this.initComponent(nextProp);
+		// 	}
+		// }
+
+		/**
+	  * 点击打开参照弹出层时，做字段校验。
+	  */
+
+		/**
+	  * 控制模糊匹配时选择匹配项文本框失去焦点后 blur 先于 click 触发造成的选择未生效问题
+	  */
+
+
+		RefCoreWithInput.prototype.render = function render() {
+			var _state = this.state,
+			    savedShow = _state.savedShow,
+			    savedData = _state.savedData,
+			    filterItems = _state.filterItems,
+			    filtering = _state.filtering,
+			    filterText = _state.filterText,
+			    checkedArray = _state.checkedArray,
+			    showModal = _state.showModal;
+			var _props2 = this.props,
+			    displayField = _props2.displayField,
+			    valueField = _props2.valueField,
+			    form = _props2.form,
+			    rules = _props2.rules,
+			    className = _props2.className,
+			    wrapClassName = _props2.wrapClassName,
+			    disabled = _props2.disabled,
+			    style = _props2.style,
+			    placeholder = _props2.placeholder;
+
+			var childrenProps = _extends(_extends({}, this.props), {
+				showModal: showModal,
+				checkedArray: checkedArray,
+				onCancel: this.onCancelModal,
+				onSave: this.onSaveModal,
+				onMatchInitValue: this.onMatchInitValue
+			});
+			delete childrenProps.children;
+			return _react2["default"].createElement(
+				'div',
+				{ className: 'ref-input-wrap ' + wrapClassName,
+					style: _extends({}, style)
+				},
+				_react2["default"].createElement(
+					_beeInputGroup2["default"],
+					{ simple: true,
+						style: {
+							width: '100%'
+						} },
+					_react2["default"].createElement(_beeFormControl2["default"], _extends({
+						disabled: disabled,
+						type: 'text',
+						style: {
+							width: '100%'
+						}
+					}, savedShow ? { readOnly: "readonly" } : '', {
+						placeholder: placeholder,
+						value: filtering ? filterText : savedShow,
+						onFocus: this.onFocusFormControl,
+						onChange: this.onChangeFormControl,
+						onBlur: this.onBlurFormControl
+					})),
+					_react2["default"].createElement(
+						_beeInputGroup2["default"].Button,
+						{ shape: 'border', onClick: this.handleClick },
+						_react2["default"].createElement(
+							'span',
+							{ className: 'uf uf-navmenu ' + (disabled ? 'ref-input-wrap-display' : '') },
+							' '
+						)
+					)
+				),
+				_react2["default"].cloneElement(this.childrenComponent, childrenProps),
+				_react2["default"].createElement(
+					'div',
+					{ className: 'ref-input-wrap-filter-panel', style: { display: filtering ? '' : 'none', width: style.width || 200 } },
+					_react2["default"].createElement(
+						'ul',
+						{
+							onClick: this.onClickFilterItem,
+							onMouseEnter: this.onFilterMouseEnter,
+							onMouseLeave: this.onFilterMouseLeave
+						},
+						filterItems.length ? filterItems.map(function (item) {
+							return item;
+						}) : _react2["default"].createElement(
+							'li',
+							{ className: 'ref-filter-empty' },
+							'\u6CA1\u6709\u5339\u914D\u5230\u6570\u636E'
+						)
+					)
+				)
+			);
+		};
+
+		return RefCoreWithInput;
+	}(React__default.Component);
+
+	RefCoreWithInput.propTypes = propTypes$1;
+	RefCoreWithInput.defaultProps = defaultProps;
+	exports["default"] = RefCoreWithInput;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreWithInput_1$2);
+
+	var createApi$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createRefInput = exports.createRefModal = undefined;
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	//监听者模式对象
+	function Listenter() {
+	    this.events = {};
+	    this.on = function (type, handler) {
+	        if (typeof this.events[type] == "undefined") {
+	            this.events[type] = [];
+	        }
+	        this.events[type].push(handler);
+	    };
+	    this.fire = function (event) {
+	        if (this.events[event] instanceof Array) {
+	            var events = this.events[event];
+	            for (var i = 0, len = events.length; i < len; i++) {
+	                events[i](event);
+	            }
+	        }
+	    };
+	    return this;
+	}
+
+	//监听队列
+	var Queue = {};
+
+	//用于监听触发时间的 ReactJS 容器
+
+	var Container = function (_Component) {
+	    _inherits(Container, _Component);
+
+	    function Container(props) {
+	        _classCallCheck(this, Container);
+
+	        var _this2 = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	        _this2.onCancelModal = function (p) {
+	            var onCancel = _this2.props.onCancel;
+
+	            _this2.setState({
+	                showModal: false
+	            });
+	            if (onCancel) {
+	                onCancel();
+	            }
+	        };
+
+	        _this2.onSaveModal = function (record) {
+	            var onSave = _this2.props.onSave;
+
+	            _this2.setState({
+	                checkedArray: record,
+	                showModal: false
+	            });
+	            if (onSave) {
+	                onSave(record);
+	            }
+	        };
+
+	        _this2.state = props;
+	        return _this2;
+	    }
+
+	    Container.prototype.componentDidMount = function componentDidMount() {
+	        var _this3 = this;
+
+	        var _this = this;
+	        var listener = Queue[this.props.eventId].listener;
+
+	        if (!listener) {
+	            listener = Queue[this.props.eventId] = new Listenter();
+	        }
+	        listener.on("show", function () {
+	            _this.setState({
+	                showModal: true
+	            });
+	        });
+	        listener.on("hide", function () {
+	            _this.setState({
+	                showModal: false
+	            }, function () {
+	                var onCancel = _this3.props.onCancel;
+
+	                if (onCancel) {
+	                    onCancel();
+	                }
+	            });
+	        });
+	    };
+
+	    Container.prototype.render = function render() {
+	        var children = this.props.children;
+
+	        return _react2["default"].cloneElement(children, _extends({}, this.state, {
+	            onSave: this.onSaveModal,
+	            onCancel: this.onCancelModal
+	        }));
+	    };
+
+	    return Container;
+	}(React__default.Component);
+
+	function createRefInput(selector, component, props) {
+	    var dom = document.getElementById(selector);
+	    var destory = function destory() {
+	        try {
+	            dom.parentNode.removeChild(dom);
+	        } catch (e) {
+	            console.log(e);
+	        }
+	    };
+
+	    _reactDom2["default"].render(_react2["default"].cloneElement(component, _extends({}, props)), dom);
+	    return {
+	        destory: destory,
+	        dom: dom
+	    };
+	}
+	function createRefModal(_ref, callback) {
+	    var component = _ref.component,
+	        props = _objectWithoutProperties(_ref, ['component']);
+
+	    var modalContainer = document.createElement('div');
+	    document.body.appendChild(modalContainer);
+	    //随机生成队列ID
+	    var eventId = 'listener-' + Math.random();
+
+	    Queue[eventId] = new Listenter();
+	    var param = {
+	        show: function show() {
+	            if (!Queue[eventId]) {
+	                return false;
+	            } else {
+	                Queue[eventId].fire('show');
+	                return true;
+	            }
+	        },
+	        hide: function hide() {
+	            if (!Queue[eventId]) {
+	                return false;
+	            } else {
+	                Queue[eventId].fire('hide');
+	                return true;
+	            }
+	        },
+	        destory: function destory() {
+	            if (!Queue[eventId]) {
+	                return false;
+	            } else {
+	                delete Queue[eventId];
+	                return true;
+	            }
+	        }
+	    };
+	    _reactDom2["default"].render(_react2["default"].createElement(
+	        Container,
+	        _extends({}, props, {
+
+	            eventId: eventId
+	        }),
+	        _react2["default"].cloneElement(component)
+	    ), modalContainer, function () {
+	        if (typeof callback === 'function') {
+	            callback(param);
+	        }
+	    });
+	    return param;
+	}
+
+	exports.createRefModal = createRefModal;
+	exports.createRefInput = createRefInput;
+	});
+
+	unwrapExports(createApi$2);
+	var createApi_1$2 = createApi$2.createRefInput;
+	var createApi_2$2 = createApi$2.createRefModal;
+
+	var RefCoreGlobal_1$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+
+
+	var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(getOwnPropertyDescriptor$1);
+
+
+
+	var _getOwnPropertyNames2 = _interopRequireDefault(getOwnPropertyNames$1);
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+
+
+	var _setPrototypeOf2 = _interopRequireDefault(setPrototypeOf$1);
+
+
+
+	var _create2 = _interopRequireDefault(create$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = (0, _getOwnPropertyNames2["default"])(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = (0, _getOwnPropertyDescriptor2["default"])(defaults, key); if (value && value.configurable && obj[key] === undefined) { (0, _defineProperty2["default"])(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var RefCoreGlobal = function (_Component) {
+	    _inherits(RefCoreGlobal, _Component);
+
+	    function RefCoreGlobal(props) {
+	        _classCallCheck(this, RefCoreGlobal);
+
+	        var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	        _this.state = {
+	            // checkedArray: props.checkedArray,
+	        };
+	        return _this;
+	    }
+
+	    RefCoreGlobal.prototype.componentDidMount = function componentDidMount() {
+	        // var self = this;
+	        // var { refType , checkedArray } = this.props;
+	        // var tempCheckedArray = checkedArray;
+	        // if(this.props.onBeforeAjax){
+	        //     this.props.onBeforeAjax('begin')
+	        // }
+	        // //对checkedArray作判断
+	        // function ajaxWrap(val){
+	        //     var value = {};
+	        //     var url = option.refModelUrl.totalDataUrl
+	        //     fetchJ(url,{
+	        //         ...option.param,
+	        //         pk_val:val,
+	        //     })
+	        //     // .then( (response) => { return JSON.parse(response); })
+	        //     .then( ({ data }) => {
+	        //         var checkedArray = data.filter(({refpk})=>{
+	        //             return tempCheckedArray.indexOf(refpk)>-1
+	        //         })
+	        //         checkedArray = checkedArray.map((v,k)=>{
+	        //             v.key = v.refpk;
+	        //             return v
+	        //         })
+	        //         self.setState({
+	        //             checkedArray,
+	        //         })
+	        //         // return checkedArray;
+	        //     })
+	        //     .catch(()=>{
+	        //         self.setState({
+	        //             checkedArray:[]
+	        //         })
+	        //     })
+	        // }
+	        // if(!checkedArray || checkedArray==[] || checkedArray.length === 0 ){
+	        //     checkedArray = [];
+	        // }else{
+	        //     if(typeof(checkedArray[0]) === 'object'){
+	        //         //todo nothing
+	        //     }else{
+	        //         ajaxWrap(checkedArray);
+	        //     }
+	        // }
+	    };
+
+	    RefCoreGlobal.prototype.render = function render() {
+	        // var { checkedArray } = this.state;
+	        return _react2["default"].createElement(
+	            'div',
+	            null,
+	            _react2["default"].cloneElement(this.props.children, _extends({}, this.props))
+	        );
+	    };
+
+	    return RefCoreGlobal;
+	}(React__default.Component);
+
+	exports["default"] = RefCoreGlobal;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreGlobal_1$2);
+
+
+
+	var refcore$2 = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcore$2);
+
+	var lib$5 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.createRefTreeTableModal = exports.createRefTreeTable = exports.RefTreeTableWithInput = exports.RefTreeTable = undefined;
+
+
+
+	var _assign2 = _interopRequireDefault(assign$1);
+
+	var _extends = _assign2["default"] || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _RefTreeTableBaseUI2 = _interopRequireDefault(RefTreeTableBaseUI_1);
+
+
+
+	var _RefCoreWithInput2 = _interopRequireDefault(RefCoreWithInput_1$2);
+
+
+
+	var _createApi2 = _interopRequireDefault(createApi$2);
+
+
+
+	var _RefCoreGlobal2 = _interopRequireDefault(RefCoreGlobal_1$2);
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	// import './index.less'; //webpack打包放开
+
+	function RefTreeTable(props) {
+	    return _react2["default"].createElement(
+	        _RefCoreGlobal2["default"],
+	        props,
+	        _react2["default"].createElement(_RefTreeTableBaseUI2["default"], null)
+	    );
+	}
+
+	function createRefTreeTable(selector, props, callback) {
+	    return createRefInput(selector, _react2["default"].createElement(RefTreeTableWithInput, null), props, function (param) {
+	        if (typeof callback === 'function') {
+	            callback(param);
+	        }
+	    });
+	}
+	function createRefTreeTableModal(props, callback) {
+	    return createRefModal(_extends({
+	        component: _react2["default"].createElement(RefTreeTable, null)
+	    }, props), function (param) {
+	        if (typeof callback === 'function') {
+	            callback(param);
+	        }
+	    });
+	}
+
+	function RefTreeTableWithInput(props) {
+
+	    return _react2["default"].createElement(
+	        _RefCoreWithInput2["default"],
+	        props,
+	        _react2["default"].createElement(RefTreeTable, null)
+	    );
+	}
+
+	exports["default"] = _RefTreeTableBaseUI2["default"];
+	exports.RefTreeTable = RefTreeTable;
+	exports.RefTreeTableWithInput = RefTreeTableWithInput;
+	exports.createRefTreeTable = createRefTreeTable;
+	exports.createRefTreeTableModal = createRefTreeTableModal;
+	});
+
+	unwrapExports(lib$5);
+	var lib_1$3 = lib$5.createRefTreeTableModal;
+	var lib_2$3 = lib$5.createRefTreeTable;
+	var lib_3$3 = lib$5.RefTreeTableWithInput;
+	var lib_4$3 = lib$5.RefTreeTable;
+
+	function getTableInfo() {
+
+	  console.log('==================', this, this.param);
+	  var param = this.param;
+	  param.page = {
+	    pageSize: 10,
+	    pageIndex: 1
+	  };
+	  var requestList = [getTableHeader.call(this), getTableData.call(this, param)];
+	  return Promise.all(requestList); //   .then(([columnsData, bodyData]) => {
+	  //     // 请求完表体数据回调
+	  //     if (this.onAfterAjax) {
+	  //         this.onAfterAjax(bodyData);
+	  //     }
+	  //     launchTableHeader.call(this,columnsData);
+	  //     launchTableData.call(this,bodyData);
+	  //     this.setState({
+	  //       showLoading: false
+	  //     });
+	  //   })
+	  //   .catch(e => {
+	  //     console.log(e);
+	  //     launchTableHeader.call(this,{});
+	  //     launchTableData.call(this,{});
+	  //     this.setState({
+	  //       showLoading: false
+	  //     });
+	  //     console.error(e);
+	  //   });
+	}
+	/**
+	 * 转换元数据参照表格数据为可识别的格式
+	 *
+	 */
+
+
+	function convertMetaTableData() {
+	  var _this$view = this.view,
+	      view = _this$view === void 0 ? {} : _this$view;
+	  var strFieldCode = [],
+	      strFieldName = [],
+	      tpl = {};
+	  var tableContainer = [];
+
+	  if (view.containers) {
+	    tableContainer = view.containers.find(function (item) {
+	      return item.cName.toLocaleLowerCase() == 'table';
+	    });
+	  }
+
+	  tableContainer.controls.forEach(function (item) {
+	    strFieldCode.push(item.cFieldName);
+	    strFieldName.push(item.cShowCaption);
+	  });
+	  tpl["rootName"] = view.cTemplateTitle;
+	  tpl["refName"] = view.cTemplateTitle;
+	  tpl["defaultFieldCount"] = strFieldCode.length;
+	  tpl["strFieldCode"] = strFieldCode;
+	  tpl["strFieldName"] = strFieldName;
+	  return new Promise(function (resolve, reject) {
+	    resolve(tpl); // reject({err:true});
+	  }); // return tpl;
+	}
+
+	function getTableHeader() {
+	  var _this = this;
+
+	  return new Promise(function (resolve, reject) {
+	    resolve(convertMetaTableData.call(_this));
+	  });
+	}
+
+	function getTableData(params) {
+	  var paramsInfo = Object.assign({}, params, {
+	    dataType: 'grid'
+	  });
+	  return request$1(this.dataUrl, {
+	    method: "post",
+	    data: paramsInfo
+	  });
+	}
+	/**
+	 * 根据 refinfo 返回结果拆解并渲染表格表头
+	 * @param {object} data
+	 */
+
+	function launchTableHeader(data) {
+	  if (data == {}) return;
+	  var multiple = this.props.multiple;
+	  var keyList = data.strFieldCode || [];
+	  var titleList = data.strFieldName || [];
+	  var valueField = this.valueField;
+	  this.filterFormInputs = [];
+	  var colunmsList = keyList.map(function (item, index) {
+	    //   this.filterFormInputs.push(
+	    //     <SearchPanelItem key={item} name={item} text={titleList[index]}>
+	    //       <FormControl />
+	    //     </SearchPanelItem>
+	    //   );
+	    return {
+	      key: item,
+	      dataIndex: item,
+	      title: titleList[index]
+	    };
+	  });
+
+	  if (colunmsList.length === 0) {
+	    colunmsList = [{
+	      title: "未传递表头数据",
+	      dataIndex: "nodata",
+	      key: "nodata"
+	    }];
+	  } else if (!multiple) {
+	    //单选时用对号符号标记当前行选中
+	    colunmsList.unshift({
+	      title: " ",
+	      dataIndex: "a",
+	      key: "a",
+	      width: 45,
+	      render: function render(text, record, index) {
+	        return React__default.createElement(tinperBee.Radio.RadioGroup, {
+	          className: "in-table",
+	          name: record[valueField],
+	          selectedValue: record._checked ? record[valueField] : null
+	        }, React__default.createElement(tinperBee.Radio, {
+	          value: record[valueField]
+	        }));
+	      }
+	    });
+	  }
+
+	  this.columnsData = colunmsList;
+	}
+	/**
+	 * 处理并渲染表格数据
+	 */
+
+	function launchTableData(response) {
+	  if (!response) return;
+	  var valueField = this.valueField; // valueField = 'id';
+	  // let { data = [], page = {} } = response;
+
+	  var _response$data$data = response.data.data,
+	      data = _response$data$data === void 0 ? {} : _response$data$data;
+	  var tableData = data.recordList ? data.recordList : [];
+	  tableData.map(function (record, k) {
+	    record.key = record[valueField];
+	    return record;
+	  });
+	  this.tableData = tableData;
+	  this.page.pageCount = data.pageCount || 0;
+	  this.page.currPageIndex = data.pageIndex || 0;
+	  this.page.totalElements = data.recordCount || 0;
+	}
+
+	function getRefTreeData(value) {
+	  var param = this.param,
+	      dataUrl = this.dataUrl,
+	      lazyModal = this.lazyModal,
+	      onAfterAjax = this.onAfterAjax;
+	  var paramsInfo = Object.assign({}, param, {
+	    dataType: 'tree'
+	  });
+	  return getTreeList$1(dataUrl, paramsInfo, value); //   .then(res => {
+	  //     if (onAfterAjax && !this.state.isAfterAjax) {
+	  //       onAfterAjax(res);
+	  //       this.setState({ isAfterAjax: true });
+	  //     }
+	  //     let { data = [] } = res.data;
+	  // 	this.treeData = data;
+	  // 	_changeLoadingState.call(this,false);
+	  //   })
+	  //   .catch(() => {
+	  //     this.treeData = [];
+	  //     _changeLoadingState.call(this,false);
+	  //   });
+	}
+
+	var getTreeList$1 = function getTreeList(url, param, content) {
+	  if (content === void 0) {
+	    content = "";
+	  }
+
+	  content.length && (param.likeValue = content);
+	  param.dataType = 'tree';
+	  return request$1(url, {
+	    method: "POST",
+	    data: param
+	  });
+	};
+
+	var _dec$2, _class$3, _temp$2;
+	var dataType$2 = "treeTable";
+	var Tree$2 = (_dec$2 = miniStore.connect(function (state) {
+	  return {
+	    form: state.form
+	  };
+	}), _dec$2(_class$3 = (_temp$2 =
+	/*#__PURE__*/
+	function (_Component) {
+	  inheritsLoose(Tree, _Component);
+
+	  function Tree(props) {
+	    var _this2;
+
+	    _this2 = _Component.call(this, props) || this;
+	    _this2.getData =
+	    /*#__PURE__*/
+	    asyncToGenerator(
+	    /*#__PURE__*/
+	    regenerator.mark(function _callee() {
+	      var _this, flag;
+
+	      return regenerator.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              _this = assertThisInitialized(_this2);
+
+	              _this2.setState({
+	                showLoading: true
+	              });
+
+	              _context.next = 4;
+	              return Promise.all([_this2.getTableInfo(), _this2.getRefTreeData()]).then(function (_ref2) {
+	                var _ref2$ = _ref2[0],
+	                    columnsData = _ref2$[0],
+	                    bodyData = _ref2$[1],
+	                    treeData = _ref2[1];
+
+	                // 请求完表体数据回调
+	                if (_this2.onAfterAjax) {
+	                  _this2.onAfterAjax(bodyData);
+	                }
+
+	                _this2.launchTableHeader(columnsData);
+
+	                _this2.launchTableData(bodyData);
+
+	                if (_this2.onAfterAjax && !_this2.state.isAfterAjax) {
+	                  _this2.onAfterAjax(treeData);
+
+	                  _this2.setState({
+	                    isAfterAjax: true
+	                  });
+	                }
+
+	                var _treeData$data$data = treeData.data.data,
+	                    data = _treeData$data$data === void 0 ? [] : _treeData$data$data;
+	                _this2.treeData = data; // console.log('treeData===',this.treeData,this.tableData);
+
+	                _this2.setState({
+	                  showLoading: false
+	                });
+	              }).catch(function (e) {
+	                console.log(e);
+
+	                _this2.launchTableHeader({});
+
+	                _this2.launchTableData({});
+
+	                _this2.treeData = [];
+
+	                _this2.setState({
+	                  showLoading: false
+	                });
+	              });
+
+	            case 4:
+	              flag = _context.sent;
+	              return _context.abrupt("return", flag);
+
+	            case 6:
+	            case "end":
+	              return _context.stop();
+	          }
+	        }
+	      }, _callee);
+	    }));
+
+	    _this2.onTreeChange = function (record) {
+	      console.log(record);
+
+	      var _assertThisInitialize = assertThisInitialized(_this2),
+	          param = _assertThisInitialize.param;
+
+	      param.data = record[0];
+	      param.path = record[0] && record[0].path;
+
+	      _this2.setState({
+	        showLoading: true
+	      });
+
+	      _this2.getTableData(param).then(function (bodyData) {
+	        _this2.launchTableData(bodyData);
+
+	        console.log('unfinish*(');
+
+	        _this2.setState({
+	          showLoading: false
+	        });
+	      }).catch(function (e) {
+	        _this2.setState({
+	          showLoading: false
+	        });
+	      });
+
+	      console.log('finish*(');
+	    };
+
+	    _this2.onTreeSearch = function (value) {
+	      // alert(value);
+	      console.log('treeSearch---', value);
+	    };
+
+	    _this2.loadTableData = function (param) {
+	      _this2.page.currPageIndex = param["refClientPageInfo.currPageIndex"];
+
+	      _this2.setState({
+	        num: ++_this2.state.num
+	      });
+	    };
+
+	    _this2.onTableSearch = function (value) {
+	      console.log("onTableSearch", value);
+	    };
+
+	    _this2.onSave = function (item) {
+	      console.log("save", JSON.stringify(item));
+
+	      _this2.setState({
+	        matchData: item
+	      });
+	    };
+
+	    _this2.state = {
+	      value: "",
+	      condition: "",
+	      num: 0,
+	      matchData: []
+	    };
+	    _this2.columnsData = [];
+	    _this2.tableData = [];
+	    _this2.originTableData = [];
+	    var _this2$props = _this2.props,
+	        store = _this2$props.store,
+	        getDataParams = _this2$props.getDataParams;
+	    var _store$getState$meta = store.getState().meta,
+	        viewApplication = _store$getState$meta.viewApplication,
+	        refEntity = _store$getState$meta.refEntity;
+	    _this2.dataUrl = store.getState().dataUrl;
+	    initReferInfo.call(assertThisInitialized(_this2), dataType$2, refEntity, viewApplication, getDataParams);
+	    _this2.view = viewApplication.view;
+	    _this2.dataType = '';
+	    _this2.getTableInfo = getTableInfo.bind(assertThisInitialized(_this2));
+	    _this2.getRefTreeData = getRefTreeData.bind(assertThisInitialized(_this2));
+	    _this2.launchTableData = launchTableData.bind(assertThisInitialized(_this2));
+	    _this2.launchTableHeader = launchTableHeader.bind(assertThisInitialized(_this2));
+	    _this2.getTableData = getTableData.bind(assertThisInitialized(_this2));
+	    _this2.page = {
+	      pageCount: 2,
+	      //总页数
+	      pageSize: "10",
+	      //每页数据数
+	      totalElements: 9
+	    };
+	    return _this2;
+	  } //   componentDidMount() {
+	  //     this.initComponent();
+	  //   }
+	  //   //  请求表格和树的数据
+	  //   initComponent=()=>{
+	  //     const _this = this;
+	  //     getTableInfo.call(_this)
+	  //     getRefTreeData.call(_this)
+	  //   }
+
+
+	  var _proto = Tree.prototype;
+
+	  _proto.render = function render() {
+	    var store = this.props.store;
+	    var refEntity = store.getState().meta.refEntity;
+	    var _refEntity$bMultiSel = refEntity.bMultiSel,
+	        code = refEntity.code,
+	        name = refEntity.name;
+	    var _this$props$form = this.props.form,
+	        getFieldProps = _this$props$form.getFieldProps,
+	        getFieldError = _this$props$form.getFieldError;
+	    return React__default.createElement(lib_3$3, _extends_1({
+	      title: "\u7EC4\u7EC7\u90E8\u95E8\u4EBA\u5458",
+	      textOption: {
+	        menuTitle: '组织',
+	        tableTitle: '人员'
+	      },
+	      filterUrl: "/pap_basedoc/common-ref/filterRefJSON",
+	      displayField: "{" + this.displayField + "}",
+	      valueField: this.valueField,
+	      lang: "zh_CN",
+	      treeData: this.treeData,
+	      onTreeChange: this.onTreeChange,
+	      onTreeSearch: this.onTreeSearch,
+	      columnsData: this.columnsData,
+	      tableData: this.tableData,
+	      page: this.page,
+	      loadTableData: this.loadTableData,
+	      onTableSearch: this.onTableSearch,
+	      onSave: this.onSave,
+	      matchData: this.state.matchData,
+	      showLoading: this.state.showLoading,
+	      nodeDisplay: "{" + this.displayField + "}",
+	      defaultExpandAll: false,
+	      canClickGoOn: this.getData
+	    }, getFieldProps('code', {
+	      initialValue: '',
+	      rules: [{
+	        message: '提示：请选择',
+	        pattern: /[^{"refname":"","refpk":""}|{"refpk":"","refname":""}]/
+	      }]
+	    })));
+	  };
+
+	  return Tree;
+	}(React.Component), _temp$2)) || _class$3);
+
+	var _dec$3, _class$4, _temp$3;
+	var RefRender = (_dec$3 = miniStore.connect(), _dec$3(_class$4 = (_temp$3 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RefRender, _Component);
@@ -83264,9 +91749,13 @@
 	      switch (refEntity.cTpltype) {
 	        case 'Table':
 	          // 简单表格
-	          return React__default.createElement(TableRender, null);
-	        // case 'Tree':
-	        //     return <TreeRender />
+	          return React__default.createElement(Table, null);
+
+	        case 'Tree':
+	          return React__default.createElement(Tree$1, null);
+
+	        case 'TreeTable':
+	          return React__default.createElement(Tree$2, null);
 
 	        default:
 	          return React__default.createElement("div", null, "\u53C2\u7167\u6E32\u67D3\u7C7B\u578B\u9519\u8BEF");
@@ -83283,7 +91772,7 @@
 	  };
 
 	  return RefRender;
-	}(React.Component), _temp$1)) || _class$2);
+	}(React.Component), _temp$3)) || _class$4);
 
 	var UITemplateRender =
 	/*#__PURE__*/
@@ -83308,8 +91797,8 @@
 	  return UITemplateRender;
 	}(React.Component);
 
-	var _dec$2, _class$3, _temp$2;
-	var RenderEngine = (_dec$2 = miniStore.connect(), _dec$2(_class$3 = (_temp$2 =
+	var _dec$4, _class$5, _temp$4;
+	var RenderEngine = (_dec$4 = miniStore.connect(), _dec$4(_class$5 = (_temp$4 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RenderEngine, _Component);
@@ -83344,7 +91833,7 @@
 	  };
 
 	  return RenderEngine;
-	}(React.Component), _temp$2)) || _class$3);
+	}(React.Component), _temp$4)) || _class$5);
 
 	function store (props) {
 	  return miniStore.create(_extends_1({}, props, {
@@ -83415,10 +91904,11 @@
 	              case 0:
 	                _this$props = _this.props, serviceCode = _this$props.serviceCode, refCode = _this$props.refCode;
 	                url += "?serviceCode=" + serviceCode + "&refCode=" + refCode;
-	                _context2.next = 4;
+	                console.log(url);
+	                _context2.next = 5;
 	                return getMeta(url);
 
-	              case 4:
+	              case 5:
 	                _ref4 = _context2.sent;
 	                data = _ref4.data;
 	                isNeedRender = _this.state.isNeedRender;
@@ -83431,7 +91921,7 @@
 	                  });
 	                }
 
-	              case 8:
+	              case 9:
 	              case "end":
 	                return _context2.stop();
 	            }
@@ -83479,8 +91969,9 @@
 	  var _proto = MTLComponent.prototype;
 
 	  _proto.componentWillMount = function componentWillMount() {
-	    var url = this.props.url || '';
-	    this.handleDynamicView(url);
+	    var url = this.props.url || '/uniform/pub/ref/getRefMeta'; // this.handleDynamicView(url)
+
+	    this.getMetaDataByCustomURL(url);
 	  }
 	  /**
 	   * 处理数据协议请求：
@@ -83497,7 +91988,8 @@
 	        dataUrl = _this$props2.dataUrl,
 	        refCode = _this$props2.refCode,
 	        serviceCode = _this$props2.serviceCode,
-	        cItemName = _this$props2.cItemName;
+	        cItemName = _this$props2.cItemName,
+	        onOk = _this$props2.onOk;
 
 	    if (isLoading) {
 	      return React__default.createElement("p", null, "\u6570\u636E\u8BF7\u6C42\u4E2D...");
@@ -83509,7 +92001,8 @@
 	          dataUrl: dataUrl,
 	          refCode: refCode,
 	          serviceCode: serviceCode,
-	          cItemName: cItemName
+	          cItemName: cItemName,
+	          onOk: onOk
 	        })
 	      }, React__default.createElement(RenderEngine, null));
 	    }

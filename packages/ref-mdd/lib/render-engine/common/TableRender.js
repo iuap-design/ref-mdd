@@ -72,7 +72,6 @@ class TableRender extends Component {
         })
       );
     }
-
     Promise.all(requestList)
       .then(([columnsData, bodyData, matchData]) => {
         // 请求完表体数据回调
@@ -88,9 +87,6 @@ class TableRender extends Component {
             _this.checkedMap[item.key] = item;
             return item;
           });
-          // if (Object.prototype.toString.call(onMatchInitValue) === '[object Function]') {
-          //     onMatchInitValue(data);
-          // }
           _this.setState({
             selectedDataLength: this.checkedArray.length,
             mustRender: Math.random()
@@ -265,8 +261,7 @@ class TableRender extends Component {
    * @param {number} index 跳转页数
    */
   handlePagination = index => {
-    let { filterInfo } = this;
-    let { param } = this.props;
+    let { filterInfo,param } = this;
     Object.keys(filterInfo).forEach(key => {
       if (!filterInfo[key]) {
         delete filterInfo[key];
@@ -275,7 +270,7 @@ class TableRender extends Component {
 
     param.page = {
       pageSize: this.pageSize,
-      pageIndex: index - 1
+      pageIndex: index
     };
     if (Object.keys(filterInfo) > 0) {
       param.content = JSON.stringify(filterInfo);
@@ -286,8 +281,7 @@ class TableRender extends Component {
    * 选择每页数据个数
    */
   dataNumSelect = (index, pageSize) => {
-    let { filterInfo } = this;
-    let { param } = this.props;
+    let { filterInfo,param } = this;
     Object.keys(filterInfo).forEach(key => {
       if (!filterInfo[key]) {
         delete filterInfo[key];
@@ -352,7 +346,7 @@ class TableRender extends Component {
     };
     console.log(props);
     return (
-      <div>
+      <div className='ref-container'>
         <RefMultipleTableWithInput
           {...props}
           onSave={this.onSave}

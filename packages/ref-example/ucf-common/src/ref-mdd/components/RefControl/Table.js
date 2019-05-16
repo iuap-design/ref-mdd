@@ -48,8 +48,14 @@ class Table extends Component {
   componentDidMount() {
     // this.initComponent();
   }
-  onSave = item => {
-    console.log("save", item);
+  onSave = data => {
+    const {store} = this.props;
+    const onOk = store.getState().onOk;
+    this.setState({
+      matchData:data
+    });
+    // console.log("save", data);
+    onOk && onOk(data);
   };
   onCancel = () => {};
 

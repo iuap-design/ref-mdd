@@ -10,7 +10,6 @@ export function getMeta(url) {
 }
 
 
-
 const refValParse = (value,valueField,displayField) => {
     if(!value) return {[displayField]: '', [valueField]: ''};
 
@@ -34,12 +33,26 @@ export {refValParse};
  * @param {string} type 
  * @param {object} refEntity 
  */
-export function getQueryParam(type,refEntity,viewApplication){
-    let rsParam = {};
+export function getQueryParam(type,refEntity,viewApplication,getDataParams={}){
+    let rsParam = {},defaultDataParams = getDataParams;
     rsParam.dataType = type;
     rsParam.refCode = refEntity.refType; 
-    // rsParam.key =  viewApplication.cCardKey;
     rsParam.billnum = refEntity.cBillnum;
+    if(typeof getDataParams == 'function'){
+        defaultDataParams = getDataParams();
+    }
+    rsParam = Object.assign({},rsParam,defaultDataParams);
     return rsParam;
-
+}
+/**
+ * 初始化参照信息
+ */
+export function initReferInfo(dataType, refEntity, viewApplication,getDataParams){
+    this.valueField = refEntity.cEntityKeyFld;//参照真实值
+    this.displayField = refEntity.cEntityNameFld;//参照显示值
+    if(!this.dataUrl){
+        this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    }
+   
+    this.param = getQueryParam(dataType, refEntity, viewApplication,getDataParams);//数据查询参数
 }

@@ -31,10 +31,12 @@ const RefTableComponent = () => (
 - 初始化：`window.MTLCore.initComponent(options)`
 
 ## 组件接口说明
-|参数|说明|类型|默认值|
-|:--|:---:|:--:|---:|
-|url|参照中获取的meta信息的url|string||
-|dataUrl|参照中获取的数据data信息的url|string||
+|参数|说明|类型|默认值|是否必填|
+|:--|:---:|:--:|---:|---:|
+|url|参照中获取的meta信息的url|string|'/uniform/pub/ref/getRefMeta'|否|
+|dataUrl|参照中获取的数据data信息的url|string|/uniform/bill/ref/getRefData|否|
+|refCode|参照Code值|string||是|
+|onOk|点击确认按钮的回调函数|Function||否|
 ## 整体流程
 
 <img src="https://raw.githubusercontent.com/whizbz11/Img/master/ref-mdd/ref-mdd.png" height='500px' />

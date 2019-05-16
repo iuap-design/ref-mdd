@@ -3,7 +3,8 @@ import { Provider, connect, create } from 'mini-store';
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
 import store from './datamodel/store';
-import './style/index.less';
+
+
 class MTLComponent extends Component {
     constructor(props) {
         super(props)
@@ -15,8 +16,9 @@ class MTLComponent extends Component {
     }
     meta = {};
     componentWillMount() {
-        let url = this.props.url || '';
-        this.handleDynamicView(url)
+        let url = this.props.url || '/uniform/pub/ref/getRefMeta';
+        // this.handleDynamicView(url)
+        this.getMetaDataByCustomURL(url);
     }
 
     /**
@@ -48,6 +50,7 @@ class MTLComponent extends Component {
     getMetaDataByCustomURL = async url => {
         const {serviceCode,refCode} = this.props;
         url += `?serviceCode=${serviceCode}&refCode=${refCode}`;
+        console.log(url);
         let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
 
@@ -86,13 +89,13 @@ class MTLComponent extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl,refCode,serviceCode ,cItemName} = this.props;
+        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
 
         } else {
             return (
-                <Provider store={store({ meta: this.meta, form ,dataUrl,refCode,serviceCode,cItemName})}>
+                <Provider store={store({ meta: this.meta, form ,dataUrl,refCode,serviceCode,cItemName,onOk})}>
                     <RenderEngine />
                 </Provider>
             )
