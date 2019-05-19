@@ -14,23 +14,20 @@ import { refValParse,getQueryParam,initReferInfo } from "../../utils";
 import request from "../../utils/request";
 // 样式
 import "ref-multiple-table/lib/index.css";
-
+const defaultProps = {
+  matchData:[]
+}
 const dataType = "grid";
 @connect(state => ({ form: state.form }))
 class Table extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      showLoading: true,
-      selectedDataLength: 0,
-      mustRender: 0
-    };
+   
 
     let { store ,getDataParams} = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
-    this.dataUrl = store.getState().dataUrl;
-     initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams);
+    initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
     this.view = viewApplication.view;
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
@@ -44,16 +41,27 @@ class Table extends Component {
     this.checkedMap = {};
     this.inited = false;
     this.value = ''; //默认值，初始化input框值后续加上
+    this.state = {
+      showLoading: true,
+      matchData:store.getDate().matchData
+    };
   }
-  componentDidMount() {
-    // this.initComponent();
+
+  componentWillReceiveProps(nextProps){
+    let { store ,getDataParams} = nextProps;
+    let { viewApplication, refEntity } = store.getState().meta;
+    this.dataUrl = store.getState().dataUrl;
+    this.setState({
+      matchData:store.getDate().matchData
+    });
   }
   onSave = data => {
     const {store} = this.props;
     const onOk = store.getState().onOk;
     this.setState({
       matchData:data
-    });
+    })
+  
     // console.log("save", data);
     onOk && onOk(data);
   };
@@ -299,8 +307,12 @@ class Table extends Component {
       currPageIndex,
       filterFormInputs,
       filterInfo,
+      dataNumSelect,
+      handlePagination,
+      searchFilterInfo,
+      matchData
     } = this;
-    let { dataNumSelect, handlePagination, searchFilterInfo } = this;
+
  
     const props = {
       // placeholder: extendField.placeholder,
@@ -319,9 +331,9 @@ class Table extends Component {
       dataNumSelect: dataNumSelect,
       handlePagination: handlePagination,
       miniSearchFunc: searchFilterInfo,
+      matcheData,
       emptyBut: true //清空按钮是否展示
     };
-    console.log(props);
     return (
       <div className='ref-container'>
         <RefMultipleTableWithInput
@@ -344,5 +356,5 @@ class Table extends Component {
     );
   }
 }
-
+Table.defaultProps= defaultProps;
 export default Table;

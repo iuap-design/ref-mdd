@@ -31,21 +31,23 @@ const tablecItemName='country_name';
 
 const mtlInfo = {
     table:{
-        metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=btt2b523192-f945-4d57-91af-5236be749f4f__1557992953164',
-        dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btt2b523192-f945-4d57-91af-5236be749f4f__1557992953164',
-        serviceCode:'GZTBDM061',
-        refCode:'ucfbasedoc.bd_countryref',
-        itemName:'country_name'
+        metaUrl:'https://u8cucf-daily.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        dataUrl:'https://u8cucf-daily.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        serviceCode:'bankdot_u8c',
+        refCode:'bd_bankcard',
+        itemName:'country_name',
+        host:'',
+        token:"",
     },
     tree:{
         metaUrl:'/uniform/pub/ref/getRefMeta',
         serviceCode:'enterprise_bank_account_u8c',
         refCode:'bd_financeorgtreeref',
-        itemName:'orgid_name'
+        itemName:'orgid_name'   
     },
     treeTable:{
-        metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?token=btt2b523192-f945-4d57-91af-5236be749f4f__1557992953164',
-        dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?token=btt2b523192-f945-4d57-91af-5236be749f4f__1557992953164',
+        metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        dataUrl:'http://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
         serviceCode:'GZTBDM111',
         refCode:'pc_taxrevenueref',
         itemName:'taxClass_Code'
@@ -130,6 +132,7 @@ class SearchArea extends Component {
                             <Label>部门</Label>
                             <MTLComponent form={_this.props.form} 
                                           url={mtlInfo.table.metaUrl} 
+                                          dataUrl={mtlInfo.table.dataUrl} 
                                           serviceCode={mtlInfo.table.serviceCode}
                                           refCode={mtlInfo.table.refCode} 
                                           onOk={this.onOk('depart')}

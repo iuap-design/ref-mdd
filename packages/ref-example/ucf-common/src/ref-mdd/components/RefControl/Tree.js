@@ -39,7 +39,8 @@ const defaultProps = {
   },
   onCancel: noop,
   onSave: noop,
-  value: ""
+  value: "",
+  matchData:[]
 };
 const dataType = "tree";
 @connect(state => ({ form: state.form }))
@@ -49,15 +50,16 @@ class Tree extends Component {
     
   let { store,getDataParams } = this.props;
   let { viewApplication, refEntity } = store.getState().meta;
-  this.dataUrl = store.getState().dataUrl;
-	initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams);
-   this.state = {
+	initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
+  this.state = {
       isAfterAjax: false,
-      showLoading: false
+      showLoading: false,
+      matchData:  store.getState().matchData
     };
 
     this.treeData = [];
   }
+
 
   componentDidMount() {
     this.initComponent();
@@ -74,9 +76,9 @@ class Tree extends Component {
   onCancel = () => {};
 
 
-  initComponent = () => {	  
-    this.getRefTreeData();
-  };
+  // initComponent = () => {	  
+  //   this.getRefTreeData();
+  // };
   //   获取树组件数据
   getRefTreeData = (value)=> {
     let { param, dataUrl, lazyModal, onAfterAjax } = this;
@@ -148,9 +150,10 @@ class Tree extends Component {
       <RefTreeWithInput
         {...option}
         getRefTreeData={this.getRefTreeData}
-		filterUrlFunc={this.searchData}
-		onSave = {this.onSave}
-		matchData={this.state.matchData}
+	    	filterUrlFunc={this.searchData}
+        onSave = {this.onSave}
+        canClickGoOn={this.initComponent}
+	    	matchData={this.state.matchData}
       />
     );
   }

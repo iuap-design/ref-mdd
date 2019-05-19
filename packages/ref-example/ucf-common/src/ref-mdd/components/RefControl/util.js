@@ -6,8 +6,6 @@ import {
 import request from "../../utils/request";
 import { FormControl, Radio } from "tinper-bee";
 function getTableInfo(){
-    const _this = this;
-    console.log('==================',this,this.param);
     let  param = this.param;
     param.page = {
       pageSize: 10,

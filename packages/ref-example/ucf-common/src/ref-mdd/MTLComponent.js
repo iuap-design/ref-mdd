@@ -16,7 +16,13 @@ class MTLComponent extends Component {
     }
     meta = {};
     componentWillMount() {
-        let url = this.props.url || '/uniform/pub/ref/getRefMeta';
+        let {url='',token='',host=''} = this.props;
+        const DefaultMetaURL = '/uniform/pub/ref/getRefMeta'
+        // 判断props中的url是否存在，存在走用户传入的url，
+        // 不存在判断使用传入host和token，再跟默认的DefaultMetaURL拼接
+        if(!url){
+            url = token?`${host}${DefaultMetaURL}?token=${token}`:DefaultMetaURL
+        }
         // this.handleDynamicView(url)
         this.getMetaDataByCustomURL(url);
     }
@@ -89,13 +95,25 @@ class MTLComponent extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk} = this.props;
+        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
 
         } else {
+            const opt = {
+                meta: this.meta,
+                form ,
+                dataUrl,
+                refCode,
+                serviceCode,
+                cItemName,
+                onOk,
+                host,
+                token,
+                matchData
+            }
             return (
-                <Provider store={store({ meta: this.meta, form ,dataUrl,refCode,serviceCode,cItemName,onOk})}>
+                <Provider store={store(opt)}>
                     <RenderEngine />
                 </Provider>
             )
