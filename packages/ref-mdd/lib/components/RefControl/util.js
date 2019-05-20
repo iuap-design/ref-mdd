@@ -6,8 +6,6 @@ import {
 import request from "../../utils/request";
 import { FormControl, Radio } from "tinper-bee";
 function getTableInfo(){
-    const _this = this;
-    console.log('==================',this,this.param);
     let  param = this.param;
     param.page = {
       pageSize: 10,
@@ -151,7 +149,7 @@ function getTableData(params){
     });
     this.tableData = tableData;
     this.page.pageCount = data.pageCount || 0;
-    this.page.currPageIndex = data.pageIndex || 0;
+    this.page.currPageIndex = data.pageIndex-1 || 0;
     this.page.totalElements = data.recordCount || 0;
   };
 

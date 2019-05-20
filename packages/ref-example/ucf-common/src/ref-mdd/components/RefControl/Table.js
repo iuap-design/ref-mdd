@@ -11,6 +11,7 @@ import {
 } from "ref-multiple-table/lib/index";
 // 工具类
 import { refValParse,getQueryParam,initReferInfo } from "../../utils";
+import {getTableInfo,launchTableHeader,launchTableData,getTableData} from './util';
 import request from "../../utils/request";
 // 样式
 import "ref-multiple-table/lib/index.css";
@@ -32,9 +33,12 @@ class Table extends Component {
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
     this.tableData = []; //表格数据
-    this.pageCount = 1; //总页数
-    this.pageSize = "10"; //每页数据数
-    this.currPageIndex = 1; //激活页码
+
+    this.page = {
+      pageCount: 1, //总页数
+      currPageIndex:1,
+      pageSize: "10", //每页数据数
+    };
     this.filterFormInputs = [];
     this.filterInfo = {};
     this.checkedArray = [];
@@ -43,8 +47,13 @@ class Table extends Component {
     this.value = ''; //默认值，初始化input框值后续加上
     this.state = {
       showLoading: true,
-      matchData:store.getDate().matchData
+      matchData:store.getState().matchData
     };
+
+    this.getTableInfo =  getTableInfo.bind(this);
+    this.launchTableData = launchTableData.bind(this);
+    this.launchTableHeader = launchTableHeader.bind(this);
+    this.getTableData = getTableData.bind(this);
   }
 
   componentWillReceiveProps(nextProps){
@@ -52,7 +61,7 @@ class Table extends Component {
     let { viewApplication, refEntity } = store.getState().meta;
     this.dataUrl = store.getState().dataUrl;
     this.setState({
-      matchData:store.getDate().matchData
+      matchData:store.getState().matchData
     });
   }
   onSave = data => {
@@ -67,36 +76,68 @@ class Table extends Component {
   };
   onCancel = () => {};
 
-  initComponent = async () => {
+
+  getData = async ()=>{
     const _this = this;
-    let { param, valueField, displayField, value } = _this;
-    param.page = {
-      pageSize: 10,
-      pageIndex: 1
-    };
-    let requestList = [_this.getTableHeader(), _this.getTableData(param)];
-    await Promise.all(requestList)
-      .then(([columnsData, bodyData]) => {
+    this.setState({
+      showLoading: true
+    });
+    const flag =  await this.getTableInfo().then(([columnsData, bodyData])=>{
         // 请求完表体数据回调
-        if (_this.onAfterAjax) {
-          _this.onAfterAjax(bodyData);
+        if (this.onAfterAjax) {
+            this.onAfterAjax(bodyData);
         }
-        _this.launchTableHeader(columnsData);
-        _this.launchTableData(bodyData);
-        _this.setState({
+        this.launchTableHeader(columnsData);
+        this.launchTableData(bodyData);
+        if (this.onAfterAjax && !this.state.isAfterAjax) {
+            this.onAfterAjax(treeData);
+            this.setState({ isAfterAjax: true });
+        }
+        this.setState({
           showLoading: false
         });
-      })
-      .catch(e => {
-        _this.launchTableHeader({});
-        _this.launchTableData({});
-        _this.setState({
+    }).catch(e=>{
+         console.log(e);
+        this.launchTableHeader({});
+        this.launchTableData({});
+        this.setState({
           showLoading: false
         });
-        console.error(e);
-      });
-    return true;
-  };
+    })
+
+    return flag;
+    
+  }
+  // initComponent = async () => {
+  //   const _this = this;
+  //   let { param, valueField, displayField, value } = _this;
+  //   param.page = {
+  //     pageSize: 10,
+  //     pageIndex: 1
+  //   };
+  //   let requestList = [_this.getTableHeader(), _this.getTableData(param)];
+  //   await Promise.all(requestList)
+  //     .then(([columnsData, bodyData]) => {
+  //       // 请求完表体数据回调
+  //       if (_this.onAfterAjax) {
+  //         _this.onAfterAjax(bodyData);
+  //       }
+  //       _this.launchTableHeader(columnsData);
+  //       _this.launchTableData(bodyData);
+  //       _this.setState({
+  //         showLoading: false
+  //       });
+  //     })
+  //     .catch(e => {
+  //       _this.launchTableHeader({});
+  //       _this.launchTableData({});
+  //       _this.setState({
+  //         showLoading: false
+  //       });
+  //       console.error(e);
+  //     });
+  //   return true;
+  // };
   /**
    * 转换元数据参照表格数据为可识别的格式
    *
@@ -302,9 +343,7 @@ class Table extends Component {
     let {
       columnsData,
       tableData,
-      pageCount,
-      pageSize,
-      currPageIndex,
+      page,
       filterFormInputs,
       filterInfo,
       dataNumSelect,
@@ -313,7 +352,7 @@ class Table extends Component {
       matchData
     } = this;
 
- 
+    console.log(page);
     const props = {
       // placeholder: extendField.placeholder,
       title: cBillName,
@@ -323,15 +362,15 @@ class Table extends Component {
       showLoading: showLoading,
       columnsData: columnsData,
       tableData: tableData,
-      pageCount: pageCount,
-      pageSize: pageSize,
-      currPageIndex: currPageIndex,
+      pageCount: page.pageCount,
+      pageSize: page.pageSize,
+      currPageIndex: page.currPageIndex,
       filterFormInputs: filterFormInputs,
       filterInfo: filterInfo,
       dataNumSelect: dataNumSelect,
       handlePagination: handlePagination,
       miniSearchFunc: searchFilterInfo,
-      matcheData,
+      matchData,
       emptyBut: true //清空按钮是否展示
     };
     return (
@@ -340,7 +379,7 @@ class Table extends Component {
           {...props}
           onSave={this.onSave}
           onCancel={this.onCancel}
-          canClickGoOn={this.initComponent}
+          canClickGoOn={this.getData}
           {...getFieldProps(valueField, {
             initialValue: `{${displayField}:"",${valueField}:""}`,
             rules: [

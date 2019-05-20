@@ -37,10 +37,9 @@ class TreeTable extends Component {
     this.launchTableHeader = launchTableHeader.bind(this);
     this.getTableData = getTableData.bind(this);
     this.page = {
-      pageCount: 2, //总页数
+      pageCount: 1, //总页数
       currPageIndex:0,
       pageSize: "10", //每页数据数
-      totalElements: 9
     };
     this.state = {
       value: "",
@@ -49,15 +48,7 @@ class TreeTable extends Component {
   }
   
 
-//   componentDidMount() {
-//     this.initComponent();
-//   }
-//   //  请求表格和树的数据
-//   initComponent=()=>{
-//     const _this = this;
-//     getTableInfo.call(_this)
-//     getRefTreeData.call(_this)
-//   }
+
 
   getData = async ()=>{
     const _this = this;
@@ -98,19 +89,7 @@ class TreeTable extends Component {
     const {param} = this;
     param.data = record[0];
     param.path = record[0] && record[0].path;
-    this.setState({
-      showLoading: true
-    });
-    this.getTableData(param).then(bodyData=>{
-      this.launchTableData(bodyData);
-      this.setState({
-        showLoading: false
-      });
-    }).catch(e=>{
-      this.setState({
-        showLoading: false
-      });
-    });
+    this._getTableDataByParam(param);
 
   };
   onTreeSearch = value => { 
@@ -120,23 +99,9 @@ class TreeTable extends Component {
   };
   loadTableData = pageInfo => {
     const {param} = this;
-    param.page={
-      currPageIndex:pageInfo[`refClientPageInfo.currPageIndex`],
-    }
-    // pageInfo.content ? param.likeValue = pageInfo.content : param.likeValue =null
-    this.setState({
-      showLoading: true
-    });
-    this.getTableData(param).then(bodyData=>{
-      this.launchTableData(bodyData);
-      this.setState({
-        showLoading: false
-      });
-    }).catch(e=>{
-      this.setState({
-        showLoading: false
-      });
-    });
+    param.page.pageIndex = pageInfo[`refClientPageInfo.currPageIndex`]+1,
+
+   this._getTableDataByParam(param);
   };
 
   onTableSearch = value => {
@@ -144,6 +109,10 @@ class TreeTable extends Component {
     const {param} = this;
  
     value ? param.likeValue=value : param.likeValue =null
+    this._getTableDataByParam(param);
+  };
+
+  _getTableDataByParam = (param)=>{
     this.setState({
       showLoading: true
     });
@@ -157,7 +126,7 @@ class TreeTable extends Component {
         showLoading: false
       });
     });
-  };
+  }
   onSave = item => {
     console.log("save", JSON.stringify(item));
     this.setState({

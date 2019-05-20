@@ -28,10 +28,6 @@ export default (url, options) => {
             }
 
         }
-        // setTimeout(() => {
-        //     if (err.message == 'Network Error' || err.response == undefined) {
-        //         window.top.location.href = '/wbalone/pages/login/login.html';
-        //     }
-        // }, 3000);
+      
     });
 }

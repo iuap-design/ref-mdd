@@ -31,10 +31,10 @@ const tablecItemName='country_name';
 
 const mtlInfo = {
     table:{
-        metaUrl:'https://u8cucf-daily.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
-        dataUrl:'https://u8cucf-daily.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=btt6c82ee84-0b78-4af6-9dec-16c8e605eccf__1558167577869',
+        dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btt6c82ee84-0b78-4af6-9dec-16c8e605eccf__1558167577869',
         serviceCode:'bankdot_u8c',
-        refCode:'bd_bankcard',
+        refCode:'ucfbasedoc.bd_currencytenantref',
         itemName:'country_name',
         host:'',
         token:"",
@@ -46,8 +46,10 @@ const mtlInfo = {
         itemName:'orgid_name'   
     },
     treeTable:{
-        metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
-        dataUrl:'http://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        // metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        // dataUrl:'http://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        host:"https://u8cupc-daily.yyuap.com",
+        token:"bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682",
         serviceCode:'GZTBDM111',
         refCode:'pc_taxrevenueref',
         itemName:'taxClass_Code'
@@ -149,7 +151,7 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>税收分类码</Label>
-                            <MTLComponent form={_this.props.form} url={mtlInfo.treeTable.metaUrl} dataUrl={mtlInfo.treeTable.dataUrl} serviceCode={mtlInfo.treeTable.serviceCode} refCode={mtlInfo.treeTable.refCode} cItemName={mtlInfo.treeTable.itemName}/>
+                            <MTLComponent form={_this.props.form} token={mtlInfo.treeTable.token} host={mtlInfo.treeTable.host} serviceCode={mtlInfo.treeTable.serviceCode} refCode={mtlInfo.treeTable.refCode} cItemName={mtlInfo.treeTable.itemName}/>
                         </FormItem>
                     </Col>
                 </Row>

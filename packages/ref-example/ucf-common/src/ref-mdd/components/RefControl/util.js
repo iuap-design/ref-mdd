@@ -149,7 +149,7 @@ function getTableData(params){
     });
     this.tableData = tableData;
     this.page.pageCount = data.pageCount || 0;
-    this.page.currPageIndex = data.pageIndex || 0;
+    this.page.currPageIndex = data.pageIndex-1 || 0;
     this.page.totalElements = data.recordCount || 0;
   };
 

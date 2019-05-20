@@ -47,12 +47,15 @@ export function getQueryParam(type,refEntity,viewApplication,getDataParams={}){
 /**
  * 初始化参照信息
  */
-export function initReferInfo(dataType, refEntity, viewApplication,getDataParams){
+export function initReferInfo(dataType, refEntity, viewApplication,getDataParams,propsState={}){
+    let {dataUrl,token='',host=''} = propsState;
+    // this.dataUrl = propsState.dataUrl;
     this.valueField = refEntity.cEntityKeyFld;//参照真实值
     this.displayField = refEntity.cEntityNameFld;//参照显示值
-    if(!this.dataUrl){
-        this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    const DefaultDataURL = '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    if(!dataUrl){
+        dataUrl = token?`${host}${DefaultDataURL}?token=${token}`:`${host}${DefaultDataURL}`;
     }
-   
+    this.dataUrl = dataUrl;
     this.param = getQueryParam(dataType, refEntity, viewApplication,getDataParams);//数据查询参数
 }

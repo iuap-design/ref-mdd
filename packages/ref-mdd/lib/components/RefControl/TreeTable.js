@@ -7,31 +7,28 @@ import { connect } from "mini-store";
 import { RefTreeTableWithInput } from "ref-tree-table/lib/index";
 
 // 工具类
-import { refValParse, getQueryParam, initReferInfo } from "../../utils";
+import {  initReferInfo } from "../../utils";
 import {getTableInfo,getRefTreeData,launchTableHeader,launchTableData,getTableData} from './util';
 
 // 样式
 import "ref-tree-table/lib/index.css";
 
 const dataType = "treeTable";
+const defaultProps = {
+  matchData:[]
+}
 @connect(state => ({ form: state.form }))
-class Tree extends Component {
+class TreeTable extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: "",
-      condition: "",
-      num: 0,
-      matchData: []
-    };
+   
     this.columnsData = [];
     this.tableData = [];
     this.originTableData = [];
     let { store ,getDataParams} = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
-    this.dataUrl = store.getState().dataUrl;
-
-    initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams);
+    
+    initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
     this.view = viewApplication.view;
     this.dataType = '';
     this.getTableInfo =  getTableInfo.bind(this);
@@ -40,21 +37,18 @@ class Tree extends Component {
     this.launchTableHeader = launchTableHeader.bind(this);
     this.getTableData = getTableData.bind(this);
     this.page = {
-      pageCount: 2, //总页数
+      pageCount: 1, //总页数
+      currPageIndex:0,
       pageSize: "10", //每页数据数
-      totalElements: 9
+    };
+    this.state = {
+      value: "",
+      matchData:  store.getState().matchData
     };
   }
+  
 
-//   componentDidMount() {
-//     this.initComponent();
-//   }
-//   //  请求表格和树的数据
-//   initComponent=()=>{
-//     const _this = this;
-//     getTableInfo.call(_this)
-//     getRefTreeData.call(_this)
-//   }
+
 
   getData = async ()=>{
     const _this = this;
@@ -92,16 +86,38 @@ class Tree extends Component {
     
   }
   onTreeChange = record => {
-    console.log(record);
     const {param} = this;
     param.data = record[0];
     param.path = record[0] && record[0].path;
+    this._getTableDataByParam(param);
+
+  };
+  onTreeSearch = value => { 
+    // alert(value);
+    console.log('treeSearch---',value);
+    
+  };
+  loadTableData = pageInfo => {
+    const {param} = this;
+    param.page.pageIndex = pageInfo[`refClientPageInfo.currPageIndex`]+1,
+
+   this._getTableDataByParam(param);
+  };
+
+  onTableSearch = value => {
+    console.log("onTableSearch", value);
+    const {param} = this;
+ 
+    value ? param.likeValue=value : param.likeValue =null
+    this._getTableDataByParam(param);
+  };
+
+  _getTableDataByParam = (param)=>{
     this.setState({
       showLoading: true
     });
     this.getTableData(param).then(bodyData=>{
       this.launchTableData(bodyData);
-      console.log('unfinish*(');
       this.setState({
         showLoading: false
       });
@@ -110,23 +126,7 @@ class Tree extends Component {
         showLoading: false
       });
     });
-    console.log('finish*(');
-    
-   
-  };
-  onTreeSearch = value => { 
-    // alert(value);
-    console.log('treeSearch---',value);
-  };
-  loadTableData = param => {
-    this.page.currPageIndex = param[`refClientPageInfo.currPageIndex`];
-    this.setState({
-      num: ++this.state.num
-    });
-  };
-  onTableSearch = value => {
-    console.log("onTableSearch", value);
-  };
+  }
   onSave = item => {
     console.log("save", JSON.stringify(item));
     this.setState({
@@ -179,6 +179,6 @@ class Tree extends Component {
     );
   }
 }
-
-export default Tree;
+TreeTable.defaultProps= defaultProps;
+export default TreeTable;
 

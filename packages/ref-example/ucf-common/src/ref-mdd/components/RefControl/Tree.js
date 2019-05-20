@@ -9,19 +9,13 @@ import { RefTreeWithInput } from "ref-tree/lib/index";
 
 // 工具类
 import { refValParse,getQueryParam,initReferInfo } from "../../utils";
+import {getRefTreeData} from './util';
 import request from "../../utils/request";
 // 样式
 import "ref-tree/lib/index.css";
 
 const noop = () => {
 };
-const getTreeList = (url, param, content = "") =>{
-  content.length && (param.likeValue = content); 
-  return request(url, {
-    method: "POST",
-    data: param
-  });
-}
 
 const propTypes = {
   param: PropTypes.object,
@@ -58,12 +52,10 @@ class Tree extends Component {
     };
 
     this.treeData = [];
+    this.getRefTreeData = getRefTreeData.bind(this);
   }
 
 
-  componentDidMount() {
-    this.initComponent();
-  }
   onSave = data => {
     const {store} = this.props;
     const onOk = store.getState().onOk;
@@ -76,39 +68,27 @@ class Tree extends Component {
   onCancel = () => {};
 
 
-  // initComponent = () => {	  
-  //   this.getRefTreeData();
-  // };
-  //   获取树组件数据
-  getRefTreeData = (value)=> {
-    let { param, dataUrl, lazyModal, onAfterAjax } = this;
-    param = Object.assign(param, {
-      treeNode: "",
-      treeloadData: lazyModal
+  getData = async ()=>{
+    const _this = this;
+    this.setState({
+      showLoading: true
     });
-    getTreeList(dataUrl, param, value)
-      .then(res => {
-        if (onAfterAjax && !this.state.isAfterAjax) {
-          onAfterAjax(res);
-          this.setState({ isAfterAjax: true });
-        }
-        let { data = [] } = res.data;
-		this.treeData = data;
-		this._changeLoadingState(false);
-      })
-      .catch(() => {
+    const flag =  await this.getRefTreeData().then((treeData)=>{
+        let { data = [] } = treeData.data;
+        this.treeData = data;
+        this.setState({
+          showLoading: false
+        });
+    }).catch(e=>{
+         console.log(e);
         this.treeData = [];
-        this._changeLoadingState(false);
-      });
+        this.setState({
+          showLoading: false
+        });
+    })
+    return flag;
   }
-
-  _changeLoadingState=(loadingValue)=>{
-	this.setState({
-		showLoading:loadingValue
-	});
-  }
-
-
+  
   searchData=()=>{
 	  console.log('++=========');
 	  const {treeData} = this;
@@ -152,7 +132,7 @@ class Tree extends Component {
         getRefTreeData={this.getRefTreeData}
 	    	filterUrlFunc={this.searchData}
         onSave = {this.onSave}
-        canClickGoOn={this.initComponent}
+        canClickGoOn={this.getData}
 	    	matchData={this.state.matchData}
       />
     );
