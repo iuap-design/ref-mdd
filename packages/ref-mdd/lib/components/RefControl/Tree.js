@@ -12,7 +12,7 @@ import { initReferInfo } from "../../utils";
 import {getRefTreeData} from './util';
 
 // 样式
-import "ref-tree/lib/index.css";
+import "ref-tree/lib/index.less";
 
 const noop = () => {
 };
@@ -62,23 +62,22 @@ class Tree extends Component {
     this.setState({
       matchData:data
     });
-    // console.log("save", data);
     onOk && onOk(data);
   };
   onCancel = () => {};
 
 
   getData = async ()=>{
-    const _this = this;
     this.setState({
       showLoading: true
     });
     const flag =  await this.getRefTreeData().then((treeData)=>{
+       this.setState({
+        showLoading: false
+       });
         let { data = [] } = treeData.data;
         this.treeData = data;
-        this.setState({
-          showLoading: false
-        });
+        
     }).catch(e=>{
          console.log(e);
         this.treeData = [];
@@ -90,7 +89,6 @@ class Tree extends Component {
   }
   
   searchData=()=>{
-	  console.log('++=========');
 	  const {treeData} = this;
 	  this.setState({
 		  filterData:treeData

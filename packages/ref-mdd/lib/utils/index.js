@@ -57,5 +57,6 @@ export function initReferInfo(dataType, refEntity, viewApplication,getDataParams
         dataUrl = token?`${host}${DefaultDataURL}?token=${token}`:`${host}${DefaultDataURL}`;
     }
     this.dataUrl = dataUrl;
+    this.cBillName = viewApplication.cBillName;
     this.param = getQueryParam(dataType, refEntity, viewApplication,getDataParams);//数据查询参数
 }

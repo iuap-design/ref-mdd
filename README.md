@@ -34,8 +34,10 @@ const RefTableComponent = () => (
 |参数|说明|类型|默认值|是否必填|
 |:--|:---:|:--:|---:|---:|
 |url|参照中获取的meta信息的url|string|'/uniform/pub/ref/getRefMeta'|否|
-|dataUrl|参照中获取的数据data信息的url|string|/uniform/bill/ref/getRefData|否|
+|dataUrl|参照中获取的数据data信息的url|string|'/uniform/bill/ref/getRefData'|否|
 |refCode|参照Code值|string||是|
+|host|请求meta和数据的域地址|string||否|
+|token|跨域时所需的token|string|否|
 |onOk|点击确认按钮的回调函数|Function||否|
 ## 整体流程
 

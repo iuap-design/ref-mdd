@@ -31,13 +31,13 @@ const tablecItemName='country_name';
 
 const mtlInfo = {
     table:{
-        metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=btt6c82ee84-0b78-4af6-9dec-16c8e605eccf__1558167577869',
-        dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btt6c82ee84-0b78-4af6-9dec-16c8e605eccf__1558167577869',
-        serviceCode:'bankdot_u8c',
-        refCode:'ucfbasedoc.bd_currencytenantref',
+        // metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=btte215f3e7-a166-433a-9da8-59fcd8a12a1c__1558493419324',
+        // dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btte215f3e7-a166-433a-9da8-59fcd8a12a1c__1558493419324',
+        serviceCode:'aa_merchant',
+        refCode:'ucfbasedoc.bd_countryref',
         itemName:'country_name',
-        host:'',
-        token:"",
+        // host:'https://u8cupc-daily.yyuap.com',
+        // token:"btt7c9c8eef-a804-41a2-bbd7-3321b6d46098__1558612008682",
     },
     tree:{
         metaUrl:'/uniform/pub/ref/getRefMeta',
@@ -46,13 +46,12 @@ const mtlInfo = {
         itemName:'orgid_name'   
     },
     treeTable:{
-        // metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
-        // dataUrl:'http://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
-        host:"https://u8cupc-daily.yyuap.com",
-        token:"bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682",
-        serviceCode:'GZTBDM111',
-        refCode:'pc_taxrevenueref',
-        itemName:'taxClass_Code'
+        // metaUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefMeta?terminalType=1&token=btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881&refimestamp=1559026546502',
+        // dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+        // host:"http://u8cupc-test.yyuap.com",
+        // token:"btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881",
+        serviceCode:'pc_product',
+        refCode:'pc_taxrevenueref'
     }
 }
 //所需变量
@@ -97,6 +96,10 @@ class SearchArea extends Component {
         // actions.app.loadList();
     }
 
+    /**
+     *确认后的回调事件
+     * @memberof SearchArea
+     */
     onOk=(type)=>{
         return (param)=>{
             console.log('onOk======',type,param);
@@ -133,12 +136,9 @@ class SearchArea extends Component {
                         <FormItem>
                             <Label>部门</Label>
                             <MTLComponent form={_this.props.form} 
-                                          url={mtlInfo.table.metaUrl} 
-                                          dataUrl={mtlInfo.table.dataUrl} 
-                                          serviceCode={mtlInfo.table.serviceCode}
                                           refCode={mtlInfo.table.refCode} 
                                           onOk={this.onOk('depart')}
-                                          cItemName={mtlInfo.table.itemName}/>
+                                          />
                         </FormItem>
                     </Col>
 
@@ -151,7 +151,7 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>税收分类码</Label>
-                            <MTLComponent form={_this.props.form} token={mtlInfo.treeTable.token} host={mtlInfo.treeTable.host} serviceCode={mtlInfo.treeTable.serviceCode} refCode={mtlInfo.treeTable.refCode} cItemName={mtlInfo.treeTable.itemName}/>
+                            <MTLComponent form={_this.props.form}  refCode={mtlInfo.treeTable.refCode} />
                         </FormItem>
                     </Col>
                 </Row>

@@ -17,11 +17,11 @@ class MTLComponent extends Component {
     meta = {};
     componentWillMount() {
         let {url='',token='',host=''} = this.props;
-        const DefaultMetaURL = '/uniform/pub/ref/getRefMeta'
+        const defaultMetaURL = '/uniform/pub/ref/getRefMeta'
         // 判断props中的url是否存在，存在走用户传入的url，
-        // 不存在判断使用传入host和token，再跟默认的DefaultMetaURL拼接
+        // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
         if(!url){
-            url = token?`${host}${DefaultMetaURL}?token=${token}`:DefaultMetaURL
+            url = token?`${host}${defaultMetaURL}?token=${token}`:defaultMetaURL
         }
         // this.handleDynamicView(url)
         this.getMetaDataByCustomURL(url);
@@ -56,7 +56,6 @@ class MTLComponent extends Component {
     getMetaDataByCustomURL = async url => {
         const {serviceCode,refCode} = this.props;
         url += `?serviceCode=${serviceCode}&refCode=${refCode}`;
-        console.log(url);
         let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
 

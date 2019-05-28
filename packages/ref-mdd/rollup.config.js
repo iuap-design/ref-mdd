@@ -5,19 +5,22 @@ import commonjs from 'rollup-plugin-commonjs';
 // import json from 'rollup-plugin-json';
 import pkg from './package.json'
 import postcss from 'rollup-plugin-postcss';
-
+// import { uglify } from "rollup-plugin-uglify";
 // PostCSS plugins
 import simplevars from 'postcss-simple-vars';
 import nested from 'postcss-nested';
-import cssnext from 'postcss-cssnext';
-import postcssPresetEnv from 'postcss-preset-env';
+// import cssnext from 'postcss-cssnext';
+// import postcssPresetEnv from 'postcss-preset-env';
 import cssnano from 'cssnano';
+import replace from 'rollup-plugin-replace';
+
 export default {
   input: 'lib/index.js',
   output: {
     file: 'dist/ref-mdd.js',
     format: 'umd',
     name: 'RefMdd',
+    sourceMap: true,
     globals: {
       react: 'React',
       axios: 'axios',
@@ -32,6 +35,9 @@ export default {
     ...Object.keys(pkg.peerDependencies || {})
   ],
   plugins: [
+    replace({
+      ENVIRONMENT: JSON.stringify(process.env.NODE_ENV || 'development')
+    }),
     postcss({
       plugins:[
               simplevars(),
@@ -42,7 +48,7 @@ export default {
       extensions: [ '.css','.scss' ],
     }),
     resolve(),
-
+    
     babel({
       runtimeHelpers: true,
       exclude: [
@@ -50,12 +56,15 @@ export default {
              '*.json'
       ],// only transpile our source code
     }),
+   
     commonjs({
       include: 'node_modules/**',
       namedExports: {
         'node_modules/react-is/index.js': ['isValidElementType']
       }
-    })
+    }),
+    // uglify()
+
     // commonjs({
     //   namedExports: {
     //     // left-hand side can be an absolute path, a path

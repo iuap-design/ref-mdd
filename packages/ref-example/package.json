@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ucf-scripts start --homepage=mtl-example",
+    "start": "ucf-scripts start --homepage=mtl-example --mode production",
     "build": "ucf-scripts build"
   },
   "keywords": [],
