@@ -4,7 +4,7 @@ import {
   } from "ref-multiple-table/lib/index";
 
 import request from "../../utils/request";
-import { FormControl, Radio } from "tinper-bee";
+import Radio  from "bee-radio";
 function getTableInfo(){
     let  param = this.param;
     param.page = {
@@ -48,7 +48,7 @@ function convertMetaTableData() {
     let tableContainer = [];
     if(view.containers){
         tableContainer = view.containers.find(item=>{
-            return item.cName.toLocaleLowerCase() == 'table';
+            return item.cControlType.toLocaleLowerCase() == 'table';
         });
     }
     tableContainer.controls.forEach(item => {
@@ -74,7 +74,11 @@ function getTableHeader(){
   };
 
 function getTableData(params){
-  const paramsInfo = Object.assign({}, params,{dataType:'grid'});
+  let extraParams = {};
+  if(typeof this.beforeGetData == 'function'){
+    extraParams = this.beforeGetData();
+  }
+  const paramsInfo = Object.assign({}, params,{dataType:'grid'},extraParams);
     return request(this.dataUrl, {
       method: "post",
       data: paramsInfo
@@ -156,22 +160,14 @@ function getTableData(params){
 
   //   获取树组件数据
   function getRefTreeData (value){
+    let extraParams = {};
+    if(typeof this.beforeGetData == 'function'){
+      extraParams = this.beforeGetData();
+    }
     let { param, dataUrl, lazyModal, onAfterAjax } = this;
-    const paramsInfo = Object.assign({}, param,{dataType:'tree'});
+    const paramsInfo = Object.assign({}, param,{dataType:'tree'},extraParams);
     return getTreeList(dataUrl, paramsInfo, value)
-    //   .then(res => {
-    //     if (onAfterAjax && !this.state.isAfterAjax) {
-    //       onAfterAjax(res);
-    //       this.setState({ isAfterAjax: true });
-    //     }
-    //     let { data = [] } = res.data;
-	// 	this.treeData = data;
-	// 	_changeLoadingState.call(this,false);
-    //   })
-    //   .catch(() => {
-    //     this.treeData = [];
-    //     _changeLoadingState.call(this,false);
-    //   });
+   
   }
 
   function _changeLoadingState(loadingValue){

@@ -8,11 +8,11 @@ import { connect } from "mini-store";
 import { RefTreeWithInput } from "ref-tree/lib/index";
 
 // 工具类
-import { refValParse,getQueryParam,initReferInfo } from "../../utils";
+import { initReferInfo } from "../../utils";
 import {getRefTreeData} from './util';
-import request from "../../utils/request";
+
 // 样式
-import "ref-tree/lib/index.css";
+import "ref-tree/lib/index.less";
 
 const noop = () => {
 };
@@ -42,9 +42,9 @@ class Tree extends Component {
   constructor(props) {
     super(props);
     
-  let { store,getDataParams } = this.props;
+  let { store } = this.props;
   let { viewApplication, refEntity } = store.getState().meta;
-	initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
+	initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
   this.state = {
       isAfterAjax: false,
       showLoading: false,
@@ -62,23 +62,22 @@ class Tree extends Component {
     this.setState({
       matchData:data
     });
-    // console.log("save", data);
     onOk && onOk(data);
   };
   onCancel = () => {};
 
 
   getData = async ()=>{
-    const _this = this;
     this.setState({
       showLoading: true
     });
     const flag =  await this.getRefTreeData().then((treeData)=>{
+       this.setState({
+        showLoading: false
+       });
         let { data = [] } = treeData.data;
         this.treeData = data;
-        this.setState({
-          showLoading: false
-        });
+        
     }).catch(e=>{
          console.log(e);
         this.treeData = [];
@@ -90,7 +89,6 @@ class Tree extends Component {
   }
   
   searchData=()=>{
-	  console.log('++=========');
 	  const {treeData} = this;
 	  this.setState({
 		  filterData:treeData

@@ -33,13 +33,13 @@ export {refValParse};
  * @param {string} type 
  * @param {object} refEntity 
  */
-export function getQueryParam(type,refEntity,viewApplication,getDataParams={}){
-    let rsParam = {},defaultDataParams = getDataParams;
+export function getQueryParam(type,refEntity,viewApplication,beforeGetData={},refCode){
+    let rsParam = {},defaultDataParams = beforeGetData;
     rsParam.dataType = type;
-    rsParam.refCode = refEntity.refType; 
+    rsParam.refCode = refCode; 
     rsParam.billnum = refEntity.cBillnum;
-    if(typeof getDataParams == 'function'){
-        defaultDataParams = getDataParams();
+    if(typeof beforeGetData == 'function'){
+        defaultDataParams = beforeGetData();
     }
     rsParam = Object.assign({},rsParam,defaultDataParams);
     return rsParam;
@@ -47,16 +47,18 @@ export function getQueryParam(type,refEntity,viewApplication,getDataParams={}){
 /**
  * 初始化参照信息
  */
-export function initReferInfo(dataType, refEntity, viewApplication,getDataParams,propsState={}){
-    let {dataUrl,token='',host=''} = propsState;
+export function initReferInfo(dataType, refEntity, viewApplication,propsState={}){
+    let {dataUrl,token='',host='',beforeGetData} = propsState;
     // this.dataUrl = propsState.dataUrl;
     this.valueField = refEntity.cEntityKeyFld;//参照真实值
     this.displayField = refEntity.cEntityNameFld;//参照显示值
-    const DefaultDataURL = '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    const defaultDataURL = '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     if(!dataUrl){
-        dataUrl = token?`${host}${DefaultDataURL}?token=${token}`:`${host}${DefaultDataURL}`;
+        dataUrl = token?`${host}${defaultDataURL}?token=${token}`:`${host}${defaultDataURL}`;
     }
     this.dataUrl = dataUrl;
     this.cBillName = viewApplication.cBillName;
-    this.param = getQueryParam(dataType, refEntity, viewApplication,getDataParams);//数据查询参数
+    this.getQueryParam = getQueryParam;
+    this.refCode = propsState.refCode;
+    this.param = getQueryParam(dataType, refEntity, viewApplication,beforeGetData,this.refCode);//数据查询参数
 }

@@ -9,7 +9,7 @@
 	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
 	var ReactDOM__default = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
 	indexof = indexof && indexof.hasOwnProperty('default') ? indexof['default'] : indexof;
-	var tinperBee__default = 'default' in tinperBee ? tinperBee['default'] : tinperBee;
+	tinperBee = tinperBee && tinperBee.hasOwnProperty('default') ? tinperBee['default'] : tinperBee;
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -829,19 +829,19 @@
 	 * @param {object} refEntity 
 	 */
 
-	function getQueryParam(type, refEntity, viewApplication, getDataParams) {
-	  if (getDataParams === void 0) {
-	    getDataParams = {};
+	function getQueryParam(type, refEntity, viewApplication, beforeGetData, refCode) {
+	  if (beforeGetData === void 0) {
+	    beforeGetData = {};
 	  }
 
 	  var rsParam = {},
-	      defaultDataParams = getDataParams;
+	      defaultDataParams = beforeGetData;
 	  rsParam.dataType = type;
-	  rsParam.refCode = refEntity.refType;
+	  rsParam.refCode = refCode;
 	  rsParam.billnum = refEntity.cBillnum;
 
-	  if (typeof getDataParams == 'function') {
-	    defaultDataParams = getDataParams();
+	  if (typeof beforeGetData == 'function') {
+	    defaultDataParams = beforeGetData();
 	  }
 
 	  rsParam = Object.assign({}, rsParam, defaultDataParams);
@@ -851,7 +851,7 @@
 	 * 初始化参照信息
 	 */
 
-	function initReferInfo(dataType, refEntity, viewApplication, getDataParams, propsState) {
+	function initReferInfo(dataType, refEntity, viewApplication, propsState) {
 	  if (propsState === void 0) {
 	    propsState = {};
 	  }
@@ -861,20 +861,24 @@
 	      _propsState$token = _propsState.token,
 	      token = _propsState$token === void 0 ? '' : _propsState$token,
 	      _propsState$host = _propsState.host,
-	      host = _propsState$host === void 0 ? '' : _propsState$host; // this.dataUrl = propsState.dataUrl;
+	      host = _propsState$host === void 0 ? '' : _propsState$host,
+	      beforeGetData = _propsState.beforeGetData; // this.dataUrl = propsState.dataUrl;
 
 	  this.valueField = refEntity.cEntityKeyFld; //参照真实值
 
 	  this.displayField = refEntity.cEntityNameFld; //参照显示值
 
-	  var DefaultDataURL = '/uniform/' + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
+	  var defaultDataURL = '/uniform/' + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
 
 	  if (!dataUrl) {
-	    dataUrl = token ? "" + host + DefaultDataURL + "?token=" + token : "" + host + DefaultDataURL;
+	    dataUrl = token ? "" + host + defaultDataURL + "?token=" + token : "" + host + defaultDataURL;
 	  }
 
 	  this.dataUrl = dataUrl;
-	  this.param = getQueryParam(dataType, refEntity, viewApplication, getDataParams); //数据查询参数
+	  this.cBillName = viewApplication.cBillName;
+	  this.getQueryParam = getQueryParam;
+	  this.refCode = propsState.refCode;
+	  this.param = getQueryParam(dataType, refEntity, viewApplication, beforeGetData, this.refCode); //数据查询参数
 	}
 
 	var _extends_1 = createCommonjsModule(function (module) {
@@ -2495,7 +2499,7 @@
 	module.exports = exports['default'];
 	});
 
-	var FormControl = unwrapExports(build$1);
+	unwrapExports(build$1);
 
 	var RadioGroup_1 = createCommonjsModule(function (module, exports) {
 
@@ -4352,7 +4356,7 @@
 
 
 
-	var FormControl$1 = /*#__PURE__*/Object.freeze({
+	var FormControl = /*#__PURE__*/Object.freeze({
 		default: undefined
 	});
 
@@ -4368,7 +4372,7 @@
 		default: undefined
 	});
 
-	getCjsExportFromNamespace(FormControl$1);
+	getCjsExportFromNamespace(FormControl);
 
 	getCjsExportFromNamespace(InputGroup);
 
@@ -83601,7 +83605,7 @@
 
 	  if (view.containers) {
 	    tableContainer = view.containers.find(function (item) {
-	      return item.cName.toLocaleLowerCase() == 'table';
+	      return item.cControlType.toLocaleLowerCase() == 'table';
 	    });
 	  }
 
@@ -83628,9 +83632,15 @@
 	}
 
 	function getTableData(params) {
+	  var extraParams = {};
+
+	  if (typeof this.beforeGetData == 'function') {
+	    extraParams = this.beforeGetData();
+	  }
+
 	  var paramsInfo = Object.assign({}, params, {
 	    dataType: 'grid'
-	  });
+	  }, extraParams);
 	  return request$1(this.dataUrl, {
 	    method: "post",
 	    data: paramsInfo
@@ -83675,11 +83685,11 @@
 	      key: "a",
 	      width: 45,
 	      render: function render(text, record, index) {
-	        return React__default.createElement(tinperBee.Radio.RadioGroup, {
+	        return React__default.createElement(Radio.RadioGroup, {
 	          className: "in-table",
 	          name: record[valueField],
 	          selectedValue: record._checked ? record[valueField] : null
-	        }, React__default.createElement(tinperBee.Radio, {
+	        }, React__default.createElement(Radio, {
 	          value: record[valueField]
 	        }));
 	      }
@@ -83711,26 +83721,20 @@
 	}
 
 	function getRefTreeData(value) {
+	  var extraParams = {};
+
+	  if (typeof this.beforeGetData == 'function') {
+	    extraParams = this.beforeGetData();
+	  }
+
 	  var param = this.param,
 	      dataUrl = this.dataUrl,
 	      lazyModal = this.lazyModal,
 	      onAfterAjax = this.onAfterAjax;
 	  var paramsInfo = Object.assign({}, param, {
 	    dataType: 'tree'
-	  });
-	  return getTreeList(dataUrl, paramsInfo, value); //   .then(res => {
-	  //     if (onAfterAjax && !this.state.isAfterAjax) {
-	  //       onAfterAjax(res);
-	  //       this.setState({ isAfterAjax: true });
-	  //     }
-	  //     let { data = [] } = res.data;
-	  // 	this.treeData = data;
-	  // 	_changeLoadingState.call(this,false);
-	  //   })
-	  //   .catch(() => {
-	  //     this.treeData = [];
-	  //     _changeLoadingState.call(this,false);
-	  //   });
+	  }, extraParams);
+	  return getTreeList(dataUrl, paramsInfo, value);
 	}
 
 	var getTreeList = function getTreeList(url, param, content) {
@@ -83784,19 +83788,16 @@
 	    asyncToGenerator(
 	    /*#__PURE__*/
 	    regenerator.mark(function _callee() {
-	      var _this, flag;
-
+	      var flag;
 	      return regenerator.wrap(function _callee$(_context) {
 	        while (1) {
 	          switch (_context.prev = _context.next) {
 	            case 0:
-	              _this = assertThisInitialized(_this2);
-
 	              _this2.setState({
 	                showLoading: true
 	              });
 
-	              _context.next = 4;
+	              _context.next = 3;
 	              return _this2.getTableInfo().then(function (_ref2) {
 	                var columnsData = _ref2[0],
 	                    bodyData = _ref2[1];
@@ -83833,11 +83834,11 @@
 	                });
 	              });
 
-	            case 4:
+	            case 3:
 	              flag = _context.sent;
 	              return _context.abrupt("return", flag);
 
-	            case 6:
+	            case 5:
 	            case "end":
 	              return _context.stop();
 	          }
@@ -83845,92 +83846,9 @@
 	      }, _callee);
 	    }));
 
-	    _this2.convertMetaTableData = function () {
-	      var _assertThisInitialize = assertThisInitialized(_this2),
-	          view = _assertThisInitialize.view;
-
-	      var strFieldCode = [],
-	          strFieldName = [],
-	          tpl = {};
-	      view.containers[0].controls.forEach(function (item) {
-	        strFieldCode.push(item.cFieldName);
-	        strFieldName.push(item.cCaption);
-	      });
-	      tpl["rootName"] = view.cTemplateTitle;
-	      tpl["refName"] = view.cTemplateTitle;
-	      tpl["defaultFieldCount"] = strFieldCode.length;
-	      tpl["strFieldCode"] = strFieldCode;
-	      tpl["strFieldName"] = strFieldName;
-	      return tpl;
-	    };
-
-	    _this2.getTableHeader = function () {
-	      return new Promise(function (resolve, reject) {
-	        resolve(_this2.convertMetaTableData());
-	      });
-	    };
-
-	    _this2.getTableData = function (params) {
-	      return request$1(_this2.dataUrl, {
-	        method: "post",
-	        data: params
-	      });
-	    };
-
-	    _this2.launchTableHeader = function (data) {
-	      if (!data) return;
-	      var multiple = _this2.props.multiple;
-	      var keyList = data.strFieldCode || [];
-	      var titleList = data.strFieldName || [];
-	      var valueField = _this2.valueField;
-	      _this2.filterFormInputs = [];
-	      var colunmsList = keyList.map(function (item, index) {
-	        _this2.filterFormInputs.push(React__default.createElement(lib_1$1, {
-	          key: item,
-	          name: item,
-	          text: titleList[index]
-	        }, React__default.createElement(FormControl, null)));
-
-	        return {
-	          key: item,
-	          dataIndex: item,
-	          title: titleList[index]
-	        };
-	      });
-
-	      if (colunmsList.length === 0) {
-	        colunmsList = [{
-	          title: "未传递表头数据",
-	          dataIndex: "nodata",
-	          key: "nodata"
-	        }];
-	      } else if (!multiple) {
-	        //单选时用对号符号标记当前行选中
-	        colunmsList.unshift({
-	          title: " ",
-	          dataIndex: "a",
-	          key: "a",
-	          width: 45,
-	          render: function render(text, record, index) {
-	            return React__default.createElement(Radio.RadioGroup, {
-	              className: "in-table",
-	              name: record[valueField],
-	              selectedValue: record._checked ? record[valueField] : null
-	            }, React__default.createElement(Radio, {
-	              value: record[valueField]
-	            }));
-	          }
-	        });
-	      }
-
-	      _this2.columnsData = colunmsList;
-	    };
-
 	    _this2.launchTableData = function (response) {
 	      if (!response) return;
-	      var valueField = _this2.props.valueField; // valueField = 'id';
-	      // let { data = [], page = {} } = response;
-
+	      var valueField = _this2.props.valueField;
 	      var data = response.data.data;
 	      var tableData = data && data.recordList ? data.recordList : [];
 	      tableData.map(function (record, k) {
@@ -83943,33 +83861,11 @@
 	      _this2.totalElements = data.recordCount || 0;
 	    };
 
-	    _this2.loadTableData = function (param) {
-	      _this2.setState({
-	        showLoading: true
-	      });
-
-	      var _this = assertThisInitialized(_this2);
-
-	      _this.getTableData(param).then(function (response) {
-	        _this.launchTableData(response);
-
-	        _this.setState({
-	          showLoading: false
-	        });
-	      }).catch(function () {
-	        _this.launchTableData({});
-
-	        _this.setState({
-	          showLoading: false
-	        });
-	      });
-	    };
-
 	    _this2.searchFilterInfo = function (filterInfo) {
 	      var _this = assertThisInitialized(_this2);
 
-	      var _assertThisInitialize2 = assertThisInitialized(_this2),
-	          param = _assertThisInitialize2.param;
+	      var _assertThisInitialize = assertThisInitialized(_this2),
+	          param = _assertThisInitialize.param;
 
 	      _this2.filterInfo = filterInfo;
 
@@ -83990,9 +83886,9 @@
 	    };
 
 	    _this2.handlePagination = function (index) {
-	      var _assertThisInitialize3 = assertThisInitialized(_this2),
-	          filterInfo = _assertThisInitialize3.filterInfo,
-	          param = _assertThisInitialize3.param;
+	      var _assertThisInitialize2 = assertThisInitialized(_this2),
+	          filterInfo = _assertThisInitialize2.filterInfo,
+	          param = _assertThisInitialize2.param;
 
 	      Object.keys(filterInfo).forEach(function (key) {
 	        if (!filterInfo[key]) {
@@ -84012,9 +83908,9 @@
 	    };
 
 	    _this2.dataNumSelect = function (index, pageSize) {
-	      var _assertThisInitialize4 = assertThisInitialized(_this2),
-	          filterInfo = _assertThisInitialize4.filterInfo,
-	          param = _assertThisInitialize4.param;
+	      var _assertThisInitialize3 = assertThisInitialized(_this2),
+	          filterInfo = _assertThisInitialize3.filterInfo,
+	          param = _assertThisInitialize3.param;
 
 	      Object.keys(filterInfo).forEach(function (key) {
 	        if (!filterInfo[key]) {
@@ -84035,15 +83931,13 @@
 	      _this2.loadTableData(param);
 	    };
 
-	    var _this2$props = _this2.props,
-	        _store = _this2$props.store,
-	        getDataParams = _this2$props.getDataParams;
+	    var _store = _this2.props.store;
 
 	    var _store$getState$meta = _store.getState().meta,
 	        viewApplication = _store$getState$meta.viewApplication,
 	        refEntity = _store$getState$meta.refEntity;
 
-	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, getDataParams, _store.getState());
+	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, _store.getState());
 	    _this2.view = viewApplication.view; // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
 
 	    _this2.columnsData = []; //表头数据
@@ -84079,10 +83973,7 @@
 
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	    var store = nextProps.store,
-	        getDataParams = nextProps.getDataParams;
-	    var _store$getState$meta2 = store.getState().meta,
-	        viewApplication = _store$getState$meta2.viewApplication,
-	        refEntity = _store$getState$meta2.refEntity;
+	        beforeGetData = nextProps.beforeGetData;
 	    this.dataUrl = store.getState().dataUrl;
 	    this.setState({
 	      matchData: store.getState().matchData
@@ -84091,9 +83982,9 @@
 
 	  _proto.render = function render() {
 	    var store = this.props.store;
-	    var _store$getState$meta3 = store.getState().meta,
-	        viewApplication = _store$getState$meta3.viewApplication,
-	        refEntity = _store$getState$meta3.refEntity;
+	    var _store$getState$meta2 = store.getState().meta,
+	        viewApplication = _store$getState$meta2.viewApplication,
+	        refEntity = _store$getState$meta2.refEntity;
 	    var _this$props$form = this.props.form,
 	        getFieldError = _this$props$form.getFieldError,
 	        getFieldProps = _this$props$form.getFieldProps;
@@ -84113,7 +84004,6 @@
 	        handlePagination = this.handlePagination,
 	        searchFilterInfo = this.searchFilterInfo,
 	        matchData = this.matchData;
-	    console.log(page);
 	    var props = {
 	      // placeholder: extendField.placeholder,
 	      title: cBillName,
@@ -88702,64 +88592,60 @@
 	  inheritsLoose(Tree, _Component);
 
 	  function Tree(props) {
-	    var _this2;
+	    var _this;
 
-	    _this2 = _Component.call(this, props) || this;
+	    _this = _Component.call(this, props) || this;
 
-	    _this2.onSave = function (data) {
-	      var store = _this2.props.store;
+	    _this.onSave = function (data) {
+	      var store = _this.props.store;
 	      var onOk = store.getState().onOk;
 
-	      _this2.setState({
+	      _this.setState({
 	        matchData: data
-	      }); // console.log("save", data);
-
+	      });
 
 	      onOk && onOk(data);
 	    };
 
-	    _this2.onCancel = function () {};
+	    _this.onCancel = function () {};
 
-	    _this2.getData =
+	    _this.getData =
 	    /*#__PURE__*/
 	    asyncToGenerator(
 	    /*#__PURE__*/
 	    regenerator.mark(function _callee() {
-	      var _this, flag;
-
+	      var flag;
 	      return regenerator.wrap(function _callee$(_context) {
 	        while (1) {
 	          switch (_context.prev = _context.next) {
 	            case 0:
-	              _this = assertThisInitialized(_this2);
-
-	              _this2.setState({
+	              _this.setState({
 	                showLoading: true
 	              });
 
-	              _context.next = 4;
-	              return _this2.getRefTreeData().then(function (treeData) {
-	                var _treeData$data$data = treeData.data.data,
-	                    data = _treeData$data$data === void 0 ? [] : _treeData$data$data;
-	                _this2.treeData = data;
-
-	                _this2.setState({
+	              _context.next = 3;
+	              return _this.getRefTreeData().then(function (treeData) {
+	                _this.setState({
 	                  showLoading: false
 	                });
+
+	                var _treeData$data$data = treeData.data.data,
+	                    data = _treeData$data$data === void 0 ? [] : _treeData$data$data;
+	                _this.treeData = data;
 	              }).catch(function (e) {
 	                console.log(e);
-	                _this2.treeData = [];
+	                _this.treeData = [];
 
-	                _this2.setState({
+	                _this.setState({
 	                  showLoading: false
 	                });
 	              });
 
-	            case 4:
+	            case 3:
 	              flag = _context.sent;
 	              return _context.abrupt("return", flag);
 
-	            case 6:
+	            case 5:
 	            case "end":
 	              return _context.stop();
 	          }
@@ -88767,40 +88653,36 @@
 	      }, _callee);
 	    }));
 
-	    _this2.searchData = function () {
-	      console.log('++=========');
-
-	      var _assertThisInitialize = assertThisInitialized(_this2),
+	    _this.searchData = function () {
+	      var _assertThisInitialize = assertThisInitialized(_this),
 	          treeData = _assertThisInitialize.treeData;
 
-	      _this2.setState({
+	      _this.setState({
 	        filterData: treeData
 	      });
 	    };
 
-	    var _this2$props = _this2.props,
-	        _store = _this2$props.store,
-	        getDataParams = _this2$props.getDataParams;
+	    var _store = _this.props.store;
 
 	    var _store$getState$meta = _store.getState().meta,
 	        viewApplication = _store$getState$meta.viewApplication,
 	        refEntity = _store$getState$meta.refEntity;
 
-	    initReferInfo.call(assertThisInitialized(_this2), dataType$1, refEntity, viewApplication, getDataParams, _store.getState());
-	    _this2.state = {
+	    initReferInfo.call(assertThisInitialized(_this), dataType$1, refEntity, viewApplication, _store.getState());
+	    _this.state = {
 	      isAfterAjax: false,
 	      showLoading: false,
 	      matchData: _store.getState().matchData
 	    };
-	    _this2.treeData = [];
-	    _this2.getRefTreeData = getRefTreeData.bind(assertThisInitialized(_this2));
-	    return _this2;
+	    _this.treeData = [];
+	    _this.getRefTreeData = getRefTreeData.bind(assertThisInitialized(_this));
+	    return _this;
 	  }
 
 	  var _proto = Tree.prototype;
 
 	  _proto.render = function render() {
-	    var _this3 = this;
+	    var _this2 = this;
 
 	    var store = this.props.store;
 	    var refEntity = store.getState().meta.refEntity;
@@ -88821,11 +88703,11 @@
 	      },
 	      nodeDisplay: function nodeDisplay(record) {
 	        //树节点显示的名字
-	        return record[_this3.displayField];
+	        return record[_this2.displayField];
 	      },
 	      displayField: function displayField(record) {
 	        //输入框的名字
-	        return record[_this3.displayField];
+	        return record[_this2.displayField];
 	      },
 	      //显示内容的键
 	      valueField: this.valueField,
@@ -90729,7 +90611,7 @@
 				value: value
 			});
 			return _react2["default"].createElement(
-				tinperBee__default.Modal,
+				tinperBee.Modal,
 				{
 					show: showModal, className: theme + '  ' + className + ' ref-core ref-core-modal ref-tree-table',
 					backdrop: backdrop,
@@ -90738,16 +90620,16 @@
 					autoFocus: false
 				},
 				_react2["default"].createElement(
-					tinperBee__default.Modal.Header,
+					tinperBee.Modal.Header,
 					{ closeButton: true },
 					_react2["default"].createElement(
-						tinperBee__default.Modal.Title,
+						tinperBee.Modal.Title,
 						null,
 						title
 					)
 				),
 				_react2["default"].createElement(
-					tinperBee__default.Modal.Body,
+					tinperBee.Modal.Body,
 					{ ref: function ref(_ref) {
 							return _this3.modalRef = _ref;
 						} },
@@ -90782,7 +90664,7 @@
 					)
 				),
 				_react2["default"].createElement(
-					tinperBee__default.Modal.Footer,
+					tinperBee.Modal.Footer,
 					{ className: 'ref-core-modal-footer ' },
 					_react2["default"].createElement(_RefCoreButton2["default"], {
 						language: lang,
@@ -92013,76 +91895,74 @@
 	  inheritsLoose(TreeTable, _Component);
 
 	  function TreeTable(props) {
-	    var _this2;
+	    var _this;
 
-	    _this2 = _Component.call(this, props) || this;
-	    _this2.getData =
+	    _this = _Component.call(this, props) || this;
+	    _this.getData =
 	    /*#__PURE__*/
 	    asyncToGenerator(
 	    /*#__PURE__*/
 	    regenerator.mark(function _callee() {
-	      var _this, flag;
-
+	      var flag;
 	      return regenerator.wrap(function _callee$(_context) {
 	        while (1) {
 	          switch (_context.prev = _context.next) {
 	            case 0:
-	              _this = assertThisInitialized(_this2);
-
-	              _this2.setState({
+	              _this.setState({
 	                showLoading: true
 	              });
 
-	              _context.next = 4;
-	              return Promise.all([_this2.getTableInfo(), _this2.getRefTreeData()]).then(function (_ref2) {
+	              _context.next = 3;
+	              return Promise.all([_this.getTableInfo(), _this.getRefTreeData()]).then(function (_ref2) {
 	                var _ref2$ = _ref2[0],
 	                    columnsData = _ref2$[0],
 	                    bodyData = _ref2$[1],
 	                    treeData = _ref2[1];
 
 	                // 请求完表体数据回调
-	                if (_this2.onAfterAjax) {
-	                  _this2.onAfterAjax(bodyData);
+	                if (_this.onAfterAjax) {
+	                  _this.onAfterAjax(bodyData);
 	                }
 
-	                _this2.launchTableHeader(columnsData);
+	                _this.launchTableHeader(columnsData);
 
-	                _this2.launchTableData(bodyData);
+	                _this.launchTableData(bodyData);
 
-	                if (_this2.onAfterAjax && !_this2.state.isAfterAjax) {
-	                  _this2.onAfterAjax(treeData);
+	                if (_this.onAfterAjax && !_this.state.isAfterAjax) {
+	                  _this.onAfterAjax(treeData);
 
-	                  _this2.setState({
+	                  _this.setState({
 	                    isAfterAjax: true
 	                  });
 	                }
 
 	                var _treeData$data$data = treeData.data.data,
 	                    data = _treeData$data$data === void 0 ? [] : _treeData$data$data;
-	                _this2.treeData = data; // console.log('treeData===',this.treeData,this.tableData);
+	                _this.treeData = data;
 
-	                _this2.setState({
+	                _this.setState({
 	                  showLoading: false
-	                });
+	                }); // console.log('treeData===',this.treeData,this.tableData);
+
 	              }).catch(function (e) {
 	                console.log(e);
 
-	                _this2.launchTableHeader({});
+	                _this.launchTableHeader({});
 
-	                _this2.launchTableData({});
+	                _this.launchTableData({});
 
-	                _this2.treeData = [];
+	                _this.treeData = [];
 
-	                _this2.setState({
+	                _this.setState({
 	                  showLoading: false
 	                });
 	              });
 
-	            case 4:
+	            case 3:
 	              flag = _context.sent;
 	              return _context.abrupt("return", flag);
 
-	            case 6:
+	            case 5:
 	            case "end":
 	              return _context.stop();
 	          }
@@ -92090,114 +91970,114 @@
 	      }, _callee);
 	    }));
 
-	    _this2.onTreeChange = function (record) {
-	      var _assertThisInitialize = assertThisInitialized(_this2),
+	    _this.onTreeChange = function (record) {
+	      var _assertThisInitialize = assertThisInitialized(_this),
 	          param = _assertThisInitialize.param;
 
 	      param.data = record[0];
 	      param.path = record[0] && record[0].path;
 
-	      _this2._getTableDataByParam(param);
+	      _this._getTableDataByParam(param);
 	    };
 
-	    _this2.onTreeSearch = function (value) {
+	    _this.onTreeSearch = function (value) {
 	      // alert(value);
 	      console.log('treeSearch---', value);
 	    };
 
-	    _this2.loadTableData = function (pageInfo) {
-	      var _assertThisInitialize2 = assertThisInitialized(_this2),
+	    _this.loadTableData = function (pageInfo) {
+	      var _assertThisInitialize2 = assertThisInitialized(_this),
 	          param = _assertThisInitialize2.param;
 
-	      param.page.pageIndex = pageInfo["refClientPageInfo.currPageIndex"] + 1, _this2._getTableDataByParam(param);
+	      param.page.pageIndex = pageInfo["refClientPageInfo.currPageIndex"] + 1, _this._getTableDataByParam(param);
 	    };
 
-	    _this2.onTableSearch = function (value) {
+	    _this.onTableSearch = function (value) {
 	      console.log("onTableSearch", value);
 
-	      var _assertThisInitialize3 = assertThisInitialized(_this2),
+	      var _assertThisInitialize3 = assertThisInitialized(_this),
 	          param = _assertThisInitialize3.param;
 
 	      value ? param.likeValue = value : param.likeValue = null;
 
-	      _this2._getTableDataByParam(param);
+	      _this._getTableDataByParam(param);
+
+	      if (_this.timer) {
+	        clearTimeout(_this.timer);
+	      }
+
+	      _this.timer = setTimeout(_this._getTableDataByParam(param), 300);
 	    };
 
-	    _this2._getTableDataByParam = function (param) {
-	      _this2.setState({
+	    _this._getTableDataByParam = function (param) {
+	      _this.setState({
 	        showLoading: true
 	      });
 
-	      _this2.getTableData(param).then(function (bodyData) {
-	        _this2.launchTableData(bodyData);
-
-	        _this2.setState({
+	      _this.getTableData(param).then(function (bodyData) {
+	        _this.setState({
 	          showLoading: false
 	        });
+
+	        _this.launchTableData(bodyData);
 	      }).catch(function (e) {
-	        _this2.setState({
+	        _this.setState({
 	          showLoading: false
 	        });
 	      });
 	    };
 
-	    _this2.onSave = function (item) {
-	      console.log("save", JSON.stringify(item));
-
-	      _this2.setState({
+	    _this.onSave = function (item) {
+	      // console.log("save", JSON.stringify(item));
+	      _this.setState({
 	        matchData: item
 	      });
 	    };
 
-	    _this2.columnsData = [];
-	    _this2.tableData = [];
-	    _this2.originTableData = [];
-	    var _this2$props = _this2.props,
-	        store = _this2$props.store,
-	        getDataParams = _this2$props.getDataParams;
+	    _this.columnsData = [];
+	    _this.tableData = [];
+	    _this.originTableData = [];
+	    var store = _this.props.store;
 	    var _store$getState$meta = store.getState().meta,
 	        viewApplication = _store$getState$meta.viewApplication,
 	        refEntity = _store$getState$meta.refEntity;
-	    initReferInfo.call(assertThisInitialized(_this2), dataType$2, refEntity, viewApplication, getDataParams, store.getState());
-	    _this2.view = viewApplication.view;
-	    _this2.dataType = '';
-	    _this2.getTableInfo = getTableInfo.bind(assertThisInitialized(_this2));
-	    _this2.getRefTreeData = getRefTreeData.bind(assertThisInitialized(_this2));
-	    _this2.launchTableData = launchTableData.bind(assertThisInitialized(_this2));
-	    _this2.launchTableHeader = launchTableHeader.bind(assertThisInitialized(_this2));
-	    _this2.getTableData = getTableData.bind(assertThisInitialized(_this2));
-	    _this2.page = {
+	    initReferInfo.call(assertThisInitialized(_this), dataType$2, refEntity, viewApplication, store.getState());
+	    _this.view = viewApplication.view;
+	    _this.dataType = '';
+	    _this.getTableInfo = getTableInfo.bind(assertThisInitialized(_this));
+	    _this.getRefTreeData = getRefTreeData.bind(assertThisInitialized(_this));
+	    _this.launchTableData = launchTableData.bind(assertThisInitialized(_this));
+	    _this.launchTableHeader = launchTableHeader.bind(assertThisInitialized(_this));
+	    _this.getTableData = getTableData.bind(assertThisInitialized(_this));
+	    _this.page = {
 	      pageCount: 1,
 	      //总页数
 	      currPageIndex: 0,
 	      pageSize: "10" //每页数据数
 
 	    };
-	    _this2.state = {
+	    _this.state = {
 	      value: "",
 	      matchData: store.getState().matchData
 	    };
-	    return _this2;
+	    return _this;
 	  }
 
 	  var _proto = TreeTable.prototype;
 
+	  _proto.componentWillUnmount = function componentWillUnmount() {
+	    if (this.timer) {
+	      clearTimeout(this.timer);
+	      this.timer = null;
+	    }
+	  };
+
 	  _proto.render = function render() {
-	    var store = this.props.store;
-	    var refEntity = store.getState().meta.refEntity;
-	    var _refEntity$bMultiSel = refEntity.bMultiSel,
-	        code = refEntity.code,
-	        name = refEntity.name;
 	    var _this$props$form = this.props.form,
 	        getFieldProps = _this$props$form.getFieldProps,
 	        getFieldError = _this$props$form.getFieldError;
 	    return React__default.createElement(lib_3$3, _extends_1({
-	      title: "\u7EC4\u7EC7\u90E8\u95E8\u4EBA\u5458",
-	      textOption: {
-	        menuTitle: '组织',
-	        tableTitle: '人员'
-	      },
-	      filterUrl: "/pap_basedoc/common-ref/filterRefJSON",
+	      title: this.cBillName,
 	      displayField: "{" + this.displayField + "}",
 	      valueField: this.valueField,
 	      lang: "zh_CN",
@@ -92245,8 +92125,7 @@
 
 	    _this.renderComp = function () {
 	      var store = _this.props.store;
-	      var refEntity = store.getState().meta.refEntity;
-	      console.log('refEntity.cTpltype=======', refEntity.cTpltype); // 判断 refEntity 需要的参照模板类型
+	      var refEntity = store.getState().meta.refEntity; // 判断 refEntity 需要的参照模板类型
 
 	      switch (refEntity.cTpltype) {
 	        case 'Table':
@@ -92313,8 +92192,7 @@
 	    _this.renderComp = function () {
 	      // 拿到 store 获得指定的元数据
 	      var store = _this.props.store;
-	      var refEntity = store.getState().meta.refEntity;
-	      console.log('render-engine store : ', store.getState()); // 逻辑说明：
+	      var refEntity = store.getState().meta.refEntity; // 逻辑说明：
 	      // 1、如果有 refEntity，则根据多端协议渲染出不同的参照组件
 	      // 2、如果无 refEntity，则该协议描述的为普通的UI模板，按正常流程进行渲染
 
@@ -92406,11 +92284,10 @@
 	              case 0:
 	                _this$props = _this.props, serviceCode = _this$props.serviceCode, refCode = _this$props.refCode;
 	                url += "?serviceCode=" + serviceCode + "&refCode=" + refCode;
-	                console.log(url);
-	                _context2.next = 5;
+	                _context2.next = 4;
 	                return getMeta(url);
 
-	              case 5:
+	              case 4:
 	                _ref4 = _context2.sent;
 	                data = _ref4.data;
 	                isNeedRender = _this.state.isNeedRender;
@@ -92423,7 +92300,7 @@
 	                  });
 	                }
 
-	              case 9:
+	              case 8:
 	              case "end":
 	                return _context2.stop();
 	            }
@@ -92478,13 +92355,14 @@
 	        token = _this$props2$token === void 0 ? '' : _this$props2$token,
 	        _this$props2$host = _this$props2.host,
 	        host = _this$props2$host === void 0 ? '' : _this$props2$host;
-	    var DefaultMetaURL = '/uniform/pub/ref/getRefMeta'; // 判断props中的url是否存在，存在走用户传入的url，
-	    // 不存在判断使用传入host和token，再跟默认的DefaultMetaURL拼接
+	    var defaultUrl = '/uniform/pub/ref/getRefMeta'; // 判断props中的url是否存在，存在走用户传入的url，
+	    // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
 
 	    if (!url) {
-	      url = token ? "" + host + DefaultMetaURL + "?token=" + token : DefaultMetaURL;
-	    } // this.handleDynamicView(url)
+	      url = token ? "" + host + defaultUrl + "?token=" + token : defaultUrl;
+	    }
 
+	    console.log('url=========', url); // this.handleDynamicView(url)
 
 	    this.getMetaDataByCustomURL(url);
 	  }
@@ -92507,7 +92385,8 @@
 	        onOk = _this$props3.onOk,
 	        host = _this$props3.host,
 	        token = _this$props3.token,
-	        matchData = _this$props3.matchData;
+	        matchData = _this$props3.matchData,
+	        beforeGetData = _this$props3.beforeGetData;
 
 	    if (isLoading) {
 	      return React__default.createElement("p", null, "\u6570\u636E\u8BF7\u6C42\u4E2D...");
@@ -92522,7 +92401,8 @@
 	        onOk: onOk,
 	        host: host,
 	        token: token,
-	        matchData: matchData
+	        matchData: matchData,
+	        beforeGetData: beforeGetData
 	      };
 	      return React__default.createElement(miniStore.Provider, {
 	        store: store(opt)

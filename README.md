@@ -38,6 +38,8 @@ const RefTableComponent = () => (
 |refCode|参照Code值|string||是|
 |host|请求meta和数据的域地址|string||否|
 |token|跨域时所需的token|string|否|
+|matchData|选中的行的数据|object||
+|beforeGetData|查询数据前的回调函数，用户可以在这个方法中返回附加的请求参数，返回值的类型为Object|function|否|
 |onOk|点击确认按钮的回调函数|Function||否|
 ## 整体流程
 

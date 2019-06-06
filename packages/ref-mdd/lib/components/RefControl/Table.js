@@ -26,9 +26,9 @@ class Table extends Component {
     super(props);
    
 
-    let { store ,getDataParams} = this.props;
+    let { store } = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
-    initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
+    initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
     this.view = viewApplication.view;
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
@@ -57,7 +57,7 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    let { store ,getDataParams} = nextProps;
+    let { store ,beforeGetData} = nextProps;
     this.dataUrl = store.getState().dataUrl;
     this.setState({
       matchData:store.getState().matchData
@@ -81,9 +81,7 @@ class Table extends Component {
       showLoading: true
     });
     const flag =  await this.getTableInfo().then(([columnsData, bodyData])=>{
-       this.setState({
-         showLoading: false
-       });
+      
         // 请求完表体数据回调
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
@@ -94,7 +92,9 @@ class Table extends Component {
             this.onAfterAjax(treeData);
             this.setState({ isAfterAjax: true });
         }
-       
+        this.setState({
+          showLoading: false
+        });
     }).catch(e=>{
          console.log(e);
         this.launchTableHeader({});

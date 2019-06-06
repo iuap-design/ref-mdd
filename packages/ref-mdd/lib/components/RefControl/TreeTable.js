@@ -25,10 +25,10 @@ class TreeTable extends Component {
     this.columnsData = [];
     this.tableData = [];
     this.originTableData = [];
-    let { store ,getDataParams} = this.props;
+    let { store} = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
     
-    initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
+    initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
     this.view = viewApplication.view;
     this.dataType = '';
     this.getTableInfo =  getTableInfo.bind(this);
@@ -47,17 +47,18 @@ class TreeTable extends Component {
     };
   }
   
-
-
-
+  componentWillUnmount(){
+    if(this.timer){
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+  }
   getData = async ()=>{
     this.setState({
       showLoading: true
     });
     const flag =  await Promise.all([this.getTableInfo(),this.getRefTreeData()]).then(([[columnsData, bodyData],treeData])=>{
-       this.setState({
-        showLoading: false
-       });  
+      
       // 请求完表体数据回调
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
@@ -70,6 +71,9 @@ class TreeTable extends Component {
         }
         let { data = [] } = treeData.data;
         this.treeData = data;
+        this.setState({
+          showLoading: false
+         }); 
         // console.log('treeData===',this.treeData,this.tableData);
        
     }).catch(e=>{
@@ -107,9 +111,13 @@ class TreeTable extends Component {
   onTableSearch = value => {
     console.log("onTableSearch", value);
     const {param} = this;
- 
     value ? param.likeValue=value : param.likeValue =null
-    this._getTableDataByParam(param);
+    this._getTableDataByParam(param)
+    if(this.timer){
+      clearTimeout(this.timer);
+    }
+    
+    this.timer = setTimeout(this._getTableDataByParam(param),300);
   };
 
   _getTableDataByParam = (param)=>{

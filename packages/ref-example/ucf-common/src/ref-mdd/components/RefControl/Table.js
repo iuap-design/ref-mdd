@@ -3,18 +3,18 @@
  */
 import React, { Component } from "react";
 import { connect } from "mini-store";
-
-import { FormControl, Radio } from "tinper-bee";
+import FormControl from 'bee-form-control';
+import Radio from 'bee-radio';
 import {
   SearchPanelItem,
   RefMultipleTableWithInput
 } from "ref-multiple-table/lib/index";
 // 工具类
-import { refValParse,getQueryParam,initReferInfo } from "../../utils";
+import {initReferInfo } from "../../utils";
 import {getTableInfo,launchTableHeader,launchTableData,getTableData} from './util';
 import request from "../../utils/request";
 // 样式
-import "ref-multiple-table/lib/index.css";
+import "ref-multiple-table/lib/index.less";
 const defaultProps = {
   matchData:[]
 }
@@ -26,9 +26,9 @@ class Table extends Component {
     super(props);
    
 
-    let { store ,getDataParams} = this.props;
+    let { store } = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
-    initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
+    initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
     this.view = viewApplication.view;
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
@@ -57,8 +57,7 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    let { store ,getDataParams} = nextProps;
-    let { viewApplication, refEntity } = store.getState().meta;
+    let { store ,beforeGetData} = nextProps;
     this.dataUrl = store.getState().dataUrl;
     this.setState({
       matchData:store.getState().matchData
@@ -78,11 +77,11 @@ class Table extends Component {
 
 
   getData = async ()=>{
-    const _this = this;
     this.setState({
       showLoading: true
     });
     const flag =  await this.getTableInfo().then(([columnsData, bodyData])=>{
+      
         // 请求完表体数据回调
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
@@ -108,127 +107,13 @@ class Table extends Component {
     return flag;
     
   }
-  // initComponent = async () => {
-  //   const _this = this;
-  //   let { param, valueField, displayField, value } = _this;
-  //   param.page = {
-  //     pageSize: 10,
-  //     pageIndex: 1
-  //   };
-  //   let requestList = [_this.getTableHeader(), _this.getTableData(param)];
-  //   await Promise.all(requestList)
-  //     .then(([columnsData, bodyData]) => {
-  //       // 请求完表体数据回调
-  //       if (_this.onAfterAjax) {
-  //         _this.onAfterAjax(bodyData);
-  //       }
-  //       _this.launchTableHeader(columnsData);
-  //       _this.launchTableData(bodyData);
-  //       _this.setState({
-  //         showLoading: false
-  //       });
-  //     })
-  //     .catch(e => {
-  //       _this.launchTableHeader({});
-  //       _this.launchTableData({});
-  //       _this.setState({
-  //         showLoading: false
-  //       });
-  //       console.error(e);
-  //     });
-  //   return true;
-  // };
-  /**
-   * 转换元数据参照表格数据为可识别的格式
-   *
-   */
-  convertMetaTableData = () => {
-    const { view } = this;
-    let strFieldCode = [],
-      strFieldName = [],
-      tpl ={};
-
-    view.containers[0].controls.forEach(item => {
-      strFieldCode.push(item.cFieldName);
-      strFieldName.push(item.cCaption);
-    });
-    tpl["rootName"] = view.cTemplateTitle;
-    tpl["refName"] = view.cTemplateTitle;
-    tpl["defaultFieldCount"] = strFieldCode.length;
-    tpl["strFieldCode"] = strFieldCode;
-    tpl["strFieldName"] = strFieldName;
-    return tpl;
-  };
-  getTableHeader = () => {
-    return new Promise((resolve, reject) => {
-      resolve(this.convertMetaTableData());
-    });
-  };
-
-  getTableData = params => {
-    return request(this.dataUrl, {
-      method: "post",
-      data: params
-    });
-  };
-
-  /**
-   * 根据 refinfo 返回结果拆解并渲染表格表头
-   * @param {object} data
-   */
-  launchTableHeader = data => {
-    if (!data) return;
-    let { multiple } = this.props;
-    let keyList = data.strFieldCode || [];
-    let titleList = data.strFieldName || [];
-    const valueField = this.valueField;
-    this.filterFormInputs = [];
-    let colunmsList = keyList.map((item, index) => {
-      this.filterFormInputs.push(
-        <SearchPanelItem key={item} name={item} text={titleList[index]}>
-          <FormControl />
-        </SearchPanelItem>
-      );
-      return {
-        key: item,
-        dataIndex: item,
-        title: titleList[index]
-      };
-    });
-    if (colunmsList.length === 0) {
-      colunmsList = [
-        { title: "未传递表头数据", dataIndex: "nodata", key: "nodata" }
-      ];
-    } else if (!multiple) {
-      //单选时用对号符号标记当前行选中
-      colunmsList.unshift({
-        title: " ",
-        dataIndex: "a",
-        key: "a",
-        width: 45,
-        render(text, record, index) {
-          return (
-            <Radio.RadioGroup
-              className = 'in-table'
-              name={record[valueField]}
-              selectedValue={record._checked ? record[valueField] : null}
-            >
-              <Radio value={record[valueField]} />
-            </Radio.RadioGroup>
-          );
-        }
-      });
-    }
-    this.columnsData = colunmsList;
-  };
+  
   /**
    * 处理并渲染表格数据
    */
   launchTableData = response => {
     if (!response) return;
     let { valueField } = this.props;
-    // valueField = 'id';
-    // let { data = [], page = {} } = response;
     let {
       data: { data }
     } = response;
@@ -243,27 +128,7 @@ class Table extends Component {
     this.totalElements = data.recordCount || 0;
   };
 
-  //加载getTableData
-  loadTableData = param => {
-    this.setState({
-      showLoading: true
-    });
-    const _this = this;
-
-    _this.getTableData(param)
-      .then(response => {
-        _this.launchTableData(response);
-        _this.setState({
-          showLoading: false
-        });
-      })
-      .catch(() => {
-        _this.launchTableData({});
-        _this.setState({
-          showLoading: false
-        });
-      });
-  };
+ 
 
   // 复杂查询
   searchFilterInfo = filterInfo => {
@@ -352,7 +217,7 @@ class Table extends Component {
       matchData
     } = this;
 
-    console.log(page);
+
     const props = {
       // placeholder: extendField.placeholder,
       title: cBillName,

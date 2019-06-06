@@ -42,9 +42,9 @@ class Tree extends Component {
   constructor(props) {
     super(props);
     
-  let { store,getDataParams } = this.props;
+  let { store } = this.props;
   let { viewApplication, refEntity } = store.getState().meta;
-	initReferInfo.call(this,dataType, refEntity, viewApplication,getDataParams,store.getState());
+	initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
   this.state = {
       isAfterAjax: false,
       showLoading: false,

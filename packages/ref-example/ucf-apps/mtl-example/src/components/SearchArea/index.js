@@ -31,13 +31,12 @@ const tablecItemName='country_name';
 
 const mtlInfo = {
     table:{
-        // metaUrl:'http://u8cupc-test.yyuap.com/uniform/pub/ref/getRefMeta?terminalType=1&token=btte215f3e7-a166-433a-9da8-59fcd8a12a1c__1558493419324',
-        // dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btte215f3e7-a166-433a-9da8-59fcd8a12a1c__1558493419324',
-        serviceCode:'aa_merchant',
-        refCode:'ucfbasedoc.bd_countryref',
-        itemName:'country_name',
-        // host:'https://u8cupc-daily.yyuap.com',
-        // token:"btt7c9c8eef-a804-41a2-bbd7-3321b6d46098__1558612008682",
+        // metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444',
+        // dataUrl:'https://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444',
+        // serviceCode:'aa_merchant',
+        refCode:'yonyoufi.at_fixedassetsref',  
+        host:'https://u8cupc-daily.yyuap.com',
+        token:"btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444",
     },
     tree:{
         metaUrl:'/uniform/pub/ref/getRefMeta',
@@ -106,6 +105,11 @@ class SearchArea extends Component {
         }
         
     }
+    getDataParams=()=>{
+        return {
+            'extraValue':'dataExtraParam'
+        };
+    }
     render() {
         const { getFieldProps } = this.props.form;
         const { form, searchOpen, onCallback } = this.props;
@@ -138,6 +142,10 @@ class SearchArea extends Component {
                             <MTLComponent form={_this.props.form} 
                                           refCode={mtlInfo.table.refCode} 
                                           onOk={this.onOk('depart')}
+                                          token={mtlInfo.table.token}
+                                          host={mtlInfo.table.host}
+                                        //   url={mtlInfo.table.metaUrl}
+                                          
                                           />
                         </FormItem>
                     </Col>
@@ -151,7 +159,7 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>税收分类码</Label>
-                            <MTLComponent form={_this.props.form}  refCode={mtlInfo.treeTable.refCode} />
+                            <MTLComponent form={_this.props.form}  refCode={mtlInfo.treeTable.refCode} beforeGetData={this.getDataParams}/>
                         </FormItem>
                     </Col>
                 </Row>
