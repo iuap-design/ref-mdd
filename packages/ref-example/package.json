@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ucf-scripts start --homepage=mtl-example --mode production",
-    "build": "ucf-scripts build"
+    "build": "ucf-scripts build",
+    "war": "rimraf war && mkdir war && jar cvfM0 ./war/mtl-example.war ./ucf-publish/mtl-example"
+
   },
   "keywords": [],
   "author": "",
