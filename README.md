@@ -8,13 +8,12 @@
 ## 如何使用
 
 ### 组件方式调用
-
 ```
-import { MTLComponent } from 'ref-mdd';
+import ModelDrivenRefer  from 'ref-mdd';
 
 const RefTableComponent = () => (
     <div className="home-wrap">
-        <MTLComponent url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
+        <ModelDrivenRefer url={mtlUrl.tableMetaUrl} dataUrl={mtlUrl.tableDataUrl} />
     </div>
 );
 

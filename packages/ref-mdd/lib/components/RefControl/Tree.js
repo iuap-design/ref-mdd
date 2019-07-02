@@ -77,6 +77,9 @@ class Tree extends Component {
        });
         let { data = [] } = treeData.data;
         this.treeData = data;
+        this.setState({
+          showLoading: false
+        });
         
     }).catch(e=>{
          console.log(e);

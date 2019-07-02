@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('mini-store'), require('axios'), require('react-dom'), require('bee-overlay-modal/build/Modal'), require('bee-overlay-modal/build/utils/isOverflowing'), require('indexof'), require('tinper-bee')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'react', 'mini-store', 'axios', 'react-dom', 'bee-overlay-modal/build/Modal', 'bee-overlay-modal/build/utils/isOverflowing', 'indexof', 'tinper-bee'], factory) :
-	(global = global || self, factory(global.RefMdd = {}, global.React, global.miniStore, global.axios, global.ReactDOM, global.Modal, global.isOverflowing, global.indexof, global.TinperBee));
-}(this, function (exports, React, miniStore, axios, ReactDOM, Modal, isOverflowing, indexof, tinperBee) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('mini-store'), require('axios'), require('react-dom'), require('bee-overlay-modal/build/Modal'), require('bee-overlay-modal/build/utils/isOverflowing'), require('indexof'), require('tinper-bee')) :
+	typeof define === 'function' && define.amd ? define(['react', 'mini-store', 'axios', 'react-dom', 'bee-overlay-modal/build/Modal', 'bee-overlay-modal/build/utils/isOverflowing', 'indexof', 'tinper-bee'], factory) :
+	(global = global || self, global.RefMdd = factory(global.React, global.miniStore, global.axios, global.ReactDOM, global.Modal, global.isOverflowing, global.indexof, global.TinperBee));
+}(this, function (React, miniStore, axios, ReactDOM, Modal, isOverflowing, indexof, tinperBee) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
 	var miniStore__default = 'default' in miniStore ? miniStore['default'] : miniStore;
@@ -2934,7 +2934,7 @@
 	module.exports = exports['default'];
 	});
 
-	var Radio = unwrapExports(build$2);
+	unwrapExports(build$2);
 
 	var _global = createCommonjsModule(function (module) {
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -82739,9 +82739,9 @@
 	 * @param {object} data
 	 */
 
-	function launchTableHeader(data) {
-	  if (data == {}) return;
-	  var multiple = this.props.multiple;
+	function launchTableHeader(data, multiple) {
+	  if (data == {}) return; // let { multiple } = this.props;
+
 	  var keyList = data.strFieldCode || [];
 	  var titleList = data.strFieldName || [];
 	  var valueField = this.valueField;
@@ -82765,23 +82765,6 @@
 	      dataIndex: "nodata",
 	      key: "nodata"
 	    }];
-	  } else if (!multiple) {
-	    //单选时用对号符号标记当前行选中
-	    colunmsList.unshift({
-	      title: " ",
-	      dataIndex: "a",
-	      key: "a",
-	      width: 45,
-	      render: function render(text, record, index) {
-	        return React__default.createElement(Radio.RadioGroup, {
-	          className: "in-table",
-	          name: record[valueField],
-	          selectedValue: record._checked ? record[valueField] : null
-	        }, React__default.createElement(Radio, {
-	          value: record[valueField]
-	        }));
-	      }
-	    });
 	  }
 
 	  this.columnsData = colunmsList;
@@ -82895,7 +82878,9 @@
 	                  _this2.onAfterAjax(bodyData);
 	                }
 
-	                _this2.launchTableHeader(columnsData);
+	                var multiple = _this2.props.store.getState().meta.refEntity.bMultiSel;
+
+	                _this2.launchTableHeader(columnsData, multiple);
 
 	                _this2.launchTableData(bodyData);
 
@@ -83082,7 +83067,9 @@
 
 	    var valueField = this.valueField,
 	        displayField = this.displayField;
-	    var showLoading = this.state.showLoading;
+	    var _this$state = this.state,
+	        showLoading = _this$state.showLoading,
+	        matchData = _this$state.matchData;
 	    var columnsData = this.columnsData,
 	        tableData = this.tableData,
 	        page = this.page,
@@ -83090,10 +83077,12 @@
 	        filterInfo = this.filterInfo,
 	        dataNumSelect = this.dataNumSelect,
 	        handlePagination = this.handlePagination,
-	        searchFilterInfo = this.searchFilterInfo,
-	        matchData = this.matchData;
+	        searchFilterInfo = this.searchFilterInfo;
 	    var props = {
 	      // placeholder: extendField.placeholder,
+	      style: {
+	        width: 200
+	      },
 	      title: cBillName,
 	      multiple: refEntity.bMultiSel,
 	      displayField: "{" + displayField + "}",
@@ -87717,6 +87706,10 @@
 	                var _treeData$data$data = treeData.data.data,
 	                    data = _treeData$data$data === void 0 ? [] : _treeData$data$data;
 	                _this.treeData = data;
+
+	                _this.setState({
+	                  showLoading: false
+	                });
 	              }).catch(function (e) {
 	                console.log(e);
 	                _this.treeData = [];
@@ -91306,12 +91299,12 @@
 	  }));
 	}
 
-	var MTLComponent =
+	var ModelDrivenRefer =
 	/*#__PURE__*/
 	function (_Component) {
-	  inheritsLoose(MTLComponent, _Component);
+	  inheritsLoose(ModelDrivenRefer, _Component);
 
-	  function MTLComponent(props) {
+	  function ModelDrivenRefer(props) {
 	    var _this;
 
 	    _this = _Component.call(this, props) || this;
@@ -91430,7 +91423,7 @@
 	    return _this;
 	  }
 
-	  var _proto = MTLComponent.prototype;
+	  var _proto = ModelDrivenRefer.prototype;
 
 	  _proto.componentWillMount = function componentWillMount() {
 	    var _this$props2 = this.props,
@@ -91495,18 +91488,9 @@
 	    }
 	  };
 
-	  return MTLComponent;
+	  return ModelDrivenRefer;
 	}(React.Component);
 
-	var MTLCore = {
-	  MTLComponent: MTLComponent // MTLModel,
-
-	};
-	window.MTLCore = MTLCore;
-
-	exports.MTLComponent = MTLComponent;
-	exports.default = MTLCore;
-
-	Object.defineProperty(exports, '__esModule', { value: true });
+	return ModelDrivenRefer;
 
 }));

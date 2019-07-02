@@ -16,7 +16,7 @@ import { deepClone } from "utils";
 //其他
 import SearchPanel from 'components/SearchPanel';
 
-import MtlCore, { MTLComponent } from 'ref-mdd';
+import ModelDrivenRefer from 'ref-mdd';
 import 'ref-mdd/dist/ref-mdd.css';
 import './index.less';
 const mtlUrl = {
@@ -34,9 +34,9 @@ const mtlInfo = {
         // metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444',
         // dataUrl:'https://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444',
         // serviceCode:'aa_merchant',
-        refCode:'yonyoufi.at_fixedassetsref',  
+        refCode:'ucf-org-center.bd_adminorgtreeref',  
         host:'https://u8cupc-daily.yyuap.com',
-        token:"btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444",
+        token:'btta6ef5e28-9285-4de3-81e4-fdcc24ffb298__1562034561890',  
     },
     tree:{
            // metaUrl:'/uniform/pub/ref/getRefMeta',
@@ -142,7 +142,7 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>部门</Label>
-                            <MTLComponent form={_this.props.form} 
+                            <ModelDrivenRefer form={_this.props.form} 
                                           refCode={mtlInfo.table.refCode} 
                                           onOk={this.onOk('depart')}
                                           token={mtlInfo.table.token}
@@ -156,13 +156,13 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>组织</Label>
-                            <MTLComponent form={_this.props.form} url={mtlInfo.tree.metaUrl}  serviceCode={mtlInfo.tree.serviceCode} refCode={mtlInfo.tree.refCode} cItemName={mtlInfo.tree.itemName}/>
+                            <ModelDrivenRefer form={_this.props.form} url={mtlInfo.tree.metaUrl}  serviceCode={mtlInfo.tree.serviceCode} refCode={mtlInfo.tree.refCode} cItemName={mtlInfo.tree.itemName}/>
                         </FormItem>
                     </Col>
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>税收分类码</Label>
-                            <MTLComponent form={_this.props.form}  refCode={mtlInfo.treeTable.refCode} beforeGetData={this.getDataParams}/>
+                            <ModelDrivenRefer form={_this.props.form}  refCode={mtlInfo.treeTable.refCode} beforeGetData={this.getDataParams}/>
                         </FormItem>
                     </Col>
                 </Row>
