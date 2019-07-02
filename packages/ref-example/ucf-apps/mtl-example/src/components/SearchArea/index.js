@@ -39,10 +39,13 @@ const mtlInfo = {
         token:"btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444",
     },
     tree:{
-        metaUrl:'/uniform/pub/ref/getRefMeta',
-        serviceCode:'enterprise_bank_account_u8c',
-        refCode:'bd_financeorgtreeref',
-        itemName:'orgid_name'   
+           // metaUrl:'/uniform/pub/ref/getRefMeta',
+        // serviceCode:'enterprise_bank_account_u8c',
+        // refCode:'bd_financeorgtreeref',
+        // itemName:'orgid_name'  
+        refCode:'ucf-org-center.bd_adminorgtreeref',  
+        host:'https://u8cupc-daily.yyuap.com',
+        token:'btta6ef5e28-9285-4de3-81e4-fdcc24ffb298__1562034561890',  
     },
     treeTable:{
         // metaUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefMeta?terminalType=1&token=btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881&refimestamp=1559026546502',

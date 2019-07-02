@@ -33,7 +33,7 @@ export {refValParse};
  * @param {string} type 
  * @param {object} refEntity 
  */
-export function getQueryParam(type,refEntity,viewApplication,beforeGetData={},refCode){
+export function getQueryParam(type,refEntity,viewApplication={},beforeGetData={},refCode){
     let rsParam = {},defaultDataParams = beforeGetData;
     rsParam.dataType = type;
     rsParam.refCode = refCode; 
@@ -47,7 +47,7 @@ export function getQueryParam(type,refEntity,viewApplication,beforeGetData={},re
 /**
  * 初始化参照信息
  */
-export function initReferInfo(dataType, refEntity, viewApplication,propsState={}){
+export function initReferInfo(dataType, refEntity, viewApplication={},propsState={}){
     let {dataUrl,token='',host='',beforeGetData} = propsState;
     // this.dataUrl = propsState.dataUrl;
     this.valueField = refEntity.cEntityKeyFld;//参照真实值

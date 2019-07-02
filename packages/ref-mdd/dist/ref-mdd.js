@@ -1,13 +1,15 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('mini-store'), require('axios'), require('react-dom'), require('indexof'), require('tinper-bee')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'react', 'mini-store', 'axios', 'react-dom', 'indexof', 'tinper-bee'], factory) :
-	(global = global || self, factory(global.RefMdd = {}, global.React, global.miniStore, global.axios, global.ReactDOM, global.indexof, global.TinperBee));
-}(this, function (exports, React, miniStore, axios, ReactDOM, indexof, tinperBee) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('mini-store'), require('axios'), require('react-dom'), require('bee-overlay-modal/build/Modal'), require('bee-overlay-modal/build/utils/isOverflowing'), require('indexof'), require('tinper-bee')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'react', 'mini-store', 'axios', 'react-dom', 'bee-overlay-modal/build/Modal', 'bee-overlay-modal/build/utils/isOverflowing', 'indexof', 'tinper-bee'], factory) :
+	(global = global || self, factory(global.RefMdd = {}, global.React, global.miniStore, global.axios, global.ReactDOM, global.Modal, global.isOverflowing, global.indexof, global.TinperBee));
+}(this, function (exports, React, miniStore, axios, ReactDOM, Modal, isOverflowing, indexof, tinperBee) { 'use strict';
 
 	var React__default = 'default' in React ? React['default'] : React;
 	var miniStore__default = 'default' in miniStore ? miniStore['default'] : miniStore;
 	axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
 	var ReactDOM__default = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
+	Modal = Modal && Modal.hasOwnProperty('default') ? Modal['default'] : Modal;
+	isOverflowing = isOverflowing && isOverflowing.hasOwnProperty('default') ? isOverflowing['default'] : isOverflowing;
 	indexof = indexof && indexof.hasOwnProperty('default') ? indexof['default'] : indexof;
 	tinperBee = tinperBee && tinperBee.hasOwnProperty('default') ? tinperBee['default'] : tinperBee;
 
@@ -830,6 +832,10 @@
 	 */
 
 	function getQueryParam(type, refEntity, viewApplication, beforeGetData, refCode) {
+	  if (viewApplication === void 0) {
+	    viewApplication = {};
+	  }
+
 	  if (beforeGetData === void 0) {
 	    beforeGetData = {};
 	  }
@@ -852,6 +858,10 @@
 	 */
 
 	function initReferInfo(dataType, refEntity, viewApplication, propsState) {
+	  if (viewApplication === void 0) {
+	    viewApplication = {};
+	  }
+
 	  if (propsState === void 0) {
 	    propsState = {};
 	  }
@@ -7085,67 +7095,6 @@
 
 	unwrapExports(scrollbarSize);
 
-	/**
-	 * Copyright 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-
-	/**
-	 * Similar to invariant but only logs a warning if the condition is not met.
-	 * This can be used to log issues in development environments in critical
-	 * paths. Removing the logging code for production environments will keep the
-	 * same logic and follow the same code paths.
-	 */
-
-	var __DEV__ = process.env.NODE_ENV !== 'production';
-
-	var warning = function() {};
-
-	if (__DEV__) {
-	  warning = function(condition, format, args) {
-	    var len = arguments.length;
-	    args = new Array(len > 2 ? len - 2 : 0);
-	    for (var key = 2; key < len; key++) {
-	      args[key - 2] = arguments[key];
-	    }
-	    if (format === undefined) {
-	      throw new Error(
-	        '`warning(condition, format, ...args)` requires a warning ' +
-	        'message argument'
-	      );
-	    }
-
-	    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
-	      throw new Error(
-	        'The warning format should be able to uniquely identify this ' +
-	        'warning. Please, use a more descriptive format than: ' + format
-	      );
-	    }
-
-	    if (!condition) {
-	      var argIndex = 0;
-	      var message = 'Warning: ' +
-	        format.replace(/%s/g, function() {
-	          return args[argIndex++];
-	        });
-	      if (typeof console !== 'undefined') {
-	        console.error(message);
-	      }
-	      try {
-	        // This error was thrown as a convenience so that you can use this stack
-	        // to find the callsite that caused this warning to fire.
-	        throw new Error(message);
-	      } catch(x) {}
-	    }
-	  };
-	}
-
-	var warning_1 = warning;
-
 	var createChainableTypeChecker_1 = createCommonjsModule(function (module, exports) {
 
 	exports.__esModule = true;
@@ -7279,6 +7228,67 @@
 	});
 
 	unwrapExports(componentOrElement);
+
+	/**
+	 * Copyright 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	/**
+	 * Similar to invariant but only logs a warning if the condition is not met.
+	 * This can be used to log issues in development environments in critical
+	 * paths. Removing the logging code for production environments will keep the
+	 * same logic and follow the same code paths.
+	 */
+
+	var __DEV__ = process.env.NODE_ENV !== 'production';
+
+	var warning = function() {};
+
+	if (__DEV__) {
+	  warning = function(condition, format, args) {
+	    var len = arguments.length;
+	    args = new Array(len > 2 ? len - 2 : 0);
+	    for (var key = 2; key < len; key++) {
+	      args[key - 2] = arguments[key];
+	    }
+	    if (format === undefined) {
+	      throw new Error(
+	        '`warning(condition, format, ...args)` requires a warning ' +
+	        'message argument'
+	      );
+	    }
+
+	    if (format.length < 10 || (/^[s\W]*$/).test(format)) {
+	      throw new Error(
+	        'The warning format should be able to uniquely identify this ' +
+	        'warning. Please, use a more descriptive format than: ' + format
+	      );
+	    }
+
+	    if (!condition) {
+	      var argIndex = 0;
+	      var message = 'Warning: ' +
+	        format.replace(/%s/g, function() {
+	          return args[argIndex++];
+	        });
+	      if (typeof console !== 'undefined') {
+	        console.error(message);
+	      }
+	      try {
+	        // This error was thrown as a convenience so that you can use this stack
+	        // to find the callsite that caused this warning to fire.
+	        throw new Error(message);
+	      } catch(x) {}
+	    }
+	  };
+	}
+
+	var warning_1 = warning;
 
 	var deprecated_1 = createCommonjsModule(function (module, exports) {
 
@@ -10442,278 +10452,6 @@
 	var lib_12 = lib$1.componentOrElement;
 	var lib_13 = lib$1.all;
 
-	var ownerDocument_1$1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = ownerDocument;
-
-	function ownerDocument(node) {
-	  return node && node.ownerDocument || document;
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(ownerDocument_1$1);
-
-	var ownerDocument = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports["default"] = function (componentOrElement) {
-	  return (0, _ownerDocument2["default"])(_reactDom2["default"].findDOMNode(componentOrElement));
-	};
-
-
-
-	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
-
-
-
-	var _ownerDocument2 = _interopRequireDefault(ownerDocument_1$1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(ownerDocument);
-
-	var getContainer_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports["default"] = getContainer;
-
-
-
-	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	/**
-	 * 获取容器组件
-	 * @param  {[type]} container        [description]
-	 * @param  {[type]} defaultContainer [description]
-	 * @return {[type]}                  [description]
-	 */
-	function getContainer(container, defaultContainer) {
-	  container = typeof container === 'function' ? container() : container;
-	  return _reactDom2["default"].findDOMNode(container) || defaultContainer;
-	}
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(getContainer_1);
-
-	var Portal_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-
-
-	var _ownerDocument2 = _interopRequireDefault(ownerDocument);
-
-
-
-	var _getContainer2 = _interopRequireDefault(getContainer_1);
-
-
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var isReact16 = _reactDom2["default"].createPortal !== undefined;
-	var createPortal = isReact16 ? _reactDom2["default"].createPortal : _reactDom2["default"].unstable_renderSubtreeIntoContainer;
-
-	var propTypes$1 = {
-	  /**
-	   * 存放子组件的容器
-	   */
-	  container: _propTypes2["default"].oneOfType([lib$1.componentOrElement, _propTypes2["default"].func])
-	};
-
-	var defaultProps = {};
-
-	/**
-	 * Portal组件是将子组件渲染
-	 */
-
-	var Portal = function (_Component) {
-	  _inherits(Portal, _Component);
-
-	  function Portal(props) {
-	    _classCallCheck(this, Portal);
-
-	    var _this = _possibleConstructorReturn(this, _Component.call(this, props));
-
-	    _this.getMountNode = _this.getMountNode.bind(_this);
-	    _this.getOverlayDOMNode = _this.getOverlayDOMNode.bind(_this);
-	    _this.mountOverlayTarget = _this.mountOverlayTarget.bind(_this);
-	    _this.unmountOverlayTarget = _this.unmountOverlayTarget.bind(_this);
-	    _this.renderOverlay = _this.renderOverlay.bind(_this);
-	    _this.unrenderOverlay = _this.unrenderOverlay.bind(_this);
-
-	    _this.overlayTarget = isReact16 ? document.createElement('div') : null;
-	    return _this;
-	  }
-
-	  Portal.prototype.componentDidMount = function componentDidMount() {
-	    if (isReact16) {
-	      this.portalContainerNode = (0, _getContainer2["default"])(this.props.container, (0, _ownerDocument2["default"])(this).body);
-	      this.portalContainerNode.appendChild(this.overlayTarget);
-	    } else {
-	      this.renderOverlay();
-	    }
-
-	    this.mounted = true;
-	  };
-
-	  Portal.prototype.componentDidUpdate = function componentDidUpdate() {
-	    if (isReact16) {
-	      var overlay = !this.props.children ? null : _react2["default"].Children.only(this.props.children);
-	      if (overlay === null) {
-	        this.unrenderOverlay();
-	        this.unmountOverlayTarget();
-	      }
-	    } else {
-	      this.renderOverlay();
-	    }
-	  };
-	  //this._overlayTarget为当前的要添加的子组件， this._portalContainerNode要添加组件的容器元素
-
-
-	  Portal.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	    if (this.overlayTarget && nextProps.container !== this.props.container) {
-	      this.portalContainerNode.removeChild(this.overlayTarget);
-	      this.portalContainerNode = (0, _getContainer2["default"])(nextProps.container, (0, _ownerDocument2["default"])(this).body);
-	      this.portalContainerNode.appendChild(this.overlayTarget);
-	    }
-	  };
-
-	  Portal.prototype.componentWillUnmount = function componentWillUnmount() {
-	    this.unrenderOverlay();
-	    this.unmountOverlayTarget();
-
-	    this.mounted = false;
-	  };
-
-	  Portal.prototype.getMountNode = function getMountNode() {
-	    return this.overlayTarget;
-	  };
-
-	  Portal.prototype.getOverlayDOMNode = function getOverlayDOMNode() {
-	    if (!this.mounted) {
-	      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
-	    }
-
-	    if (this.overlayInstance) {
-	      return _reactDom2["default"].findDOMNode(this.overlayInstance);
-	    }
-
-	    return null;
-	  };
-
-	  /**
-	   * 如果要添加的子组件不存在，就将div添加到要添加容器的DOM中；
-	   */
-
-	  Portal.prototype.mountOverlayTarget = function mountOverlayTarget() {
-	    if (!this.overlayTarget) {
-	      this.overlayTarget = document.createElement('div');
-	      this.portalContainerNode = (0, _getContainer2["default"])(this.props.container, (0, _ownerDocument2["default"])(this).body);
-	      this.portalContainerNode.appendChild(this.overlayTarget);
-	    }
-	  };
-	  /**
-	   * 将要添加的子元素从容器中移除，并把变量置为null
-	   */
-
-
-	  Portal.prototype.unmountOverlayTarget = function unmountOverlayTarget() {
-	    if (this.overlayTarget) {
-	      this.portalContainerNode.removeChild(this.overlayTarget);
-	      this.overlayTarget = null;
-	    }
-	    this.portalContainerNode = null;
-	  };
-	  /**
-	   * 手动渲染_overlayTarget
-	   */
-
-
-	  Portal.prototype.renderOverlay = function renderOverlay() {
-
-	    var overlay = !this.props.children ? null : _react2["default"].Children.only(this.props.children);
-
-	    // Save reference for future access.
-	    if (overlay !== null) {
-	      this.mountOverlayTarget();
-	      this.overlayInstance = _reactDom2["default"].unstable_renderSubtreeIntoContainer(this, overlay, this.overlayTarget);
-	    } else {
-	      // Unrender if the component is null for transitions to null
-	      this.unrenderOverlay();
-	      this.unmountOverlayTarget();
-	    }
-	  };
-	  /**
-	   * 销毁_overlayTarget组件。并把_overlayInstance置为null
-	   */
-
-
-	  Portal.prototype.unrenderOverlay = function unrenderOverlay() {
-	    if (this.overlayTarget) {
-	      !isReact16 && _reactDom2["default"].unmountComponentAtNode(this.overlayTarget);
-	      this.overlayInstance = null;
-	    }
-	  };
-
-	  Portal.prototype.render = function render() {
-	    if (!isReact16) {
-	      return null;
-	    }
-
-	    var overlay = !this.props.children ? null : _react2["default"].Children.only(this.props.children);
-
-	    return _reactDom2["default"].createPortal(overlay, this.overlayTarget);
-	  };
-
-	  return Portal;
-	}(React__default.Component);
-
-	Portal.propTypes = propTypes$1;
-	Portal.defaultProps = defaultProps;
-
-	exports["default"] = Portal;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(Portal_1);
-
 	var interopRequireDefault = createCommonjsModule(function (module) {
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : {
@@ -10725,150 +10463,6 @@
 	});
 
 	unwrapExports(interopRequireDefault);
-
-	var camelize_1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = camelize;
-	var rHyphen = /-(.)/g;
-
-	function camelize(string) {
-	  return string.replace(rHyphen, function (_, chr) {
-	    return chr.toUpperCase();
-	  });
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(camelize_1);
-
-	var camelizeStyle = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = camelizeStyleName;
-
-	var _camelize = interopRequireDefault(camelize_1);
-
-	/**
-	 * Copyright 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/camelizeStyleName.js
-	 */
-	var msPattern = /^-ms-/;
-
-	function camelizeStyleName(string) {
-	  return (0, _camelize.default)(string.replace(msPattern, 'ms-'));
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(camelizeStyle);
-
-	var hyphenate_1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = hyphenate;
-	var rUpper = /([A-Z])/g;
-
-	function hyphenate(string) {
-	  return string.replace(rUpper, '-$1').toLowerCase();
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(hyphenate_1);
-
-	var hyphenateStyle = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = hyphenateStyleName;
-
-	var _hyphenate = interopRequireDefault(hyphenate_1);
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/hyphenateStyleName.js
-	 */
-	var msPattern = /^ms-/;
-
-	function hyphenateStyleName(string) {
-	  return (0, _hyphenate.default)(string).replace(msPattern, '-ms-');
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(hyphenateStyle);
-
-	var getComputedStyle = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = _getComputedStyle;
-
-	var _camelizeStyle = interopRequireDefault(camelizeStyle);
-
-	var rposition = /^(top|right|bottom|left)$/;
-	var rnumnonpx = /^([+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|))(?!px)[a-z%]+$/i;
-
-	function _getComputedStyle(node) {
-	  if (!node) throw new TypeError('No Element passed to `getComputedStyle()`');
-	  var doc = node.ownerDocument;
-	  return 'defaultView' in doc ? doc.defaultView.opener ? node.ownerDocument.defaultView.getComputedStyle(node, null) : window.getComputedStyle(node, null) : {
-	    //ie 8 "magic" from: https://github.com/jquery/jquery/blob/1.11-stable/src/css/curCSS.js#L72
-	    getPropertyValue: function getPropertyValue(prop) {
-	      var style = node.style;
-	      prop = (0, _camelizeStyle.default)(prop);
-	      if (prop == 'float') prop = 'styleFloat';
-	      var current = node.currentStyle[prop] || null;
-	      if (current == null && style && style[prop]) current = style[prop];
-
-	      if (rnumnonpx.test(current) && !rposition.test(prop)) {
-	        // Remember the original values
-	        var left = style.left;
-	        var runStyle = node.runtimeStyle;
-	        var rsLeft = runStyle && runStyle.left; // Put in the new values to get a computed value out
-
-	        if (rsLeft) runStyle.left = node.currentStyle.left;
-	        style.left = prop === 'fontSize' ? '1em' : current;
-	        current = style.pixelLeft + 'px'; // Revert the changed values
-
-	        style.left = left;
-	        if (rsLeft) runStyle.left = rsLeft;
-	      }
-
-	      return current;
-	    }
-	  };
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(getComputedStyle);
-
-	var removeStyle_1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = removeStyle;
-
-	function removeStyle(node, key) {
-	  return 'removeProperty' in node.style ? node.style.removeProperty(key) : node.style.removeAttribute(key);
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(removeStyle_1);
 
 	var inDOM$1 = createCommonjsModule(function (module, exports) {
 
@@ -10990,477 +10584,6 @@
 	var properties_10 = properties.transitionProperty;
 	var properties_11 = properties.transform;
 
-	var isTransform_1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = isTransform;
-	var supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|perspective|skew(X|Y)?)$/i;
-
-	function isTransform(property) {
-	  return !!(property && supportedTransforms.test(property));
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(isTransform_1);
-
-	var style_1 = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = style;
-
-	var _camelizeStyle = interopRequireDefault(camelizeStyle);
-
-	var _hyphenateStyle = interopRequireDefault(hyphenateStyle);
-
-	var _getComputedStyle2 = interopRequireDefault(getComputedStyle);
-
-	var _removeStyle = interopRequireDefault(removeStyle_1);
-
-
-
-	var _isTransform = interopRequireDefault(isTransform_1);
-
-	function style(node, property, value) {
-	  var css = '';
-	  var transforms = '';
-	  var props = property;
-
-	  if (typeof property === 'string') {
-	    if (value === undefined) {
-	      return node.style[(0, _camelizeStyle.default)(property)] || (0, _getComputedStyle2.default)(node).getPropertyValue((0, _hyphenateStyle.default)(property));
-	    } else {
-	      (props = {})[property] = value;
-	    }
-	  }
-
-	  Object.keys(props).forEach(function (key) {
-	    var value = props[key];
-
-	    if (!value && value !== 0) {
-	      (0, _removeStyle.default)(node, (0, _hyphenateStyle.default)(key));
-	    } else if ((0, _isTransform.default)(key)) {
-	      transforms += key + "(" + value + ") ";
-	    } else {
-	      css += (0, _hyphenateStyle.default)(key) + ": " + value + ";";
-	    }
-	  });
-
-	  if (transforms) {
-	    css += properties.transform + ": " + transforms + ";";
-	  }
-
-	  node.style.cssText += ';' + css;
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(style_1);
-
-	var hasClass_1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = hasClass;
-
-	function hasClass(element, className) {
-	  if (element.classList) return !!className && element.classList.contains(className);else return (" " + (element.className.baseVal || element.className) + " ").indexOf(" " + className + " ") !== -1;
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(hasClass_1);
-
-	var addClass_1 = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = addClass;
-
-	var _hasClass = interopRequireDefault(hasClass_1);
-
-	function addClass(element, className) {
-	  if (element.classList) element.classList.add(className);else if (!(0, _hasClass.default)(element, className)) if (typeof element.className === 'string') element.className = element.className + ' ' + className;else element.setAttribute('class', (element.className && element.className.baseVal || '') + ' ' + className);
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(addClass_1);
-
-	function replaceClassName(origClass, classToRemove) {
-	  return origClass.replace(new RegExp('(^|\\s)' + classToRemove + '(?:\\s|$)', 'g'), '$1').replace(/\s+/g, ' ').replace(/^\s*|\s*$/g, '');
-	}
-
-	var removeClass = function removeClass(element, className) {
-	  if (element.classList) element.classList.remove(className);else if (typeof element.className === 'string') element.className = replaceClassName(element.className, className);else element.setAttribute('class', replaceClassName(element.className && element.className.baseVal || '', className));
-	};
-
-	var _class = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = void 0;
-
-	var _addClass = interopRequireDefault(addClass_1);
-
-	exports.addClass = _addClass.default;
-
-	var _removeClass = interopRequireDefault(removeClass);
-
-	exports.removeClass = _removeClass.default;
-
-	var _hasClass = interopRequireDefault(hasClass_1);
-
-	exports.hasClass = _hasClass.default;
-	var _default = {
-	  addClass: _addClass.default,
-	  removeClass: _removeClass.default,
-	  hasClass: _hasClass.default
-	};
-	exports.default = _default;
-	});
-
-	unwrapExports(_class);
-	var _class_1 = _class.addClass;
-	var _class_2 = _class.removeClass;
-	var _class_3 = _class.hasClass;
-
-	var scrollbarSize_1 = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = scrollbarSize;
-
-	var _inDOM = interopRequireDefault(inDOM$1);
-
-	var size;
-
-	function scrollbarSize(recalc) {
-	  if (!size && size !== 0 || recalc) {
-	    if (_inDOM.default) {
-	      var scrollDiv = document.createElement('div');
-	      scrollDiv.style.position = 'absolute';
-	      scrollDiv.style.top = '-9999px';
-	      scrollDiv.style.width = '50px';
-	      scrollDiv.style.height = '50px';
-	      scrollDiv.style.overflow = 'scroll';
-	      document.body.appendChild(scrollDiv);
-	      size = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-	      document.body.removeChild(scrollDiv);
-	    }
-	  }
-
-	  return size;
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(scrollbarSize_1);
-
-	var isWindow$1 = createCommonjsModule(function (module, exports) {
-
-	exports.__esModule = true;
-	exports.default = getWindow;
-
-	function getWindow(node) {
-	  return node === node.window ? node : node.nodeType === 9 ? node.defaultView || node.parentWindow : false;
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(isWindow$1);
-
-	var isOverflowing_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports["default"] = isOverflowing;
-
-
-
-	var _isWindow2 = _interopRequireDefault(isWindow$1);
-
-
-
-	var _ownerDocument2 = _interopRequireDefault(ownerDocument_1$1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function isBody(node) {
-	  return node && node.tagName.toLowerCase() === 'body';
-	}
-
-	function bodyIsOverflowing(node) {
-	  var doc = (0, _ownerDocument2["default"])(node);
-	  var win = (0, _isWindow2["default"])(doc);
-	  var fullWidth = win.innerWidth;
-
-	  // Support: ie8, no innerWidth
-	  if (!fullWidth) {
-	    var documentElementRect = doc.documentElement.getBoundingClientRect();
-	    fullWidth = documentElementRect.right - Math.abs(documentElementRect.left);
-	  }
-
-	  return doc.body.clientWidth < fullWidth;
-	}
-
-	function isOverflowing(container) {
-	  var win = (0, _isWindow2["default"])(container);
-
-	  return win || isBody(container) ? bodyIsOverflowing(container) : container.scrollHeight > container.clientHeight;
-	}
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(isOverflowing_1);
-
-	var manageAriaHidden = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.ariaHidden = ariaHidden;
-	exports.hideSiblings = hideSiblings;
-	exports.showSiblings = showSiblings;
-
-	var BLACKLIST = ['template', 'script', 'style'];
-
-	var isHidable = function isHidable(_ref) {
-	  var nodeType = _ref.nodeType,
-	      tagName = _ref.tagName;
-	  return nodeType === 1 && BLACKLIST.indexOf(tagName.toLowerCase()) === -1;
-	};
-
-	var siblings = function siblings(container, mount, cb) {
-	  mount = [].concat(mount);
-
-	  [].forEach.call(container.children, function (node) {
-	    if (mount.indexOf(node) === -1 && isHidable(node)) {
-	      cb(node);
-	    }
-	  });
-	};
-
-	function ariaHidden(show, node) {
-	  if (!node) {
-	    return;
-	  }
-	  if (show) {
-	    node.setAttribute('aria-hidden', 'true');
-	  } else {
-	    node.removeAttribute('aria-hidden');
-	  }
-	}
-
-	function hideSiblings(container, mountNode) {
-	  siblings(container, mountNode, function (node) {
-	    return ariaHidden(true, node);
-	  });
-	}
-
-	function showSiblings(container, mountNode) {
-	  siblings(container, mountNode, function (node) {
-	    return ariaHidden(false, node);
-	  });
-	}
-	});
-
-	unwrapExports(manageAriaHidden);
-	var manageAriaHidden_1 = manageAriaHidden.ariaHidden;
-	var manageAriaHidden_2 = manageAriaHidden.hideSiblings;
-	var manageAriaHidden_3 = manageAriaHidden.showSiblings;
-
-	var ModalManager_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _style2 = _interopRequireDefault(style_1);
-
-
-
-	var _class2 = _interopRequireDefault(_class);
-
-
-
-	var _scrollbarSize2 = _interopRequireDefault(scrollbarSize_1);
-
-
-
-	var _isOverflowing2 = _interopRequireDefault(isOverflowing_1);
-
-
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function findIndexOf(arr, cb) {
-	  var idx = -1;
-	  arr.some(function (d, i) {
-	    if (cb(d, i)) {
-	      idx = i;
-	      return true;
-	    }
-	  });
-	  return idx;
-	}
-
-	//查找容器
-	function findContainer(data, modal) {
-	  return findIndexOf(data, function (d) {
-	    return d.modals.indexOf(modal) !== -1;
-	  });
-	}
-
-	//设置容器style
-	function setContainerStyle(state, container) {
-	  var style = { overflow: 'hidden' };
-
-	  state.style = {
-	    overflow: container.style.overflow,
-	    paddingRight: container.style.paddingRight
-	  };
-
-	  if (state.overflowing) {
-	    //设置内边距，和添加滚动条宽度
-	    style.paddingRight = parseInt((0, _style2["default"])(container, 'paddingRight') || 0, 10) + (0, _scrollbarSize2["default"])() + 'px';
-	  }
-
-	  (0, _style2["default"])(container, style);
-	}
-	//移除容器style
-	function removeContainerStyle(_ref, container) {
-	  var style = _ref.style;
-
-
-	  Object.keys(style).forEach(function (key) {
-	    return container.style[key] = style[key];
-	  });
-	}
-	/**
-	 * 容器的正确状态管理和那些容器中的模态。
-	 */
-
-	var ModalManager = function () {
-	  function ModalManager() {
-	    var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-	        _ref2$hideSiblingNode = _ref2.hideSiblingNodes,
-	        hideSiblingNodes = _ref2$hideSiblingNode === undefined ? true : _ref2$hideSiblingNode,
-	        _ref2$handleContainer = _ref2.handleContainerOverflow,
-	        handleContainerOverflow = _ref2$handleContainer === undefined ? true : _ref2$handleContainer;
-
-	    _classCallCheck(this, ModalManager);
-
-	    this.hideSiblingNodes = hideSiblingNodes;
-	    this.handleContainerOverflow = handleContainerOverflow;
-	    this.modals = [];
-	    this.containers = [];
-	    this.data = [];
-	  }
-
-	  ModalManager.prototype.add = function add(modal, container, className) {
-	    var modalIdx = this.modals.indexOf(modal);
-	    var containerIdx = this.containers.indexOf(container);
-
-	    if (modalIdx !== -1) {
-	      return modalIdx;
-	    }
-
-	    modalIdx = this.modals.length;
-	    this.modals.push(modal);
-
-	    if (this.hideSiblingNodes) {
-	      (0, manageAriaHidden.hideSiblings)(container, modal.mountNode);
-	    }
-
-	    if (containerIdx !== -1) {
-	      this.data[containerIdx].modals.push(modal);
-	      return modalIdx;
-	    }
-
-	    var data = {
-	      modals: [modal],
-	      //right now only the first modal of a container will have its classes applied
-	      classes: className ? className.split(/\s+/) : [],
-
-	      overflowing: (0, _isOverflowing2["default"])(container)
-	    };
-
-	    if (this.handleContainerOverflow) {
-	      setContainerStyle(data, container);
-	    }
-
-	    data.classes.forEach(_class2["default"].addClass.bind(null, container));
-
-	    this.containers.push(container);
-	    this.data.push(data);
-
-	    return modalIdx;
-	  };
-
-	  ModalManager.prototype.remove = function remove(modal) {
-	    var modalIdx = this.modals.indexOf(modal);
-
-	    if (modalIdx === -1) {
-	      return;
-	    }
-
-	    var containerIdx = findContainer(this.data, modal);
-	    var data = this.data[containerIdx];
-	    var container = this.containers[containerIdx];
-
-	    data.modals.splice(data.modals.indexOf(modal), 1);
-
-	    this.modals.splice(modalIdx, 1);
-
-	    // if that was the last modal in a container,
-	    // clean up the container
-	    if (data.modals.length === 0) {
-	      data.classes.forEach(_class2["default"].removeClass.bind(null, container));
-
-	      if (this.handleContainerOverflow) {
-	        removeContainerStyle(data, container);
-	      }
-
-	      if (this.hideSiblingNodes) {
-	        (0, manageAriaHidden.showSiblings)(container, modal.mountNode);
-	      }
-	      this.containers.splice(containerIdx, 1);
-	      this.data.splice(containerIdx, 1);
-	    } else if (this.hideSiblingNodes) {
-	      //otherwise make sure the next top modal is visible to a SR
-	      (0, manageAriaHidden.ariaHidden)(false, data.modals[data.modals.length - 1].mountNode);
-	    }
-	  };
-
-	  ModalManager.prototype.isTopModal = function isTopModal(modal) {
-	    return !!this.modals.length && this.modals[this.modals.length - 1] === modal;
-	  };
-
-	  return ModalManager;
-	}();
-
-	exports["default"] = ModalManager;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(ModalManager_1);
-
 	var on_1$1 = createCommonjsModule(function (module, exports) {
 
 
@@ -11493,708 +10616,6 @@
 	});
 
 	unwrapExports(on_1$1);
-
-	var off_1$1 = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = void 0;
-
-	var _inDOM = interopRequireDefault(inDOM$1);
-
-	var off = function off() {};
-
-	if (_inDOM.default) {
-	  off = function () {
-	    if (document.addEventListener) return function (node, eventName, handler, capture) {
-	      return node.removeEventListener(eventName, handler, capture || false);
-	    };else if (document.attachEvent) return function (node, eventName, handler) {
-	      return node.detachEvent('on' + eventName, handler);
-	    };
-	  }();
-	}
-
-	var _default = off;
-	exports.default = _default;
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(off_1$1);
-
-	var addEventListener$1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports["default"] = function (node, event, handler, capture) {
-	  (0, _on2["default"])(node, event, handler, capture);
-
-	  return {
-	    remove: function remove() {
-	      (0, _off2["default"])(node, event, handler, capture);
-	    }
-	  };
-	};
-
-
-
-	var _on2 = _interopRequireDefault(on_1$1);
-
-
-
-	var _off2 = _interopRequireDefault(off_1$1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(addEventListener$1);
-
-	var addFocusListener_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports["default"] = addFocusListener;
-	/**
-	 * Firefox doesn't have a focusin event so using capture is easiest way to get bubbling
-	 * IE8 can't do addEventListener, but does have onfocusin, so we use that in ie8
-	 *
-	 * We only allow one Listener at a time to avoid stack overflows
-	 */
-	function addFocusListener(handler) {
-	  var useFocusin = !document.addEventListener;
-	  var remove = void 0;
-
-	  if (useFocusin) {
-	    document.attachEvent('onfocusin', handler);
-	    remove = function remove() {
-	      return document.detachEvent('onfocusin', handler);
-	    };
-	  } else {
-	    document.addEventListener('focus', handler, true);
-	    remove = function remove() {
-	      return document.removeEventListener('focus', handler, true);
-	    };
-	  }
-
-	  return { remove: remove };
-	}
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(addFocusListener_1);
-
-	var activeElement_1 = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = activeElement;
-
-	var _ownerDocument = interopRequireDefault(ownerDocument_1$1);
-
-	function activeElement(doc) {
-	  if (doc === void 0) {
-	    doc = (0, _ownerDocument.default)();
-	  }
-
-	  try {
-	    return doc.activeElement;
-	  } catch (e) {
-	    /* ie throws if no active element */
-	  }
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(activeElement_1);
-
-	var contains$1 = createCommonjsModule(function (module, exports) {
-
-
-
-	exports.__esModule = true;
-	exports.default = void 0;
-
-	var _inDOM = interopRequireDefault(inDOM$1);
-
-	var _default = function () {
-	  // HTML DOM and SVG DOM may have different support levels,
-	  // so we need to check on context instead of a document root element.
-	  return _inDOM.default ? function (context, node) {
-	    if (context.contains) {
-	      return context.contains(node);
-	    } else if (context.compareDocumentPosition) {
-	      return context === node || !!(context.compareDocumentPosition(node) & 16);
-	    } else {
-	      return fallback(context, node);
-	    }
-	  } : fallback;
-	}();
-
-	exports.default = _default;
-
-	function fallback(context, node) {
-	  if (node) do {
-	    if (node === context) return true;
-	  } while (node = node.parentNode);
-	  return false;
-	}
-
-	module.exports = exports["default"];
-	});
-
-	unwrapExports(contains$1);
-
-	var Modal = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /*eslint-disable react/prop-types */
-
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-
-
-	var _warning2 = _interopRequireDefault(warning_1);
-
-
-
-
-
-	var _Portal2 = _interopRequireDefault(Portal_1);
-
-
-
-	var _ModalManager2 = _interopRequireDefault(ModalManager_1);
-
-
-
-	var _ownerDocument2 = _interopRequireDefault(ownerDocument);
-
-
-
-	var _addEventListener2 = _interopRequireDefault(addEventListener$1);
-
-
-
-	var _addFocusListener2 = _interopRequireDefault(addFocusListener_1);
-
-
-
-	var _inDOM2 = _interopRequireDefault(inDOM$1);
-
-
-
-	var _activeElement2 = _interopRequireDefault(activeElement_1);
-
-
-
-	var _contains2 = _interopRequireDefault(contains$1);
-
-
-
-	var _getContainer2 = _interopRequireDefault(getContainer_1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var modalManager = new _ModalManager2["default"]();
-
-	/**
-	 * 模态框
-	 */
-
-	var propTypes$1 = _extends({}, _Portal2["default"].propTypes, {
-
-	  /**
-	   * 是否显示
-	   */
-	  show: _propTypes2["default"].bool,
-
-	  /**
-	   * 容器
-	   */
-	  container: _propTypes2["default"].oneOfType([lib$1.componentOrElement, _propTypes2["default"].func]),
-
-	  /**
-	   * 当模态框打开时的钩子函数
-	   */
-	  onShow: _propTypes2["default"].func,
-
-	  /**
-	   * 当show参数为false时触发的模态框关闭时的钩子函数
-	   */
-	  onHide: _propTypes2["default"].func,
-
-	  /**
-	   * 是否包含背景
-	   */
-	  backdrop: _propTypes2["default"].oneOfType([_propTypes2["default"].bool, _propTypes2["default"].oneOf(['static'])]),
-
-	  /**
-	   *返回背景组件的函数
-	   */
-	  renderBackdrop: _propTypes2["default"].func,
-
-	  /**
-	   * 设置esc键特殊钩子函数
-	   */
-	  onEscapeKeyUp: _propTypes2["default"].func,
-
-	  /**
-	   * 当点击背景时触发的函数
-	   */
-	  onBackdropClick: _propTypes2["default"].func,
-
-	  /**
-	   * 背景的style
-	   */
-	  backdropStyle: _propTypes2["default"].object,
-
-	  /**
-	   * 背景的class
-	   */
-	  backdropClassName: _propTypes2["default"].string,
-
-	  /**
-	   *容器的class
-	   */
-	  containerClassName: _propTypes2["default"].string,
-
-	  /**
-	   * 按esc键是否关闭模态框
-	   */
-	  keyboard: _propTypes2["default"].bool,
-
-	  /**
-	   * 动画组件
-	   */
-	  transition: lib$1.elementType,
-
-	  /**
-	   * 设置动画超时时间
-	   */
-	  dialogTransitionTimeout: _propTypes2["default"].number,
-
-	  /**
-	   * 设置背景动画超时时间
-	   */
-	  backdropTransitionTimeout: _propTypes2["default"].number,
-
-	  /**
-	   * 是否自动设置焦点
-	   */
-	  autoFocus: _propTypes2["default"].bool,
-
-	  /**
-	   * 防止焦点离开模态框
-	   */
-	  enforceFocus: _propTypes2["default"].bool,
-
-	  /**
-	   * 模态框进入时的钩子函数
-	   */
-	  onEnter: _propTypes2["default"].func,
-
-	  /**
-	   * 模态框开始进入时的钩子函数
-	   */
-	  onEntering: _propTypes2["default"].func,
-
-	  /**
-	   * 模态框进入后的钩子函数
-	   */
-	  onEntered: _propTypes2["default"].func,
-
-	  /**
-	   * 模态框退出时的钩子函数
-	   */
-	  onExit: _propTypes2["default"].func,
-
-	  /**
-	   * 模态框开始退出时的钩子函数
-	   */
-	  onExiting: _propTypes2["default"].func,
-
-	  /**
-	   * 模态框推出后的钩子函数
-	   */
-	  onExited: _propTypes2["default"].func,
-
-	  /**
-	   *管理model状态的实例
-	   */
-	  manager: _propTypes2["default"].object.isRequired
-	});
-
-	var defaultProps = {
-	  show: false,
-	  backdrop: true,
-	  keyboard: true,
-	  autoFocus: true,
-	  enforceFocus: true,
-	  onHide: function onHide() {},
-	  manager: modalManager,
-	  renderBackdrop: function renderBackdrop(props) {
-	    return _react2["default"].createElement('div', props);
-	  }
-	};
-
-	var BaseModal = function (_Component) {
-	  _inherits(BaseModal, _Component);
-
-	  function BaseModal(props, content) {
-	    _classCallCheck(this, BaseModal);
-
-	    var _this = _possibleConstructorReturn(this, _Component.call(this, props));
-
-	    _this.state = {
-	      exited: !_this.props.show
-	    };
-
-	    _this.onShow = _this.onShow.bind(_this);
-	    _this.onHide = _this.onHide.bind(_this);
-	    _this.setMountNode = _this.setMountNode.bind(_this);
-	    _this.handleHidden = _this.handleHidden.bind(_this);
-	    _this.handleBackdropClick = _this.handleBackdropClick.bind(_this);
-	    _this.handleDocumentKeyUp = _this.handleDocumentKeyUp.bind(_this);
-	    _this.checkForFocus = _this.checkForFocus.bind(_this);
-	    _this.focus = _this.focus.bind(_this);
-	    _this.restoreLastFocus = _this.restoreLastFocus.bind(_this);
-	    _this.enforceFocus = _this.enforceFocus.bind(_this);
-	    _this.getDialogElement = _this.getDialogElement.bind(_this);
-	    _this.isTopModal = _this.isTopModal.bind(_this);
-	    _this.renderBackdrop = _this.renderBackdrop.bind(_this);
-	    return _this;
-	  }
-
-	  BaseModal.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	    if (nextProps.show) {
-	      this.setState({ exited: false });
-	    } else if (!nextProps.transition) {
-	      // Otherwise let handleHidden take care of marking exited.
-	      this.setState({ exited: true });
-	    }
-	  };
-
-	  BaseModal.prototype.componentWillUpdate = function componentWillUpdate(nextProps) {
-	    if (!this.props.show && nextProps.show) {
-	      this.checkForFocus();
-	    }
-	  };
-
-	  BaseModal.prototype.componentDidMount = function componentDidMount() {
-	    if (this.props.show) {
-	      this.onShow();
-	    }
-	    this.mounted = true;
-	  };
-
-	  BaseModal.prototype.componentDidUpdate = function componentDidUpdate(prevProps) {
-	    var transition = this.props.transition;
-
-
-	    if (prevProps.show && !this.props.show && !transition) {
-	      // Otherwise handleHidden will call this.
-	      this.onHide();
-	    } else if (!prevProps.show && this.props.show) {
-	      this.onShow();
-	    }
-	  };
-
-	  BaseModal.prototype.componentWillUnmount = function componentWillUnmount() {
-	    var _props = this.props,
-	        show = _props.show,
-	        transition = _props.transition;
-
-
-	    if (show || transition && !this.state.exited) {
-	      this.onHide();
-	    }
-
-	    this.mounted = false;
-	  };
-
-	  BaseModal.prototype.onShow = function onShow() {
-	    var doc = (0, _ownerDocument2["default"])(this);
-	    var container = (0, _getContainer2["default"])(this.props.container, doc.body);
-
-	    this.props.manager.add(this, container, this.props.containerClassName);
-
-	    this._onDocumentKeyupListener = (0, _addEventListener2["default"])(doc, 'keyup', this.handleDocumentKeyUp);
-
-	    this._onFocusinListener = (0, _addFocusListener2["default"])(this.enforceFocus);
-
-	    this.focus();
-
-	    if (this.props.onShow) {
-	      this.props.onShow();
-	    }
-	  };
-
-	  BaseModal.prototype.onHide = function onHide() {
-	    this.props.manager.remove(this);
-
-	    this._onDocumentKeyupListener.remove();
-
-	    this._onFocusinListener.remove();
-
-	    this.restoreLastFocus();
-	  };
-
-	  BaseModal.prototype.setMountNode = function setMountNode(ref) {
-	    this.mountNode = ref ? ref.getMountNode() : ref;
-	  };
-
-	  BaseModal.prototype.handleHidden = function handleHidden() {
-	    this.setState({ exited: true });
-	    this.onHide();
-
-	    if (this.props.onExited) {
-	      var _props2;
-
-	      (_props2 = this.props).onExited.apply(_props2, arguments);
-	    }
-	  };
-
-	  BaseModal.prototype.handleBackdropClick = function handleBackdropClick(e) {
-	    if (e.target !== e.currentTarget) {
-	      return;
-	    }
-
-	    if (this.props.onBackdropClick) {
-	      this.props.onBackdropClick(e);
-	    }
-
-	    if (this.props.backdrop === true) {
-	      this.props.onHide();
-	    }
-	  };
-
-	  BaseModal.prototype.handleDocumentKeyUp = function handleDocumentKeyUp(e) {
-	    if (this.props.keyboard && e.keyCode === 27 && this.isTopModal()) {
-	      if (this.props.onEscapeKeyUp) {
-	        this.props.onEscapeKeyUp(e);
-	      }
-	      this.props.onHide();
-	    }
-	  };
-
-	  BaseModal.prototype.checkForFocus = function checkForFocus() {
-	    if (_inDOM2["default"]) {
-	      this.lastFocus = (0, _activeElement2["default"])();
-	    }
-	  };
-
-	  BaseModal.prototype.focus = function focus() {
-	    var autoFocus = this.props.autoFocus;
-	    var modalContent = this.getDialogElement();
-	    var current = (0, _activeElement2["default"])((0, _ownerDocument2["default"])(this));
-	    var focusInModal = current && (0, _contains2["default"])(modalContent, current);
-
-	    if (modalContent && autoFocus && !focusInModal) {
-	      this.lastFocus = current;
-
-	      if (!modalContent.hasAttribute('tabIndex')) {
-	        modalContent.setAttribute('tabIndex', -1);
-	        (0, _warning2["default"])(false, 'The modal content node does not accept focus. ' + 'For the benefit of assistive technologies, the tabIndex of the node is being set to "-1".');
-	      }
-
-	      modalContent.focus();
-	    }
-	  };
-
-	  BaseModal.prototype.restoreLastFocus = function restoreLastFocus() {
-	    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
-	    if (this.lastFocus && this.lastFocus.focus) {
-	      this.lastFocus.focus();
-	      this.lastFocus = null;
-	    }
-	  };
-
-	  BaseModal.prototype.enforceFocus = function enforceFocus() {
-	    var enforceFocus = this.props.enforceFocus;
-
-
-	    if (!enforceFocus || !this.mounted || !this.isTopModal()) {
-	      return;
-	    }
-
-	    var active = (0, _activeElement2["default"])((0, _ownerDocument2["default"])(this));
-	    var modal = this.getDialogElement();
-
-	    if (modal && modal !== active && !(0, _contains2["default"])(modal, active)) {
-	      modal.focus();
-	    }
-	  };
-
-	  //instead of a ref, which might conflict with one the parent applied.
-
-
-	  BaseModal.prototype.getDialogElement = function getDialogElement() {
-	    var node = this.modal;
-	    return node && node.lastChild;
-	  };
-
-	  BaseModal.prototype.isTopModal = function isTopModal() {
-	    return this.props.manager.isTopModal(this);
-	  };
-
-	  BaseModal.prototype.renderBackdrop = function renderBackdrop() {
-	    var _this2 = this;
-
-	    var _props3 = this.props,
-	        backdropStyle = _props3.backdropStyle,
-	        backdropClassName = _props3.backdropClassName,
-	        renderBackdrop = _props3.renderBackdrop,
-	        Transition = _props3.transition,
-	        backdropTransitionTimeout = _props3.backdropTransitionTimeout;
-
-
-	    var backdropRef = function backdropRef(ref) {
-	      return _this2.backdrop = ref;
-	    };
-
-	    var backdrop = _react2["default"].createElement('div', {
-	      ref: backdropRef,
-	      style: this.props.backdropStyle,
-	      className: this.props.backdropClassName,
-	      onClick: this.handleBackdropClick
-	    });
-
-	    if (Transition) {
-	      backdrop = _react2["default"].createElement(
-	        Transition,
-	        { transitionAppear: true,
-	          'in': this.props.show,
-	          timeout: backdropTransitionTimeout
-	        },
-	        renderBackdrop({
-	          ref: backdropRef,
-	          style: backdropStyle,
-	          className: backdropClassName,
-	          onClick: this.handleBackdropClick
-	        })
-	      );
-	    }
-
-	    return backdrop;
-	  };
-
-	  BaseModal.prototype.render = function render() {
-	    var _this3 = this;
-
-	    var _props4 = this.props,
-	        show = _props4.show,
-	        container = _props4.container,
-	        children = _props4.children,
-	        Transition = _props4.transition,
-	        backdrop = _props4.backdrop,
-	        dialogTransitionTimeout = _props4.dialogTransitionTimeout,
-	        className = _props4.className,
-	        style = _props4.style,
-	        onExit = _props4.onExit,
-	        onExiting = _props4.onExiting,
-	        onEnter = _props4.onEnter,
-	        onEntering = _props4.onEntering,
-	        onEntered = _props4.onEntered;
-
-
-	    var dialog = _react2["default"].Children.only(children);
-
-	    var mountModal = show || Transition && !this.state.exited;
-	    if (!mountModal) {
-	      return null;
-	    }
-
-	    var _dialog$props = dialog.props,
-	        role = _dialog$props.role,
-	        tabIndex = _dialog$props.tabIndex;
-
-
-	    if (role === undefined || tabIndex === undefined) {
-	      dialog = (0, React__default.cloneElement)(dialog, {
-	        role: role === undefined ? 'document' : role,
-	        tabIndex: tabIndex == null ? '-1' : tabIndex
-	      });
-	    }
-
-	    if (Transition) {
-	      dialog = _react2["default"].createElement(
-	        Transition,
-	        {
-	          transitionAppear: true,
-	          unmountOnExit: true,
-	          'in': show,
-	          timeout: dialogTransitionTimeout,
-	          onExit: onExit,
-	          onExiting: onExiting,
-	          onExited: this.handleHidden,
-	          onEnter: onEnter,
-	          onEntering: onEntering,
-	          onEntered: onEntered
-	        },
-	        dialog
-	      );
-	    }
-
-	    return _react2["default"].createElement(
-	      _Portal2["default"],
-	      {
-	        ref: this.setMountNode,
-	        container: container
-	      },
-	      _react2["default"].createElement(
-	        'div',
-	        {
-	          ref: function ref(el) {
-	            _this3.modal = el;
-	          },
-	          role: role || 'dialog',
-	          style: style,
-	          className: className
-	        },
-	        backdrop && this.renderBackdrop(),
-	        dialog
-	      )
-	    );
-	  };
-
-	  return BaseModal;
-	}(React__default.Component);
-
-	BaseModal.Manager = _ModalManager2["default"];
-
-	BaseModal.propTypes = propTypes$1;
-	BaseModal.defaultProps = defaultProps;
-
-	exports["default"] = BaseModal;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(Modal);
 
 	var Transition_1 = createCommonjsModule(function (module, exports) {
 
@@ -12544,6 +10965,221 @@
 	var Transition_4 = Transition_1.ENTERING;
 	var Transition_5 = Transition_1.EXITED;
 	var Transition_6 = Transition_1.UNMOUNTED;
+
+	var camelize_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.default = camelize;
+	var rHyphen = /-(.)/g;
+
+	function camelize(string) {
+	  return string.replace(rHyphen, function (_, chr) {
+	    return chr.toUpperCase();
+	  });
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(camelize_1);
+
+	var camelizeStyle = createCommonjsModule(function (module, exports) {
+
+
+
+	exports.__esModule = true;
+	exports.default = camelizeStyleName;
+
+	var _camelize = interopRequireDefault(camelize_1);
+
+	/**
+	 * Copyright 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/camelizeStyleName.js
+	 */
+	var msPattern = /^-ms-/;
+
+	function camelizeStyleName(string) {
+	  return (0, _camelize.default)(string.replace(msPattern, 'ms-'));
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(camelizeStyle);
+
+	var hyphenate_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.default = hyphenate;
+	var rUpper = /([A-Z])/g;
+
+	function hyphenate(string) {
+	  return string.replace(rUpper, '-$1').toLowerCase();
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(hyphenate_1);
+
+	var hyphenateStyle = createCommonjsModule(function (module, exports) {
+
+
+
+	exports.__esModule = true;
+	exports.default = hyphenateStyleName;
+
+	var _hyphenate = interopRequireDefault(hyphenate_1);
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 * https://github.com/facebook/react/blob/2aeb8a2a6beb00617a4217f7f8284924fa2ad819/src/vendor/core/hyphenateStyleName.js
+	 */
+	var msPattern = /^ms-/;
+
+	function hyphenateStyleName(string) {
+	  return (0, _hyphenate.default)(string).replace(msPattern, '-ms-');
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(hyphenateStyle);
+
+	var getComputedStyle = createCommonjsModule(function (module, exports) {
+
+
+
+	exports.__esModule = true;
+	exports.default = _getComputedStyle;
+
+	var _camelizeStyle = interopRequireDefault(camelizeStyle);
+
+	var rposition = /^(top|right|bottom|left)$/;
+	var rnumnonpx = /^([+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|))(?!px)[a-z%]+$/i;
+
+	function _getComputedStyle(node) {
+	  if (!node) throw new TypeError('No Element passed to `getComputedStyle()`');
+	  var doc = node.ownerDocument;
+	  return 'defaultView' in doc ? doc.defaultView.opener ? node.ownerDocument.defaultView.getComputedStyle(node, null) : window.getComputedStyle(node, null) : {
+	    //ie 8 "magic" from: https://github.com/jquery/jquery/blob/1.11-stable/src/css/curCSS.js#L72
+	    getPropertyValue: function getPropertyValue(prop) {
+	      var style = node.style;
+	      prop = (0, _camelizeStyle.default)(prop);
+	      if (prop == 'float') prop = 'styleFloat';
+	      var current = node.currentStyle[prop] || null;
+	      if (current == null && style && style[prop]) current = style[prop];
+
+	      if (rnumnonpx.test(current) && !rposition.test(prop)) {
+	        // Remember the original values
+	        var left = style.left;
+	        var runStyle = node.runtimeStyle;
+	        var rsLeft = runStyle && runStyle.left; // Put in the new values to get a computed value out
+
+	        if (rsLeft) runStyle.left = node.currentStyle.left;
+	        style.left = prop === 'fontSize' ? '1em' : current;
+	        current = style.pixelLeft + 'px'; // Revert the changed values
+
+	        style.left = left;
+	        if (rsLeft) runStyle.left = rsLeft;
+	      }
+
+	      return current;
+	    }
+	  };
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(getComputedStyle);
+
+	var removeStyle_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.default = removeStyle;
+
+	function removeStyle(node, key) {
+	  return 'removeProperty' in node.style ? node.style.removeProperty(key) : node.style.removeAttribute(key);
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(removeStyle_1);
+
+	var isTransform_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.default = isTransform;
+	var supportedTransforms = /^((translate|rotate|scale)(X|Y|Z|3d)?|matrix(3d)?|perspective|skew(X|Y)?)$/i;
+
+	function isTransform(property) {
+	  return !!(property && supportedTransforms.test(property));
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(isTransform_1);
+
+	var style_1 = createCommonjsModule(function (module, exports) {
+
+
+
+	exports.__esModule = true;
+	exports.default = style;
+
+	var _camelizeStyle = interopRequireDefault(camelizeStyle);
+
+	var _hyphenateStyle = interopRequireDefault(hyphenateStyle);
+
+	var _getComputedStyle2 = interopRequireDefault(getComputedStyle);
+
+	var _removeStyle = interopRequireDefault(removeStyle_1);
+
+
+
+	var _isTransform = interopRequireDefault(isTransform_1);
+
+	function style(node, property, value) {
+	  var css = '';
+	  var transforms = '';
+	  var props = property;
+
+	  if (typeof property === 'string') {
+	    if (value === undefined) {
+	      return node.style[(0, _camelizeStyle.default)(property)] || (0, _getComputedStyle2.default)(node).getPropertyValue((0, _hyphenateStyle.default)(property));
+	    } else {
+	      (props = {})[property] = value;
+	    }
+	  }
+
+	  Object.keys(props).forEach(function (key) {
+	    var value = props[key];
+
+	    if (!value && value !== 0) {
+	      (0, _removeStyle.default)(node, (0, _hyphenateStyle.default)(key));
+	    } else if ((0, _isTransform.default)(key)) {
+	      transforms += key + "(" + value + ") ";
+	    } else {
+	      css += (0, _hyphenateStyle.default)(key) + ": " + value + ";";
+	    }
+	  });
+
+	  if (transforms) {
+	    css += properties.transform + ": " + transforms + ";";
+	  }
+
+	  node.style.cssText += ';' + css;
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(style_1);
 
 	var capitalize_1 = createCommonjsModule(function (module, exports) {
 
@@ -26614,15 +25250,17 @@
 	  }
 
 	  ModalDialog.prototype.componentDidUpdate = function componentDidUpdate() {
-	    var _getMaxSizesFromProps = this.getMaxSizesFromProps(),
-	        maxWidth = _getMaxSizesFromProps.maxWidth,
-	        maxHeight = _getMaxSizesFromProps.maxHeight;
+	    if (this.props.resizable) {
+	      var _getMaxSizesFromProps = this.getMaxSizesFromProps(),
+	          maxWidth = _getMaxSizesFromProps.maxWidth,
+	          maxHeight = _getMaxSizesFromProps.maxHeight;
 
-	    if (maxWidth != this.state.maxWidth) {
-	      this.setState({
-	        maxWidth: maxWidth,
-	        maxHeight: maxHeight
-	      });
+	      if (maxWidth != this.state.maxWidth) {
+	        this.setState({
+	          maxWidth: maxWidth,
+	          maxHeight: maxHeight
+	        });
+	      }
 	    }
 	  };
 
@@ -26659,9 +25297,10 @@
 	        children = _props.children,
 	        draggable = _props.draggable,
 	        resizable = _props.resizable,
+	        resizeClassName = _props.resizeClassName,
 	        minHeight = _props.minHeight,
 	        minWidth = _props.minWidth,
-	        props = _objectWithoutProperties(_props, ['dialogClassName', 'className', 'clsPrefix', 'size', 'style', 'contentStyle', 'children', 'draggable', 'resizable', 'minHeight', 'minWidth']);
+	        props = _objectWithoutProperties(_props, ['dialogClassName', 'className', 'clsPrefix', 'size', 'style', 'contentStyle', 'children', 'draggable', 'resizable', 'resizeClassName', 'minHeight', 'minWidth']);
 
 	    var _state = this.state,
 	        original = _state.original,
@@ -26700,7 +25339,8 @@
 	          {
 	            handle: '.dnd-handle',
 	            cancel: '.dnd-cancel',
-	            onStart: this.onStart,
+	            bounds: { top: -20 } //防止拖拽时，Header 被导航栏覆盖
+	            , onStart: this.onStart,
 	            onStop: this.onStop,
 	            position: original,
 	            list: []
@@ -26708,6 +25348,7 @@
 	          resizable ? _react2["default"].createElement(
 	            _reResizable2["default"],
 	            {
+	              className: resizeClassName,
 	              ref: function ref(c) {
 	                if (c) {
 	                  _this2.resizable = c;
@@ -27069,7 +25710,7 @@
 
 
 
-	var _isOverflowing2 = _interopRequireDefault(isOverflowing_1);
+	var _isOverflowing2 = _interopRequireDefault(isOverflowing);
 
 
 
@@ -27172,7 +25813,7 @@
 	  onExited: _propTypes2["default"].func,
 
 	  containerClassName: _propTypes2["default"].string
-	}, _defineProperty(_extends2, 'containerClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'container', _Modal2["default"].propTypes.container), _defineProperty(_extends2, 'size', _propTypes2["default"].oneOf(["sm", "lg", "xlg", ""])), _defineProperty(_extends2, 'width', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'draggable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizable', _propTypes2["default"].bool), _defineProperty(_extends2, 'onResizeStart', _propTypes2["default"].func), _defineProperty(_extends2, 'onResize', _propTypes2["default"].func), _defineProperty(_extends2, 'onResizeStop', _propTypes2["default"].func), _defineProperty(_extends2, 'minWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'minHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _extends2));
+	}, _defineProperty(_extends2, 'containerClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'container', _Modal2["default"].propTypes.container), _defineProperty(_extends2, 'size', _propTypes2["default"].oneOf(["sm", "lg", "xlg", ""])), _defineProperty(_extends2, 'width', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'draggable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizeClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'onResizeStart', _propTypes2["default"].func), _defineProperty(_extends2, 'onResize', _propTypes2["default"].func), _defineProperty(_extends2, 'onResizeStop', _propTypes2["default"].func), _defineProperty(_extends2, 'minWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'minHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _extends2));
 
 	var defaultProps = _extends({}, _Modal2["default"].defaultProps, {
 	  backdropClosable: true,
@@ -27276,7 +25917,10 @@
 	    var dialogHeight = dialogNode.scrollHeight;
 
 	    var document = (0, _ownerDocument2["default"])(dialogNode);
-	    var bodyIsOverflowing = (0, _isOverflowing2["default"])(_reactDom2["default"].findDOMNode(this.props.container || document.body));
+	    var bodyIsOverflowing = false;
+	    if (this.props.container) {
+	      bodyIsOverflowing = (0, _isOverflowing2["default"])(_reactDom2["default"].findDOMNode(this.props.container));
+	    }
 	    var modalIsOverflowing = dialogHeight > document.documentElement.clientHeight;
 
 	    this.setState({
@@ -27308,7 +25952,8 @@
 	        backdropClassName = _props.backdropClassName,
 	        containerClassName = _props.containerClassName,
 	        draggable = _props.draggable,
-	        props = _objectWithoutProperties(_props, ['backdrop', 'backdropClosable', 'animation', 'show', 'dialogComponentClass', 'className', 'clsPrefix', 'style', 'size', 'width', 'children', 'onEntering', 'onExited', 'backdropClassName', 'containerClassName', 'draggable']);
+	        resizeClassName = _props.resizeClassName,
+	        props = _objectWithoutProperties(_props, ['backdrop', 'backdropClosable', 'animation', 'show', 'dialogComponentClass', 'className', 'clsPrefix', 'style', 'size', 'width', 'children', 'onEntering', 'onExited', 'backdropClassName', 'containerClassName', 'draggable', 'resizeClassName']);
 
 	    var _splitComponent = (0, lib$1.splitComponent)(props, _Modal2["default"]),
 	        _splitComponent2 = _slicedToArray(_splitComponent, 2),
@@ -27335,7 +25980,7 @@
 	        onEntering: (0, lib$1.createChainedFunction)(onEntering, this.handleEntering),
 	        onExited: (0, lib$1.createChainedFunction)(onExited, this.handleExited),
 	        backdrop: backdrop,
-	        backdropClassName: (0, _classnames2["default"])(backdropClasses, inClassName),
+	        backdropClassName: (0, _classnames2["default"])(backdropClasses, inClassName, backdropClassName),
 	        containerClassName: (0, _classnames2["default"])(containerClasses, containerClassName),
 	        transition: animation ? build$7.Fade : undefined,
 	        dialogTransitionTimeout: Modal.TRANSITION_DURATION,
@@ -27348,7 +25993,8 @@
 	          className: (0, _classnames2["default"])(className, inClassName, backdropClassName),
 	          onClick: backdrop === true && !!backdropClosable ? this.handleDialogClick : null,
 	          size: size,
-	          draggable: draggable
+	          draggable: draggable,
+	          resizeClassName: resizeClassName
 	        }),
 	        children
 	      )
@@ -27838,7 +26484,7 @@
 	_Modal2["default"].error = function (props) {
 	    var config = _extends({
 	        type: 'error',
-	        icon: _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-close-bold' }),
+	        icon: _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-exc-c' }),
 	        okCancel: false
 	    }, props);
 	    return (0, _confirm2["default"])(config);
@@ -31255,7 +29901,7 @@
 	    return ResizeObserver;
 	})();
 
-	function contains$2(root, n) {
+	function contains$1(root, n) {
 	  var node = n;
 	  while (node) {
 	    if (node === root) {
@@ -31520,7 +30166,7 @@
 	  return false;
 	}
 
-	function isWindow$2(obj) {
+	function isWindow$1(obj) {
 	  return obj && typeof obj === 'object' && obj.window === obj;
 	}
 
@@ -31532,7 +30178,7 @@
 
 	function restoreFocus(activeElement, container) {
 	  // Focus back if is in the container
-	  if (activeElement !== document.activeElement && contains$2(container, activeElement)) {
+	  if (activeElement !== document.activeElement && contains$1(container, activeElement)) {
 	    activeElement.focus();
 	  }
 	}
@@ -31622,7 +30268,7 @@
 	          var lastPoint = getPoint(prevProps.target);
 	          var currentPoint = getPoint(props.target);
 
-	          if (isWindow$2(lastElement) && isWindow$2(currentElement)) {
+	          if (isWindow$1(lastElement) && isWindow$1(currentElement)) {
 	            // Skip if is window
 	            reAlign = false;
 	          } else if (lastElement !== currentElement || // Element change
@@ -31916,7 +30562,7 @@
 	  detectEvents();
 	}
 
-	function addEventListener$2(node, eventName, eventListener) {
+	function addEventListener$1(node, eventName, eventListener) {
 	  node.addEventListener(eventName, eventListener, false);
 	}
 
@@ -31934,7 +30580,7 @@
 	      return;
 	    }
 	    startEvents.forEach(function (startEvent) {
-	      addEventListener$2(node, startEvent, eventListener);
+	      addEventListener$1(node, startEvent, eventListener);
 	    });
 	  },
 	  removeStartEventListener: function removeStartEventListener(node, eventListener) {
@@ -31956,7 +30602,7 @@
 	      return;
 	    }
 	    endEvents.forEach(function (endEvent) {
-	      addEventListener$2(node, endEvent, eventListener);
+	      addEventListener$1(node, endEvent, eventListener);
 	    });
 	  },
 	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
@@ -33498,7 +32144,7 @@
 	  this.onPopupMouseLeave = function (e) {
 	    // https://github.com/react-component/trigger/pull/13
 	    // react bug?
-	    if (e.relatedTarget && !e.relatedTarget.setTimeout && _this5._component && _this5._component.getPopupDomNode && contains$2(_this5._component.getPopupDomNode(), e.relatedTarget)) {
+	    if (e.relatedTarget && !e.relatedTarget.setTimeout && _this5._component && _this5._component.getPopupDomNode && contains$1(_this5._component.getPopupDomNode(), e.relatedTarget)) {
 	      return;
 	    }
 	    _this5.delaySetPopupVisible(false, _this5.props.mouseLeaveDelay);
@@ -33595,7 +32241,7 @@
 
 	    var target = event.target;
 	    var root = ReactDOM.findDOMNode(_this5);
-	    if (!contains$2(root, target) && !_this5.hasPopupMouseDown) {
+	    if (!contains$1(root, target) && !_this5.hasPopupMouseDown) {
 	      _this5.close();
 	    }
 	  };
@@ -35484,7 +34130,7 @@
 	 * A crude way of determining if an object is a window
 	 * @member util
 	 */
-	function isWindow$3(obj) {
+	function isWindow$2(obj) {
 	  // must use == for ie8
 	  /* eslint eqeqeq:0 */
 	  return obj != null && obj == obj.window;
@@ -35525,7 +34171,7 @@
 	 'margin' : (css width) + padding + border + margin
 	 */
 	function getWH$1(elem, name, extra) {
-	  if (isWindow$3(elem)) {
+	  if (isWindow$2(elem)) {
 	    return name === 'width' ? domUtils$1.viewportWidth(elem) : domUtils$1.viewportHeight(elem);
 	  } else if (elem.nodeType === 9) {
 	    return name === 'width' ? domUtils$1.docWidth(elem) : domUtils$1.docHeight(elem);
@@ -35662,7 +34308,7 @@
 	    }
 	  },
 
-	  isWindow: isWindow$3,
+	  isWindow: isWindow$2,
 	  each: each$1,
 	  css: css$2,
 	  clone: function clone(obj) {
@@ -35683,7 +34329,7 @@
 	    return ret;
 	  },
 	  scrollLeft: function scrollLeft(w, v) {
-	    if (isWindow$3(w)) {
+	    if (isWindow$2(w)) {
 	      if (v === undefined) {
 	        return getScrollLeft$1(w);
 	      }
@@ -35696,7 +34342,7 @@
 	    }
 	  },
 	  scrollTop: function scrollTop(w, v) {
-	    if (isWindow$3(w)) {
+	    if (isWindow$2(w)) {
 	      if (v === undefined) {
 	        return getScrollTop$1(w);
 	      }
@@ -36459,6 +35105,43 @@
 	var util_20 = util$3.defaultFilterFn;
 	var util_21 = util$3.validateOptionValue;
 	var util_22 = util$3.saveRef;
+
+	var contains$2 = createCommonjsModule(function (module, exports) {
+
+
+
+	exports.__esModule = true;
+	exports.default = void 0;
+
+	var _inDOM = interopRequireDefault(inDOM$1);
+
+	var _default = function () {
+	  // HTML DOM and SVG DOM may have different support levels,
+	  // so we need to check on context instead of a document root element.
+	  return _inDOM.default ? function (context, node) {
+	    if (context.contains) {
+	      return context.contains(node);
+	    } else if (context.compareDocumentPosition) {
+	      return context === node || !!(context.compareDocumentPosition(node) & 16);
+	    } else {
+	      return fallback(context, node);
+	    }
+	  } : fallback;
+	}();
+
+	exports.default = _default;
+
+	function fallback(context, node) {
+	  if (node) do {
+	    if (node === context) return true;
+	  } while (node = node.parentNode);
+	  return false;
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(contains$2);
 
 	var ChildrenUtils$1 = createCommonjsModule(function (module, exports) {
 
@@ -37648,7 +36331,7 @@
 
 
 
-	var _contains2 = _interopRequireDefault(contains$1);
+	var _contains2 = _interopRequireDefault(contains$2);
 
 
 
@@ -41851,11 +40534,12 @@
 	}
 
 	function removeHandler(element, type, handler) {
-	  if (element.removeEventListener) {
+	  if (element && element.removeEventListener) {
+	    //element&& ie11报错兼容
 	    element.removeEventListener(type, handler, false);
-	  } else if (element.detachEvent) {
+	  } else if (element && element.detachEvent) {
 	    element.detachEvent("on" + type, handler);
-	  } else {
+	  } else if (element) {
 	    element["on" + type] = null;
 	  }
 	}
@@ -41899,11 +40583,12 @@
 	  },
 
 	  removeHandler: function removeHandler(element, type, handler) {
-	    if (element.removeEventListener) {
+	    //element&& ie11报错兼容
+	    if (element && element.removeEventListener) {
 	      element.removeEventListener(type, handler, false);
-	    } else if (element.detachEvent) {
+	    } else if (element && element.detachEvent) {
 	      element.detachEvent('on' + type, handler);
-	    } else {
+	    } else if (element) {
 	      element['on' + type] = null;
 	    }
 	  }
@@ -42445,16 +41130,27 @@
 	        needIndentSpaced = _props.needIndentSpaced,
 	        expanded = _props.expanded,
 	        record = _props.record,
-	        isHiddenExpandIcon = _props.isHiddenExpandIcon;
+	        isHiddenExpandIcon = _props.isHiddenExpandIcon,
+	        expandedIcon = _props.expandedIcon,
+	        collapsedIcon = _props.collapsedIcon;
 
 	    if (expandable && !isHiddenExpandIcon) {
 	      var expandClassName = expanded ? 'expanded' : 'collapsed';
-	      return _react2["default"].createElement('span', {
-	        className: clsPrefix + '-expand-icon ' + clsPrefix + '-' + expandClassName,
-	        onClick: function onClick(e) {
-	          return onExpand(!expanded, record, e);
-	        }
+	      var currentIcon = _react2["default"].createElement('span', {
+	        className: clsPrefix + '-expand-icon ' + clsPrefix + '-' + expandClassName
 	      });
+	      if (expanded && expandedIcon) {
+	        currentIcon = expandedIcon;
+	      } else if (!expanded && collapsedIcon) {
+	        currentIcon = collapsedIcon;
+	      }
+	      return _react2["default"].createElement(
+	        'span',
+	        { onClick: function onClick(e) {
+	            return onExpand(!expanded, record, e);
+	          }, className: 'expand-icon-con' },
+	        currentIcon
+	      );
 	    } else if (needIndentSpaced || isHiddenExpandIcon) {
 	      return _react2["default"].createElement('span', { className: clsPrefix + '-expand-icon ' + clsPrefix + '-spaced' });
 	    }
@@ -42637,6 +41333,8 @@
 	      var _table_trs = contentTable.querySelector('.u-table-scroll table tbody'),
 	          _table_fixed_left_trs = contentTable.querySelector('.u-table-fixed-left table tbody'),
 	          _table_fixed_right_trs = contentTable.querySelector('.u-table-fixed-right table tbody');
+
+	      _table_trs = _table_trs ? _table_trs : contentTable.querySelector('.u-table table tbody');
 
 	      _this.synchronizeTrStyle(_table_trs, currentIndex, type);
 	      if (_table_fixed_left_trs) {
@@ -42921,7 +41619,10 @@
 	        indentSize = _props9.indentSize,
 	        isHiddenExpandIcon = _props9.isHiddenExpandIcon,
 	        fixed = _props9.fixed,
-	        bodyDisplayInRow = _props9.bodyDisplayInRow;
+	        bodyDisplayInRow = _props9.bodyDisplayInRow,
+	        expandedIcon = _props9.expandedIcon,
+	        collapsedIcon = _props9.collapsedIcon,
+	        hoverKey = _props9.hoverKey;
 
 	    var showSum = false;
 	    var className = this.props.className;
@@ -42942,6 +41643,8 @@
 	      needIndentSpaced: needIndentSpaced,
 	      expanded: expanded,
 	      record: record,
+	      expandedIcon: expandedIcon,
+	      collapsedIcon: collapsedIcon,
 	      isHiddenExpandIcon: isHiddenExpandIcon
 	    });
 
@@ -42986,7 +41689,7 @@
 	        onMouseLeave: this.onMouseLeave,
 	        className: clsPrefix + ' ' + className + ' ' + clsPrefix + '-level-' + indent,
 	        style: style,
-	        'data-row-key': record && record.key ? record.key : "null"
+	        'data-row-key': record && record.key ? record.key : hoverKey
 	        // key={hoverKey}
 	        , ref: this.bindElement
 	      },
@@ -61367,6 +60070,7 @@
 	    'less_than_equal_to': '小于等于',
 	    'be_equal_to': '等于',
 	    'not_equal_to': '不等于',
+	    "no_data": '暂无数据',
 	    'en-us': {
 	        'resetSettings': 'reset settings',
 	        'include': 'include',
@@ -61380,7 +60084,8 @@
 	        'less_than': 'less than',
 	        'less_than_equal_to': 'less than equal to',
 	        'be_equal_to': 'be equal to',
-	        'not_equal_to': 'not equal to'
+	        'not_equal_to': 'not equal to',
+	        "no_data": 'no data'
 	    },
 	    'zh-tw': {
 	        'resetSettings': '還原設置',
@@ -61395,7 +60100,8 @@
 	        'less_than': '小於',
 	        'less_than_equal to': '小於等於',
 	        'be_equal_to': '等於',
-	        'not_equal_to': '不等於'
+	        'not_equal_to': '不等於',
+	        "no_data": '暫無數據'
 	    }
 	};
 
@@ -61728,7 +60434,7 @@
 	                    _beeButton2["default"],
 	                    {
 	                        shape: 'border',
-	                        style: { marginLeft: "3px", minWidth: "0px", width: "24px", padding: 0 }
+	                        style: { marginLeft: "2px", minWidth: "0px", width: "26px", lineHeight: "24px", padding: 0 }
 	                    },
 	                    _react2["default"].createElement(_beeIcon2["default"], { style: { padding: 0, color: '#585858' }, type: 'uf-filter' })
 	                )
@@ -61738,7 +60444,7 @@
 	                {
 	                    onClick: this.onClickClear,
 	                    shape: 'border',
-	                    style: { marginLeft: "1px", minWidth: "0px", width: "24px", padding: 0, "visibility": this.props.isShowClear || this.state.selectValue.length > 0 ? "visible" : "hidden" }
+	                    style: { marginLeft: "2px", minWidth: "0px", width: "26px", lineHeight: "24px", padding: 0, "visibility": this.props.isShowClear || this.state.selectValue.length > 0 ? "visible" : "hidden" }
 	                },
 	                _react2["default"].createElement(_beeIcon2["default"], { style: { padding: 0, color: '#585858', "visibility": this.props.isShowClear || this.state.selectValue.length > 0 ? "visible" : "hidden" }, type: 'uf-filterno' })
 	            )
@@ -62014,6 +60720,7 @@
 	                        'div',
 	                        { className: clsPrefix + ' filter-wrap' },
 	                        _react2["default"].createElement(_beeSelect2["default"], _extends({}, _this.props, {
+	                            size: 'sm',
 	                            value: _this.state.value,
 	                            onChange: _this.changeSelect
 	                        })),
@@ -63445,6 +62152,278 @@
 
 	unwrapExports(createStore_1);
 
+	var ownerDocument_1$1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.default = ownerDocument;
+
+	function ownerDocument(node) {
+	  return node && node.ownerDocument || document;
+	}
+
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(ownerDocument_1$1);
+
+	var ownerDocument = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = function (componentOrElement) {
+	  return (0, _ownerDocument2["default"])(_reactDom2["default"].findDOMNode(componentOrElement));
+	};
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+
+
+	var _ownerDocument2 = _interopRequireDefault(ownerDocument_1$1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(ownerDocument);
+
+	var getContainer_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = getContainer;
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	/**
+	 * 获取容器组件
+	 * @param  {[type]} container        [description]
+	 * @param  {[type]} defaultContainer [description]
+	 * @return {[type]}                  [description]
+	 */
+	function getContainer(container, defaultContainer) {
+	  container = typeof container === 'function' ? container() : container;
+	  return _reactDom2["default"].findDOMNode(container) || defaultContainer;
+	}
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(getContainer_1);
+
+	var Portal_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	var _ownerDocument2 = _interopRequireDefault(ownerDocument);
+
+
+
+	var _getContainer2 = _interopRequireDefault(getContainer_1);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var isReact16 = _reactDom2["default"].createPortal !== undefined;
+	var createPortal = isReact16 ? _reactDom2["default"].createPortal : _reactDom2["default"].unstable_renderSubtreeIntoContainer;
+
+	var propTypes$1 = {
+	  /**
+	   * 存放子组件的容器
+	   */
+	  container: _propTypes2["default"].oneOfType([lib$1.componentOrElement, _propTypes2["default"].func])
+	};
+
+	var defaultProps = {};
+
+	/**
+	 * Portal组件是将子组件渲染
+	 */
+
+	var Portal = function (_Component) {
+	  _inherits(Portal, _Component);
+
+	  function Portal(props) {
+	    _classCallCheck(this, Portal);
+
+	    var _this = _possibleConstructorReturn(this, _Component.call(this, props));
+
+	    _this.getMountNode = _this.getMountNode.bind(_this);
+	    _this.getOverlayDOMNode = _this.getOverlayDOMNode.bind(_this);
+	    _this.mountOverlayTarget = _this.mountOverlayTarget.bind(_this);
+	    _this.unmountOverlayTarget = _this.unmountOverlayTarget.bind(_this);
+	    _this.renderOverlay = _this.renderOverlay.bind(_this);
+	    _this.unrenderOverlay = _this.unrenderOverlay.bind(_this);
+
+	    _this.overlayTarget = isReact16 ? document.createElement('div') : null;
+	    return _this;
+	  }
+
+	  Portal.prototype.componentDidMount = function componentDidMount() {
+	    if (isReact16) {
+	      this.portalContainerNode = (0, _getContainer2["default"])(this.props.container, (0, _ownerDocument2["default"])(this).body);
+	      this.portalContainerNode.appendChild(this.overlayTarget);
+	    } else {
+	      this.renderOverlay();
+	    }
+
+	    this.mounted = true;
+	  };
+
+	  Portal.prototype.componentDidUpdate = function componentDidUpdate() {
+	    if (isReact16) {
+	      var overlay = !this.props.children ? null : _react2["default"].Children.only(this.props.children);
+	      if (overlay === null) {
+	        this.unrenderOverlay();
+	        this.unmountOverlayTarget();
+	      }
+	    } else {
+	      this.renderOverlay();
+	    }
+	  };
+	  //this._overlayTarget为当前的要添加的子组件， this._portalContainerNode要添加组件的容器元素
+
+
+	  Portal.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (this.overlayTarget && nextProps.container !== this.props.container) {
+	      this.portalContainerNode.removeChild(this.overlayTarget);
+	      this.portalContainerNode = (0, _getContainer2["default"])(nextProps.container, (0, _ownerDocument2["default"])(this).body);
+	      this.portalContainerNode.appendChild(this.overlayTarget);
+	    }
+	  };
+
+	  Portal.prototype.componentWillUnmount = function componentWillUnmount() {
+	    this.unrenderOverlay();
+	    this.unmountOverlayTarget();
+
+	    this.mounted = false;
+	  };
+
+	  Portal.prototype.getMountNode = function getMountNode() {
+	    return this.overlayTarget;
+	  };
+
+	  Portal.prototype.getOverlayDOMNode = function getOverlayDOMNode() {
+	    if (!this.mounted) {
+	      throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
+	    }
+
+	    if (this.overlayInstance) {
+	      return _reactDom2["default"].findDOMNode(this.overlayInstance);
+	    }
+
+	    return null;
+	  };
+
+	  /**
+	   * 如果要添加的子组件不存在，就将div添加到要添加容器的DOM中；
+	   */
+
+	  Portal.prototype.mountOverlayTarget = function mountOverlayTarget() {
+	    if (!this.overlayTarget) {
+	      this.overlayTarget = document.createElement('div');
+	      this.portalContainerNode = (0, _getContainer2["default"])(this.props.container, (0, _ownerDocument2["default"])(this).body);
+	      this.portalContainerNode.appendChild(this.overlayTarget);
+	    }
+	  };
+	  /**
+	   * 将要添加的子元素从容器中移除，并把变量置为null
+	   */
+
+
+	  Portal.prototype.unmountOverlayTarget = function unmountOverlayTarget() {
+	    if (this.overlayTarget) {
+	      this.portalContainerNode.removeChild(this.overlayTarget);
+	      this.overlayTarget = null;
+	    }
+	    this.portalContainerNode = null;
+	  };
+	  /**
+	   * 手动渲染_overlayTarget
+	   */
+
+
+	  Portal.prototype.renderOverlay = function renderOverlay() {
+
+	    var overlay = !this.props.children ? null : _react2["default"].Children.only(this.props.children);
+
+	    // Save reference for future access.
+	    if (overlay !== null) {
+	      this.mountOverlayTarget();
+	      this.overlayInstance = _reactDom2["default"].unstable_renderSubtreeIntoContainer(this, overlay, this.overlayTarget);
+	    } else {
+	      // Unrender if the component is null for transitions to null
+	      this.unrenderOverlay();
+	      this.unmountOverlayTarget();
+	    }
+	  };
+	  /**
+	   * 销毁_overlayTarget组件。并把_overlayInstance置为null
+	   */
+
+
+	  Portal.prototype.unrenderOverlay = function unrenderOverlay() {
+	    if (this.overlayTarget) {
+	      !isReact16 && _reactDom2["default"].unmountComponentAtNode(this.overlayTarget);
+	      this.overlayInstance = null;
+	    }
+	  };
+
+	  Portal.prototype.render = function render() {
+	    if (!isReact16) {
+	      return null;
+	    }
+
+	    var overlay = !this.props.children ? null : _react2["default"].Children.only(this.props.children);
+
+	    return _reactDom2["default"].createPortal(overlay, this.overlayTarget);
+	  };
+
+	  return Portal;
+	}(React__default.Component);
+
+	Portal.propTypes = propTypes$1;
+	Portal.defaultProps = defaultProps;
+
+	exports["default"] = Portal;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(Portal_1);
+
 	var Loading_1 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -63720,6 +62699,12 @@
 
 	var _beeIcon2 = _interopRequireDefault(build$l);
 
+
+
+	var _i18n2 = _interopRequireDefault(i18n$1);
+
+
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
@@ -63774,7 +62759,8 @@
 	  tabIndex: _propTypes2["default"].string,
 	  hoverContent: _propTypes2["default"].func,
 	  size: _propTypes2["default"].oneOf(['sm', 'md', 'lg']),
-	  rowDraggAble: _propTypes2["default"].bool
+	  rowDraggAble: _propTypes2["default"].bool,
+	  onDropRow: _propTypes2["default"].func
 	};
 
 	var defaultProps = {
@@ -63809,18 +62795,7 @@
 	  getBodyWrapper: function getBodyWrapper(body) {
 	    return body;
 	  },
-	  emptyText: function emptyText() {
-	    return _react2["default"].createElement(
-	      'div',
-	      null,
-	      _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-nodata', className: 'table-nodata' }),
-	      _react2["default"].createElement(
-	        'span',
-	        null,
-	        '\u6682\u65E0\u6570\u636E'
-	      )
-	    );
-	  },
+	  // emptyText: () => <div><Icon type="uf-nodata" className="table-nodata"></Icon><span>{locale["no_data"]}</span></div>,
 	  columns: [],
 	  minColumnWidth: 80,
 	  locale: {},
@@ -63830,7 +62805,8 @@
 	  tabIndex: '0',
 	  heightConsistent: false,
 	  size: 'md',
-	  rowDraggAble: false
+	  rowDraggAble: false,
+	  onDropRow: function onDropRow() {}
 	};
 
 	var Table = function (_Component) {
@@ -63863,23 +62839,29 @@
 	    _this.onDragRow = function (currentKey, targetKey) {
 	      var data = _this.state.data,
 	          currentIndex = void 0,
-	          targetIndex = void 0;
+	          targetIndex = void 0,
+	          record = void 0;
 	      data.forEach(function (da, i) {
-	        if (da.key == currentKey) {
+	        // tr 的唯一标识通过 data.key 或 rowKey 两种方式传进来
+	        var trKey = da.key ? da.key : _this.getRowKey(da, i);
+	        if (trKey == currentKey) {
 	          currentIndex = i;
+	          record = da;
 	        }
-	        if (da.key == targetKey) {
+	        if (trKey == targetKey) {
 	          targetIndex = i;
 	        }
 	      });
-	      if (currentIndex < targetIndex) {
-	        data.splice(targetIndex, 0, data.splice(currentIndex, 1).shift());
-	      } else {
-	        data.splice(targetIndex + 1, 0, data.splice(currentIndex, 1).shift());
-	      }
+	      data = _this.swapArray(data, currentIndex, targetIndex);
+	      _this.props.onDropRow && _this.props.onDropRow(data, record);
 	      _this.setState({
 	        data: data
 	      });
+	    };
+
+	    _this.swapArray = function (arr, index1, index2) {
+	      arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+	      return arr;
 	    };
 
 	    _this.renderDragHideTable = function () {
@@ -64033,6 +63015,10 @@
 	    if (nextProps.resetScroll) {
 	      this.resetScrollX();
 	    }
+	    // fix:模态框中使用table，计算的滚动条宽度为0的bug
+	    if (this.scrollbarWidth <= 0 && this.props.scroll.y) {
+	      this.scrollbarWidth = (0, utils$2.measureScrollbar)();
+	    }
 
 	    // console.log('this.scrollTop**********',this.scrollTop);
 	  };
@@ -64056,6 +63042,7 @@
 	    if (prevProps.data.length === 0 || this.props.data.length === 0) {
 	      this.resetScrollX();
 	    }
+
 	    // 是否传入 scroll中的y属性，如果传入判断是否是整数，如果是则进行比较 。bodyTable 的clientHeight进行判断
 	    this.isShowScrollY();
 	  };
@@ -64115,7 +63102,7 @@
 	      var bodyH = this.bodyTable.clientHeight;
 	      var bodyContentH = this.bodyTable.querySelector('table').clientHeight;
 	      var rightBodyTable = this.refs.fixedColumnsBodyRight;
-	      var leftBodyTable = this.refs.fixedColumnsBodyLeft;
+	      // const leftBodyTable = this.refs.fixedColumnsBodyLeft;
 	      var overflowy = bodyContentH <= bodyH ? 'auto' : 'scroll';
 	      this.bodyTable.style.overflowY = overflowy;
 
@@ -64123,7 +63110,7 @@
 	      rightBodyTable && (rightBodyTable.style.overflowY = overflowy);
 	      // 没有纵向滚动条时，表头横向滚动条根据内容动态显示 待验证
 	      // if(overflowy == 'auto'){
-	      //   this.refs.fixedHeadTable && (this.refs.fixedHeadTable.style.overflowX = 'auto');
+	      //   this.fixedHeadTable && (this.fixedHeadTable.style.overflowX = 'auto');
 	      //   rightBodyTable && (rightBodyTable.style.overflowX = 'auto');
 	      //   leftBodyTable && (leftBodyTable.style.overflowX = 'auto');
 	      // }
@@ -64393,6 +63380,20 @@
 	  };
 
 	  /**
+	   * 行拖拽结束时触发
+	   * @param currentKey 当前拖拽目标的key
+	   * @param targetKey 拖拽结束时，目标位置的key
+	   */
+
+	  /**
+	  * 数组元素交换位置
+	  * @param {array} arr 数组
+	  * @param {number} index1 添加项目的位置
+	  * @param {number} index2 删除项目的位置
+	  */
+
+
+	  /**
 	   *
 	   *
 	   * @param {*} data
@@ -64635,7 +63636,9 @@
 	        getBodyWrapper = _props3.getBodyWrapper,
 	        footerScroll = _props3.footerScroll,
 	        headerScroll = _props3.headerScroll;
-	    var useFixedHeader = this.props.useFixedHeader;
+	    var _props4 = this.props,
+	        useFixedHeader = _props4.useFixedHeader,
+	        data = _props4.data;
 
 	    var bodyStyle = _extends({}, this.props.bodyStyle);
 	    var headStyle = {};
@@ -64677,7 +63680,7 @@
 
 	            if (this.domWidthDiff <= 0) {
 	              headStyle.marginBottom = scrollbarWidth + 'px';
-	              // bodyStyle.marginBottom = `-${scrollbarWidth}px`;
+	              bodyStyle.marginBottom = '-' + scrollbarWidth + 'px';
 	            } else {
 	              innerBodyStyle.overflowX = 'auto';
 	            }
@@ -64693,9 +63696,16 @@
 	            if (this.domWidthDiff > 0) {
 	              headStyle.overflow = 'hidden';
 	              innerBodyStyle.overflowX = 'auto'; //兼容expand场景、子表格含有固定列的场景
+	            } else {
+	              bodyStyle.marginBottom = '-' + scrollbarWidth + 'px';
 	            }
 	          } else {
-	            headStyle.marginBottom = '-' + scrollbarWidth + 'px';
+	            // 没有数据时，表头滚动条隐藏问题
+	            if (data.length == 0 && this.domWidthDiff < 0) {
+	              headStyle.marginBottom = '0px';
+	            } else {
+	              headStyle.marginBottom = '-' + scrollbarWidth + 'px';
+	            }
 	          }
 	        }
 	      }
@@ -64726,7 +63736,7 @@
 	      var _drag_class = _this4.props.dragborder ? "table-drag-bordered" : "";
 	      return _react2["default"].createElement(
 	        'table',
-	        { id: 'bee-table-uid', className: ' ' + tableClassName + '  table-bordered ' + _drag_class + ' ', style: tableStyle },
+	        { className: ' ' + tableClassName + '  table-bordered ' + _drag_class + ' ', style: tableStyle },
 	        _this4.getColGroup(columns, fixed),
 	        hasHead ? _this4.getHeader(columns, fixed) : null,
 	        tableBody
@@ -64812,9 +63822,9 @@
 	  };
 
 	  Table.prototype.getTitle = function getTitle() {
-	    var _props4 = this.props,
-	        title = _props4.title,
-	        clsPrefix = _props4.clsPrefix;
+	    var _props5 = this.props,
+	        title = _props5.title,
+	        clsPrefix = _props5.clsPrefix;
 
 	    return title ? _react2["default"].createElement(
 	      'div',
@@ -64824,9 +63834,9 @@
 	  };
 
 	  Table.prototype.getFooter = function getFooter() {
-	    var _props5 = this.props,
-	        footer = _props5.footer,
-	        clsPrefix = _props5.clsPrefix;
+	    var _props6 = this.props,
+	        footer = _props6.footer,
+	        clsPrefix = _props6.clsPrefix;
 
 	    return footer ? _react2["default"].createElement(
 	      'div',
@@ -64836,10 +63846,26 @@
 	  };
 
 	  Table.prototype.getEmptyText = function getEmptyText() {
-	    var _props6 = this.props,
-	        emptyText = _props6.emptyText,
-	        clsPrefix = _props6.clsPrefix,
-	        data = _props6.data;
+	    var _props7 = this.props,
+	        defaultEmptyText = _props7.emptyText,
+	        clsPrefix = _props7.clsPrefix,
+	        data = _props7.data;
+
+	    var locale = (0, tool$1.getComponentLocale)(this.props, this.context, 'Table', function () {
+	      return _i18n2["default"];
+	    });
+	    var emptyText = defaultEmptyText !== undefined ? defaultEmptyText : function () {
+	      return _react2["default"].createElement(
+	        'div',
+	        null,
+	        _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-nodata', className: 'table-nodata' }),
+	        _react2["default"].createElement(
+	          'span',
+	          null,
+	          locale["no_data"]
+	        )
+	      );
+	    };
 
 	    return !data.length ? _react2["default"].createElement(
 	      'div',
@@ -64864,12 +63890,12 @@
 
 	  Table.prototype.syncFixedTableRowHeight = function syncFixedTableRowHeight() {
 	    //this.props.height、headerHeight分别为用户传入的行高和表头高度，如果有值，所有行的高度都是固定的，主要为了避免在千行数据中有固定列时获取行高度有问题
-	    var _props7 = this.props,
-	        clsPrefix = _props7.clsPrefix,
-	        height = _props7.height,
-	        headerHeight = _props7.headerHeight,
-	        columns = _props7.columns,
-	        heightConsistent = _props7.heightConsistent;
+	    var _props8 = this.props,
+	        clsPrefix = _props8.clsPrefix,
+	        height = _props8.height,
+	        headerHeight = _props8.headerHeight,
+	        columns = _props8.columns,
+	        heightConsistent = _props8.heightConsistent;
 
 	    var headRows = this.headTable ? this.headTable.querySelectorAll('thead') : this.bodyTable.querySelectorAll('thead');
 	    var bodyRows = this.bodyTable.querySelectorAll('.' + clsPrefix + '-row') || [];
@@ -64953,12 +63979,12 @@
 
 	  Table.prototype.handleBodyScroll = function handleBodyScroll(e) {
 	    var headTable = this.headTable;
-	    var _props8 = this.props,
-	        _props8$scroll = _props8.scroll,
-	        scroll = _props8$scroll === undefined ? {} : _props8$scroll,
-	        clsPrefix = _props8.clsPrefix,
-	        handleScrollY = _props8.handleScrollY,
-	        handleScrollX = _props8.handleScrollX;
+	    var _props9 = this.props,
+	        _props9$scroll = _props9.scroll,
+	        scroll = _props9$scroll === undefined ? {} : _props9$scroll,
+	        clsPrefix = _props9.clsPrefix,
+	        handleScrollY = _props9.handleScrollY,
+	        handleScrollX = _props9.handleScrollX;
 	    var _refs = this.refs,
 	        fixedColumnsBodyLeft = _refs.fixedColumnsBodyLeft,
 	        fixedColumnsBodyRight = _refs.fixedColumnsBodyRight;
@@ -65015,10 +64041,10 @@
 
 	  Table.prototype.handleRowHover = function handleRowHover(isHover, key, event, currentIndex) {
 	    //增加新的API，设置是否同步Hover状态，提高性能，避免无关的渲染
-	    var _props9 = this.props,
-	        syncHover = _props9.syncHover,
-	        onRowHover = _props9.onRowHover,
-	        data = _props9.data;
+	    var _props10 = this.props,
+	        syncHover = _props10.syncHover,
+	        onRowHover = _props10.onRowHover,
+	        data = _props10.data;
 
 	    var record = data[currentIndex];
 	    // 固定列、或者含有hoverdom时情况下同步hover状态
@@ -65137,6 +64163,9 @@
 
 	Table.propTypes = propTypes$1;
 	Table.defaultProps = defaultProps;
+	Table.contextTypes = {
+	  beeLocale: _propTypes2["default"].object
+	};
 
 	exports["default"] = Table;
 	module.exports = exports['default'];
@@ -65341,7 +64370,7 @@
 	        }
 	      });
 
-	      if (data.length == count + disabledCount) {
+	      if (data.length == count + disabledCount && count > 0) {
 	        return "all";
 	      }
 	      return count == 0 ? false : "indeter";
@@ -65459,7 +64488,7 @@
 	        key: "checkbox",
 	        dataIndex: "checkbox",
 	        fixed: "left",
-	        width: 50,
+	        width: 49,
 	        render: function render(text, record, index) {
 	          var attr = {};
 	          record._disabled ? attr.disabled = record._disabled : "";
@@ -72286,6 +71315,65 @@
 
 	unwrapExports(build$z);
 
+	var off_1$1 = createCommonjsModule(function (module, exports) {
+
+
+
+	exports.__esModule = true;
+	exports.default = void 0;
+
+	var _inDOM = interopRequireDefault(inDOM$1);
+
+	var off = function off() {};
+
+	if (_inDOM.default) {
+	  off = function () {
+	    if (document.addEventListener) return function (node, eventName, handler, capture) {
+	      return node.removeEventListener(eventName, handler, capture || false);
+	    };else if (document.attachEvent) return function (node, eventName, handler) {
+	      return node.detachEvent('on' + eventName, handler);
+	    };
+	  }();
+	}
+
+	var _default = off;
+	exports.default = _default;
+	module.exports = exports["default"];
+	});
+
+	unwrapExports(off_1$1);
+
+	var addEventListener$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = function (node, event, handler, capture) {
+	  (0, _on2["default"])(node, event, handler, capture);
+
+	  return {
+	    remove: function remove() {
+	      (0, _off2["default"])(node, event, handler, capture);
+	    }
+	  };
+	};
+
+
+
+	var _on2 = _interopRequireDefault(on_1$1);
+
+
+
+	var _off2 = _interopRequireDefault(off_1$1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(addEventListener$2);
+
 	var Icon_1$3 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -72562,7 +71650,7 @@
 
 
 
-	var _addEventListener2 = _interopRequireDefault(addEventListener$1);
+	var _addEventListener2 = _interopRequireDefault(addEventListener$2);
 
 
 
@@ -83750,7 +82838,7 @@
 	  });
 	};
 
-	var _dec, _class$1, _temp;
+	var _dec, _class, _temp;
 	var defaultProps = {
 	  matchData: []
 	};
@@ -83759,7 +82847,7 @@
 	  return {
 	    form: state.form
 	  };
-	}), _dec(_class$1 = (_temp =
+	}), _dec(_class = (_temp =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(Table, _Component);
@@ -84043,7 +83131,7 @@
 	  };
 
 	  return Table;
-	}(React.Component), _temp)) || _class$1);
+	}(React.Component), _temp)) || _class);
 	Table.defaultProps = defaultProps;
 
 	var utils$4 = createCommonjsModule(function (module, exports) {
@@ -85098,7 +84186,7 @@
 	    var _this4 = this;
 
 	    var targetDom = e.target;
-	    if (this.tree == targetDom && !this.isIn) {
+	    if (this.refs.tree == targetDom && !this.isIn) {
 	      var onFocus = this.props.onFocus;
 	      var _state$selectedKeys = this.state.selectedKeys,
 	          selectedKeys = _state$selectedKeys === undefined ? [] : _state$selectedKeys;
@@ -85277,6 +84365,7 @@
 	    }
 
 	    var cloneProps = {
+	      ref: 'treeNode-' + key,
 	      root: this,
 	      eventKey: key,
 	      pos: pos,
@@ -85401,9 +84490,7 @@
 	    this.selectKeyDomExist = false;
 	    return _react2["default"].createElement(
 	      'ul',
-	      _extends({}, domProps, { unselectable: 'true', ref: function ref(el) {
-	          _this5.tree = el;
-	        }, tabIndex: props.focusable && props.tabIndexValue }),
+	      _extends({}, domProps, { unselectable: 'true', ref: 'tree', tabIndex: props.focusable && props.tabIndexValue }),
 	      _react2["default"].Children.map(props.children, this.renderTreeNode, this)
 	    );
 	  };
@@ -85755,13 +84842,13 @@
 	      checkboxCls[prefixCls + '-checkbox-disabled'] = true;
 	      return _react2["default"].createElement(
 	        'span',
-	        { className: (0, _classnames2["default"])(checkboxCls) },
+	        { ref: 'checkbox', className: (0, _classnames2["default"])(checkboxCls) },
 	        customEle
 	      );
 	    }
 	    return _react2["default"].createElement(
 	      'span',
-	      {
+	      { ref: 'checkbox',
 	        className: (0, _classnames2["default"])(checkboxCls),
 	        onClick: this.onCheck
 	      },
@@ -85962,9 +85049,7 @@
 
 	      return _react2["default"].createElement(
 	        'a',
-	        _extends({ ref: function ref(el) {
-	            _this4.selectHandle = el;
-	          }, pos: props.pos, title: typeof content === 'string' ? content : '' }, domProps),
+	        _extends({ ref: 'selectHandle', pos: props.pos, title: typeof content === 'string' ? content : '' }, domProps),
 	        icon,
 	        title
 	      );
@@ -86011,7 +85096,7 @@
 	    var selectedCls = props.selected ? prefixCls + '-treenode-selected' : '';
 	    return _react2["default"].createElement(
 	      'li',
-	      _extends({}, liProps, { style: props.style,
+	      _extends({}, liProps, { ref: 'li', style: props.style,
 	        className: (0, _classnames2["default"])(props.className, disabledCls, dragOverCls, filterCls, selectedCls)
 	      }),
 	      canRenderSwitcher ? this.renderSwitcher(props, expandedState) : noopSwitcher(),
@@ -88557,7 +87642,7 @@
 	var lib_3$2 = lib$4.RefTree;
 	var lib_4$2 = lib$4.RefTreeWithInput;
 
-	var _dec$1, _class$2, _temp$1;
+	var _dec$1, _class$1, _temp$1;
 
 	var noop$7 = function noop() {};
 
@@ -88586,7 +87671,7 @@
 	  return {
 	    form: state.form
 	  };
-	}), _dec$1(_class$2 = (_temp$1 =
+	}), _dec$1(_class$1 = (_temp$1 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(Tree, _Component);
@@ -88731,7 +87816,7 @@
 	  };
 
 	  return Tree;
-	}(React.Component), _temp$1)) || _class$2);
+	}(React.Component), _temp$1)) || _class$1);
 	Tree$1.defaultProps = defaultProps$1;
 	Tree$1.propTypes = propTypes$1;
 
@@ -91880,7 +90965,7 @@
 	var lib_3$3 = lib$5.RefTreeTableWithInput;
 	var lib_4$3 = lib$5.RefTreeTable;
 
-	var _dec$2, _class$3, _temp$2;
+	var _dec$2, _class$2, _temp$2;
 	var dataType$2 = "treeTable";
 	var defaultProps$2 = {
 	  matchData: []
@@ -91889,7 +90974,7 @@
 	  return {
 	    form: state.form
 	  };
-	}), _dec$2(_class$3 = (_temp$2 =
+	}), _dec$2(_class$2 = (_temp$2 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(TreeTable, _Component);
@@ -92105,11 +91190,11 @@
 	  };
 
 	  return TreeTable;
-	}(React.Component), _temp$2)) || _class$3);
+	}(React.Component), _temp$2)) || _class$2);
 	TreeTable.defaultProps = defaultProps$2;
 
-	var _dec$3, _class$4, _temp$3;
-	var RefRender = (_dec$3 = miniStore.connect(), _dec$3(_class$4 = (_temp$3 =
+	var _dec$3, _class$3, _temp$3;
+	var RefRender = (_dec$3 = miniStore.connect(), _dec$3(_class$3 = (_temp$3 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RefRender, _Component);
@@ -92153,7 +91238,7 @@
 	  };
 
 	  return RefRender;
-	}(React.Component), _temp$3)) || _class$4);
+	}(React.Component), _temp$3)) || _class$3);
 
 	var UITemplateRender =
 	/*#__PURE__*/
@@ -92178,8 +91263,8 @@
 	  return UITemplateRender;
 	}(React.Component);
 
-	var _dec$4, _class$5, _temp$4;
-	var RenderEngine = (_dec$4 = miniStore.connect(), _dec$4(_class$5 = (_temp$4 =
+	var _dec$4, _class$4, _temp$4;
+	var RenderEngine = (_dec$4 = miniStore.connect(), _dec$4(_class$4 = (_temp$4 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RenderEngine, _Component);
@@ -92213,7 +91298,7 @@
 	  };
 
 	  return RenderEngine;
-	}(React.Component), _temp$4)) || _class$5);
+	}(React.Component), _temp$4)) || _class$4);
 
 	function store (props) {
 	  return miniStore.create(_extends_1({}, props, {

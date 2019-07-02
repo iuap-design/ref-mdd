@@ -22,7 +22,7 @@
     "mirrorx": "^0.2.12",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "ref-mdd": "^1.0.2",
+    "ref-mdd": "^1.0.5",
     "ref-tree": "^2.0.9",
     "ref-tree-table": "^2.0.5",
     "tinper-bee": "^2.0.7",
