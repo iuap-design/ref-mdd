@@ -90,9 +90,9 @@ function getTableData(params){
    * 根据 refinfo 返回结果拆解并渲染表格表头
    * @param {object} data
    */
-  function launchTableHeader(data){
+  function launchTableHeader(data,multiple){
     if (data == {}) return;
-    let { multiple } = this.props;
+    // let { multiple } = this.props;
     let keyList = data.strFieldCode || [];
     let titleList = data.strFieldName || [];
     const valueField = this.valueField;
@@ -115,23 +115,23 @@ function getTableData(params){
       ];
     } else if (!multiple) {
       //单选时用对号符号标记当前行选中
-      colunmsList.unshift({
-        title: " ",
-        dataIndex: "a",
-        key: "a",
-        width: 45,
-        render(text, record, index) {
-          return (
-            <Radio.RadioGroup
-              className = 'in-table'
-              name={record[valueField]}
-              selectedValue={record._checked ? record[valueField] : null}
-            >
-              <Radio value={record[valueField]} />
-            </Radio.RadioGroup>
-          );
-        }
-      });
+      // colunmsList.unshift({
+      //   title: " ",
+      //   dataIndex: "a",
+      //   key: "a",
+      //   width: 45,
+      //   render(text, record, index) {
+      //     return (
+      //       <Radio.RadioGroup
+      //         className = 'in-table'
+      //         name={record[valueField]}
+      //         selectedValue={record._checked ? record[valueField] : null}
+      //       >
+      //         <Radio value={record[valueField]} />
+      //       </Radio.RadioGroup>
+      //     );
+      //   }
+      // });
     }
     this.columnsData = colunmsList;
   };

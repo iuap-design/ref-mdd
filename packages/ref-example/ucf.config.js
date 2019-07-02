@@ -44,6 +44,16 @@ module.exports = (env, argv) => {
                 // ],
                 // url: 'http://u8cupc-test.yyuap.com'
                 
+            },{
+                enable: true,
+                headers: {
+                    "Referer": "http://ucf-ref-test-bootstrap.dev.app.yyuap.com"
+                },
+                //要代理访问的对方路由
+                router: [
+                    '/ref'
+                ],
+                url: 'http://ucf-ref-test-bootstrap.dev.app.yyuap.com/'
             }
         ],
         // 静态托管服务
@@ -62,7 +72,7 @@ module.exports = (env, argv) => {
         },
         // 别名配置
         alias: {
-            'ref-mdd1': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
+            'ref-mdd': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
         },
         // 构建排除指定包
         externals: {

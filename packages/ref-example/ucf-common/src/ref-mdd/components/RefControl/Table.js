@@ -86,7 +86,8 @@ class Table extends Component {
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
         }
-        this.launchTableHeader(columnsData);
+        let multiple = this.props.store.getState().meta.refEntity.bMultiSel;
+        this.launchTableHeader(columnsData,multiple);
         this.launchTableData(bodyData);
         if (this.onAfterAjax && !this.state.isAfterAjax) {
             this.onAfterAjax(treeData);
@@ -204,7 +205,7 @@ class Table extends Component {
     // extendField = JSON.parse(extendField);
 
     const {valueField,displayField} = this;
-    let { showLoading } = this.state;
+    let { showLoading,matchData } = this.state;
     let {
       columnsData,
       tableData,
@@ -214,12 +215,11 @@ class Table extends Component {
       dataNumSelect,
       handlePagination,
       searchFilterInfo,
-      matchData
     } = this;
-
 
     const props = {
       // placeholder: extendField.placeholder,
+      style:{width:200},
       title: cBillName,
       multiple: refEntity.bMultiSel,
       displayField: `{${displayField}}`,
