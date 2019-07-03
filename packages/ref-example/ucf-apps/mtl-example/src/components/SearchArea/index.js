@@ -43,7 +43,7 @@ const mtlInfo = {
         // serviceCode:'enterprise_bank_account_u8c',
         // refCode:'bd_financeorgtreeref',
         // itemName:'orgid_name'  
-        refCode:'ucf-org-center.bd_adminorgtreeref',  
+        refCode:'ucf-org-center.org_unit_tree_ref',  
         host:'https://u8cupc-daily.yyuap.com',
         token:'btta6ef5e28-9285-4de3-81e4-fdcc24ffb298__1562034561890',  
     },
@@ -156,7 +156,8 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>组织</Label>
-                            <ModelDrivenRefer form={_this.props.form} url={mtlInfo.tree.metaUrl}  serviceCode={mtlInfo.tree.serviceCode} refCode={mtlInfo.tree.refCode} cItemName={mtlInfo.tree.itemName}/>
+                            <ModelDrivenRefer form={_this.props.form}  refCode={mtlInfo.tree.refCode}  token={mtlInfo.tree.token}
+                                          host={mtlInfo.tree.host} multiSelect={true}/>
                         </FormItem>
                     </Col>
                     <Col md={6} xs={6}>

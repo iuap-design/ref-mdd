@@ -89772,11 +89772,12 @@
 	        code = refEntity.code,
 	        name = refEntity.name;
 	    var showLoading = this.state.showLoading;
+	    var multiSelect = store.getState().multiSelect == undefined ? bMultiSel : store.getState().multiSelect;
 	    var option = {
 	      title: name,
 	      searchable: true,
 	      //默认搜索输入框，没有这个字段
-	      multiple: bMultiSel,
+	      multiple: multiSelect,
 	      //refEntity: bMultiSel
 	      param: {
 	        refCode: code //refEntity: code
@@ -91526,7 +91527,8 @@
 	        host = _this$props3.host,
 	        token = _this$props3.token,
 	        matchData = _this$props3.matchData,
-	        beforeGetData = _this$props3.beforeGetData;
+	        beforeGetData = _this$props3.beforeGetData,
+	        multiSelect = _this$props3.multiSelect;
 
 	    if (isLoading) {
 	      return React__default.createElement("p", null, "\u6570\u636E\u8BF7\u6C42\u4E2D...");
@@ -91542,7 +91544,8 @@
 	        host: host,
 	        token: token,
 	        matchData: matchData,
-	        beforeGetData: beforeGetData
+	        beforeGetData: beforeGetData,
+	        multiSelect: multiSelect
 	      };
 	      return React__default.createElement(miniStore.Provider, {
 	        store: store(opt)

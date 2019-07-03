@@ -97,7 +97,7 @@ class ModelDrivenRefer extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData,beforeGetData} = this.props;
+        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData,beforeGetData,multiSelect} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
         } else {
@@ -112,7 +112,8 @@ class ModelDrivenRefer extends Component {
                 host,
                 token,
                 matchData,
-                beforeGetData
+                beforeGetData,
+                multiSelect
             }
             return (
                 <Provider store={store(opt)}>

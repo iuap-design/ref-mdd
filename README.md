@@ -40,6 +40,7 @@ const RefTableComponent = () => (
 |matchData|选中的行的数据|object||
 |beforeGetData|查询数据前的回调函数，用户可以在这个方法中返回附加的请求参数，返回值的类型为Object|function|否|
 |onOk|点击确认按钮的回调函数|Function||否|
+|multiSelect|当前参照是否是多选，如果这个属性没有传递会读取参照元数据getRefMeta接口获取|bool||否|
 ## 整体流程
 
 <img src="https://raw.githubusercontent.com/whizbz11/Img/master/ref-mdd/ref-mdd.png" height='500px' />

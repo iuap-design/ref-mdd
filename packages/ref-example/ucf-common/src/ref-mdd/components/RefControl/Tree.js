@@ -102,11 +102,11 @@ class Tree extends Component {
     let { refEntity } = store.getState().meta;
     const { bMultiSel = false,  code, name } = refEntity;
     const { showLoading } = this.state;
-
+    let multiSelect = store.getState().multiSelect == undefined?bMultiSel:store.getState().multiSelect;
     const option = {
       title: name,
       searchable: true, //默认搜索输入框，没有这个字段
-      multiple: bMultiSel, //refEntity: bMultiSel
+      multiple: multiSelect, //refEntity: bMultiSel
       param: {
         refCode: code //refEntity: code
       },

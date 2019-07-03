@@ -33,7 +33,7 @@ export {refValParse};
  * @param {string} type 
  * @param {object} refEntity 
  */
-export function getQueryParam(type,refEntity,viewApplication,beforeGetData={},refCode){
+export function getQueryParam(type,refEntity,viewApplication={},beforeGetData={},refCode){
     let rsParam = {},defaultDataParams = beforeGetData;
     rsParam.dataType = type;
     rsParam.refCode = refCode; 
