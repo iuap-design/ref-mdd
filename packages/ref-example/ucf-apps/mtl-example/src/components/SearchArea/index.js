@@ -36,7 +36,7 @@ const mtlInfo = {
         // serviceCode:'aa_merchant',
         refCode:'ucf-org-center.bd_adminorgtreeref',  
         host:'https://u8cupc-daily.yyuap.com',
-        token:'btta6ef5e28-9285-4de3-81e4-fdcc24ffb298__1562034561890',  
+        token:'btt3176d04c-7883-484b-b647-a283a7e86dd4__1562210394952',  
     },
     tree:{
            // metaUrl:'/uniform/pub/ref/getRefMeta',
@@ -45,7 +45,7 @@ const mtlInfo = {
         // itemName:'orgid_name'  
         refCode:'ucf-org-center.org_unit_tree_ref',  
         host:'https://u8cupc-daily.yyuap.com',
-        token:'btta6ef5e28-9285-4de3-81e4-fdcc24ffb298__1562034561890',  
+        token:'btt3176d04c-7883-484b-b647-a283a7e86dd4__1562210394952',  
     },
     treeTable:{
         // metaUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefMeta?terminalType=1&token=btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881&refimestamp=1559026546502',
@@ -64,7 +64,7 @@ class SearchArea extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            matchData:[{"orgtype":1,"parent":"","code":"001","name":"zjc626(测试)","sort":0,"id":"1283412664783104","pubts":"2019-06-26 15:14:52","orgid":"1283412664783104"}]
         }
     }
 
@@ -113,11 +113,16 @@ class SearchArea extends Component {
             'extraValue':'dataExtraParam'
         };
     }
+    click=()=>{
+        this.setState({
+            matchData:[]
+        })
+    }
     render() {
         const { getFieldProps } = this.props.form;
         const { form, searchOpen, onCallback } = this.props;
         const _this = this;
-
+        
         return (
             <SearchPanel
                 className='search-area'
@@ -147,6 +152,7 @@ class SearchArea extends Component {
                                           onOk={this.onOk('depart')}
                                           token={mtlInfo.table.token}
                                           host={mtlInfo.table.host}
+                                          matchData={this.state.matchData}
                                         //   url={mtlInfo.table.metaUrl}
                                           
                                           />
@@ -167,6 +173,7 @@ class SearchArea extends Component {
                         </FormItem>
                     </Col>
                 </Row>
+                <button onClick={this.click}>changeMatchData</button>
             </SearchPanel>
         )
     }

@@ -42,8 +42,7 @@ class TreeTable extends Component {
       pageSize: "10", //每页数据数
     };
     this.state = {
-      value: "",
-      matchData:  store.getState().matchData
+      value: ""
     };
   }
   
@@ -138,13 +137,15 @@ class TreeTable extends Component {
   }
   onSave = item => {
     // console.log("save", JSON.stringify(item));
-    this.setState({
-      matchData: item
+    const { store } = this.props;
+    store.setState({
+      matchData: data
     });
+    onOk && onOk(data);
   };
 
   render() {
-
+    let { store } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
     return (
         <RefTreeTableWithInput
@@ -161,7 +162,7 @@ class TreeTable extends Component {
         loadTableData={this.loadTableData}
         onTableSearch={this.onTableSearch}
         onSave={this.onSave}
-        matchData={this.state.matchData}
+        matchData={store.getState().matchData}
         showLoading ={this.state.showLoading}
         nodeDisplay={`{${this.displayField}}`}
         defaultExpandAll = {false}

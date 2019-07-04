@@ -37,72 +37,91 @@ const defaultProps = {
   matchData:[]
 };
 const dataType = "tree";
-@connect(state => ({ form: state.form }))
+@connect()
 class Tree extends Component {
   constructor(props) {
     super(props);
-    
-  let { store } = this.props;
-  let { viewApplication, refEntity } = store.getState().meta;
-	initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
-  this.state = {
+
+    let { store } = this.props;
+    let { viewApplication, refEntity } = store.getState().meta;
+    initReferInfo.call(
+      this,
+      dataType,
+      refEntity,
+      viewApplication,
+      store.getState()
+    );
+    this.state = {
       isAfterAjax: false,
       showLoading: false,
-      matchData:  store.getState().matchData
+      matchData: store.getState().matchData?store.getState().matchData:[]
     };
 
     this.treeData = [];
     this.getRefTreeData = getRefTreeData.bind(this);
   }
 
+  componentWillReceiveProps(nextProps){
+    let state = nextProps.store.getState();
+    console.log('state------',state,"--this.state---",this.state);
+    debugger
+    if(state && this.state.matchData !== state.matchData){
+      this.setState({
+        matchData:state.matchData
+      })
+    }
+  }
 
   onSave = data => {
-    const {store} = this.props;
+    const { store } = this.props;
     const onOk = store.getState().onOk;
-    this.setState({
-      matchData:data
+    store.setState({
+      matchData: data
     });
     onOk && onOk(data);
   };
   onCancel = () => {};
 
-
-  getData = async ()=>{
+  getData = async () => {
     this.setState({
       showLoading: true
     });
-    const flag =  await this.getRefTreeData().then((treeData)=>{
-       this.setState({
-        showLoading: false
-       });
+    const flag = await this.getRefTreeData()
+      .then(treeData => {
+        this.setState({
+          showLoading: false
+        });
         let { data = [] } = treeData.data;
         this.treeData = data;
         this.setState({
           showLoading: false
         });
-        
-    }).catch(e=>{
-         console.log(e);
+      })
+      .catch(e => {
+        console.log(e);
         this.treeData = [];
         this.setState({
           showLoading: false
         });
-    })
+      });
     return flag;
-  }
-  
-  searchData=()=>{
-	  const {treeData} = this;
-	  this.setState({
-		  filterData:treeData
-	  });
-  }
+  };
+
+  searchData = () => {
+    const { treeData } = this;
+    this.setState({
+      filterData: treeData
+    });
+  };
   render() {
     let { store } = this.props;
     let { refEntity } = store.getState().meta;
-    const { bMultiSel = false,  code, name } = refEntity;
+    const { bMultiSel = false, code, name } = refEntity;
     const { showLoading } = this.state;
-    let multiSelect = store.getState().multiSelect == undefined?bMultiSel:store.getState().multiSelect;
+    let multiSelect =
+      store.getState().multiSelect == undefined
+        ? bMultiSel
+        : store.getState().multiSelect;
     const option = {
       title: name,
       searchable: true, //默认搜索输入框，没有这个字段
@@ -123,18 +142,18 @@ class Tree extends Component {
       strictMode: true, //是否调用之前缓存的数据，为true则不重新请求
       defaultExpandAll: false,
       treeData: this.treeData,
-      filterData:this.state.filterData,
-      showLoading: showLoading,
+      filterData: this.state.filterData,
+      showLoading: showLoading
     };
 
     return (
       <RefTreeWithInput
         {...option}
         getRefTreeData={this.getRefTreeData}
-	    	filterUrlFunc={this.searchData}
-        onSave = {this.onSave}
+        filterUrlFunc={this.searchData}
+        onSave={this.onSave}
         canClickGoOn={this.getData}
-	    	matchData={this.state.matchData}
+        matchData={store.getState().matchData}
       />
     );
   }

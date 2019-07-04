@@ -3,8 +3,7 @@
  */
 import React, { Component } from "react";
 import { connect } from "mini-store";
-import FormControl from 'bee-form-control';
-import Radio from 'bee-radio';
+
 import {
   SearchPanelItem,
   RefMultipleTableWithInput
@@ -24,8 +23,6 @@ class Table extends Component {
 
   constructor(props) {
     super(props);
-   
-
     let { store } = this.props;
     let { viewApplication, refEntity } = store.getState().meta;
     initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
@@ -46,8 +43,7 @@ class Table extends Component {
     this.inited = false;
     this.value = ''; //默认值，初始化input框值后续加上
     this.state = {
-      showLoading: true,
-      matchData:store.getState().matchData
+      showLoading: true
     };
 
     this.getTableInfo =  getTableInfo.bind(this);
@@ -59,16 +55,14 @@ class Table extends Component {
   componentWillReceiveProps(nextProps){
     let { store ,beforeGetData} = nextProps;
     this.dataUrl = store.getState().dataUrl;
-    this.setState({
-      matchData:store.getState().matchData
-    });
+   
   }
   onSave = data => {
     const {store} = this.props;
     const onOk = store.getState().onOk;
-    this.setState({
+    store.setState({
       matchData:data
-    })
+    });
   
     // console.log("save", data);
     onOk && onOk(data);
@@ -205,7 +199,7 @@ class Table extends Component {
     // extendField = JSON.parse(extendField);
 
     const {valueField,displayField} = this;
-    let { showLoading,matchData } = this.state;
+    let { showLoading } = this.state;
     let {
       columnsData,
       tableData,
@@ -235,7 +229,7 @@ class Table extends Component {
       dataNumSelect: dataNumSelect,
       handlePagination: handlePagination,
       miniSearchFunc: searchFilterInfo,
-      matchData,
+      matchData:store.getState().matchData,
       emptyBut: true //清空按钮是否展示
     };
     return (

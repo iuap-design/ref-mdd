@@ -3,6 +3,7 @@ import { Provider} from 'mini-store';
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
 import store from './datamodel/store';
+import { create } from 'mini-store';
 import './style/index.less'
 
 class ModelDrivenRefer extends Component {
@@ -12,7 +13,7 @@ class ModelDrivenRefer extends Component {
             isNeedRender: false,
             isLoading: true
         }
-
+        this.store = create(props);
     }
     meta = {};
     componentWillMount() {
@@ -23,13 +24,30 @@ class ModelDrivenRefer extends Component {
         if(!url){
             url = token?`${host}${defaultUrl}?token=${token}`:defaultUrl  
         }
-        
-        
-        console.log('url=========',url);
         // this.handleDynamicView(url)
         this.getMetaDataByCustomURL(url);
     }
-
+    componentWillReceiveProps(nextProps){
+        this._setState(nextProps);
+    }
+    _setState(props){
+        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData,beforeGetData,multiSelect} = props;
+        const opt = {
+            meta: this.meta,
+            form ,
+            dataUrl,
+            refCode,
+            serviceCode,
+            cItemName,
+            onOk,
+            host,
+            token,
+            matchData,
+            beforeGetData,
+            multiSelect
+        };
+        this.store.setState(opt);
+    }
     /**
      * 处理数据协议请求：
      * 1、如果初始化SDK的时候主动传了数据协议的URL进来，则进行下一步的操作；
@@ -64,6 +82,7 @@ class ModelDrivenRefer extends Component {
 
         if (data.code == 200) {
             this.isRefer(data.data);
+            this._setState(this.props);
             this.setState({
                 isNeedRender: !isNeedRender
             });
@@ -116,7 +135,7 @@ class ModelDrivenRefer extends Component {
                 multiSelect
             }
             return (
-                <Provider store={store(opt)}>
+                <Provider store={this.store}>
                     <RenderEngine />
                 </Provider>
             )
