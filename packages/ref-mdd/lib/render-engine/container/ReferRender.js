@@ -8,11 +8,11 @@ import { connect } from 'mini-store';
 import TableRender from '../../components/RefControl/Table';
 import TreeRender from '../../components/RefControl/Tree';
 import TreeTable from '../../components/RefControl/TreeTable';
-@connect()
+@connect(state=>({meta:state.meta}))
 class RefRender extends Component {
     renderComp = () => {
-        let { store } = this.props;
-        let { refEntity } = store.getState().meta;
+        let { meta } = this.props;
+        let { refEntity } = meta;
         // 判断 refEntity 需要的参照模板类型
         switch (refEntity.cTpltype) {
             case 'Table':// 简单表格

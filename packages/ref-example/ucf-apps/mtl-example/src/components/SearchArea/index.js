@@ -34,15 +34,19 @@ const mtlInfo = {
         // metaUrl:'https://u8cupc-daily.yyuap.com/uniform/pub/ref/getRefMeta?token=btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444',
         // dataUrl:'https://u8cupc-daily.yyuap.com/uniform/bill/ref/getRefData?terminalType=1&token=btt3b576345-a494-4926-8e44-970b5c809d13__1559804534444',
         // serviceCode:'aa_merchant',
-        refCode:'ucf-org-center.bd_adminorgtreeref',  
+        refCode:'ucfbasedoc.bd_currencytenantref',  
         host:'https://u8cupc-daily.yyuap.com',
         token:'btt3176d04c-7883-484b-b647-a283a7e86dd4__1562210394952',  
     },
     tree:{
-           // metaUrl:'/uniform/pub/ref/getRefMeta',
+        // metaUrl:'/uniform/pub/ref/getRefMeta',
         // serviceCode:'enterprise_bank_account_u8c',
         // refCode:'bd_financeorgtreeref',
         // itemName:'orgid_name'  
+
+        // refCode:'ucf-org-center.bd_adminorgtreeref',  
+        // host:'https://u8cupc-daily.yyuap.com',
+        // token:'btt3176d04c-7883-484b-b647-a283a7e86dd4__1562210394952',
         refCode:'ucf-org-center.org_unit_tree_ref',  
         host:'https://u8cupc-daily.yyuap.com',
         token:'btt3176d04c-7883-484b-b647-a283a7e86dd4__1562210394952',  

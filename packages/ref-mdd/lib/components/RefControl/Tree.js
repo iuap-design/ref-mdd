@@ -37,24 +37,25 @@ const defaultProps = {
   matchData:[]
 };
 const dataType = "tree";
-@connect()
+@connect(state=>(state))
 class Tree extends Component {
   constructor(props) {
     super(props);
 
-    let { store } = this.props;
-    let { viewApplication, refEntity } = store.getState().meta;
+    let { meta={},matchData=[] } = this.props;
+    
+    let { viewApplication, refEntity } = meta;
     initReferInfo.call(
       this,
       dataType,
       refEntity,
       viewApplication,
-      store.getState()
+      this.props
     );
     this.state = {
       isAfterAjax: false,
       showLoading: false,
-      matchData: store.getState().matchData?store.getState().matchData:[]
+      matchData: matchData
     };
 
     this.treeData = [];
@@ -62,20 +63,18 @@ class Tree extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    let state = nextProps.store.getState();
-    console.log('state------',state,"--this.state---",this.state);
-    debugger
-    if(state && this.state.matchData !== state.matchData){
-      this.setState({
-        matchData:state.matchData
-      })
-    }
+ 
+    // if(this.state.matchData !== nextProps.matchData){
+    //   this.setState({
+    //     matchData:nextProps.matchData
+    //   })
+    // }
   }
 
   onSave = data => {
-    const { store } = this.props;
-    const onOk = store.getState().onOk;
-    store.setState({
+    const  props  = this.props;
+    const onOk = props.onOk;
+    props.store.setState({
       matchData: data
     });
     onOk && onOk(data);
@@ -114,14 +113,14 @@ class Tree extends Component {
     });
   };
   render() {
-    let { store } = this.props;
-    let { refEntity } = store.getState().meta;
+    const props = this.props;
+    let { refEntity } = props.meta;
     const { bMultiSel = false, code, name } = refEntity;
     const { showLoading } = this.state;
     let multiSelect =
-      store.getState().multiSelect == undefined
+    props.multiSelect == undefined
         ? bMultiSel
-        : store.getState().multiSelect;
+        : props.multiSelect;
     const option = {
       title: name,
       searchable: true, //默认搜索输入框，没有这个字段
@@ -153,7 +152,7 @@ class Tree extends Component {
         filterUrlFunc={this.searchData}
         onSave={this.onSave}
         canClickGoOn={this.getData}
-        matchData={store.getState().matchData}
+        matchData={props.matchData}
       />
     );
   }

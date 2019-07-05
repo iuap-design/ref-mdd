@@ -5,27 +5,26 @@ import React, { Component } from "react";
 import { connect } from "mini-store";
 
 import {
-  SearchPanelItem,
   RefMultipleTableWithInput
 } from "ref-multiple-table/lib/index";
 // 工具类
 import {initReferInfo } from "../../utils";
 import {getTableInfo,launchTableHeader,launchTableData,getTableData} from './util';
-import request from "../../utils/request";
+
 // 样式
 import "ref-multiple-table/lib/index.less";
 const defaultProps = {
   matchData:[]
 }
 const dataType = "grid";
-@connect(state => ({ form: state.form }))
+@connect(state => (state))
 class Table extends Component {
 
   constructor(props) {
     super(props);
-    let { store } = this.props;
-    let { viewApplication, refEntity } = store.getState().meta;
-    initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
+    debugger
+    let { viewApplication, refEntity } = props.meta;
+    initReferInfo.call(this,dataType, refEntity, viewApplication,props);
     this.view = viewApplication.view;
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
@@ -53,14 +52,13 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    let { store ,beforeGetData} = nextProps;
-    this.dataUrl = store.getState().dataUrl;
+    this.dataUrl = nextProps.dataUrl;
    
   }
   onSave = data => {
-    const {store} = this.props;
-    const onOk = store.getState().onOk;
-    store.setState({
+    const props = this.props;
+    const onOk = props.onOk;
+    props.store.setState({
       matchData:data
     });
   
@@ -80,7 +78,7 @@ class Table extends Component {
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
         }
-        let multiple = this.props.store.getState().meta.refEntity.bMultiSel;
+        let multiple = this.props.meta.refEntity.bMultiSel;
         this.launchTableHeader(columnsData,multiple);
         this.launchTableData(bodyData);
         if (this.onAfterAjax && !this.state.isAfterAjax) {
@@ -191,9 +189,9 @@ class Table extends Component {
     this.loadTableData(param);
   };
   render() {
-    let { store } = this.props;
-    let { viewApplication, refEntity } = store.getState().meta;
-    const { getFieldError, getFieldProps } = this.props.form;
+    const  props = this.props;
+    let { viewApplication, refEntity } = props.meta;
+    const { getFieldError, getFieldProps } = props.form;
     const { cBillName, view } = viewApplication;
     // let { extendField = "{}" } = refEntity;
     // extendField = JSON.parse(extendField);
@@ -211,7 +209,7 @@ class Table extends Component {
       searchFilterInfo,
     } = this;
 
-    const props = {
+    const propsParam = {
       // placeholder: extendField.placeholder,
       style:{width:200},
       title: cBillName,
@@ -229,27 +227,19 @@ class Table extends Component {
       dataNumSelect: dataNumSelect,
       handlePagination: handlePagination,
       miniSearchFunc: searchFilterInfo,
-      matchData:store.getState().matchData,
+      matchData:props.matchData,
       emptyBut: true //清空按钮是否展示
     };
     return (
       <div className='ref-container'>
         <RefMultipleTableWithInput
-          {...props}
+          {...propsParam}
           onSave={this.onSave}
           onCancel={this.onCancel}
           canClickGoOn={this.getData}
-          {...getFieldProps(valueField, {
-            initialValue: `{${displayField}:"",${valueField}:""}`,
-            rules: [
-              {
-                message: "请选择参照",
-                pattern: /[^{refname:"",refpk:""}]/
-              }
-            ]
-          })}
+          
         />
-        <span className="error">{getFieldError(valueField)}</span>
+       
       </div>
     );
   }

@@ -17,7 +17,7 @@ const dataType = "treeTable";
 const defaultProps = {
   matchData:[]
 }
-@connect(state => ({ form: state.form }))
+@connect(state => (state))
 class TreeTable extends Component {
   constructor(props) {
     super(props);
@@ -25,10 +25,10 @@ class TreeTable extends Component {
     this.columnsData = [];
     this.tableData = [];
     this.originTableData = [];
-    let { store} = this.props;
-    let { viewApplication, refEntity } = store.getState().meta;
+  
+    let { viewApplication, refEntity } = props.meta;
     
-    initReferInfo.call(this,dataType, refEntity, viewApplication,store.getState());
+    initReferInfo.call(this,dataType, refEntity, viewApplication,props);
     this.view = viewApplication.view;
     this.dataType = '';
     this.getTableInfo =  getTableInfo.bind(this);
@@ -135,7 +135,7 @@ class TreeTable extends Component {
       });
     });
   }
-  onSave = item => {
+  onSave = data => {
     // console.log("save", JSON.stringify(item));
     const { store } = this.props;
     store.setState({
@@ -145,8 +145,7 @@ class TreeTable extends Component {
   };
 
   render() {
-    let { store } = this.props;
-    const { getFieldProps, getFieldError } = this.props.form;
+    const props = this.props;
     return (
         <RefTreeTableWithInput
         title={this.cBillName}
@@ -162,18 +161,11 @@ class TreeTable extends Component {
         loadTableData={this.loadTableData}
         onTableSearch={this.onTableSearch}
         onSave={this.onSave}
-        matchData={store.getState().matchData}
+        matchData={props.matchData}
         showLoading ={this.state.showLoading}
         nodeDisplay={`{${this.displayField}}`}
         defaultExpandAll = {false}
         canClickGoOn={this.getData}
-        {...getFieldProps('code', {
-            initialValue: '',
-            rules: [{
-                message: '提示：请选择',
-                pattern: /[^{"refname":"","refpk":""}|{"refpk":"","refname":""}]/
-            }]
-        })}
     />
     );
   }
