@@ -915,54 +915,652 @@
 
 	var assertThisInitialized = _assertThisInitialized;
 
-	var classnames = createCommonjsModule(function (module) {
-	/*!
-	  Copyright (c) 2017 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = [];
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg) && arg.length) {
-					var inner = classNames.apply(null, arg);
-					if (inner) {
-						classes.push(inner);
-					}
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-
-			return classes.join(' ');
-		}
-
-		if (module.exports) {
-			classNames.default = classNames;
-			module.exports = classNames;
-		} else {
-			window.classNames = classNames;
-		}
-	}());
+	var _global = createCommonjsModule(function (module) {
+	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+	var global = module.exports = typeof window != 'undefined' && window.Math == Math
+	  ? window : typeof self != 'undefined' && self.Math == Math ? self
+	  // eslint-disable-next-line no-new-func
+	  : Function('return this')();
+	if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 	});
+
+	var _core = createCommonjsModule(function (module) {
+	var core = module.exports = { version: '2.6.5' };
+	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+	});
+	var _core_1 = _core.version;
+
+	var _aFunction = function (it) {
+	  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+	  return it;
+	};
+
+	// optional / simple context binding
+
+	var _ctx = function (fn, that, length) {
+	  _aFunction(fn);
+	  if (that === undefined) return fn;
+	  switch (length) {
+	    case 1: return function (a) {
+	      return fn.call(that, a);
+	    };
+	    case 2: return function (a, b) {
+	      return fn.call(that, a, b);
+	    };
+	    case 3: return function (a, b, c) {
+	      return fn.call(that, a, b, c);
+	    };
+	  }
+	  return function (/* ...args */) {
+	    return fn.apply(that, arguments);
+	  };
+	};
+
+	var _isObject = function (it) {
+	  return typeof it === 'object' ? it !== null : typeof it === 'function';
+	};
+
+	var _anObject = function (it) {
+	  if (!_isObject(it)) throw TypeError(it + ' is not an object!');
+	  return it;
+	};
+
+	var _fails = function (exec) {
+	  try {
+	    return !!exec();
+	  } catch (e) {
+	    return true;
+	  }
+	};
+
+	// Thank's IE8 for his funny defineProperty
+	var _descriptors = !_fails(function () {
+	  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+	});
+
+	var document$1 = _global.document;
+	// typeof document.createElement is 'object' in old IE
+	var is = _isObject(document$1) && _isObject(document$1.createElement);
+	var _domCreate = function (it) {
+	  return is ? document$1.createElement(it) : {};
+	};
+
+	var _ie8DomDefine = !_descriptors && !_fails(function () {
+	  return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
+	});
+
+	// 7.1.1 ToPrimitive(input [, PreferredType])
+
+	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+	// and the second argument - flag - preferred type is a string
+	var _toPrimitive = function (it, S) {
+	  if (!_isObject(it)) return it;
+	  var fn, val;
+	  if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+	  if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
+	  if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
+	  throw TypeError("Can't convert object to primitive value");
+	};
+
+	var dP = Object.defineProperty;
+
+	var f = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+	  _anObject(O);
+	  P = _toPrimitive(P, true);
+	  _anObject(Attributes);
+	  if (_ie8DomDefine) try {
+	    return dP(O, P, Attributes);
+	  } catch (e) { /* empty */ }
+	  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+	  if ('value' in Attributes) O[P] = Attributes.value;
+	  return O;
+	};
+
+	var _objectDp = {
+		f: f
+	};
+
+	var _propertyDesc = function (bitmap, value) {
+	  return {
+	    enumerable: !(bitmap & 1),
+	    configurable: !(bitmap & 2),
+	    writable: !(bitmap & 4),
+	    value: value
+	  };
+	};
+
+	var _hide = _descriptors ? function (object, key, value) {
+	  return _objectDp.f(object, key, _propertyDesc(1, value));
+	} : function (object, key, value) {
+	  object[key] = value;
+	  return object;
+	};
+
+	var hasOwnProperty = {}.hasOwnProperty;
+	var _has = function (it, key) {
+	  return hasOwnProperty.call(it, key);
+	};
+
+	var PROTOTYPE = 'prototype';
+
+	var $export = function (type, name, source) {
+	  var IS_FORCED = type & $export.F;
+	  var IS_GLOBAL = type & $export.G;
+	  var IS_STATIC = type & $export.S;
+	  var IS_PROTO = type & $export.P;
+	  var IS_BIND = type & $export.B;
+	  var IS_WRAP = type & $export.W;
+	  var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
+	  var expProto = exports[PROTOTYPE];
+	  var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] : (_global[name] || {})[PROTOTYPE];
+	  var key, own, out;
+	  if (IS_GLOBAL) source = name;
+	  for (key in source) {
+	    // contains in native
+	    own = !IS_FORCED && target && target[key] !== undefined;
+	    if (own && _has(exports, key)) continue;
+	    // export native or passed
+	    out = own ? target[key] : source[key];
+	    // prevent global pollution for namespaces
+	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+	    // bind timers to global for call from export context
+	    : IS_BIND && own ? _ctx(out, _global)
+	    // wrap global constructors for prevent change them in library
+	    : IS_WRAP && target[key] == out ? (function (C) {
+	      var F = function (a, b, c) {
+	        if (this instanceof C) {
+	          switch (arguments.length) {
+	            case 0: return new C();
+	            case 1: return new C(a);
+	            case 2: return new C(a, b);
+	          } return new C(a, b, c);
+	        } return C.apply(this, arguments);
+	      };
+	      F[PROTOTYPE] = C[PROTOTYPE];
+	      return F;
+	    // make static versions for prototype methods
+	    })(out) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
+	    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+	    if (IS_PROTO) {
+	      (exports.virtual || (exports.virtual = {}))[key] = out;
+	      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+	      if (type & $export.R && expProto && !expProto[key]) _hide(expProto, key, out);
+	    }
+	  }
+	};
+	// type bitmap
+	$export.F = 1;   // forced
+	$export.G = 2;   // global
+	$export.S = 4;   // static
+	$export.P = 8;   // proto
+	$export.B = 16;  // bind
+	$export.W = 32;  // wrap
+	$export.U = 64;  // safe
+	$export.R = 128; // real proto method for `library`
+	var _export = $export;
+
+	var toString = {}.toString;
+
+	var _cof = function (it) {
+	  return toString.call(it).slice(8, -1);
+	};
+
+	// fallback for non-array-like ES3 and non-enumerable old V8 strings
+
+	// eslint-disable-next-line no-prototype-builtins
+	var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+	  return _cof(it) == 'String' ? it.split('') : Object(it);
+	};
+
+	// 7.2.1 RequireObjectCoercible(argument)
+	var _defined = function (it) {
+	  if (it == undefined) throw TypeError("Can't call method on  " + it);
+	  return it;
+	};
+
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+
+
+	var _toIobject = function (it) {
+	  return _iobject(_defined(it));
+	};
+
+	// 7.1.4 ToInteger
+	var ceil = Math.ceil;
+	var floor = Math.floor;
+	var _toInteger = function (it) {
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	};
+
+	// 7.1.15 ToLength
+
+	var min = Math.min;
+	var _toLength = function (it) {
+	  return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+	};
+
+	var max = Math.max;
+	var min$1 = Math.min;
+	var _toAbsoluteIndex = function (index, length) {
+	  index = _toInteger(index);
+	  return index < 0 ? max(index + length, 0) : min$1(index, length);
+	};
+
+	// false -> Array#indexOf
+	// true  -> Array#includes
+
+
+
+	var _arrayIncludes = function (IS_INCLUDES) {
+	  return function ($this, el, fromIndex) {
+	    var O = _toIobject($this);
+	    var length = _toLength(O.length);
+	    var index = _toAbsoluteIndex(fromIndex, length);
+	    var value;
+	    // Array#includes uses SameValueZero equality algorithm
+	    // eslint-disable-next-line no-self-compare
+	    if (IS_INCLUDES && el != el) while (length > index) {
+	      value = O[index++];
+	      // eslint-disable-next-line no-self-compare
+	      if (value != value) return true;
+	    // Array#indexOf ignores holes, Array#includes - not
+	    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+	      if (O[index] === el) return IS_INCLUDES || index || 0;
+	    } return !IS_INCLUDES && -1;
+	  };
+	};
+
+	var _library = true;
+
+	var _shared = createCommonjsModule(function (module) {
+	var SHARED = '__core-js_shared__';
+	var store = _global[SHARED] || (_global[SHARED] = {});
+
+	(module.exports = function (key, value) {
+	  return store[key] || (store[key] = value !== undefined ? value : {});
+	})('versions', []).push({
+	  version: _core.version,
+	  mode: _library ? 'pure' : 'global',
+	  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+	});
+	});
+
+	var id = 0;
+	var px = Math.random();
+	var _uid = function (key) {
+	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+	};
+
+	var shared = _shared('keys');
+
+	var _sharedKey = function (key) {
+	  return shared[key] || (shared[key] = _uid(key));
+	};
+
+	var arrayIndexOf = _arrayIncludes(false);
+	var IE_PROTO = _sharedKey('IE_PROTO');
+
+	var _objectKeysInternal = function (object, names) {
+	  var O = _toIobject(object);
+	  var i = 0;
+	  var result = [];
+	  var key;
+	  for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
+	  // Don't enum bug & hidden keys
+	  while (names.length > i) if (_has(O, key = names[i++])) {
+	    ~arrayIndexOf(result, key) || result.push(key);
+	  }
+	  return result;
+	};
+
+	// IE 8- don't enum bug keys
+	var _enumBugKeys = (
+	  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+	).split(',');
+
+	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+
+
+
+	var _objectKeys = Object.keys || function keys(O) {
+	  return _objectKeysInternal(O, _enumBugKeys);
+	};
+
+	var f$1 = Object.getOwnPropertySymbols;
+
+	var _objectGops = {
+		f: f$1
+	};
+
+	var f$2 = {}.propertyIsEnumerable;
+
+	var _objectPie = {
+		f: f$2
+	};
+
+	// 7.1.13 ToObject(argument)
+
+	var _toObject = function (it) {
+	  return Object(_defined(it));
+	};
+
+	// 19.1.2.1 Object.assign(target, source, ...)
+
+
+
+
+
+	var $assign = Object.assign;
+
+	// should work with symbols and should have deterministic property order (V8 bug)
+	var _objectAssign = !$assign || _fails(function () {
+	  var A = {};
+	  var B = {};
+	  // eslint-disable-next-line no-undef
+	  var S = Symbol();
+	  var K = 'abcdefghijklmnopqrst';
+	  A[S] = 7;
+	  K.split('').forEach(function (k) { B[k] = k; });
+	  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+	}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+	  var T = _toObject(target);
+	  var aLen = arguments.length;
+	  var index = 1;
+	  var getSymbols = _objectGops.f;
+	  var isEnum = _objectPie.f;
+	  while (aLen > index) {
+	    var S = _iobject(arguments[index++]);
+	    var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
+	    var length = keys.length;
+	    var j = 0;
+	    var key;
+	    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+	  } return T;
+	} : $assign;
+
+	// 19.1.3.1 Object.assign(target, source)
+
+
+	_export(_export.S + _export.F, 'Object', { assign: _objectAssign });
+
+	var assign = _core.Object.assign;
+
+	var assign$1 = createCommonjsModule(function (module) {
+	module.exports = { "default": assign, __esModule: true };
+	});
+
+	unwrapExports(assign$1);
+
+	var gOPD = Object.getOwnPropertyDescriptor;
+
+	var f$3 = _descriptors ? gOPD : function getOwnPropertyDescriptor(O, P) {
+	  O = _toIobject(O);
+	  P = _toPrimitive(P, true);
+	  if (_ie8DomDefine) try {
+	    return gOPD(O, P);
+	  } catch (e) { /* empty */ }
+	  if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
+	};
+
+	var _objectGopd = {
+		f: f$3
+	};
+
+	// Works with __proto__ only. Old v8 can't work with null proto objects.
+	/* eslint-disable no-proto */
+
+
+	var check = function (O, proto) {
+	  _anObject(O);
+	  if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
+	};
+	var _setProto = {
+	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+	    function (test, buggy, set) {
+	      try {
+	        set = _ctx(Function.call, _objectGopd.f(Object.prototype, '__proto__').set, 2);
+	        set(test, []);
+	        buggy = !(test instanceof Array);
+	      } catch (e) { buggy = true; }
+	      return function setPrototypeOf(O, proto) {
+	        check(O, proto);
+	        if (buggy) O.__proto__ = proto;
+	        else set(O, proto);
+	        return O;
+	      };
+	    }({}, false) : undefined),
+	  check: check
+	};
+
+	// 19.1.3.19 Object.setPrototypeOf(O, proto)
+
+	_export(_export.S, 'Object', { setPrototypeOf: _setProto.set });
+
+	var setPrototypeOf = _core.Object.setPrototypeOf;
+
+	var setPrototypeOf$1 = createCommonjsModule(function (module) {
+	module.exports = { "default": setPrototypeOf, __esModule: true };
+	});
+
+	unwrapExports(setPrototypeOf$1);
+
+	var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
+	  _anObject(O);
+	  var keys = _objectKeys(Properties);
+	  var length = keys.length;
+	  var i = 0;
+	  var P;
+	  while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
+	  return O;
+	};
+
+	var document$2 = _global.document;
+	var _html = document$2 && document$2.documentElement;
+
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+
+
+
+	var IE_PROTO$1 = _sharedKey('IE_PROTO');
+	var Empty = function () { /* empty */ };
+	var PROTOTYPE$1 = 'prototype';
+
+	// Create object with fake `null` prototype: use iframe Object with cleared prototype
+	var createDict = function () {
+	  // Thrash, waste and sodomy: IE GC bug
+	  var iframe = _domCreate('iframe');
+	  var i = _enumBugKeys.length;
+	  var lt = '<';
+	  var gt = '>';
+	  var iframeDocument;
+	  iframe.style.display = 'none';
+	  _html.appendChild(iframe);
+	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+	  // createDict = iframe.contentWindow.Object;
+	  // html.removeChild(iframe);
+	  iframeDocument = iframe.contentWindow.document;
+	  iframeDocument.open();
+	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+	  iframeDocument.close();
+	  createDict = iframeDocument.F;
+	  while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
+	  return createDict();
+	};
+
+	var _objectCreate = Object.create || function create(O, Properties) {
+	  var result;
+	  if (O !== null) {
+	    Empty[PROTOTYPE$1] = _anObject(O);
+	    result = new Empty();
+	    Empty[PROTOTYPE$1] = null;
+	    // add "__proto__" for Object.getPrototypeOf polyfill
+	    result[IE_PROTO$1] = O;
+	  } else result = createDict();
+	  return Properties === undefined ? result : _objectDps(result, Properties);
+	};
+
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+	_export(_export.S, 'Object', { create: _objectCreate });
+
+	var $Object = _core.Object;
+	var create = function create(P, D) {
+	  return $Object.create(P, D);
+	};
+
+	var create$1 = createCommonjsModule(function (module) {
+	module.exports = { "default": create, __esModule: true };
+	});
+
+	unwrapExports(create$1);
+
+	var $JSON = _core.JSON || (_core.JSON = { stringify: JSON.stringify });
+	var stringify = function stringify(it) { // eslint-disable-line no-unused-vars
+	  return $JSON.stringify.apply($JSON, arguments);
+	};
+
+	var stringify$1 = createCommonjsModule(function (module) {
+	module.exports = { "default": stringify, __esModule: true };
+	});
+
+	unwrapExports(stringify$1);
+
+	// most Object methods by ES6 should accept primitives
+
+
+
+	var _objectSap = function (KEY, exec) {
+	  var fn = (_core.Object || {})[KEY] || Object[KEY];
+	  var exp = {};
+	  exp[KEY] = exec(fn);
+	  _export(_export.S + _export.F * _fails(function () { fn(1); }), 'Object', exp);
+	};
+
+	// 19.1.2.14 Object.keys(O)
+
+
+
+	_objectSap('keys', function () {
+	  return function keys(it) {
+	    return _objectKeys(_toObject(it));
+	  };
+	});
+
+	var keys = _core.Object.keys;
+
+	var keys$1 = createCommonjsModule(function (module) {
+	module.exports = { "default": keys, __esModule: true };
+	});
+
+	unwrapExports(keys$1);
+
+	//
+
+	var shallowequal = function shallowEqual(objA, objB, compare, compareContext) {
+	  var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
+
+	  if (ret !== void 0) {
+	    return !!ret;
+	  }
+
+	  if (objA === objB) {
+	    return true;
+	  }
+
+	  if (typeof objA !== "object" || !objA || typeof objB !== "object" || !objB) {
+	    return false;
+	  }
+
+	  var keysA = Object.keys(objA);
+	  var keysB = Object.keys(objB);
+
+	  if (keysA.length !== keysB.length) {
+	    return false;
+	  }
+
+	  var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
+
+	  // Test for A's keys different from B.
+	  for (var idx = 0; idx < keysA.length; idx++) {
+	    var key = keysA[idx];
+
+	    if (!bHasOwnProperty(key)) {
+	      return false;
+	    }
+
+	    var valueA = objA[key];
+	    var valueB = objB[key];
+
+	    ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
+
+	    if (ret === false || (ret === void 0 && valueA !== valueB)) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	};
+
+
+
+	var refcoreerror = /*#__PURE__*/Object.freeze({
+		default: undefined
+	});
+
+	getCjsExportFromNamespace(refcoreerror);
+
+	var RefCoreError_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var RefCoreError = function RefCoreError(props) {
+	  var language = props.language,
+	      show = props.show;
+
+	  var nodata = "没有查询到数据";
+	  switch (language) {
+	    case "zh_CN":
+	      nodata = '没有查询到数据';
+
+	      break;
+	    case "en_US":
+	      nodata = 'No query to data';
+	      break;
+	    case "zh_TW":
+	      nodata = '沒有査詢到數據';
+	      break;
+	    case "fr_FR":
+	      nodata = 'Pas de données';
+	      break;
+	    case "de_DE":
+	      nodata = 'Keine abfrage zu Daten';
+	      break;
+	    case "ja_JP":
+	      nodata = 'データが検索されていません';
+	      break;
+	    default:
+	      nodata = '没有查询到数据';
+	  }
+	  return _react2["default"].createElement(
+	    'div',
+	    { className: show ? 'ref-core-error' : 'ref-core-error-hide' },
+	    nodata
+	  );
+	};
+	exports["default"] = RefCoreError;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RefCoreError_1);
 
 	var reactIs_production_min = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports,"__esModule",{value:!0});
@@ -1269,7 +1867,7 @@
 	*/
 	/* eslint-disable no-unused-vars */
 	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
 	function toObject(val) {
@@ -1333,7 +1931,7 @@
 			from = Object(arguments[s]);
 
 			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
+				if (hasOwnProperty$1.call(from, key)) {
 					to[key] = from[key];
 				}
 			}
@@ -2107,1473 +2705,54 @@
 	}
 	});
 
-	var Icon_1 = createCommonjsModule(function (module, exports) {
+	var classnames = createCommonjsModule(function (module) {
+	/*!
+	  Copyright (c) 2017 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
 
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
+	(function () {
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+		var hasOwn = {}.hasOwnProperty;
 
+		function classNames () {
+			var classes = [];
 
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
 
-	var _react2 = _interopRequireDefault(React__default);
+				var argType = typeof arg;
 
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg) && arg.length) {
+					var inner = classNames.apply(null, arg);
+					if (inner) {
+						classes.push(inner);
+					}
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
 
-
-	var _classnames2 = _interopRequireDefault(classnames);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var propTypes$1 = {
-		type: _propTypes2["default"].string
-
-	};
-	/**
-	 *  badge 默认显示内容1
-	 */
-	var defaultProps = {
-		clsPrefix: 'uf'
-	};
-
-	var Icon = function (_Component) {
-		_inherits(Icon, _Component);
-
-		function Icon(props) {
-			_classCallCheck(this, Icon);
-
-			return _possibleConstructorReturn(this, _Component.call(this, props));
+			return classes.join(' ');
 		}
 
-		Icon.prototype.render = function render() {
-			var _props = this.props,
-			    type = _props.type,
-			    className = _props.className,
-			    clsPrefix = _props.clsPrefix,
-			    others = _objectWithoutProperties(_props, ['type', 'className', 'clsPrefix']);
-
-			var classNames = (0, _classnames2["default"])(clsPrefix, type);
-
-			return _react2["default"].createElement('i', _extends({}, others, { className: (0, _classnames2["default"])(classNames, className) }));
-		};
-
-		return Icon;
-	}(React__default.Component);
-
-	Icon.defaultProps = defaultProps;
-	Icon.propTypes = propTypes$1;
-
-	exports["default"] = Icon;
-	module.exports = exports['default'];
+		if (module.exports) {
+			classNames.default = classNames;
+			module.exports = classNames;
+		} else {
+			window.classNames = classNames;
+		}
+	}());
 	});
-
-	unwrapExports(Icon_1);
-
-	var build = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _Icon2 = _interopRequireDefault(Icon_1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	exports["default"] = _Icon2["default"];
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(build);
-
-	var FormControl_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	var _classnames2 = _interopRequireDefault(classnames);
-
-
-
-	var _beeIcon2 = _interopRequireDefault(build);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var propTypes$1 = {
-	    componentClass: _propTypes2["default"].oneOfType([_propTypes2["default"].element, _propTypes2["default"].string]),
-	    type: _propTypes2["default"].string,
-	    size: _propTypes2["default"].oneOf(['sm', 'md', 'lg']),
-	    onSearch: _propTypes2["default"].func,
-	    onChange: _propTypes2["default"].func,
-	    onBlur: _propTypes2["default"].func,
-	    showClose: _propTypes2["default"].bool,
-	    focusSelect: _propTypes2["default"].bool
-	};
-
-	var defaultProps = {
-	    componentClass: 'input',
-	    clsPrefix: 'u-form-control',
-	    type: 'text',
-	    size: 'md'
-	};
-
-	var FormControl = function (_React$Component) {
-	    _inherits(FormControl, _React$Component);
-
-	    function FormControl(props) {
-	        _classCallCheck(this, FormControl);
-
-	        var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
-
-	        _this.handleSearchChange = function (e) {
-	            var onChange = _this.props.onChange;
-
-	            var value = _this.input.value;
-	            _this.setState({
-	                value: value,
-	                showSearch: value == null || value === ""
-	            });
-	            if (onChange) {
-	                onChange(value, e);
-	            }
-	        };
-
-	        _this.handleChange = function (e) {
-	            var onChange = _this.props.onChange;
-
-	            var value = _this.input.value;
-	            _this.setState({
-	                showClose: true
-	            });
-	            if (onChange) {
-	                onChange(value, e);
-	            }
-	        };
-
-	        _this.clearValue = function () {
-	            var onChange = _this.props.onChange;
-
-	            _this.setState({
-	                showSearch: true,
-	                value: "",
-	                showClose: false
-	            });
-	            if (onChange) {
-	                onChange("");
-	            }
-	            _this.input.focus();
-	        };
-
-	        _this.handleKeyDown = function (e) {
-	            var _this$props = _this.props,
-	                onSearch = _this$props.onSearch,
-	                type = _this$props.type,
-	                onKeyDown = _this$props.onKeyDown;
-
-	            if (e.keyCode === 13 && type === "search") {
-	                if (onSearch) {
-	                    onSearch(_this.input.value);
-	                }
-	            }
-	            onKeyDown && onKeyDown(e);
-	        };
-
-	        _this.handleSearch = function (e) {
-	            var onSearch = _this.props.onSearch;
-
-	            if (onSearch) onSearch(_this.input.value);
-	        };
-
-	        _this.handleBlur = function (e) {
-	            var value = _this.state.value;
-	            var onBlur = _this.props.onBlur;
-
-
-	            if (onBlur) {
-	                onBlur(value, e);
-	            }
-	        };
-
-	        _this.handleFocus = function (e) {
-	            var value = _this.state.value;
-	            var onFocus = _this.props.onFocus;
-
-	            if (_this.props.focusSelect) {
-	                _this.input.select();
-	            }
-	            if (onFocus) {
-	                onFocus(value, e);
-	            }
-	        };
-
-	        _this.renderInput = function () {
-	            var _this$props2 = _this.props,
-	                Component = _this$props2.componentClass,
-	                type = _this$props2.type,
-	                className = _this$props2.className,
-	                size = _this$props2.size,
-	                clsPrefix = _this$props2.clsPrefix,
-	                value = _this$props2.value,
-	                onChange = _this$props2.onChange,
-	                onSearch = _this$props2.onSearch,
-	                onBlur = _this$props2.onBlur,
-	                showClose = _this$props2.showClose,
-	                focusSelect = _this$props2.focusSelect,
-	                others = _objectWithoutProperties(_this$props2, ['componentClass', 'type', 'className', 'size', 'clsPrefix', 'value', 'onChange', 'onSearch', 'onBlur', 'showClose', 'focusSelect']);
-	            // input[type="file"] 不应该有类名 .form-control.
-
-
-	            var classes = {};
-	            if (size) {
-	                classes['' + size] = true;
-	            }
-
-	            var classNames = void 0;
-	            if (type !== 'file') {
-	                classNames = (0, _classnames2["default"])(clsPrefix, classes);
-	            }
-
-	            return showClose ? _react2["default"].createElement(
-	                'div',
-	                { className: (0, _classnames2["default"])(clsPrefix + '-close', clsPrefix + '-affix-wrapper', className) },
-	                _react2["default"].createElement(Component, _extends({}, others, {
-	                    type: type,
-	                    ref: function ref(el) {
-	                        return _this.input = el;
-	                    },
-	                    value: value,
-	                    onChange: _this.handleChange,
-	                    onBlur: _this.handleBlur,
-	                    onFocus: _this.handleFocus,
-	                    className: (0, _classnames2["default"])(className, classNames)
-	                })),
-	                _react2["default"].createElement(
-	                    'div',
-	                    { className: clsPrefix + '-suffix' },
-	                    _this.state.showClose ? _react2["default"].createElement(_beeIcon2["default"], { onClick: _this.clearValue, type: 'uf-close-c' }) : ''
-	                )
-	            ) : _react2["default"].createElement(Component, _extends({}, others, {
-	                type: type,
-	                ref: function ref(el) {
-	                    return _this.input = el;
-	                },
-	                value: value,
-	                onChange: _this.handleChange,
-	                onBlur: _this.handleBlur,
-	                onFocus: _this.handleFocus,
-	                className: (0, _classnames2["default"])(className, classNames)
-	            }));
-	        };
-
-	        _this.renderSearch = function () {
-	            var _this$props3 = _this.props,
-	                Component = _this$props3.componentClass,
-	                type = _this$props3.type,
-	                className = _this$props3.className,
-	                size = _this$props3.size,
-	                clsPrefix = _this$props3.clsPrefix,
-	                value = _this$props3.value,
-	                onChange = _this$props3.onChange,
-	                onSearch = _this$props3.onSearch,
-	                onBlur = _this$props3.onBlur,
-	                others = _objectWithoutProperties(_this$props3, ['componentClass', 'type', 'className', 'size', 'clsPrefix', 'value', 'onChange', 'onSearch', 'onBlur']);
-	            // input[type="file"] 不应该有类名 .form-control.
-
-
-	            var classes = {};
-	            if (size) {
-	                classes['' + size] = true;
-	            }
-	            classes[clsPrefix + '-search'] = true;
-
-	            if (type === "search") {
-	                return _react2["default"].createElement(
-	                    'div',
-	                    { className: (0, _classnames2["default"])(clsPrefix + '-search', clsPrefix + '-affix-wrapper', className) },
-	                    _react2["default"].createElement(Component, _extends({}, others, {
-	                        type: type,
-	                        ref: function ref(el) {
-	                            return _this.input = el;
-	                        },
-	                        onChange: _this.handleSearchChange,
-	                        value: value,
-	                        onKeyDown: _this.handleKeyDown,
-	                        onBlur: _this.handleBlur,
-	                        onFocus: _this.handleFocus,
-	                        className: (0, _classnames2["default"])(className, clsPrefix, classes)
-	                    })),
-	                    _react2["default"].createElement(
-	                        'div',
-	                        { className: clsPrefix + '-suffix' },
-	                        _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-search', onClick: _this.handleSearch })
-	                    )
-	                );
-	            }
-	        };
-
-	        _this.state = {
-	            showSearch: !props.value,
-	            value: props.value == null ? "" : props.value,
-	            showClose: false
-	        };
-	        _this.input = {};
-	        return _this;
-	    }
-
-	    FormControl.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProp) {
-	        if (nextProp.value !== this.state.value) {
-	            this.setState({ value: nextProp.value });
-	        }
-	    };
-
-	    FormControl.prototype.render = function render() {
-
-	        if (this.props.type === "search") {
-	            return this.renderSearch();
-	        }
-
-	        return this.renderInput();
-	    };
-
-	    return FormControl;
-	}(_react2["default"].Component);
-
-	FormControl.propTypes = propTypes$1;
-	FormControl.defaultProps = defaultProps;
-
-	exports["default"] = FormControl;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(FormControl_1);
-
-	var build$1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _FormControl2 = _interopRequireDefault(FormControl_1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	exports["default"] = _FormControl2["default"];
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(build$1);
-
-	var RadioGroup_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	var _classnames2 = _interopRequireDefault(classnames);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var propTypes$1 = {
-	  name: _propTypes2["default"].string,
-	  /**
-	   * 选中的值
-	   */
-	  selectedValue: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].number, _propTypes2["default"].bool]),
-	  /**
-	  * 暴露给用户，且与子Radio通信的方法
-	  */
-	  onChange: _propTypes2["default"].func,
-	  /**
-	    * radio 大小
-	    */
-	  size: _propTypes2["default"].oneOf(['lg', 'sm']),
-
-	  children: _propTypes2["default"].node.isRequired,
-
-	  Component: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].func, _propTypes2["default"].object])
-	};
-
-	var defaultProps = {
-	  Component: 'div',
-	  clsPrefix: 'u-radio-group'
-	};
-
-	/**
-	 * 与子Radio通信
-	 */
-	var childContextTypes = {
-	  radioGroup: _propTypes2["default"].object
-	};
-
-	var RadioGroup = function (_React$Component) {
-	  _inherits(RadioGroup, _React$Component);
-
-	  function RadioGroup(props, context) {
-	    _classCallCheck(this, RadioGroup);
-
-	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
-
-	    _this.getValues = function () {
-	      var array = [];
-	      var children = _this.props.children;
-	      if (!children) {
-	        console.error('RadioGroup must have child nodes');
-	        return array;
-	      }
-	      if (children.length > 1) {
-	        children.map(function (item) {
-	          array.push(item.props.value);
-	        });
-	      } else {
-	        array.push(children.props.value);
-	      }
-	      return array;
-	    };
-
-	    _this.state = {
-	      focusvalue: ''
-	    };
-	    return _this;
-	  }
-
-	  RadioGroup.prototype.componentDidMount = function componentDidMount() {
-	    var array = this.getValues();
-	    if (array.indexOf(this.props.selectedValue) == -1) {
-	      this.setState({
-	        focusvalue: array[0]
-	      });
-	    }
-	  };
-
-	  RadioGroup.prototype.componentWillReceiveProps = function componentWillReceiveProps() {
-	    var array = this.getValues();
-	    if (array.indexOf(this.props.selectedValue) == -1) {
-	      this.setState({
-	        focusvalue: array[0]
-	      });
-	    } else {
-	      this.setState({
-	        focusvalue: ''
-	      });
-	    }
-	  };
-
-	  /**
-	    * 一旦外层change方法触发本身props发生改变，则调用getChildContext更新与子Radio的通信信息（radioGroup）
-	    */
-
-	  RadioGroup.prototype.getChildContext = function getChildContext() {
-	    var _props = this.props,
-	        name = _props.name,
-	        selectedValue = _props.selectedValue,
-	        onChange = _props.onChange,
-	        size = _props.size;
-
-	    return {
-	      radioGroup: {
-	        name: name, selectedValue: selectedValue, onChange: onChange, size: size, focusvalue: this.state.focusvalue
-	      }
-	    };
-	  };
-
-	  RadioGroup.prototype.render = function render() {
-	    var _props2 = this.props,
-	        Component = _props2.Component,
-	        name = _props2.name,
-	        selectedValue = _props2.selectedValue,
-	        onChange = _props2.onChange,
-	        children = _props2.children,
-	        size = _props2.size,
-	        clsPrefix = _props2.clsPrefix,
-	        className = _props2.className,
-	        focusvalue = _props2.focusvalue,
-	        others = _objectWithoutProperties(_props2, ['Component', 'name', 'selectedValue', 'onChange', 'children', 'size', 'clsPrefix', 'className', 'focusvalue']);
-
-	    return _react2["default"].createElement(
-	      Component,
-	      _extends({ className: (0, _classnames2["default"])(clsPrefix, className) }, others, { focusvalue: this.state.focusvalue }),
-	      children
-	    );
-	  };
-
-	  return RadioGroup;
-	}(_react2["default"].Component);
-
-	RadioGroup.childContextTypes = childContextTypes;
-	RadioGroup.propTypes = propTypes$1;
-	RadioGroup.defaultProps = defaultProps;
-	exports["default"] = RadioGroup;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(RadioGroup_1);
-
-	var Radio_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-
-
-	var _classnames2 = _interopRequireDefault(classnames);
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var propTypes$1 = {
-	  /**
-	    * radio 颜色 样式
-	    */
-	  colors: _propTypes2["default"].oneOf(['', 'dark', 'success', 'info', 'warning', 'danger', 'primary']),
-	  /**
-	    * radio 大小
-	    */
-	  size: _propTypes2["default"].oneOf(['lg', 'sm']),
-	  /**
-	    * radio 是否可用
-	    */
-	  disabled: _propTypes2["default"].bool,
-	  /**
-	    * radio 样式 是否使用红色填充
-	    */
-	  inverse: _propTypes2["default"].bool
-	};
-
-	var defaultProps = {
-	  inverse: false,
-	  disabled: false,
-	  clsPrefix: 'u-radio'
-	};
-
-	/**
-	 * 建立与RadioGroup通信
-	 */
-	var contextTypes = {
-	  radioGroup: _propTypes2["default"].object
-	};
-
-	var Radio = function (_React$Component) {
-	  _inherits(Radio, _React$Component);
-
-	  function Radio(props, context) {
-	    _classCallCheck(this, Radio);
-
-	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
-
-	    _this.handleClick = _this.handleClick.bind(_this);
-
-	    return _this;
-	  }
-
-	  Radio.prototype.handleClick = function handleClick(event) {
-	    var onChange = this.context.radioGroup.onChange;
-
-	    if (this.props.disabled) {
-	      return;
-	    }
-	    if (onChange) {
-	      onChange(this.props.value);
-	    }
-	  };
-
-	  Radio.prototype.render = function render() {
-	    var _context$radioGroup = this.context.radioGroup,
-	        name = _context$radioGroup.name,
-	        selectedValue = _context$radioGroup.selectedValue,
-	        size = _context$radioGroup.size,
-	        focusvalue = _context$radioGroup.focusvalue;
-	    /**
-	     * 自身的属性
-	     */
-
-	    var _props = this.props,
-	        inverse = _props.inverse,
-	        disabled = _props.disabled,
-	        colors = _props.colors,
-	        className = _props.className,
-	        children = _props.children,
-	        clsPrefix = _props.clsPrefix,
-	        style = _props.style,
-	        others = _objectWithoutProperties(_props, ['inverse', 'disabled', 'colors', 'className', 'children', 'clsPrefix', 'style']);
-
-	    var optional = {};
-	    /**
-	     * 若父级selectedValue与本身的value值相同，则改radio被选中
-	     */
-	    if (selectedValue !== undefined) {
-	      optional.checked = this.props.value === selectedValue;
-	    }
-
-	    var classes = {
-	      'is-checked': optional.checked,
-	      disabled: disabled
-	    };
-
-	    if (colors) {
-	      classes[clsPrefix + '-' + colors] = true;
-	    }
-	    if (size) {
-	      classes[clsPrefix + '-' + size] = true;
-	    }
-	    if (inverse) {
-	      classes[clsPrefix + '-inverse'] = true;
-	    }
-	    if (children == null) {
-	      classes[clsPrefix + '-noContent'] = true;
-	    }
-	    var classNames = (0, _classnames2["default"])(clsPrefix, classes);
-	    var tabIndex = optional.checked ? 0 : -1;
-	    if (focusvalue && focusvalue == this.props.value) {
-	      tabIndex = 0;
-	    }
-	    var input = _react2["default"].createElement('input', _extends({}, others, {
-	      type: 'radio',
-	      name: name,
-	      disabled: this.props.disabled,
-	      tabIndex: tabIndex
-	    }));
-	    return _react2["default"].createElement(
-	      'label',
-	      { style: style, onClick: this.handleClick, className: (0, _classnames2["default"])(className, classNames) },
-	      input,
-	      _react2["default"].createElement(
-	        'label',
-	        { className: clsPrefix + '-label' },
-	        children
-	      )
-	    );
-	  };
-
-	  return Radio;
-	}(_react2["default"].Component);
-
-	Radio.contextTypes = contextTypes;
-	Radio.propTypes = propTypes$1;
-	Radio.defaultProps = defaultProps;
-
-	exports["default"] = Radio;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(Radio_1);
-
-	var RadioButton_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	var _Radio2 = _interopRequireDefault(Radio_1);
-
-
-
-	var _propTypes2 = _interopRequireDefault(propTypes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
-
-	var propTypes$1 = {
-	  value: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].number]),
-	  style: _propTypes2["default"].object
-	};
-	var defaultProps = {
-	  clsPrefix: "u-radio-button"
-	};
-
-	var RadioButton = function (_Component) {
-	  _inherits(RadioButton, _Component);
-
-	  function RadioButton() {
-	    _classCallCheck(this, RadioButton);
-
-	    return _possibleConstructorReturn(this, _Component.apply(this, arguments));
-	  }
-
-	  RadioButton.prototype.render = function render() {
-	    return _react2["default"].createElement(_Radio2["default"], this.props);
-	  };
-
-	  return RadioButton;
-	}(React__default.Component);
-
-	RadioButton.propTypes = propTypes$1;
-	RadioButton.defaultProps = defaultProps;
-	exports["default"] = RadioButton;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(RadioButton_1);
-
-	var build$2 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _RadioGroup2 = _interopRequireDefault(RadioGroup_1);
-
-
-
-	var _Radio2 = _interopRequireDefault(Radio_1);
-
-
-
-	var _RadioButton2 = _interopRequireDefault(RadioButton_1);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	_Radio2["default"].RadioGroup = _RadioGroup2["default"];
-	_Radio2["default"].RadioButton = _RadioButton2["default"];
-
-	exports["default"] = _Radio2["default"];
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(build$2);
-
-	var _global = createCommonjsModule(function (module) {
-	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global = module.exports = typeof window != 'undefined' && window.Math == Math
-	  ? window : typeof self != 'undefined' && self.Math == Math ? self
-	  // eslint-disable-next-line no-new-func
-	  : Function('return this')();
-	if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-	});
-
-	var _core = createCommonjsModule(function (module) {
-	var core = module.exports = { version: '2.6.5' };
-	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-	});
-	var _core_1 = _core.version;
-
-	var _aFunction = function (it) {
-	  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
-	  return it;
-	};
-
-	// optional / simple context binding
-
-	var _ctx = function (fn, that, length) {
-	  _aFunction(fn);
-	  if (that === undefined) return fn;
-	  switch (length) {
-	    case 1: return function (a) {
-	      return fn.call(that, a);
-	    };
-	    case 2: return function (a, b) {
-	      return fn.call(that, a, b);
-	    };
-	    case 3: return function (a, b, c) {
-	      return fn.call(that, a, b, c);
-	    };
-	  }
-	  return function (/* ...args */) {
-	    return fn.apply(that, arguments);
-	  };
-	};
-
-	var _isObject = function (it) {
-	  return typeof it === 'object' ? it !== null : typeof it === 'function';
-	};
-
-	var _anObject = function (it) {
-	  if (!_isObject(it)) throw TypeError(it + ' is not an object!');
-	  return it;
-	};
-
-	var _fails = function (exec) {
-	  try {
-	    return !!exec();
-	  } catch (e) {
-	    return true;
-	  }
-	};
-
-	// Thank's IE8 for his funny defineProperty
-	var _descriptors = !_fails(function () {
-	  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-	});
-
-	var document$1 = _global.document;
-	// typeof document.createElement is 'object' in old IE
-	var is = _isObject(document$1) && _isObject(document$1.createElement);
-	var _domCreate = function (it) {
-	  return is ? document$1.createElement(it) : {};
-	};
-
-	var _ie8DomDefine = !_descriptors && !_fails(function () {
-	  return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
-	});
-
-	// 7.1.1 ToPrimitive(input [, PreferredType])
-
-	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-	// and the second argument - flag - preferred type is a string
-	var _toPrimitive = function (it, S) {
-	  if (!_isObject(it)) return it;
-	  var fn, val;
-	  if (S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-	  if (typeof (fn = it.valueOf) == 'function' && !_isObject(val = fn.call(it))) return val;
-	  if (!S && typeof (fn = it.toString) == 'function' && !_isObject(val = fn.call(it))) return val;
-	  throw TypeError("Can't convert object to primitive value");
-	};
-
-	var dP = Object.defineProperty;
-
-	var f = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-	  _anObject(O);
-	  P = _toPrimitive(P, true);
-	  _anObject(Attributes);
-	  if (_ie8DomDefine) try {
-	    return dP(O, P, Attributes);
-	  } catch (e) { /* empty */ }
-	  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
-	  if ('value' in Attributes) O[P] = Attributes.value;
-	  return O;
-	};
-
-	var _objectDp = {
-		f: f
-	};
-
-	var _propertyDesc = function (bitmap, value) {
-	  return {
-	    enumerable: !(bitmap & 1),
-	    configurable: !(bitmap & 2),
-	    writable: !(bitmap & 4),
-	    value: value
-	  };
-	};
-
-	var _hide = _descriptors ? function (object, key, value) {
-	  return _objectDp.f(object, key, _propertyDesc(1, value));
-	} : function (object, key, value) {
-	  object[key] = value;
-	  return object;
-	};
-
-	var hasOwnProperty$1 = {}.hasOwnProperty;
-	var _has = function (it, key) {
-	  return hasOwnProperty$1.call(it, key);
-	};
-
-	var PROTOTYPE = 'prototype';
-
-	var $export = function (type, name, source) {
-	  var IS_FORCED = type & $export.F;
-	  var IS_GLOBAL = type & $export.G;
-	  var IS_STATIC = type & $export.S;
-	  var IS_PROTO = type & $export.P;
-	  var IS_BIND = type & $export.B;
-	  var IS_WRAP = type & $export.W;
-	  var exports = IS_GLOBAL ? _core : _core[name] || (_core[name] = {});
-	  var expProto = exports[PROTOTYPE];
-	  var target = IS_GLOBAL ? _global : IS_STATIC ? _global[name] : (_global[name] || {})[PROTOTYPE];
-	  var key, own, out;
-	  if (IS_GLOBAL) source = name;
-	  for (key in source) {
-	    // contains in native
-	    own = !IS_FORCED && target && target[key] !== undefined;
-	    if (own && _has(exports, key)) continue;
-	    // export native or passed
-	    out = own ? target[key] : source[key];
-	    // prevent global pollution for namespaces
-	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-	    // bind timers to global for call from export context
-	    : IS_BIND && own ? _ctx(out, _global)
-	    // wrap global constructors for prevent change them in library
-	    : IS_WRAP && target[key] == out ? (function (C) {
-	      var F = function (a, b, c) {
-	        if (this instanceof C) {
-	          switch (arguments.length) {
-	            case 0: return new C();
-	            case 1: return new C(a);
-	            case 2: return new C(a, b);
-	          } return new C(a, b, c);
-	        } return C.apply(this, arguments);
-	      };
-	      F[PROTOTYPE] = C[PROTOTYPE];
-	      return F;
-	    // make static versions for prototype methods
-	    })(out) : IS_PROTO && typeof out == 'function' ? _ctx(Function.call, out) : out;
-	    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-	    if (IS_PROTO) {
-	      (exports.virtual || (exports.virtual = {}))[key] = out;
-	      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-	      if (type & $export.R && expProto && !expProto[key]) _hide(expProto, key, out);
-	    }
-	  }
-	};
-	// type bitmap
-	$export.F = 1;   // forced
-	$export.G = 2;   // global
-	$export.S = 4;   // static
-	$export.P = 8;   // proto
-	$export.B = 16;  // bind
-	$export.W = 32;  // wrap
-	$export.U = 64;  // safe
-	$export.R = 128; // real proto method for `library`
-	var _export = $export;
-
-	var toString = {}.toString;
-
-	var _cof = function (it) {
-	  return toString.call(it).slice(8, -1);
-	};
-
-	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-
-	// eslint-disable-next-line no-prototype-builtins
-	var _iobject = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
-	  return _cof(it) == 'String' ? it.split('') : Object(it);
-	};
-
-	// 7.2.1 RequireObjectCoercible(argument)
-	var _defined = function (it) {
-	  if (it == undefined) throw TypeError("Can't call method on  " + it);
-	  return it;
-	};
-
-	// to indexed object, toObject with fallback for non-array-like ES3 strings
-
-
-	var _toIobject = function (it) {
-	  return _iobject(_defined(it));
-	};
-
-	// 7.1.4 ToInteger
-	var ceil = Math.ceil;
-	var floor = Math.floor;
-	var _toInteger = function (it) {
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-	};
-
-	// 7.1.15 ToLength
-
-	var min = Math.min;
-	var _toLength = function (it) {
-	  return it > 0 ? min(_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-	};
-
-	var max = Math.max;
-	var min$1 = Math.min;
-	var _toAbsoluteIndex = function (index, length) {
-	  index = _toInteger(index);
-	  return index < 0 ? max(index + length, 0) : min$1(index, length);
-	};
-
-	// false -> Array#indexOf
-	// true  -> Array#includes
-
-
-
-	var _arrayIncludes = function (IS_INCLUDES) {
-	  return function ($this, el, fromIndex) {
-	    var O = _toIobject($this);
-	    var length = _toLength(O.length);
-	    var index = _toAbsoluteIndex(fromIndex, length);
-	    var value;
-	    // Array#includes uses SameValueZero equality algorithm
-	    // eslint-disable-next-line no-self-compare
-	    if (IS_INCLUDES && el != el) while (length > index) {
-	      value = O[index++];
-	      // eslint-disable-next-line no-self-compare
-	      if (value != value) return true;
-	    // Array#indexOf ignores holes, Array#includes - not
-	    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
-	      if (O[index] === el) return IS_INCLUDES || index || 0;
-	    } return !IS_INCLUDES && -1;
-	  };
-	};
-
-	var _library = true;
-
-	var _shared = createCommonjsModule(function (module) {
-	var SHARED = '__core-js_shared__';
-	var store = _global[SHARED] || (_global[SHARED] = {});
-
-	(module.exports = function (key, value) {
-	  return store[key] || (store[key] = value !== undefined ? value : {});
-	})('versions', []).push({
-	  version: _core.version,
-	  mode: _library ? 'pure' : 'global',
-	  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
-	});
-	});
-
-	var id = 0;
-	var px = Math.random();
-	var _uid = function (key) {
-	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-	};
-
-	var shared = _shared('keys');
-
-	var _sharedKey = function (key) {
-	  return shared[key] || (shared[key] = _uid(key));
-	};
-
-	var arrayIndexOf = _arrayIncludes(false);
-	var IE_PROTO = _sharedKey('IE_PROTO');
-
-	var _objectKeysInternal = function (object, names) {
-	  var O = _toIobject(object);
-	  var i = 0;
-	  var result = [];
-	  var key;
-	  for (key in O) if (key != IE_PROTO) _has(O, key) && result.push(key);
-	  // Don't enum bug & hidden keys
-	  while (names.length > i) if (_has(O, key = names[i++])) {
-	    ~arrayIndexOf(result, key) || result.push(key);
-	  }
-	  return result;
-	};
-
-	// IE 8- don't enum bug keys
-	var _enumBugKeys = (
-	  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-	).split(',');
-
-	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-
-
-
-	var _objectKeys = Object.keys || function keys(O) {
-	  return _objectKeysInternal(O, _enumBugKeys);
-	};
-
-	var f$1 = Object.getOwnPropertySymbols;
-
-	var _objectGops = {
-		f: f$1
-	};
-
-	var f$2 = {}.propertyIsEnumerable;
-
-	var _objectPie = {
-		f: f$2
-	};
-
-	// 7.1.13 ToObject(argument)
-
-	var _toObject = function (it) {
-	  return Object(_defined(it));
-	};
-
-	// 19.1.2.1 Object.assign(target, source, ...)
-
-
-
-
-
-	var $assign = Object.assign;
-
-	// should work with symbols and should have deterministic property order (V8 bug)
-	var _objectAssign = !$assign || _fails(function () {
-	  var A = {};
-	  var B = {};
-	  // eslint-disable-next-line no-undef
-	  var S = Symbol();
-	  var K = 'abcdefghijklmnopqrst';
-	  A[S] = 7;
-	  K.split('').forEach(function (k) { B[k] = k; });
-	  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-	}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-	  var T = _toObject(target);
-	  var aLen = arguments.length;
-	  var index = 1;
-	  var getSymbols = _objectGops.f;
-	  var isEnum = _objectPie.f;
-	  while (aLen > index) {
-	    var S = _iobject(arguments[index++]);
-	    var keys = getSymbols ? _objectKeys(S).concat(getSymbols(S)) : _objectKeys(S);
-	    var length = keys.length;
-	    var j = 0;
-	    var key;
-	    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-	  } return T;
-	} : $assign;
-
-	// 19.1.3.1 Object.assign(target, source)
-
-
-	_export(_export.S + _export.F, 'Object', { assign: _objectAssign });
-
-	var assign = _core.Object.assign;
-
-	var assign$1 = createCommonjsModule(function (module) {
-	module.exports = { "default": assign, __esModule: true };
-	});
-
-	unwrapExports(assign$1);
-
-	var gOPD = Object.getOwnPropertyDescriptor;
-
-	var f$3 = _descriptors ? gOPD : function getOwnPropertyDescriptor(O, P) {
-	  O = _toIobject(O);
-	  P = _toPrimitive(P, true);
-	  if (_ie8DomDefine) try {
-	    return gOPD(O, P);
-	  } catch (e) { /* empty */ }
-	  if (_has(O, P)) return _propertyDesc(!_objectPie.f.call(O, P), O[P]);
-	};
-
-	var _objectGopd = {
-		f: f$3
-	};
-
-	// Works with __proto__ only. Old v8 can't work with null proto objects.
-	/* eslint-disable no-proto */
-
-
-	var check = function (O, proto) {
-	  _anObject(O);
-	  if (!_isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
-	};
-	var _setProto = {
-	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-	    function (test, buggy, set) {
-	      try {
-	        set = _ctx(Function.call, _objectGopd.f(Object.prototype, '__proto__').set, 2);
-	        set(test, []);
-	        buggy = !(test instanceof Array);
-	      } catch (e) { buggy = true; }
-	      return function setPrototypeOf(O, proto) {
-	        check(O, proto);
-	        if (buggy) O.__proto__ = proto;
-	        else set(O, proto);
-	        return O;
-	      };
-	    }({}, false) : undefined),
-	  check: check
-	};
-
-	// 19.1.3.19 Object.setPrototypeOf(O, proto)
-
-	_export(_export.S, 'Object', { setPrototypeOf: _setProto.set });
-
-	var setPrototypeOf = _core.Object.setPrototypeOf;
-
-	var setPrototypeOf$1 = createCommonjsModule(function (module) {
-	module.exports = { "default": setPrototypeOf, __esModule: true };
-	});
-
-	unwrapExports(setPrototypeOf$1);
-
-	var _objectDps = _descriptors ? Object.defineProperties : function defineProperties(O, Properties) {
-	  _anObject(O);
-	  var keys = _objectKeys(Properties);
-	  var length = keys.length;
-	  var i = 0;
-	  var P;
-	  while (length > i) _objectDp.f(O, P = keys[i++], Properties[P]);
-	  return O;
-	};
-
-	var document$2 = _global.document;
-	var _html = document$2 && document$2.documentElement;
-
-	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-
-
-
-	var IE_PROTO$1 = _sharedKey('IE_PROTO');
-	var Empty = function () { /* empty */ };
-	var PROTOTYPE$1 = 'prototype';
-
-	// Create object with fake `null` prototype: use iframe Object with cleared prototype
-	var createDict = function () {
-	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = _domCreate('iframe');
-	  var i = _enumBugKeys.length;
-	  var lt = '<';
-	  var gt = '>';
-	  var iframeDocument;
-	  iframe.style.display = 'none';
-	  _html.appendChild(iframe);
-	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-	  // createDict = iframe.contentWindow.Object;
-	  // html.removeChild(iframe);
-	  iframeDocument = iframe.contentWindow.document;
-	  iframeDocument.open();
-	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-	  iframeDocument.close();
-	  createDict = iframeDocument.F;
-	  while (i--) delete createDict[PROTOTYPE$1][_enumBugKeys[i]];
-	  return createDict();
-	};
-
-	var _objectCreate = Object.create || function create(O, Properties) {
-	  var result;
-	  if (O !== null) {
-	    Empty[PROTOTYPE$1] = _anObject(O);
-	    result = new Empty();
-	    Empty[PROTOTYPE$1] = null;
-	    // add "__proto__" for Object.getPrototypeOf polyfill
-	    result[IE_PROTO$1] = O;
-	  } else result = createDict();
-	  return Properties === undefined ? result : _objectDps(result, Properties);
-	};
-
-	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	_export(_export.S, 'Object', { create: _objectCreate });
-
-	var $Object = _core.Object;
-	var create = function create(P, D) {
-	  return $Object.create(P, D);
-	};
-
-	var create$1 = createCommonjsModule(function (module) {
-	module.exports = { "default": create, __esModule: true };
-	});
-
-	unwrapExports(create$1);
-
-	var $JSON = _core.JSON || (_core.JSON = { stringify: JSON.stringify });
-	var stringify = function stringify(it) { // eslint-disable-line no-unused-vars
-	  return $JSON.stringify.apply($JSON, arguments);
-	};
-
-	var stringify$1 = createCommonjsModule(function (module) {
-	module.exports = { "default": stringify, __esModule: true };
-	});
-
-	unwrapExports(stringify$1);
-
-	// most Object methods by ES6 should accept primitives
-
-
-
-	var _objectSap = function (KEY, exec) {
-	  var fn = (_core.Object || {})[KEY] || Object[KEY];
-	  var exp = {};
-	  exp[KEY] = exec(fn);
-	  _export(_export.S + _export.F * _fails(function () { fn(1); }), 'Object', exp);
-	};
-
-	// 19.1.2.14 Object.keys(O)
-
-
-
-	_objectSap('keys', function () {
-	  return function keys(it) {
-	    return _objectKeys(_toObject(it));
-	  };
-	});
-
-	var keys = _core.Object.keys;
-
-	var keys$1 = createCommonjsModule(function (module) {
-	module.exports = { "default": keys, __esModule: true };
-	});
-
-	unwrapExports(keys$1);
-
-	//
-
-	var shallowequal = function shallowEqual(objA, objB, compare, compareContext) {
-	  var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
-
-	  if (ret !== void 0) {
-	    return !!ret;
-	  }
-
-	  if (objA === objB) {
-	    return true;
-	  }
-
-	  if (typeof objA !== "object" || !objA || typeof objB !== "object" || !objB) {
-	    return false;
-	  }
-
-	  var keysA = Object.keys(objA);
-	  var keysB = Object.keys(objB);
-
-	  if (keysA.length !== keysB.length) {
-	    return false;
-	  }
-
-	  var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-
-	  // Test for A's keys different from B.
-	  for (var idx = 0; idx < keysA.length; idx++) {
-	    var key = keysA[idx];
-
-	    if (!bHasOwnProperty(key)) {
-	      return false;
-	    }
-
-	    var valueA = objA[key];
-	    var valueB = objB[key];
-
-	    ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
-
-	    if (ret === false || (ret === void 0 && valueA !== valueB)) {
-	      return false;
-	    }
-	  }
-
-	  return true;
-	};
-
-
-
-	var refcoreerror = /*#__PURE__*/Object.freeze({
-		default: undefined
-	});
-
-	getCjsExportFromNamespace(refcoreerror);
-
-	var RefCoreError_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-
-
-	var _react2 = _interopRequireDefault(React__default);
-
-
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	var RefCoreError = function RefCoreError(props) {
-	  var language = props.language,
-	      show = props.show;
-
-	  var nodata = "没有查询到数据";
-	  switch (language) {
-	    case "zh_CN":
-	      nodata = '没有查询到数据';
-
-	      break;
-	    case "en_US":
-	      nodata = 'No query to data';
-	      break;
-	    case "zh_TW":
-	      nodata = '沒有査詢到數據';
-	      break;
-	    case "fr_FR":
-	      nodata = 'Pas de données';
-	      break;
-	    case "de_DE":
-	      nodata = 'Keine abfrage zu Daten';
-	      break;
-	    case "ja_JP":
-	      nodata = 'データが検索されていません';
-	      break;
-	    default:
-	      nodata = '没有查询到数据';
-	  }
-	  return _react2["default"].createElement(
-	    'div',
-	    { className: show ? 'ref-core-error' : 'ref-core-error-hide' },
-	    nodata
-	  );
-	};
-	exports["default"] = RefCoreError;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(RefCoreError_1);
 
 	var Button_1 = createCommonjsModule(function (module, exports) {
 
@@ -3749,7 +2928,7 @@
 
 	unwrapExports(Button_1);
 
-	var build$3 = createCommonjsModule(function (module, exports) {
+	var build = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -3765,7 +2944,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$3);
+	unwrapExports(build);
 
 
 
@@ -3787,7 +2966,7 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$3);
+	var _beeButton2 = _interopRequireDefault(build);
 
 
 
@@ -4135,6 +3314,402 @@
 
 	unwrapExports(RefCoreTab_1);
 
+	var Icon_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+		type: _propTypes2["default"].string
+
+	};
+	/**
+	 *  badge 默认显示内容1
+	 */
+	var defaultProps = {
+		clsPrefix: 'uf'
+	};
+
+	var Icon = function (_Component) {
+		_inherits(Icon, _Component);
+
+		function Icon(props) {
+			_classCallCheck(this, Icon);
+
+			return _possibleConstructorReturn(this, _Component.call(this, props));
+		}
+
+		Icon.prototype.render = function render() {
+			var _props = this.props,
+			    type = _props.type,
+			    className = _props.className,
+			    clsPrefix = _props.clsPrefix,
+			    others = _objectWithoutProperties(_props, ['type', 'className', 'clsPrefix']);
+
+			var classNames = (0, _classnames2["default"])(clsPrefix, type);
+
+			return _react2["default"].createElement('i', _extends({}, others, { className: (0, _classnames2["default"])(classNames, className) }));
+		};
+
+		return Icon;
+	}(React__default.Component);
+
+	Icon.defaultProps = defaultProps;
+	Icon.propTypes = propTypes$1;
+
+	exports["default"] = Icon;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(Icon_1);
+
+	var build$1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _Icon2 = _interopRequireDefault(Icon_1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _Icon2["default"];
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(build$1);
+
+	var FormControl_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _beeIcon2 = _interopRequireDefault(build$1);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+	    componentClass: _propTypes2["default"].oneOfType([_propTypes2["default"].element, _propTypes2["default"].string]),
+	    type: _propTypes2["default"].string,
+	    size: _propTypes2["default"].oneOf(['sm', 'md', 'lg']),
+	    onSearch: _propTypes2["default"].func,
+	    onChange: _propTypes2["default"].func,
+	    onBlur: _propTypes2["default"].func,
+	    showClose: _propTypes2["default"].bool,
+	    focusSelect: _propTypes2["default"].bool
+	};
+
+	var defaultProps = {
+	    componentClass: 'input',
+	    clsPrefix: 'u-form-control',
+	    type: 'text',
+	    size: 'md'
+	};
+
+	var FormControl = function (_React$Component) {
+	    _inherits(FormControl, _React$Component);
+
+	    function FormControl(props) {
+	        _classCallCheck(this, FormControl);
+
+	        var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
+
+	        _this.handleSearchChange = function (e) {
+	            var onChange = _this.props.onChange;
+
+	            var value = _this.input.value;
+	            _this.setState({
+	                value: value,
+	                showSearch: value == null || value === ""
+	            });
+	            if (onChange) {
+	                onChange(value, e);
+	            }
+	        };
+
+	        _this.handleChange = function (e) {
+	            var onChange = _this.props.onChange;
+
+	            var value = _this.input.value;
+	            _this.setState({
+	                showClose: true
+	            });
+	            if (onChange) {
+	                onChange(value, e);
+	            }
+	        };
+
+	        _this.clearValue = function () {
+	            var onChange = _this.props.onChange;
+
+	            _this.setState({
+	                showSearch: true,
+	                value: "",
+	                showClose: false
+	            });
+	            if (onChange) {
+	                onChange("");
+	            }
+	            _this.input.focus();
+	        };
+
+	        _this.handleKeyDown = function (e) {
+	            var _this$props = _this.props,
+	                onSearch = _this$props.onSearch,
+	                type = _this$props.type,
+	                onKeyDown = _this$props.onKeyDown;
+
+	            if (e.keyCode === 13 && type === "search") {
+	                if (onSearch) {
+	                    onSearch(_this.input.value);
+	                }
+	            }
+	            onKeyDown && onKeyDown(e);
+	        };
+
+	        _this.handleSearch = function (e) {
+	            var onSearch = _this.props.onSearch;
+
+	            if (onSearch) onSearch(_this.input.value);
+	        };
+
+	        _this.handleBlur = function (e) {
+	            var value = _this.state.value;
+	            var onBlur = _this.props.onBlur;
+
+
+	            if (onBlur) {
+	                onBlur(value, e);
+	            }
+	        };
+
+	        _this.handleFocus = function (e) {
+	            var value = _this.state.value;
+	            var onFocus = _this.props.onFocus;
+
+	            if (_this.props.focusSelect) {
+	                _this.input.select();
+	            }
+	            if (onFocus) {
+	                onFocus(value, e);
+	            }
+	        };
+
+	        _this.renderInput = function () {
+	            var _this$props2 = _this.props,
+	                Component = _this$props2.componentClass,
+	                type = _this$props2.type,
+	                className = _this$props2.className,
+	                size = _this$props2.size,
+	                clsPrefix = _this$props2.clsPrefix,
+	                value = _this$props2.value,
+	                onChange = _this$props2.onChange,
+	                onSearch = _this$props2.onSearch,
+	                onBlur = _this$props2.onBlur,
+	                showClose = _this$props2.showClose,
+	                focusSelect = _this$props2.focusSelect,
+	                others = _objectWithoutProperties(_this$props2, ['componentClass', 'type', 'className', 'size', 'clsPrefix', 'value', 'onChange', 'onSearch', 'onBlur', 'showClose', 'focusSelect']);
+	            // input[type="file"] 不应该有类名 .form-control.
+
+
+	            var classes = {};
+	            if (size) {
+	                classes['' + size] = true;
+	            }
+
+	            var classNames = void 0;
+	            if (type !== 'file') {
+	                classNames = (0, _classnames2["default"])(clsPrefix, classes);
+	            }
+
+	            return showClose ? _react2["default"].createElement(
+	                'div',
+	                { className: (0, _classnames2["default"])(clsPrefix + '-close', clsPrefix + '-affix-wrapper', className) },
+	                _react2["default"].createElement(Component, _extends({}, others, {
+	                    type: type,
+	                    ref: function ref(el) {
+	                        return _this.input = el;
+	                    },
+	                    value: value,
+	                    onChange: _this.handleChange,
+	                    onBlur: _this.handleBlur,
+	                    onFocus: _this.handleFocus,
+	                    className: (0, _classnames2["default"])(className, classNames)
+	                })),
+	                _react2["default"].createElement(
+	                    'div',
+	                    { className: clsPrefix + '-suffix' },
+	                    _this.state.showClose ? _react2["default"].createElement(_beeIcon2["default"], { onClick: _this.clearValue, type: 'uf-close-c' }) : ''
+	                )
+	            ) : _react2["default"].createElement(Component, _extends({}, others, {
+	                type: type,
+	                ref: function ref(el) {
+	                    return _this.input = el;
+	                },
+	                value: value,
+	                onChange: _this.handleChange,
+	                onBlur: _this.handleBlur,
+	                onFocus: _this.handleFocus,
+	                className: (0, _classnames2["default"])(className, classNames)
+	            }));
+	        };
+
+	        _this.renderSearch = function () {
+	            var _this$props3 = _this.props,
+	                Component = _this$props3.componentClass,
+	                type = _this$props3.type,
+	                className = _this$props3.className,
+	                size = _this$props3.size,
+	                clsPrefix = _this$props3.clsPrefix,
+	                value = _this$props3.value,
+	                onChange = _this$props3.onChange,
+	                onSearch = _this$props3.onSearch,
+	                onBlur = _this$props3.onBlur,
+	                others = _objectWithoutProperties(_this$props3, ['componentClass', 'type', 'className', 'size', 'clsPrefix', 'value', 'onChange', 'onSearch', 'onBlur']);
+	            // input[type="file"] 不应该有类名 .form-control.
+
+
+	            var classes = {};
+	            if (size) {
+	                classes['' + size] = true;
+	            }
+	            classes[clsPrefix + '-search'] = true;
+
+	            if (type === "search") {
+	                return _react2["default"].createElement(
+	                    'div',
+	                    { className: (0, _classnames2["default"])(clsPrefix + '-search', clsPrefix + '-affix-wrapper', className) },
+	                    _react2["default"].createElement(Component, _extends({}, others, {
+	                        type: type,
+	                        ref: function ref(el) {
+	                            return _this.input = el;
+	                        },
+	                        onChange: _this.handleSearchChange,
+	                        value: value,
+	                        onKeyDown: _this.handleKeyDown,
+	                        onBlur: _this.handleBlur,
+	                        onFocus: _this.handleFocus,
+	                        className: (0, _classnames2["default"])(className, clsPrefix, classes)
+	                    })),
+	                    _react2["default"].createElement(
+	                        'div',
+	                        { className: clsPrefix + '-suffix' },
+	                        _react2["default"].createElement(_beeIcon2["default"], { type: 'uf-search', onClick: _this.handleSearch })
+	                    )
+	                );
+	            }
+	        };
+
+	        _this.state = {
+	            showSearch: !props.value,
+	            value: props.value == null ? "" : props.value,
+	            showClose: false
+	        };
+	        _this.input = {};
+	        return _this;
+	    }
+
+	    FormControl.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProp) {
+	        if (nextProp.value !== this.state.value) {
+	            this.setState({ value: nextProp.value });
+	        }
+	    };
+
+	    FormControl.prototype.render = function render() {
+
+	        if (this.props.type === "search") {
+	            return this.renderSearch();
+	        }
+
+	        return this.renderInput();
+	    };
+
+	    return FormControl;
+	}(_react2["default"].Component);
+
+	FormControl.propTypes = propTypes$1;
+	FormControl.defaultProps = defaultProps;
+
+	exports["default"] = FormControl;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(FormControl_1);
+
+	var build$2 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _FormControl2 = _interopRequireDefault(FormControl_1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _FormControl2["default"];
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(build$2);
+
 	var InputGroupAddon_1 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -4197,7 +3772,7 @@
 
 	unwrapExports(InputGroupAddon_1);
 
-	var build$4 = createCommonjsModule(function (module, exports) {
+	var build$3 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -4213,7 +3788,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$4);
+	unwrapExports(build$3);
 
 	var InputGroupButton_1 = createCommonjsModule(function (module, exports) {
 
@@ -4295,7 +3870,7 @@
 
 
 
-	var _beeInputGroupAddon2 = _interopRequireDefault(build$4);
+	var _beeInputGroupAddon2 = _interopRequireDefault(build$3);
 
 
 
@@ -4356,7 +3931,7 @@
 
 	unwrapExports(InputGroup_1);
 
-	var build$5 = InputGroup_1;
+	var build$4 = InputGroup_1;
 
 
 
@@ -4398,11 +3973,11 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$1);
+	var _beeFormControl2 = _interopRequireDefault(build$2);
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$5);
+	var _beeInputGroup2 = _interopRequireDefault(build$4);
 
 
 
@@ -6747,7 +6322,7 @@
 
 	unwrapExports(CheckboxGroup_1);
 
-	var build$6 = createCommonjsModule(function (module, exports) {
+	var build$5 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -6768,7 +6343,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$6);
+	unwrapExports(build$5);
 
 	var inDOM = createCommonjsModule(function (module, exports) {
 
@@ -11547,7 +11122,7 @@
 
 	unwrapExports(Fade_1);
 
-	var build$7 = createCommonjsModule(function (module, exports) {
+	var build$6 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -11573,10 +11148,10 @@
 	exports.Fade = _Fade3["default"];
 	});
 
-	unwrapExports(build$7);
-	var build_1 = build$7.Fade;
-	var build_2 = build$7.Collapse;
-	var build_3 = build$7.Transition;
+	unwrapExports(build$6);
+	var build_1 = build$6.Fade;
+	var build_2 = build$6.Collapse;
+	var build_3 = build$6.Transition;
 
 	var ModalBody_1 = createCommonjsModule(function (module, exports) {
 
@@ -24290,7 +23865,7 @@
 
 	unwrapExports(Dnd_1);
 
-	var build$8 = createCommonjsModule(function (module, exports) {
+	var build$7 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -24306,7 +23881,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$8);
+	unwrapExports(build$7);
 
 	var classCallCheck = function (instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -25071,7 +24646,7 @@
 
 
 
-	var _beeDnd2 = _interopRequireDefault(build$8);
+	var _beeDnd2 = _interopRequireDefault(build$7);
 
 
 
@@ -25103,7 +24678,8 @@
 	var defaultProps = {
 	  minHeight: 150,
 	  minWidth: 200,
-	  clsPrefix: 'u-modal'
+	  clsPrefix: 'u-modal',
+	  bounds: { top: -20 }
 	};
 
 	var ModalDialog = function (_React$Component) {
@@ -25119,6 +24695,8 @@
 	    }
 
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = {
+	      draging: false,
+	      draged: false,
 	      original: {
 	        x: 0,
 	        y: 0
@@ -25128,9 +24706,14 @@
 	    }, _this.onStart = function () {
 	      var draggable = _this.props.draggable;
 
+	      _this.setState({
+	        draging: true
+	      });
 	      return draggable;
 	    }, _this.onStop = function (e, delta) {
 	      _this.setState({
+	        draged: true,
+	        draging: false,
 	        original: {
 	          x: delta.x,
 	          y: delta.y
@@ -25276,12 +24859,15 @@
 	        resizeClassName = _props.resizeClassName,
 	        minHeight = _props.minHeight,
 	        minWidth = _props.minWidth,
-	        props = _objectWithoutProperties(_props, ['dialogClassName', 'className', 'clsPrefix', 'size', 'style', 'contentStyle', 'children', 'draggable', 'resizable', 'resizeClassName', 'minHeight', 'minWidth']);
+	        bounds = _props.bounds,
+	        props = _objectWithoutProperties(_props, ['dialogClassName', 'className', 'clsPrefix', 'size', 'style', 'contentStyle', 'children', 'draggable', 'resizable', 'resizeClassName', 'minHeight', 'minWidth', 'bounds']);
 
 	    var _state = this.state,
 	        original = _state.original,
 	        maxWidth = _state.maxWidth,
-	        maxHeight = _state.maxHeight;
+	        maxHeight = _state.maxHeight,
+	        draging = _state.draging,
+	        draged = _state.draged;
 
 
 	    var uClassName = _defineProperty({}, '' + clsPrefix, true);
@@ -25295,6 +24881,9 @@
 	    if (draggable) {
 	      dialogClasses[clsPrefix + '-draggable'] = true;
 	    }
+	    if (draging) dialogClasses[clsPrefix + '-draging'] = true;
+
+	    if (draged) dialogClasses[clsPrefix + '-draged'] = true;
 
 	    return _react2["default"].createElement(
 	      'div',
@@ -25315,7 +24904,7 @@
 	          {
 	            handle: '.dnd-handle',
 	            cancel: '.dnd-cancel',
-	            bounds: { top: -20 } //防止拖拽时，Header 被导航栏覆盖
+	            bounds: bounds //防止拖拽时，Header 被导航栏覆盖
 	            , onStart: this.onStart,
 	            onStop: this.onStop,
 	            position: original,
@@ -25789,7 +25378,7 @@
 	  onExited: _propTypes2["default"].func,
 
 	  containerClassName: _propTypes2["default"].string
-	}, _defineProperty(_extends2, 'containerClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'container', _Modal2["default"].propTypes.container), _defineProperty(_extends2, 'size', _propTypes2["default"].oneOf(["sm", "lg", "xlg", ""])), _defineProperty(_extends2, 'width', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'draggable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizeClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'onResizeStart', _propTypes2["default"].func), _defineProperty(_extends2, 'onResize', _propTypes2["default"].func), _defineProperty(_extends2, 'onResizeStop', _propTypes2["default"].func), _defineProperty(_extends2, 'minWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'minHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _extends2));
+	}, _defineProperty(_extends2, 'containerClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'container', _Modal2["default"].propTypes.container), _defineProperty(_extends2, 'size', _propTypes2["default"].oneOf(["sm", "lg", "xlg", ""])), _defineProperty(_extends2, 'width', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'draggable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizable', _propTypes2["default"].bool), _defineProperty(_extends2, 'resizeClassName', _propTypes2["default"].string), _defineProperty(_extends2, 'onResizeStart', _propTypes2["default"].func), _defineProperty(_extends2, 'onResize', _propTypes2["default"].func), _defineProperty(_extends2, 'onResizeStop', _propTypes2["default"].func), _defineProperty(_extends2, 'minWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'minHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxWidth', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'maxHeight', _propTypes2["default"].oneOfType([_propTypes2["default"].number, _propTypes2["default"].string])), _defineProperty(_extends2, 'bounds', _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].Object])), _extends2));
 
 	var defaultProps = _extends({}, _Modal2["default"].defaultProps, {
 	  backdropClosable: true,
@@ -25929,7 +25518,8 @@
 	        containerClassName = _props.containerClassName,
 	        draggable = _props.draggable,
 	        resizeClassName = _props.resizeClassName,
-	        props = _objectWithoutProperties(_props, ['backdrop', 'backdropClosable', 'animation', 'show', 'dialogComponentClass', 'className', 'clsPrefix', 'style', 'size', 'width', 'children', 'onEntering', 'onExited', 'backdropClassName', 'containerClassName', 'draggable', 'resizeClassName']);
+	        bounds = _props.bounds,
+	        props = _objectWithoutProperties(_props, ['backdrop', 'backdropClosable', 'animation', 'show', 'dialogComponentClass', 'className', 'clsPrefix', 'style', 'size', 'width', 'children', 'onEntering', 'onExited', 'backdropClassName', 'containerClassName', 'draggable', 'resizeClassName', 'bounds']);
 
 	    var _splitComponent = (0, lib$1.splitComponent)(props, _Modal2["default"]),
 	        _splitComponent2 = _slicedToArray(_splitComponent, 2),
@@ -25958,7 +25548,7 @@
 	        backdrop: backdrop,
 	        backdropClassName: (0, _classnames2["default"])(backdropClasses, inClassName, backdropClassName),
 	        containerClassName: (0, _classnames2["default"])(containerClasses, containerClassName),
-	        transition: animation ? build$7.Fade : undefined,
+	        transition: animation ? build$6.Fade : undefined,
 	        dialogTransitionTimeout: Modal.TRANSITION_DURATION,
 	        backdropTransitionTimeout: Modal.BACKDROP_TRANSITION_DURATION
 	      }),
@@ -25970,6 +25560,7 @@
 	          onClick: backdrop === true && !!backdropClosable ? this.handleDialogClick : null,
 	          size: size,
 	          draggable: draggable,
+	          bounds: bounds,
 	          resizeClassName: resizeClassName
 	        }),
 	        children
@@ -26039,11 +25630,11 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$3);
+	var _beeButton2 = _interopRequireDefault(build);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -26221,7 +25812,7 @@
 
 	unwrapExports(confirm_1);
 
-	var build$9 = createCommonjsModule(function (module, exports) {
+	var build$8 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -26243,7 +25834,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -26303,7 +25894,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$9);
+	unwrapExports(build$8);
 
 	var PaginationButton_1 = createCommonjsModule(function (module, exports) {
 
@@ -26592,7 +26183,7 @@
 
 	unwrapExports(Button_1$1);
 
-	var build$a = createCommonjsModule(function (module, exports) {
+	var build$9 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -26608,7 +26199,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$a);
+	unwrapExports(build$9);
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -27446,7 +27037,7 @@
 
 	unwrapExports(Animate_1);
 
-	var build$b = createCommonjsModule(function (module, exports) {
+	var build$a = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -27462,7 +27053,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$b);
+	unwrapExports(build$a);
 
 	var _extends$4 = createCommonjsModule(function (module, exports) {
 
@@ -35602,7 +35193,7 @@
 
 	unwrapExports(Animate_1$1);
 
-	var build$c = createCommonjsModule(function (module, exports) {
+	var build$b = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -35618,7 +35209,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$c);
+	unwrapExports(build$b);
 
 	var LazyRenderBox_1 = createCommonjsModule(function (module, exports) {
 
@@ -35806,7 +35397,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$c);
+	var _beeAnimate2 = _interopRequireDefault(build$b);
 
 
 
@@ -37302,7 +36893,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$b);
+	var _beeAnimate2 = _interopRequireDefault(build$a);
 
 
 
@@ -38997,7 +38588,7 @@
 
 	unwrapExports(Select_1);
 
-	var build$d = createCommonjsModule(function (module, exports) {
+	var build$c = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -39025,7 +38616,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$d);
+	unwrapExports(build$c);
 
 	var Icon_1$1 = createCommonjsModule(function (module, exports) {
 
@@ -39103,7 +38694,7 @@
 
 	unwrapExports(Icon_1$1);
 
-	var build$e = createCommonjsModule(function (module, exports) {
+	var build$d = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -39119,7 +38710,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$e);
+	unwrapExports(build$d);
 
 	var i18n = {
 	    'lang': 'zh-cn',
@@ -39206,15 +38797,15 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$a);
+	var _beeButton2 = _interopRequireDefault(build$9);
 
 
 
-	var _beeSelect2 = _interopRequireDefault(build$d);
+	var _beeSelect2 = _interopRequireDefault(build$c);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$e);
+	var _beeIcon2 = _interopRequireDefault(build$d);
 
 
 
@@ -39751,7 +39342,7 @@
 
 	unwrapExports(Pagination_1);
 
-	var build$f = createCommonjsModule(function (module, exports) {
+	var build$e = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -39767,7 +39358,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$f);
+	unwrapExports(build$e);
 
 	/** Detect free variable `global` from Node.js. */
 	var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
@@ -49150,7 +48741,7 @@
 
 	unwrapExports(Button_1$2);
 
-	var build$g = createCommonjsModule(function (module, exports) {
+	var build$f = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -49166,7 +48757,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$g);
+	unwrapExports(build$f);
 
 	var OkButton_1 = createCommonjsModule(function (module, exports) {
 
@@ -49181,7 +48772,7 @@
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$g);
+	var _beeButton2 = _interopRequireDefault(build$f);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -50570,7 +50161,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
@@ -50836,7 +50427,7 @@
 
 	unwrapExports(FormControl_1$1);
 
-	var build$h = createCommonjsModule(function (module, exports) {
+	var build$g = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -50852,7 +50443,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$h);
+	unwrapExports(build$g);
 
 	var Header_1 = createCommonjsModule(function (module, exports) {
 
@@ -52001,7 +51592,7 @@
 
 
 
-	var _beeInputGroupAddon2 = _interopRequireDefault(build$4);
+	var _beeInputGroupAddon2 = _interopRequireDefault(build$3);
 
 
 
@@ -52062,7 +51653,7 @@
 
 	unwrapExports(InputGroup_1$1);
 
-	var build$i = InputGroup_1$1;
+	var build$h = InputGroup_1$1;
 
 	var zh_CN = createCommonjsModule(function (module, exports) {
 
@@ -52132,7 +51723,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$h);
+	var _beeFormControl2 = _interopRequireDefault(build$g);
 
 
 
@@ -52144,7 +51735,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
@@ -52152,7 +51743,7 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$i);
+	var _beeInputGroup2 = _interopRequireDefault(build$h);
 
 
 
@@ -52756,15 +52347,15 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$h);
+	var _beeFormControl2 = _interopRequireDefault(build$g);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$i);
+	var _beeInputGroup2 = _interopRequireDefault(build$h);
 
 
 
@@ -54180,7 +53771,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$h);
+	var _beeFormControl2 = _interopRequireDefault(build$g);
 
 
 
@@ -54188,11 +53779,11 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$i);
+	var _beeInputGroup2 = _interopRequireDefault(build$h);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
@@ -54491,7 +54082,7 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$h);
+	var _beeFormControl2 = _interopRequireDefault(build$g);
 
 
 
@@ -54503,11 +54094,11 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$i);
+	var _beeInputGroup2 = _interopRequireDefault(build$h);
 
 
 
@@ -54791,15 +54382,15 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$h);
+	var _beeFormControl2 = _interopRequireDefault(build$g);
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$i);
+	var _beeInputGroup2 = _interopRequireDefault(build$h);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
@@ -55030,7 +54621,7 @@
 
 	unwrapExports(YearPicker_1);
 
-	var build$j = createCommonjsModule(function (module, exports) {
+	var build$i = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -55071,7 +54662,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$j);
+	unwrapExports(build$i);
 
 	var Icon_1$2 = createCommonjsModule(function (module, exports) {
 
@@ -55149,7 +54740,7 @@
 
 	unwrapExports(Icon_1$2);
 
-	var build$k = createCommonjsModule(function (module, exports) {
+	var build$j = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -55165,7 +54756,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$k);
+	unwrapExports(build$j);
 
 	var FormControl_1$2 = createCommonjsModule(function (module, exports) {
 
@@ -55185,7 +54776,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$k);
+	var _beeIcon2 = _interopRequireDefault(build$j);
 
 
 
@@ -55451,7 +55042,7 @@
 
 	unwrapExports(FormControl_1$2);
 
-	var build$l = createCommonjsModule(function (module, exports) {
+	var build$k = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -55467,7 +55058,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$l);
+	unwrapExports(build$k);
 
 	var InputGroupButton_1$2 = createCommonjsModule(function (module, exports) {
 
@@ -55549,7 +55140,7 @@
 
 
 
-	var _beeInputGroupAddon2 = _interopRequireDefault(build$4);
+	var _beeInputGroupAddon2 = _interopRequireDefault(build$3);
 
 
 
@@ -55610,7 +55201,7 @@
 
 	unwrapExports(InputGroup_1$2);
 
-	var build$m = InputGroup_1$2;
+	var build$l = InputGroup_1$2;
 
 	var FormControl_1$3 = createCommonjsModule(function (module, exports) {
 
@@ -55630,7 +55221,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 
 
@@ -55896,7 +55487,7 @@
 
 	unwrapExports(FormControl_1$3);
 
-	var build$n = createCommonjsModule(function (module, exports) {
+	var build$m = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -55912,7 +55503,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$n);
+	unwrapExports(build$m);
 
 	var InputNumber_1 = createCommonjsModule(function (module, exports) {
 
@@ -55932,11 +55523,11 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$m);
+	var _beeInputGroup2 = _interopRequireDefault(build$l);
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$n);
+	var _beeFormControl2 = _interopRequireDefault(build$m);
 
 
 
@@ -56459,7 +56050,7 @@
 
 	unwrapExports(InputNumber_1);
 
-	var build$o = createCommonjsModule(function (module, exports) {
+	var build$n = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -56475,7 +56066,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$o);
+	unwrapExports(build$n);
 
 	var placement = createCommonjsModule(function (module, exports) {
 
@@ -56753,7 +56344,7 @@
 
 	unwrapExports(Dropdown_1);
 
-	var build$p = createCommonjsModule(function (module, exports) {
+	var build$o = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -56769,7 +56360,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$p);
+	unwrapExports(build$o);
 
 	var util$5 = createCommonjsModule(function (module, exports) {
 
@@ -59710,7 +59301,7 @@
 
 	unwrapExports(VerticalMenu);
 
-	var build$q = createCommonjsModule(function (module, exports) {
+	var build$p = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -59726,7 +59317,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$q);
+	unwrapExports(build$p);
 
 	var Button_1$3 = createCommonjsModule(function (module, exports) {
 
@@ -59902,7 +59493,7 @@
 
 	unwrapExports(Button_1$3);
 
-	var build$r = createCommonjsModule(function (module, exports) {
+	var build$q = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -59918,7 +59509,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$r);
+	unwrapExports(build$q);
 
 	var i18n$1 = {
 	    'lang': 'zh-cn',
@@ -60030,19 +59621,19 @@
 
 
 
-	var _beeDropdown2 = _interopRequireDefault(build$p);
+	var _beeDropdown2 = _interopRequireDefault(build$o);
 
 
 
-	var _beeMenus2 = _interopRequireDefault(build$q);
+	var _beeMenus2 = _interopRequireDefault(build$p);
 
 
 
-	var _beeButton2 = _interopRequireDefault(build$r);
+	var _beeButton2 = _interopRequireDefault(build$q);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$k);
+	var _beeIcon2 = _interopRequireDefault(build$j);
 
 
 
@@ -60353,7 +59944,7 @@
 
 
 
-	var _beeDatepicker2 = _interopRequireDefault(build$j);
+	var _beeDatepicker2 = _interopRequireDefault(build$i);
 
 
 
@@ -60361,15 +59952,15 @@
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$l);
+	var _beeFormControl2 = _interopRequireDefault(build$k);
 
 
 
-	var _beeSelect2 = _interopRequireDefault(build$d);
+	var _beeSelect2 = _interopRequireDefault(build$c);
 
 
 
-	var _beeInputNumber2 = _interopRequireDefault(build$o);
+	var _beeInputNumber2 = _interopRequireDefault(build$n);
 
 
 
@@ -61715,7 +61306,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$k);
+	var _beeIcon2 = _interopRequireDefault(build$j);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -62368,7 +61959,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -62547,7 +62138,7 @@
 
 	unwrapExports(Loading_1);
 
-	var build$s = createCommonjsModule(function (module, exports) {
+	var build$r = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -62563,7 +62154,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$s);
+	unwrapExports(build$r);
 
 	var Table_1 = createCommonjsModule(function (module, exports) {
 
@@ -62613,11 +62204,11 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$s);
+	var _beeLoading2 = _interopRequireDefault(build$r);
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build$k);
+	var _beeIcon2 = _interopRequireDefault(build$j);
 
 
 
@@ -64096,7 +63687,7 @@
 	Table_1.Column = Column_1;
 	Table_1.ColumnGroup = ColumnGroup_1;
 
-	var build$t = Table_1;
+	var build$s = Table_1;
 
 	var util$6 = createCommonjsModule(function (module, exports) {
 
@@ -70441,7 +70032,7 @@
 
 	unwrapExports(FormItem_1);
 
-	var build$u = createCommonjsModule(function (module, exports) {
+	var build$t = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -70462,7 +70053,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$u);
+	unwrapExports(build$t);
 
 	var Label_1 = createCommonjsModule(function (module, exports) {
 
@@ -70542,7 +70133,7 @@
 
 	unwrapExports(Label_1);
 
-	var build$v = createCommonjsModule(function (module, exports) {
+	var build$u = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -70558,7 +70149,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$v);
+	unwrapExports(build$u);
 
 	var Col_1 = createCommonjsModule(function (module, exports) {
 
@@ -70901,7 +70492,7 @@
 
 	unwrapExports(Layout);
 
-	var build$w = createCommonjsModule(function (module, exports) {
+	var build$v = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -70927,10 +70518,10 @@
 	exports.Con = _Layout2["default"];
 	});
 
-	unwrapExports(build$w);
-	var build_1$1 = build$w.Con;
-	var build_2$1 = build$w.Row;
-	var build_3$1 = build$w.Col;
+	unwrapExports(build$v);
+	var build_1$1 = build$v.Con;
+	var build_2$1 = build$v.Row;
+	var build_3$1 = build$v.Col;
 
 	var classnames$1 = createCommonjsModule(function (module) {
 	/*!
@@ -73231,7 +72822,7 @@
 
 	unwrapExports(Fade_1$1);
 
-	var build$x = createCommonjsModule(function (module, exports) {
+	var build$w = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -73257,10 +72848,10 @@
 	exports.Fade = _Fade3["default"];
 	});
 
-	unwrapExports(build$x);
-	var build_1$2 = build$x.Fade;
-	var build_2$2 = build$x.Collapse;
-	var build_3$2 = build$x.Transition;
+	unwrapExports(build$w);
+	var build_1$2 = build$w.Fade;
+	var build_2$2 = build$w.Collapse;
+	var build_3$2 = build$w.Transition;
 
 	var ChildrenUtils$2 = createCommonjsModule(function (module, exports) {
 
@@ -75448,7 +75039,7 @@
 
 	unwrapExports(Animate_1$2);
 
-	var build$y = createCommonjsModule(function (module, exports) {
+	var build$x = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -75464,7 +75055,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$y);
+	unwrapExports(build$x);
 
 	var off_1$1 = createCommonjsModule(function (module, exports) {
 
@@ -75545,7 +75136,7 @@
 
 
 
-	var _beeIcon2 = _interopRequireDefault(build);
+	var _beeIcon2 = _interopRequireDefault(build$1);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -75695,7 +75286,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$y);
+	var _beeAnimate2 = _interopRequireDefault(build$x);
 
 
 
@@ -75916,7 +75507,7 @@
 
 	unwrapExports(Notification_1);
 
-	var build$z = createCommonjsModule(function (module, exports) {
+	var build$y = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -75932,7 +75523,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$z);
+	unwrapExports(build$y);
 
 	/**
 	 * Copyright (c) 2014-present, Facebook, Inc.
@@ -76009,7 +75600,7 @@
 
 
 
-	var _beeNotification2 = _interopRequireDefault(build$z);
+	var _beeNotification2 = _interopRequireDefault(build$y);
 
 
 
@@ -76268,7 +75859,7 @@
 
 	unwrapExports(Message);
 
-	var build$A = createCommonjsModule(function (module, exports) {
+	var build$z = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -76284,7 +75875,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$A);
+	unwrapExports(build$z);
 
 	var toggleSelection = function () {
 	  var selection = document.getSelection();
@@ -76436,7 +76027,7 @@
 
 
 
-	var _beeMessage2 = _interopRequireDefault(build$A);
+	var _beeMessage2 = _interopRequireDefault(build$z);
 
 
 
@@ -76603,7 +76194,7 @@
 
 	  Panel.prototype.renderCollapsibleBody = function renderCollapsibleBody(id, expanded, role, children, clsPrefix, copyable, animationHooks) {
 	    return _react2["default"].createElement(
-	      build$x.Collapse,
+	      build$w.Collapse,
 	      _extends({ 'in': expanded }, animationHooks),
 	      _react2["default"].createElement(
 	        'div',
@@ -76873,7 +76464,7 @@
 
 	unwrapExports(PanelGroup_1);
 
-	var build$B = createCommonjsModule(function (module, exports) {
+	var build$A = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -76894,9 +76485,9 @@
 	exports.PanelGroup = _PanelGroup3["default"];
 	});
 
-	unwrapExports(build$B);
-	var build_1$3 = build$B.PanelGroup;
-	var build_2$3 = build$B.Panel;
+	unwrapExports(build$A);
+	var build_1$3 = build$A.PanelGroup;
+	var build_2$3 = build$A.Panel;
 
 	var AdvancedContainer_1 = createCommonjsModule(function (module, exports) {
 
@@ -77304,7 +76895,7 @@
 	                this._HeadContainer
 	            ),
 	            _react2["default"].createElement(
-	                build$B.Panel,
+	                build$A.Panel,
 	                {
 	                    collapsible: true,
 	                    expanded: this.state.expanded,
@@ -77335,7 +76926,7 @@
 
 	unwrapExports(SearchPanel_1);
 
-	var build$C = createCommonjsModule(function (module, exports) {
+	var build$B = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -77362,7 +76953,7 @@
 	module.exports = exports['default'];
 	});
 
-	unwrapExports(build$C);
+	unwrapExports(build$B);
 
 	var RefSearchPanel_1 = createCommonjsModule(function (module, exports) {
 
@@ -77393,17 +76984,17 @@
 
 
 
-	var _beeForm2 = _interopRequireDefault(build$u);
+	var _beeForm2 = _interopRequireDefault(build$t);
 
 
 
-	var _beeLabel2 = _interopRequireDefault(build$v);
+	var _beeLabel2 = _interopRequireDefault(build$u);
 
 
 
 
 
-	var _beeSearchPanel2 = _interopRequireDefault(build$C);
+	var _beeSearchPanel2 = _interopRequireDefault(build$B);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -77451,7 +77042,7 @@
 	  var getFieldProps = form.getFieldProps;
 
 	  return _react2["default"].createElement(
-	    build$w.Col,
+	    build$v.Col,
 	    { md: 4, xs: 12, sm: 12 },
 	    _react2["default"].createElement(
 	      'div',
@@ -77536,7 +77127,7 @@
 	          _beeForm2["default"],
 	          null,
 	          _react2["default"].createElement(
-	            build$w.Row,
+	            build$v.Row,
 	            null,
 	            _react2["default"].Children.map(this.props.children, function (item) {
 	              return _react2["default"].cloneElement(item, {
@@ -77639,19 +77230,19 @@
 
 
 
-	var _beeCheckbox2 = _interopRequireDefault(build$6);
+	var _beeCheckbox2 = _interopRequireDefault(build$5);
 
 
 
-	var _beeModal2 = _interopRequireDefault(build$9);
+	var _beeModal2 = _interopRequireDefault(build$8);
 
 
 
-	var _beePagination2 = _interopRequireDefault(build$f);
+	var _beePagination2 = _interopRequireDefault(build$e);
 
 
 
-	var _beeTable2 = _interopRequireDefault(build$t);
+	var _beeTable2 = _interopRequireDefault(build$s);
 
 
 
@@ -77659,7 +77250,7 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$s);
+	var _beeLoading2 = _interopRequireDefault(build$r);
 
 
 
@@ -85221,11 +84812,11 @@
 
 
 
-	var _beeInputGroup2 = _interopRequireDefault(build$5);
+	var _beeInputGroup2 = _interopRequireDefault(build$4);
 
 
 
-	var _beeFormControl2 = _interopRequireDefault(build$1);
+	var _beeFormControl2 = _interopRequireDefault(build$2);
 
 
 
@@ -86220,6 +85811,431 @@
 	  });
 	});
 
+	var RadioGroup_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+	  name: _propTypes2["default"].string,
+	  /**
+	   * 选中的值
+	   */
+	  selectedValue: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].number, _propTypes2["default"].bool]),
+	  /**
+	  * 暴露给用户，且与子Radio通信的方法
+	  */
+	  onChange: _propTypes2["default"].func,
+	  /**
+	    * radio 大小
+	    */
+	  size: _propTypes2["default"].oneOf(['lg', 'sm']),
+
+	  children: _propTypes2["default"].node.isRequired,
+
+	  Component: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].func, _propTypes2["default"].object])
+	};
+
+	var defaultProps = {
+	  Component: 'div',
+	  clsPrefix: 'u-radio-group'
+	};
+
+	/**
+	 * 与子Radio通信
+	 */
+	var childContextTypes = {
+	  radioGroup: _propTypes2["default"].object
+	};
+
+	var RadioGroup = function (_React$Component) {
+	  _inherits(RadioGroup, _React$Component);
+
+	  function RadioGroup(props, context) {
+	    _classCallCheck(this, RadioGroup);
+
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
+
+	    _this.getValues = function () {
+	      var array = [];
+	      var children = _this.props.children;
+	      if (!children) {
+	        console.error('RadioGroup must have child nodes');
+	        return array;
+	      }
+	      if (children.length > 1) {
+	        children.map(function (item) {
+	          array.push(item.props.value);
+	        });
+	      } else {
+	        array.push(children.props.value);
+	      }
+	      return array;
+	    };
+
+	    _this.state = {
+	      focusvalue: ''
+	    };
+	    return _this;
+	  }
+
+	  RadioGroup.prototype.componentDidMount = function componentDidMount() {
+	    var array = this.getValues();
+	    if (array.indexOf(this.props.selectedValue) == -1) {
+	      this.setState({
+	        focusvalue: array[0]
+	      });
+	    }
+	  };
+
+	  RadioGroup.prototype.componentWillReceiveProps = function componentWillReceiveProps() {
+	    var array = this.getValues();
+	    if (array.indexOf(this.props.selectedValue) == -1) {
+	      this.setState({
+	        focusvalue: array[0]
+	      });
+	    } else {
+	      this.setState({
+	        focusvalue: ''
+	      });
+	    }
+	  };
+
+	  /**
+	    * 一旦外层change方法触发本身props发生改变，则调用getChildContext更新与子Radio的通信信息（radioGroup）
+	    */
+
+	  RadioGroup.prototype.getChildContext = function getChildContext() {
+	    var _props = this.props,
+	        name = _props.name,
+	        selectedValue = _props.selectedValue,
+	        onChange = _props.onChange,
+	        size = _props.size;
+
+	    return {
+	      radioGroup: {
+	        name: name, selectedValue: selectedValue, onChange: onChange, size: size, focusvalue: this.state.focusvalue
+	      }
+	    };
+	  };
+
+	  RadioGroup.prototype.render = function render() {
+	    var _props2 = this.props,
+	        Component = _props2.Component,
+	        name = _props2.name,
+	        selectedValue = _props2.selectedValue,
+	        onChange = _props2.onChange,
+	        children = _props2.children,
+	        size = _props2.size,
+	        clsPrefix = _props2.clsPrefix,
+	        className = _props2.className,
+	        focusvalue = _props2.focusvalue,
+	        others = _objectWithoutProperties(_props2, ['Component', 'name', 'selectedValue', 'onChange', 'children', 'size', 'clsPrefix', 'className', 'focusvalue']);
+
+	    return _react2["default"].createElement(
+	      Component,
+	      _extends({ className: (0, _classnames2["default"])(clsPrefix, className) }, others, { focusvalue: this.state.focusvalue }),
+	      children
+	    );
+	  };
+
+	  return RadioGroup;
+	}(_react2["default"].Component);
+
+	RadioGroup.childContextTypes = childContextTypes;
+	RadioGroup.propTypes = propTypes$1;
+	RadioGroup.defaultProps = defaultProps;
+	exports["default"] = RadioGroup;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RadioGroup_1);
+
+	var Radio_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+	  /**
+	    * radio 颜色 样式
+	    */
+	  colors: _propTypes2["default"].oneOf(['', 'dark', 'success', 'info', 'warning', 'danger', 'primary']),
+	  /**
+	    * radio 大小
+	    */
+	  size: _propTypes2["default"].oneOf(['lg', 'sm']),
+	  /**
+	    * radio 是否可用
+	    */
+	  disabled: _propTypes2["default"].bool,
+	  /**
+	    * radio 样式 是否使用红色填充
+	    */
+	  inverse: _propTypes2["default"].bool
+	};
+
+	var defaultProps = {
+	  inverse: false,
+	  disabled: false,
+	  clsPrefix: 'u-radio'
+	};
+
+	/**
+	 * 建立与RadioGroup通信
+	 */
+	var contextTypes = {
+	  radioGroup: _propTypes2["default"].object
+	};
+
+	var Radio = function (_React$Component) {
+	  _inherits(Radio, _React$Component);
+
+	  function Radio(props, context) {
+	    _classCallCheck(this, Radio);
+
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
+
+	    _this.handleClick = _this.handleClick.bind(_this);
+
+	    return _this;
+	  }
+
+	  Radio.prototype.handleClick = function handleClick(event) {
+	    var onChange = this.context.radioGroup.onChange;
+
+	    if (this.props.disabled) {
+	      return;
+	    }
+	    if (onChange) {
+	      onChange(this.props.value);
+	    }
+	  };
+
+	  Radio.prototype.render = function render() {
+	    var _context$radioGroup = this.context.radioGroup,
+	        name = _context$radioGroup.name,
+	        selectedValue = _context$radioGroup.selectedValue,
+	        size = _context$radioGroup.size,
+	        focusvalue = _context$radioGroup.focusvalue;
+	    /**
+	     * 自身的属性
+	     */
+
+	    var _props = this.props,
+	        inverse = _props.inverse,
+	        disabled = _props.disabled,
+	        colors = _props.colors,
+	        className = _props.className,
+	        children = _props.children,
+	        clsPrefix = _props.clsPrefix,
+	        style = _props.style,
+	        others = _objectWithoutProperties(_props, ['inverse', 'disabled', 'colors', 'className', 'children', 'clsPrefix', 'style']);
+
+	    var optional = {};
+	    /**
+	     * 若父级selectedValue与本身的value值相同，则改radio被选中
+	     */
+	    if (selectedValue !== undefined) {
+	      optional.checked = this.props.value === selectedValue;
+	    }
+
+	    var classes = {
+	      'is-checked': optional.checked,
+	      disabled: disabled
+	    };
+
+	    if (colors) {
+	      classes[clsPrefix + '-' + colors] = true;
+	    }
+	    if (size) {
+	      classes[clsPrefix + '-' + size] = true;
+	    }
+	    if (inverse) {
+	      classes[clsPrefix + '-inverse'] = true;
+	    }
+	    if (children == null) {
+	      classes[clsPrefix + '-noContent'] = true;
+	    }
+	    var classNames = (0, _classnames2["default"])(clsPrefix, classes);
+	    var tabIndex = optional.checked ? 0 : -1;
+	    if (focusvalue && focusvalue == this.props.value) {
+	      tabIndex = 0;
+	    }
+	    var input = _react2["default"].createElement('input', _extends({}, others, {
+	      type: 'radio',
+	      name: name,
+	      disabled: this.props.disabled,
+	      tabIndex: tabIndex
+	    }));
+	    return _react2["default"].createElement(
+	      'label',
+	      { style: style, onClick: this.handleClick, className: (0, _classnames2["default"])(className, classNames) },
+	      input,
+	      _react2["default"].createElement(
+	        'label',
+	        { className: clsPrefix + '-label' },
+	        children
+	      )
+	    );
+	  };
+
+	  return Radio;
+	}(_react2["default"].Component);
+
+	Radio.contextTypes = contextTypes;
+	Radio.propTypes = propTypes$1;
+	Radio.defaultProps = defaultProps;
+
+	exports["default"] = Radio;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(Radio_1);
+
+	var RadioButton_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _Radio2 = _interopRequireDefault(Radio_1);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+
+	var propTypes$1 = {
+	  value: _propTypes2["default"].oneOfType([_propTypes2["default"].string, _propTypes2["default"].number]),
+	  style: _propTypes2["default"].object
+	};
+	var defaultProps = {
+	  clsPrefix: "u-radio-button"
+	};
+
+	var RadioButton = function (_Component) {
+	  _inherits(RadioButton, _Component);
+
+	  function RadioButton() {
+	    _classCallCheck(this, RadioButton);
+
+	    return _possibleConstructorReturn(this, _Component.apply(this, arguments));
+	  }
+
+	  RadioButton.prototype.render = function render() {
+	    return _react2["default"].createElement(_Radio2["default"], this.props);
+	  };
+
+	  return RadioButton;
+	}(React__default.Component);
+
+	RadioButton.propTypes = propTypes$1;
+	RadioButton.defaultProps = defaultProps;
+	exports["default"] = RadioButton;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(RadioButton_1);
+
+	var build$C = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+
+
+	var _RadioGroup2 = _interopRequireDefault(RadioGroup_1);
+
+
+
+	var _Radio2 = _interopRequireDefault(Radio_1);
+
+
+
+	var _RadioButton2 = _interopRequireDefault(RadioButton_1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	_Radio2["default"].RadioGroup = _RadioGroup2["default"];
+	_Radio2["default"].RadioButton = _RadioButton2["default"];
+
+	exports["default"] = _Radio2["default"];
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(build$C);
+
 	function getTableInfo() {
 	  var param = this.param;
 	  param.page = {
@@ -86398,27 +86414,23 @@
 	};
 	var dataType = "grid";
 	var Table = (_dec = miniStore.connect(function (state) {
-	  return {
-	    form: state.form
-	  };
+	  return state;
 	}), _dec(_class = (_temp =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(Table, _Component);
 
-	  function Table(props) {
+	  function Table(_props) {
 	    var _this2;
 
-	    _this2 = _Component.call(this, props) || this;
+	    _this2 = _Component.call(this, _props) || this;
 
 	    _this2.onSave = function (data) {
-	      var store = _this2.props.store;
-	      var onOk = store.getState().onOk;
-
-	      _this2.setState({
+	      var props = _this2.props;
+	      var onOk = props.onOk;
+	      props.store.setState({
 	        matchData: data
 	      }); // console.log("save", data);
-
 
 	      onOk && onOk(data);
 	    };
@@ -86449,7 +86461,7 @@
 	                  _this2.onAfterAjax(bodyData);
 	                }
 
-	                var multiple = _this2.props.store.getState().meta.refEntity.bMultiSel;
+	                var multiple = _this2.props.meta.refEntity.bMultiSel;
 
 	                _this2.launchTableHeader(columnsData, multiple);
 
@@ -86575,13 +86587,11 @@
 	      _this2.loadTableData(param);
 	    };
 
-	    var _store = _this2.props.store;
-
-	    var _store$getState$meta = _store.getState().meta,
-	        viewApplication = _store$getState$meta.viewApplication,
-	        refEntity = _store$getState$meta.refEntity;
-
-	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, _store.getState());
+	    debugger;
+	    var _props$meta = _props.meta,
+	        viewApplication = _props$meta.viewApplication,
+	        refEntity = _props$meta.refEntity;
+	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, _props);
 	    _this2.view = viewApplication.view; // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
 
 	    _this2.columnsData = []; //表头数据
@@ -86603,8 +86613,7 @@
 	    _this2.value = ''; //默认值，初始化input框值后续加上
 
 	    _this2.state = {
-	      showLoading: true,
-	      matchData: _store.getState().matchData
+	      showLoading: true
 	    };
 	    _this2.getTableInfo = getTableInfo.bind(assertThisInitialized(_this2));
 	    _this2.launchTableData = launchTableData.bind(assertThisInitialized(_this2));
@@ -86616,31 +86625,24 @@
 	  var _proto = Table.prototype;
 
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	    var store = nextProps.store,
-	        beforeGetData = nextProps.beforeGetData;
-	    this.dataUrl = store.getState().dataUrl;
-	    this.setState({
-	      matchData: store.getState().matchData
-	    });
+	    this.dataUrl = nextProps.dataUrl;
 	  };
 
 	  _proto.render = function render() {
-	    var store = this.props.store;
-	    var _store$getState$meta2 = store.getState().meta,
-	        viewApplication = _store$getState$meta2.viewApplication,
-	        refEntity = _store$getState$meta2.refEntity;
-	    var _this$props$form = this.props.form,
-	        getFieldError = _this$props$form.getFieldError,
-	        getFieldProps = _this$props$form.getFieldProps;
+	    var props = this.props;
+	    var _props$meta2 = props.meta,
+	        viewApplication = _props$meta2.viewApplication,
+	        refEntity = _props$meta2.refEntity;
+	    var _props$form = props.form,
+	        getFieldError = _props$form.getFieldError,
+	        getFieldProps = _props$form.getFieldProps;
 	    var cBillName = viewApplication.cBillName,
 	        view = viewApplication.view; // let { extendField = "{}" } = refEntity;
 	    // extendField = JSON.parse(extendField);
 
 	    var valueField = this.valueField,
 	        displayField = this.displayField;
-	    var _this$state = this.state,
-	        showLoading = _this$state.showLoading,
-	        matchData = _this$state.matchData;
+	    var showLoading = this.state.showLoading;
 	    var columnsData = this.columnsData,
 	        tableData = this.tableData,
 	        page = this.page,
@@ -86649,7 +86651,7 @@
 	        dataNumSelect = this.dataNumSelect,
 	        handlePagination = this.handlePagination,
 	        searchFilterInfo = this.searchFilterInfo;
-	    var props = {
+	    var propsParam = {
 	      // placeholder: extendField.placeholder,
 	      style: {
 	        width: 200
@@ -86669,25 +86671,17 @@
 	      dataNumSelect: dataNumSelect,
 	      handlePagination: handlePagination,
 	      miniSearchFunc: searchFilterInfo,
-	      matchData: matchData,
+	      matchData: props.matchData,
 	      emptyBut: true //清空按钮是否展示
 
 	    };
 	    return React__default.createElement("div", {
 	      className: "ref-container"
-	    }, React__default.createElement(lib_6$3, _extends_1({}, props, {
+	    }, React__default.createElement(lib_6$3, _extends_1({}, propsParam, {
 	      onSave: this.onSave,
 	      onCancel: this.onCancel,
 	      canClickGoOn: this.getData
-	    }, getFieldProps(valueField, {
-	      initialValue: "{" + displayField + ":\"\"," + valueField + ":\"\"}",
-	      rules: [{
-	        message: "请选择参照",
-	        pattern: /[^{refname:"",refpk:""}]/
-	      }]
-	    }))), React__default.createElement("span", {
-	      className: "error"
-	    }, getFieldError(valueField)));
+	    })));
 	  };
 
 	  return Table;
@@ -87679,14 +87673,24 @@
 	    var queryInfo = 'a[pos="' + selectKeyDomPos + '"]';
 	    var parentEle = (0, util$8.closest)(targetDom, ".u-tree");
 	    var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
-	    focusEle && focusEle.focus();
+	    if (document.activeElement !== focusEle) {
+	      focusEle && focusEle.focus();
+	    }
 	  };
+
+	  /**
+	   * 此方法为了解决树快捷键，当有的元素隐藏，按tab键也要显示的问题
+	   * @param {*} e 
+	   */
+
 
 	  Tree.prototype.onUlFocus = function onUlFocus(e) {
 	    var _this4 = this;
 
 	    var targetDom = e.target;
-	    if (this.tree == targetDom && !this.isIn) {
+
+	    // 如果当前tree节点不包括上一个焦点节点会触发此方法
+	    if (this.tree == targetDom && !this.isIn && !this.tree.contains(e.relatedTarget)) {
 	      var onFocus = this.props.onFocus;
 	      var _state$selectedKeys = this.state.selectedKeys,
 	          selectedKeys = _state$selectedKeys === undefined ? [] : _state$selectedKeys;
@@ -87713,10 +87717,12 @@
 
 	  Tree.prototype.onUlMouseEnter = function onUlMouseEnter(e) {
 	    this.isIn = true;
+	    console.log('onUlMouseEnter----isIn-----', this.isIn);
 	  };
 
 	  Tree.prototype.onUlMouseLeave = function onUlMouseLeave(e) {
 	    this.isIn = false;
+	    console.log('onUlMouseLeave----isIn-----', this.isIn);
 	  };
 
 	  Tree.prototype.getFilterExpandedKeys = function getFilterExpandedKeys(props, expandKeyProp, expandAll) {
@@ -87933,9 +87939,12 @@
 	      role: 'tree-node'
 	    };
 
-	    domProps.onFocus = this.onUlFocus;
-	    domProps.onMouseEnter = this.onUlMouseEnter;
-	    domProps.onMouseLeave = this.onUlMouseLeave;
+	    if (props.focusable) {
+	      domProps.onFocus = this.onUlFocus;
+	      domProps.onMouseEnter = this.onUlMouseEnter;
+	      domProps.onMouseLeave = this.onUlMouseLeave;
+	    }
+
 	    // if (props.focusable) {
 	    //   // domProps.tabIndex = '0';//需求改成了默认选择第一个节点或者选中的节点
 	    //   // domProps.onKeyDown = this.onKeyDown;//添加到具体的treeNode上了
@@ -88095,7 +88104,7 @@
 
 
 
-	var _beeAnimate2 = _interopRequireDefault(build$b);
+	var _beeAnimate2 = _interopRequireDefault(build$a);
 
 
 
@@ -89143,11 +89152,11 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$s);
+	var _beeLoading2 = _interopRequireDefault(build$r);
 
 
 
-	var _beeModal2 = _interopRequireDefault(build$9);
+	var _beeModal2 = _interopRequireDefault(build$8);
 
 
 
@@ -89184,7 +89193,8 @@
 	  multiple: _propTypes2["default"].bool, //  默认单选
 	  treeData: _propTypes2["default"].array, //接收树的数据
 	  onLoadData: _propTypes2["default"].func,
-	  onTreeSelecting: _propTypes2["default"].func
+	  onTreeSelecting: _propTypes2["default"].func,
+	  isLocalSearch: _propTypes2["default"].bool //  默搜索是否是本地
 	};
 	var defaultProps = {
 	  title: '弹窗标题',
@@ -89203,7 +89213,8 @@
 	  treeData: [],
 	  onLoadData: function onLoadData() {},
 	  getRefTreeData: function getRefTreeData() {},
-	  onTreeSelecting: function onTreeSelecting() {}
+	  onTreeSelecting: function onTreeSelecting() {},
+	  isLocalSearch: false //默认是true
 	};
 
 	var RefTreeBaseUI = function (_Component) {
@@ -89227,7 +89238,8 @@
 	        return item[valueField];
 	      }),
 	      onSaveCheckItems: [],
-	      showLoading: showLoading
+	      showLoading: showLoading,
+	      searchValue: '' //20190527新增搜索
 	    };
 	    return _this;
 	  }
@@ -89238,7 +89250,7 @@
 	  };
 
 	  //  tree EventHandler
-	  //  tree EventHandler
+	  //  多选才走这里
 	  RefTreeBaseUI.prototype.onCheck = function onCheck(selectedKeys, event) {
 	    var _this2 = this;
 
@@ -89250,6 +89262,8 @@
 	        selectedArray: [event.node.props.attr],
 	        checkedKeys: [event.node.props.eventKey],
 	        onSaveCheckItems: [event.node.props.attr]
+	      }, function () {
+	        _this2.props.onTreeSelecting([event.node.props.attr], [event.node.props.eventKey]);
 	      });
 	    } else {
 	      //多选
@@ -89358,7 +89372,7 @@
 	      this.setState({
 	        checkedKeys: selectedKeys
 	      }, function () {
-	        _this4.props.onTreeSelecting([], selectedKeys);
+	        _this4.props.onTreeSelecting([event.node.props.attr], selectedKeys);
 	      });
 	      return false;
 	    }
@@ -89421,8 +89435,11 @@
 	        _props3$theme = _props3.theme,
 	        theme = _props3$theme === undefined ? 'ref-red' : _props3$theme,
 	        _props3$modalProps = _props3.modalProps,
-	        modalProps = _props3$modalProps === undefined ? {} : _props3$modalProps;
-	    var checkedKeys = this.state.checkedKeys;
+	        modalProps = _props3$modalProps === undefined ? {} : _props3$modalProps,
+	        isLocalSearch = _props3.isLocalSearch;
+	    var _state = this.state,
+	        checkedKeys = _state.checkedKeys,
+	        searchValue = _state.searchValue;
 
 	    if (checkedKeys.length === 0) emptyBut = false; //20190226没有选中数据清空按钮不展示
 	    return _react2["default"].createElement(
@@ -89478,7 +89495,8 @@
 	          checkStrictly: checkStrictly,
 	          showLine: showLine,
 	          lazyModal: lazyModal,
-	          loadData: lazyModal ? this.props.onLoadData : null
+	          loadData: lazyModal ? this.props.onLoadData : null,
+	          searchValue: isLocalSearch ? searchValue : ''
 	        }) : _react2["default"].createElement(_RefCoreError2["default"], { show: !Boolean(treeData.length), language: lang })
 	      ),
 	      _react2["default"].createElement(
@@ -89502,6 +89520,7 @@
 	        valueField = props.valueField;
 
 	    _this6.setState({
+	      searchValue: '', //清空搜索
 	      selectedArray: matchData,
 	      showLoading: false,
 	      checkedKeys: matchData.map(function (item) {
@@ -89510,8 +89529,14 @@
 	    });
 	  };
 
-	  this.onSearch = function (value) {
-	    _this6.props.getRefTreeData(value);
+	  this.onSearch = function (searchValue) {
+	    if (_this6.props.isLocalSearch) {
+	      _this6.setState({
+	        searchValue: searchValue
+	      });
+	    } else {
+	      _this6.props.getRefTreeData(searchValue);
+	    }
 	  };
 
 	  this.onClickBtn = function (type) {
@@ -89582,6 +89607,8 @@
 
 
 	var _RefCoreGlobal2 = _interopRequireDefault(RefCoreGlobal_1);
+
+
 
 
 
@@ -89660,27 +89687,23 @@
 	};
 	var dataType$1 = "tree";
 	var Tree = (_dec$1 = miniStore.connect(function (state) {
-	  return {
-	    form: state.form
-	  };
+	  return state;
 	}), _dec$1(_class$1 = (_temp$1 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(Tree, _Component);
 
-	  function Tree(props) {
+	  function Tree(_props) {
 	    var _this;
 
-	    _this = _Component.call(this, props) || this;
+	    _this = _Component.call(this, _props) || this;
 
 	    _this.onSave = function (data) {
-	      var store = _this.props.store;
-	      var onOk = store.getState().onOk;
-
-	      _this.setState({
+	      var props = _this.props;
+	      var onOk = props.onOk;
+	      props.store.setState({
 	        matchData: data
 	      });
-
 	      onOk && onOk(data);
 	    };
 
@@ -89743,17 +89766,18 @@
 	      });
 	    };
 
-	    var _store = _this.props.store;
-
-	    var _store$getState$meta = _store.getState().meta,
-	        viewApplication = _store$getState$meta.viewApplication,
-	        refEntity = _store$getState$meta.refEntity;
-
-	    initReferInfo.call(assertThisInitialized(_this), dataType$1, refEntity, viewApplication, _store.getState());
+	    var _this$props = _this.props,
+	        _this$props$meta = _this$props.meta,
+	        meta = _this$props$meta === void 0 ? {} : _this$props$meta,
+	        _this$props$matchData = _this$props.matchData,
+	        matchData = _this$props$matchData === void 0 ? [] : _this$props$matchData;
+	    var viewApplication = meta.viewApplication,
+	        refEntity = meta.refEntity;
+	    initReferInfo.call(assertThisInitialized(_this), dataType$1, refEntity, viewApplication, _this.props);
 	    _this.state = {
 	      isAfterAjax: false,
 	      showLoading: false,
-	      matchData: _store.getState().matchData
+	      matchData: matchData
 	    };
 	    _this.treeData = [];
 	    _this.getRefTreeData = getRefTreeData.bind(assertThisInitialized(_this));
@@ -89762,17 +89786,24 @@
 
 	  var _proto = Tree.prototype;
 
+	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {// if(this.state.matchData !== nextProps.matchData){
+	    //   this.setState({
+	    //     matchData:nextProps.matchData
+	    //   })
+	    // }
+	  };
+
 	  _proto.render = function render() {
 	    var _this2 = this;
 
-	    var store = this.props.store;
-	    var refEntity = store.getState().meta.refEntity;
+	    var props = this.props;
+	    var refEntity = props.meta.refEntity;
 	    var _refEntity$bMultiSel = refEntity.bMultiSel,
 	        bMultiSel = _refEntity$bMultiSel === void 0 ? false : _refEntity$bMultiSel,
 	        code = refEntity.code,
 	        name = refEntity.name;
 	    var showLoading = this.state.showLoading;
-	    var multiSelect = store.getState().multiSelect == undefined ? bMultiSel : store.getState().multiSelect;
+	    var multiSelect = props.multiSelect == undefined ? bMultiSel : props.multiSelect;
 	    var option = {
 	      title: name,
 	      searchable: true,
@@ -89801,14 +89832,15 @@
 	      defaultExpandAll: false,
 	      treeData: this.treeData,
 	      filterData: this.state.filterData,
-	      showLoading: showLoading
+	      showLoading: showLoading,
+	      isLocalSearch: true
 	    };
 	    return React__default.createElement(lib_4$4, _extends_1({}, option, {
 	      getRefTreeData: this.getRefTreeData,
 	      filterUrlFunc: this.searchData,
 	      onSave: this.onSave,
 	      canClickGoOn: this.getData,
-	      matchData: this.state.matchData
+	      matchData: props.matchData
 	    }));
 	  };
 
@@ -89895,19 +89927,19 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$s);
+	var _beeLoading2 = _interopRequireDefault(build$r);
 
 
 
-	var _beePagination2 = _interopRequireDefault(build$f);
+	var _beePagination2 = _interopRequireDefault(build$e);
 
 
 
-	var _beeCheckbox2 = _interopRequireDefault(build$6);
+	var _beeCheckbox2 = _interopRequireDefault(build$5);
 
 
 
-	var _beeTable2 = _interopRequireDefault(build$t);
+	var _beeTable2 = _interopRequireDefault(build$s);
 
 
 
@@ -90354,7 +90386,7 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$s);
+	var _beeLoading2 = _interopRequireDefault(build$r);
 
 
 
@@ -90667,7 +90699,7 @@
 
 
 
-	var _beeLoading2 = _interopRequireDefault(build$s);
+	var _beeLoading2 = _interopRequireDefault(build$r);
 
 
 
@@ -91027,9 +91059,7 @@
 	  matchData: []
 	};
 	var TreeTable = (_dec$2 = miniStore.connect(function (state) {
-	  return {
-	    form: state.form
-	  };
+	  return state;
 	}), _dec$2(_class$2 = (_temp$2 =
 	/*#__PURE__*/
 	function (_Component) {
@@ -91168,21 +91198,22 @@
 	      });
 	    };
 
-	    _this.onSave = function (item) {
+	    _this.onSave = function (data) {
 	      // console.log("save", JSON.stringify(item));
-	      _this.setState({
-	        matchData: item
+	      var store = _this.props.store;
+	      store.setState({
+	        matchData: data
 	      });
+	      onOk && onOk(data);
 	    };
 
 	    _this.columnsData = [];
 	    _this.tableData = [];
 	    _this.originTableData = [];
-	    var store = _this.props.store;
-	    var _store$getState$meta = store.getState().meta,
-	        viewApplication = _store$getState$meta.viewApplication,
-	        refEntity = _store$getState$meta.refEntity;
-	    initReferInfo.call(assertThisInitialized(_this), dataType$2, refEntity, viewApplication, store.getState());
+	    var _props$meta = props.meta,
+	        viewApplication = _props$meta.viewApplication,
+	        refEntity = _props$meta.refEntity;
+	    initReferInfo.call(assertThisInitialized(_this), dataType$2, refEntity, viewApplication, props);
 	    _this.view = viewApplication.view;
 	    _this.dataType = '';
 	    _this.getTableInfo = getTableInfo.bind(assertThisInitialized(_this));
@@ -91198,8 +91229,7 @@
 
 	    };
 	    _this.state = {
-	      value: "",
-	      matchData: store.getState().matchData
+	      value: ""
 	    };
 	    return _this;
 	  }
@@ -91214,10 +91244,8 @@
 	  };
 
 	  _proto.render = function render() {
-	    var _this$props$form = this.props.form,
-	        getFieldProps = _this$props$form.getFieldProps,
-	        getFieldError = _this$props$form.getFieldError;
-	    return React__default.createElement(lib_3$5, _extends_1({
+	    var props = this.props;
+	    return React__default.createElement(lib_3$5, {
 	      title: this.cBillName,
 	      displayField: "{" + this.displayField + "}",
 	      valueField: this.valueField,
@@ -91231,18 +91259,12 @@
 	      loadTableData: this.loadTableData,
 	      onTableSearch: this.onTableSearch,
 	      onSave: this.onSave,
-	      matchData: this.state.matchData,
+	      matchData: props.matchData,
 	      showLoading: this.state.showLoading,
 	      nodeDisplay: "{" + this.displayField + "}",
 	      defaultExpandAll: false,
 	      canClickGoOn: this.getData
-	    }, getFieldProps('code', {
-	      initialValue: '',
-	      rules: [{
-	        message: '提示：请选择',
-	        pattern: /[^{"refname":"","refpk":""}|{"refpk":"","refname":""}]/
-	      }]
-	    })));
+	    });
 	  };
 
 	  return TreeTable;
@@ -91250,7 +91272,11 @@
 	TreeTable.defaultProps = defaultProps$2;
 
 	var _dec$3, _class$3, _temp$3;
-	var RefRender = (_dec$3 = miniStore.connect(), _dec$3(_class$3 = (_temp$3 =
+	var RefRender = (_dec$3 = miniStore.connect(function (state) {
+	  return {
+	    meta: state.meta
+	  };
+	}), _dec$3(_class$3 = (_temp$3 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RefRender, _Component);
@@ -91265,8 +91291,8 @@
 	    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
 
 	    _this.renderComp = function () {
-	      var store = _this.props.store;
-	      var refEntity = store.getState().meta.refEntity; // 判断 refEntity 需要的参照模板类型
+	      var meta = _this.props.meta;
+	      var refEntity = meta.refEntity; // 判断 refEntity 需要的参照模板类型
 
 	      switch (refEntity.cTpltype) {
 	        case 'Table':
@@ -91320,7 +91346,9 @@
 	}(React.Component);
 
 	var _dec$4, _class$4, _temp$4;
-	var RenderEngine = (_dec$4 = miniStore.connect(), _dec$4(_class$4 = (_temp$4 =
+	var RenderEngine = (_dec$4 = miniStore.connect(function (state) {
+	  return state;
+	}), _dec$4(_class$4 = (_temp$4 =
 	/*#__PURE__*/
 	function (_Component) {
 	  inheritsLoose(RenderEngine, _Component);
@@ -91333,7 +91361,8 @@
 	    _this.renderComp = function () {
 	      // 拿到 store 获得指定的元数据
 	      var store = _this.props.store;
-	      var refEntity = store.getState().meta.refEntity; // 逻辑说明：
+	      var _store$getState$meta$ = store.getState().meta.refEntity,
+	          refEntity = _store$getState$meta$ === void 0 ? {} : _store$getState$meta$; // 逻辑说明：
 	      // 1、如果有 refEntity，则根据多端协议渲染出不同的参照组件
 	      // 2、如果无 refEntity，则该协议描述的为普通的UI模板，按正常流程进行渲染
 
@@ -91355,12 +91384,6 @@
 
 	  return RenderEngine;
 	}(React.Component), _temp$4)) || _class$4);
-
-	function store (props) {
-	  return miniStore.create(_extends_1({}, props, {
-	    count: 0
-	  }));
-	}
 
 	var ModelDrivenRefer =
 	/*#__PURE__*/
@@ -91436,6 +91459,8 @@
 	                if (data.code == 200) {
 	                  _this.isRefer(data.data);
 
+	                  _this._setState(_this.props);
+
 	                  _this.setState({
 	                    isNeedRender: !isNeedRender
 	                  });
@@ -91483,6 +91508,7 @@
 	      isNeedRender: false,
 	      isLoading: true
 	    };
+	    _this.store = miniStore.create(props);
 	    return _this;
 	  }
 
@@ -91501,11 +91527,43 @@
 
 	    if (!url) {
 	      url = token ? "" + host + defaultUrl + "?token=" + token : defaultUrl;
-	    }
+	    } // this.handleDynamicView(url)
 
-	    console.log('url=========', url); // this.handleDynamicView(url)
 
 	    this.getMetaDataByCustomURL(url);
+	  };
+
+	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    this._setState(nextProps);
+	  };
+
+	  _proto._setState = function _setState(props) {
+	    var form = props.form,
+	        dataUrl = props.dataUrl,
+	        refCode = props.refCode,
+	        serviceCode = props.serviceCode,
+	        cItemName = props.cItemName,
+	        onOk = props.onOk,
+	        host = props.host,
+	        token = props.token,
+	        matchData = props.matchData,
+	        beforeGetData = props.beforeGetData,
+	        multiSelect = props.multiSelect;
+	    var opt = {
+	      meta: this.meta,
+	      form: form,
+	      dataUrl: dataUrl,
+	      refCode: refCode,
+	      serviceCode: serviceCode,
+	      cItemName: cItemName,
+	      onOk: onOk,
+	      host: host,
+	      token: token,
+	      matchData: matchData,
+	      beforeGetData: beforeGetData,
+	      multiSelect: multiSelect
+	    };
+	    this.store.setState(opt);
 	  }
 	  /**
 	   * 处理数据协议请求：
@@ -91548,7 +91606,7 @@
 	        multiSelect: multiSelect
 	      };
 	      return React__default.createElement(miniStore.Provider, {
-	        store: store(opt)
+	        store: this.store
 	      }, React__default.createElement(RenderEngine, null));
 	    }
 	  };

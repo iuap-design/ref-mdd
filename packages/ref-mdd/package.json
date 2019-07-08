@@ -1,6 +1,6 @@
 {
   "name": "ref-mdd",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "",
   "main": "dist/ref-mdd.js",
   "scripts": {
@@ -37,6 +37,7 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "axios": "^0.18.0",
+    "bee-overlay-modal": "0.0.2",
     "cross-env": "^5.2.0",
     "less": "^3.9.0",
     "mini-store": "^2.0.0",
@@ -45,7 +46,7 @@
     "react-dom": "16.8.4",
     "ref-core": "^0.2.0",
     "ref-multiple-table": "2.0.6",
-    "ref-tree": "2.0.8",
+    "ref-tree": "2.0.11",
     "ref-tree-table": "2.0.8",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-uglify": "^6.0.2"

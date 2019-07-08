@@ -142,7 +142,8 @@ class Tree extends Component {
       defaultExpandAll: false,
       treeData: this.treeData,
       filterData: this.state.filterData,
-      showLoading: showLoading
+      showLoading: showLoading,
+      isLocalSearch:true
     };
 
     return (
