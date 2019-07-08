@@ -3,11 +3,13 @@
 ## 关键特性
 
 - 基于统一的参照描述协议实现可扩展的组件解析渲染
+
 - 支持树型、表型参照，树表型、combobox 型待支持
 
 ## 如何使用
 
 ### 组件方式调用
+
 ```
 import ModelDrivenRefer  from 'ref-mdd';
 
@@ -19,17 +21,20 @@ const RefTableComponent = () => (
 
 ```
 
-### API 形式调用
-
-
-
-### `UMD` 规范的通用 `CDN` 文件
+### 引入UMD规范的通用CDN文件
 
 - 全局加载文件：`<script type="text/javascript" src="https://design.yonyoucloud.com/static/ref-mdd/latest/ref-core.js"></script>`
 
 - 初始化：`window.MTLCore.initComponent(options)`
 
-## 组件接口说明
+
+## 使用示例
+
+[点击这里](https://github.com/iuap-design/ref-mdd/tree/master/packages/ref-example)查看示例文件
+
+
+## API
+
 |参数|说明|类型|默认值|是否必填|
 |:--|:---:|:--:|---:|---:|
 |url|参照中获取的meta信息的url|string|'/uniform/pub/ref/getRefMeta'|否|
@@ -41,10 +46,13 @@ const RefTableComponent = () => (
 |beforeGetData|查询数据前的回调函数，用户可以在这个方法中返回附加的请求参数，返回值的类型为Object|function|否|
 |onOk|点击确认按钮的回调函数|Function||否|
 |multiSelect|当前参照是否是多选，如果这个属性没有传递会读取参照元数据getRefMeta接口获取|bool||否|
+
 ## 整体流程
 
 <img src="https://raw.githubusercontent.com/whizbz11/Img/master/ref-mdd/ref-mdd.png" height='500px' />
-## 协议说明
+
+
+## 数据交互格式说明
 
 ```
 
@@ -93,7 +101,6 @@ const RefTableComponent = () => (
 
 > 基于lerna分包后的开发痛点：如果现在在开发module-2, 但是发现是module-1的bug, 把module-1的bug修改了, 需要发布一下到npm, 然后module-2再更新module-1的依赖。执行`lerna add package1 –-scope=package2`命令后，你本地的package1会依赖于本地的package2，而不用担心package2没发布或者已发布的版本是过时的。
 
-**解决方案：**
 
 ```
 # 到项目根目录执行以下命令
