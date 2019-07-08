@@ -13,9 +13,11 @@ class ModelDrivenRefer extends Component {
             isNeedRender: false,
             isLoading: true
         }
-        this.store = create(props);
+        this.meta = {};
+        this._setState(props,true);
+        
     }
-    meta = {};
+    
     componentWillMount() {
         let {url='',token='',host=''} = this.props;
         const defaultUrl = '/uniform/pub/ref/getRefMeta';
@@ -30,7 +32,7 @@ class ModelDrivenRefer extends Component {
     componentWillReceiveProps(nextProps){
         this._setState(nextProps);
     }
-    _setState(props){
+    _setState(props,isCreate){
         let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData,beforeGetData,multiSelect} = props;
         const opt = {
             meta: this.meta,
@@ -46,7 +48,12 @@ class ModelDrivenRefer extends Component {
             beforeGetData,
             multiSelect
         };
-        this.store.setState(opt);
+        if(isCreate){
+            this.store = create(opt);
+        }else{
+            this.store.setState(opt);
+        }
+        
     }
     /**
      * 处理数据协议请求：
@@ -82,10 +89,10 @@ class ModelDrivenRefer extends Component {
 
         if (data.code == 200) {
             this.isRefer(data.data);
-            this._setState(this.props);
             this.setState({
                 isNeedRender: !isNeedRender
             });
+            this._setState(this.props);
         }
     }
 
