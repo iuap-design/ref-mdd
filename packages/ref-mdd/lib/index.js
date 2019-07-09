@@ -3,6 +3,7 @@ import { Provider} from 'mini-store';
 import { getMeta } from './utils';
 import RenderEngine from './render-engine';
 import store from './datamodel/store';
+import shallowequal from 'shallowequal';
 import { create } from 'mini-store';
 import './style/index.less'
 
@@ -13,11 +14,9 @@ class ModelDrivenRefer extends Component {
             isNeedRender: false,
             isLoading: true
         }
-        this.meta = {};
-        this._setState(props,true);
-        
+        this.store = create(props);
     }
-    
+    meta = {};
     componentWillMount() {
         let {url='',token='',host=''} = this.props;
         const defaultUrl = '/uniform/pub/ref/getRefMeta';
@@ -30,10 +29,33 @@ class ModelDrivenRefer extends Component {
         this.getMetaDataByCustomURL(url);
     }
     componentWillReceiveProps(nextProps){
-        this._setState(nextProps);
+        // console.log('nextProps',nextProps.value)
+        // console.log('this.props,',this.props.value);
+        //props中的matchData不一样
+        //props中的value不一样
+        // console.log("componentWillReceiveProps",nextProps.matchData,this.props.matchData)
+        if(nextProps.value !== this.props.value && !JSON.parse(nextProps.value).refname  ){
+            this._setState(nextProps);
+        } 
+        if(nextProps.value !== this.props.value){
+            this.store.setState({
+                value:nextProps.value,
+            });
+        }
+        if(nextProps.disabled !== this.props.disabled){
+            this.store.setState({
+                disabled:nextProps.disabled,
+            });
+        } 
+        if(!shallowequal(nextProps.matchData,this.props.matchData)){
+            this.store.setState({
+                matchData:nextProps.matchData,
+            });
+        } 
     }
-    _setState(props,isCreate){
-        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData,beforeGetData,multiSelect} = props;
+    
+    _setState(props){
+        let { form,dataUrl,refCode,serviceCode ,onCancel,cItemName,onOk,host,token,matchData,beforeGetData,multiSelect,value,disabled} = props;
         const opt = {
             meta: this.meta,
             form ,
@@ -42,18 +64,16 @@ class ModelDrivenRefer extends Component {
             serviceCode,
             cItemName,
             onOk,
+            onCancel,
             host,
             token,
             matchData,
             beforeGetData,
-            multiSelect
+            multiSelect,
+            value,
+            disabled,
         };
-        if(isCreate){
-            this.store = create(opt);
-        }else{
-            this.store.setState(opt);
-        }
-        
+        this.store.setState(opt);
     }
     /**
      * 处理数据协议请求：
@@ -89,10 +109,10 @@ class ModelDrivenRefer extends Component {
 
         if (data.code == 200) {
             this.isRefer(data.data);
+            this._setState(this.props);
             this.setState({
                 isNeedRender: !isNeedRender
             });
-            this._setState(this.props);
         }
     }
 
@@ -123,7 +143,7 @@ class ModelDrivenRefer extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,token,matchData,beforeGetData,multiSelect} = this.props;
+        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,onCancel,token,matchData,value,beforeGetData,multiSelect,disabled} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
         } else {
@@ -135,11 +155,14 @@ class ModelDrivenRefer extends Component {
                 serviceCode,
                 cItemName,
                 onOk,
+                onCancel,
                 host,
                 token,
                 matchData,
                 beforeGetData,
-                multiSelect
+                multiSelect,
+                value,
+                disabled,
             }
             return (
                 <Provider store={this.store}>
