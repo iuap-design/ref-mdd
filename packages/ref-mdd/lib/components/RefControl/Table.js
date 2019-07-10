@@ -226,7 +226,8 @@ class Table extends Component {
       style:{width:200},
       title: cBillName,
       multiple: multiSelect,
-      displayField: `{${displayField}}`,
+      displayField: `{${displayField}}`,//ref-core0.x.x版本以上的需要的input展示
+      inputDisplay:`{${displayField}}`,//ref-core1.0.x版本以上的需要的input展示
       valueField: valueField,
       showLoading: showLoading,
       columnsData: columnsData,

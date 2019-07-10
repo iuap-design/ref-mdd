@@ -87148,6 +87148,9 @@
 	      title: cBillName,
 	      multiple: multiSelect,
 	      displayField: "{" + displayField + "}",
+	      //ref-core0.x.x版本以上的需要的input展示
+	      inputDisplay: "{" + displayField + "}",
+	      //ref-core1.0.x版本以上的需要的input展示
 	      valueField: valueField,
 	      showLoading: showLoading,
 	      columnsData: columnsData,
@@ -90283,11 +90286,10 @@
 
 	    _this.searchData = function () {
 	      var _assertThisInitialize = assertThisInitialized(_this),
-	          treeData = _assertThisInitialize.treeData;
+	          treeData = _assertThisInitialize.treeData; // this.setState({
+	      //   filterData: treeData
+	      // });
 
-	      _this.setState({
-	        filterData: treeData
-	      });
 	    };
 
 	    var _this$props = _this.props,
@@ -90344,9 +90346,14 @@
 	      },
 	      displayField: function displayField(record) {
 	        //输入框的名字
-	        return record[_this2.displayField];
+	        return record[_this2.displayField]; //ref-core0.x.x版本以上的需要的input展示
 	      },
 	      //显示内容的键
+	      inputDisplay: function inputDisplay(record) {
+	        //输入框的名字
+	        return record[_this2.displayField]; //ref-core1.0.x版本以上的需要的input展示
+	      },
+	      //显示内容的键,
 	      valueField: this.valueField,
 	      //真实 value 的键
 	      filterUrl: "",
