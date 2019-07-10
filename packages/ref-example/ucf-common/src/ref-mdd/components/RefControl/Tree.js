@@ -113,9 +113,9 @@ class Tree extends Component {
 
   searchData = () => {
     const { treeData } = this;
-    this.setState({
-      filterData: treeData
-    });
+    // this.setState({
+    //   filterData: treeData
+    // });
   };
   render() {
     const props = this.props;
@@ -139,8 +139,12 @@ class Tree extends Component {
       },
       displayField: record => {
         //输入框的名字
-        return record[this.displayField];
+        return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
       }, //显示内容的键
+      inputDisplay:record => {
+        //输入框的名字
+        return record[this.displayField];//ref-core1.0.x版本以上的需要的input展示
+      }, //显示内容的键,
       valueField: this.valueField, //真实 value 的键
       filterUrl: "", //输入框搜索匹配的URL,没有这个字段
       strictMode: true, //是否调用之前缓存的数据，为true则不重新请求
