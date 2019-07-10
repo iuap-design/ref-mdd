@@ -223,7 +223,7 @@ class Table extends Component {
         : props.multiSelect;
     const propsParam = {
       // placeholder: extendField.placeholder,
-      style:{width:200},
+      // style:{width:200},
       title: cBillName,
       multiple: multiSelect,
       displayField: `{${displayField}}`,//ref-core0.x.x版本以上的需要的input展示
@@ -246,6 +246,7 @@ class Table extends Component {
       emptyBut: true, //清空按钮是否展示
       disabled:props.disabled,//不可选，业务需求
     };
+    console.log('table',propsParam.valueField,propsParam.displayField)
     return (
       <div className='ref-container'>
         <RefMultipleTableWithInput
