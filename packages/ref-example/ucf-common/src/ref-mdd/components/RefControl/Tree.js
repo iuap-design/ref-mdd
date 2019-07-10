@@ -71,26 +71,31 @@ class Tree extends Component {
     // }
   }
 
-  onSave = data => {
+  onSave = (data,name) => {
     const  props  = this.props;
     const onOk = props.onOk;
+    
     props.store.setState({
       matchData: data
     });
     onOk && onOk(data);
   };
-  onCancel = () => {};
+  onCancel = () => {
+    const props = this.props;
+    const onCancel = props.onCancel;
+    onCancel && onCancel();
+  };
 
-  getData = async () => {
+  getData = async (value) => {
     this.setState({
       showLoading: true
     });
-    const flag = await this.getRefTreeData()
+    const flag = await this.getRefTreeData(value)
       .then(treeData => {
         this.setState({
           showLoading: false
         });
-        let { data = [] } = treeData.data;
+        let { data = [] } = treeData.data || {data:[]};
         this.treeData = data;
         this.setState({
           showLoading: false
@@ -143,17 +148,19 @@ class Tree extends Component {
       treeData: this.treeData,
       filterData: this.state.filterData,
       showLoading: showLoading,
-      isLocalSearch:true
+      disabled:props.disabled,//不可选，业务需求
     };
-
+    // console.log('tree-onChange',props.onChange)
     return (
       <RefTreeWithInput
         {...option}
-        getRefTreeData={this.getRefTreeData}
+        getRefTreeData={this.getData}
         filterUrlFunc={this.searchData}
         onSave={this.onSave}
         canClickGoOn={this.getData}
         matchData={props.matchData}
+        value={props.value}
+        onChange={props.onChange}
       />
     );
   }

@@ -8,8 +8,8 @@ import Radio  from "bee-radio";
 function getTableInfo(){
     let  param = this.param;
     param.page = {
-      pageSize: 10,
-      pageIndex: 1
+      pageSize: this.page.pageSize,
+      pageIndex: this.page.currPageIndex,
     };
     let requestList = [getTableHeader.call(this), getTableData.call(this,param)];
     return Promise.all(requestList)
@@ -75,6 +75,7 @@ function getTableHeader(){
 
 function getTableData(params){
   let extraParams = {};
+  this.beforeGetData = this.props.store.getState().beforeGetData
   if(typeof this.beforeGetData == 'function'){
     extraParams = this.beforeGetData();
   }
@@ -115,23 +116,23 @@ function getTableData(params){
       ];
     } else if (!multiple) {
       //单选时用对号符号标记当前行选中
-      // colunmsList.unshift({
-      //   title: " ",
-      //   dataIndex: "a",
-      //   key: "a",
-      //   width: 45,
-      //   render(text, record, index) {
-      //     return (
-      //       <Radio.RadioGroup
-      //         className = 'in-table'
-      //         name={record[valueField]}
-      //         selectedValue={record._checked ? record[valueField] : null}
-      //       >
-      //         <Radio value={record[valueField]} />
-      //       </Radio.RadioGroup>
-      //     );
-      //   }
-      // });
+      colunmsList.unshift({
+        title: " ",
+        dataIndex: "a",
+        key: "a",
+        width: 45,
+        render(text, record, index) {
+          return (
+            <Radio.RadioGroup
+              className = 'in-table'
+              name={record[valueField]}
+              selectedValue={record._checked ? record[valueField] : null}
+            >
+              <Radio value={record[valueField]} />
+            </Radio.RadioGroup>
+          );
+        }
+      });
     }
     this.columnsData = colunmsList;
   };
@@ -152,8 +153,9 @@ function getTableData(params){
       return record;
     });
     this.tableData = tableData;
+    this.tableData = tableData;
     this.page.pageCount = data.pageCount || 0;
-    this.page.currPageIndex = data.pageIndex-1 || 0;
+    this.page.currPageIndex = data.pageIndex || 0;
     this.page.totalElements = data.recordCount || 0;
   };
 
@@ -161,11 +163,12 @@ function getTableData(params){
   //   获取树组件数据
   function getRefTreeData (value){
     let extraParams = {};
+    this.beforeGetData = this.props.store.getState().beforeGetData
     if(typeof this.beforeGetData == 'function'){
       extraParams = this.beforeGetData();
     }
     let { param, dataUrl, lazyModal, onAfterAjax } = this;
-    const paramsInfo = Object.assign({}, param,{dataType:'tree'},extraParams);
+    let paramsInfo = Object.assign({}, param,{dataType:'tree'},extraParams);
     return getTreeList(dataUrl, paramsInfo, value)
    
   }

@@ -22,7 +22,6 @@ class Table extends Component {
 
   constructor(props) {
     super(props);
-    debugger
     let { viewApplication, refEntity } = props.meta;
     initReferInfo.call(this,dataType, refEntity, viewApplication,props);
     this.view = viewApplication.view;
@@ -55,9 +54,22 @@ class Table extends Component {
     this.dataUrl = nextProps.dataUrl;
    
   }
-  onSave = data => {
+  /**
+   * 再次打开清空所有的搜索条件
+   */
+  clearGetDataParam = () =>{
+    delete(this.param.likeValue);
+    this.page = {
+      pageCount: 1, //总页数
+      currPageIndex:1,
+      pageSize: "10", //每页数据数
+    }
+  }
+  onSave = (data,name) => {
+    this.clearGetDataParam();
     const props = this.props;
     const onOk = props.onOk;
+   
     props.store.setState({
       matchData:data
     });
@@ -65,9 +77,21 @@ class Table extends Component {
     // console.log("save", data);
     onOk && onOk(data);
   };
-  onCancel = () => {};
+  onCancel = () => {
+    this.clearGetDataParam();
+    const props = this.props;
+    const onCancel = props.onCancel;
+    onCancel && onCancel();
+  };
 
-
+  loadTableData  = (param) =>{
+    this.param = param;
+    this.getData()
+    return false;
+    // this.setState({
+    //   showLoading:true,
+    // })
+  }
   getData = async ()=>{
     this.setState({
       showLoading: true
@@ -78,7 +102,10 @@ class Table extends Component {
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
         }
-        let multiple = this.props.meta.refEntity.bMultiSel;
+        let multiSelect =this.props.multiSelect == undefined
+            ? this.props.meta.refEntity.bMultiSel
+            : this.props.multiSelect;
+        let multiple = multiSelect;
         this.launchTableHeader(columnsData,multiple);
         this.launchTableData(bodyData);
         if (this.onAfterAjax && !this.state.isAfterAjax) {
@@ -104,45 +131,48 @@ class Table extends Component {
   /**
    * 处理并渲染表格数据
    */
-  launchTableData = response => {
-    if (!response) return;
-    let { valueField } = this.props;
-    let {
-      data: { data }
-    } = response;
-    const tableData = data && data.recordList ? data.recordList : [];
-    tableData.map((record, k) => {
-      record.key = record[valueField];
-      return record;
-    });
-    this.tableData = tableData;
-    this.pageCount = data.pageCount || 0;
-    this.currPageIndex = data.pageIndex || 0;
-    this.totalElements = data.recordCount || 0;
-  };
+  // launchTableData = response => {
+  //   if (!response) return;
+  //   let { valueField } = this.props;
+  //   let {
+  //     data: { data }
+  //   } = response;
+  //   const tableData = data && data.recordList ? data.recordList : [];
+  //   tableData.map((record, k) => {
+  //     record.key = record[valueField];
+  //     return record;
+  //   });
+  //   this.tableData = tableData;
+  //   debugger;
+  //   this.page={
+  //     pageCount : data.pageCount || 0,
+  //     currPageIndex : data.pageIndex|| 0,
+  //     totalElements : data.recordCount || 0,
+  //   }
+  //   // this.pageCount = data.pageCount || 0;
+  //   // this.currPageIndex = data.pageIndex || 0;
+  //   // this.totalElements = data.recordCount || 0;
+  // };
 
  
 
   // 复杂查询
+  
   searchFilterInfo = filterInfo => {
     const _this = this;
     let { param } = this;
-
     this.filterInfo = filterInfo;
-    this.setState(
-      {
-        showLoading: true
-      },
-      function() {
-        let { pageSize } = _this;
-        let paramWithFilter = Object.assign({}, param, {
-          page: { pageIndex: 0, pageSize: pageSize },
-          likeValue: filterInfo
-        });
-
-        _this.loadTableData(paramWithFilter);
-      }
-    );
+    //还原数据信息
+    this.page.currPageIndex = 1;
+    this.page.pageSize = '10';
+    let paramWithFilter = Object.assign({}, param, {
+      page:this.page,
+      likeValue: filterInfo
+    });
+    if(!filterInfo){
+      delete(paramWithFilter.likeValue)
+    }
+    _this.loadTableData(paramWithFilter);
   };
   /** start:分页 */
   /**
@@ -151,19 +181,9 @@ class Table extends Component {
    */
   handlePagination = index => {
     let { filterInfo,param } = this;
-    Object.keys(filterInfo).forEach(key => {
-      if (!filterInfo[key]) {
-        delete filterInfo[key];
-      }
-    });
-
-    param.page = {
-      pageSize: this.pageSize,
-      pageIndex: index
-    };
-    if (Object.keys(filterInfo) > 0) {
-      param.content = JSON.stringify(filterInfo);
-    }
+   
+    this.page.currPageIndex = index;
+   
     this.loadTableData(param);
   };
   /**
@@ -171,27 +191,16 @@ class Table extends Component {
    */
   dataNumSelect = (index, pageSize) => {
     let { filterInfo,param } = this;
-    Object.keys(filterInfo).forEach(key => {
-      if (!filterInfo[key]) {
-        delete filterInfo[key];
-      }
-    });
-
-    param.page = {
-      pageSize: pageSize,
-      pageIndex: this.currPageIndex - 1
-    };
-
-    if (Object.keys(filterInfo) > 0) {
-      param.content = JSON.stringify(filterInfo);
-    }
-    this.pageSize = pageSize;
+  
+    this.page.pageSize = pageSize;
+   
     this.loadTableData(param);
   };
+
   render() {
     const  props = this.props;
     let { viewApplication, refEntity } = props.meta;
-    const { getFieldError, getFieldProps } = props.form;
+    // const { getFieldError, getFieldProps } = props.form;
     const { cBillName, view } = viewApplication;
     // let { extendField = "{}" } = refEntity;
     // extendField = JSON.parse(extendField);
@@ -208,12 +217,15 @@ class Table extends Component {
       handlePagination,
       searchFilterInfo,
     } = this;
-
+    let multiSelect =
+    props.multiSelect == undefined
+        ? refEntity.bMultiSel
+        : props.multiSelect;
     const propsParam = {
       // placeholder: extendField.placeholder,
       style:{width:200},
       title: cBillName,
-      multiple: refEntity.bMultiSel,
+      multiple: multiSelect,
       displayField: `{${displayField}}`,
       valueField: valueField,
       showLoading: showLoading,
@@ -227,8 +239,11 @@ class Table extends Component {
       dataNumSelect: dataNumSelect,
       handlePagination: handlePagination,
       miniSearchFunc: searchFilterInfo,
-      matchData:props.matchData,
-      emptyBut: true //清空按钮是否展示
+      matchData:props.matchData || [],
+      value:props.value,
+      onChange:props.onChange,
+      emptyBut: true, //清空按钮是否展示
+      disabled:props.disabled,//不可选，业务需求
     };
     return (
       <div className='ref-container'>
@@ -237,7 +252,7 @@ class Table extends Component {
           onSave={this.onSave}
           onCancel={this.onCancel}
           canClickGoOn={this.getData}
-          
+          // mustPaginationShow={true}
         />
        
       </div>
