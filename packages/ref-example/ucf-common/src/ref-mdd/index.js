@@ -29,13 +29,14 @@ class ModelDrivenRefer extends Component {
         this.getMetaDataByCustomURL(url);
     }
     componentWillReceiveProps(nextProps){
-        // console.log('nextProps',nextProps.value)
-        // console.log('this.props,',this.props.value);
-        //props中的matchData不一样
-        //props中的value不一样
-        // console.log("componentWillReceiveProps",nextProps.matchData,this.props.matchData)
-        if(nextProps.value !== this.props.value && !JSON.parse(nextProps.value).refname  ){
+        //这里注意一下value可能是string类型或者数组格式
+        //情况1，value是string清空操作：nextprops和this.props不一致并且是refname------》重新更新属性
+        //情况2，value是array清空操作：nextprops和this.props不一致并且是[]------》重新更新属性
+        let stringEmpty = typeof(nextProps.value)==='string' && (nextProps.value !== this.props.value && !JSON.parse(nextProps.value).refname);//后期不在提供字符串格式
+        let arrayEmpty = Array.isArray(nextProps.value) && !shallowequal(nextProps.value,this.props.value) && !nextProps.value.length
+        if( stringEmpty || arrayEmpty  ){
             this._setState(nextProps);
+            return false;
         } 
         if(nextProps.value !== this.props.value){
             this.store.setState({

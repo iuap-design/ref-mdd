@@ -127,6 +127,7 @@ class Tree extends Component {
         ? bMultiSel
         : props.multiSelect;
     const option = {
+      // style:{width:200},
       title: name,
       searchable: true, //默认搜索输入框，没有这个字段
       multiple: multiSelect, //refEntity: bMultiSel
