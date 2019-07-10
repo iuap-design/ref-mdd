@@ -52,7 +52,7 @@ function convertMetaTableData() {
         });
     }
     tableContainer.controls.forEach(item => {
-      strFieldCode.push(item.cFieldName);
+      strFieldCode.push(item.cItemName);
       strFieldName.push(item.cShowCaption);
     });
     tpl["rootName"] = view.cTemplateTitle;
