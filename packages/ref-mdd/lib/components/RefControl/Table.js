@@ -51,7 +51,10 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.dataUrl = nextProps.dataUrl;
+    if(nextProps.dataUrl !== this.props.dataUrl){
+      this.dataUrl = nextProps.dataUrl;
+    }
+   
    
   }
   /**

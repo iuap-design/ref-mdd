@@ -87111,7 +87111,9 @@
 	  var _proto = Table.prototype;
 
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	    this.dataUrl = nextProps.dataUrl;
+	    if (nextProps.dataUrl !== this.props.dataUrl) {
+	      this.dataUrl = nextProps.dataUrl;
+	    }
 	  }
 	  /**
 	   * 再次打开清空所有的搜索条件
@@ -87142,9 +87144,7 @@
 	    var multiSelect = props.multiSelect == undefined ? refEntity.bMultiSel : props.multiSelect;
 	    var propsParam = {
 	      // placeholder: extendField.placeholder,
-	      style: {
-	        width: 200
-	      },
+	      // style:{width:200},
 	      title: cBillName,
 	      multiple: multiSelect,
 	      displayField: "{" + displayField + "}",
@@ -87171,6 +87171,7 @@
 	      disabled: props.disabled //不可选，业务需求
 
 	    };
+	    console.log('table', propsParam.valueField, propsParam.displayField);
 	    return React__default.createElement("div", {
 	      className: "ref-container"
 	    }, React__default.createElement(lib_6$1, _extends_1({}, propsParam, {
@@ -90312,11 +90313,10 @@
 
 	  var _proto = Tree.prototype;
 
-	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {// if(this.state.matchData !== nextProps.matchData){
-	    //   this.setState({
-	    //     matchData:nextProps.matchData
-	    //   })
-	    // }
+	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (nextProps.dataUrl !== this.props.dataUrl) {
+	      this.dataUrl = nextProps.dataUrl;
+	    }
 	  };
 
 	  _proto.render = function render() {
@@ -90331,6 +90331,7 @@
 	    var showLoading = this.state.showLoading;
 	    var multiSelect = props.multiSelect == undefined ? bMultiSel : props.multiSelect;
 	    var option = {
+	      // style:{width:200},
 	      title: name,
 	      searchable: true,
 	      //默认搜索输入框，没有这个字段
@@ -92072,32 +92073,49 @@
 	  };
 
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	    // console.log('nextProps',nextProps.value)
-	    // console.log('this.props,',this.props.value);
-	    //props中的matchData不一样
-	    //props中的value不一样
-	    // console.log("componentWillReceiveProps",nextProps.matchData,this.props.matchData)
-	    if (nextProps.value !== this.props.value && !JSON.parse(nextProps.value).refname) {
+	    var _this2 = this;
+
+	    //这里注意一下value可能是string类型或者数组格式
+	    //情况1，value是string清空操作：nextprops和this.props不一致并且是refname------》重新更新属性
+	    //情况2，value是array清空操作：nextprops和this.props不一致并且是[]------》重新更新属性
+	    var stringEmpty = typeof nextProps.value === 'string' && nextProps.value !== this.props.value && !JSON.parse(nextProps.value).refname; //后期不在提供字符串格式
+
+	    var arrayEmpty = Array.isArray(nextProps.value) && !shallowequal(nextProps.value, this.props.value) && !nextProps.value.length;
+
+	    if (stringEmpty || arrayEmpty) {
 	      this._setState(nextProps);
-	    }
 
-	    if (nextProps.value !== this.props.value) {
-	      this.store.setState({
-	        value: nextProps.value
-	      });
-	    }
+	      return false;
+	    } // if(nextProps.value !== this.props.value){
+	    //     this.store.setState({
+	    //         value:nextProps.value,
+	    //     });
+	    // }
+	    // if(nextProps.disabled !== this.props.disabled){
+	    //     this.store.setState({
+	    //         disabled:nextProps.disabled,
+	    //     });
+	    // } 
+	    // if(!shallowequal(nextProps.matchData,this.props.matchData)){
+	    //     this.store.setState({
+	    //         matchData:nextProps.matchData,
+	    //     });
+	    // } 
+	    //下面找到前后改变的属性只修改改变的属性
 
-	    if (nextProps.disabled !== this.props.disabled) {
-	      this.store.setState({
-	        disabled: nextProps.disabled
-	      });
-	    }
 
-	    if (!shallowequal(nextProps.matchData, this.props.matchData)) {
-	      this.store.setState({
-	        matchData: nextProps.matchData
-	      });
-	    }
+	    var changeObj = {};
+	    Object.keys(nextProps).forEach(function (key) {
+	      if (_this2.props.hasOwnProperty(key)) {
+	        //判断是什么类型的
+	        if (typeof nextProps[key] === 'string' && _this2.props[key] !== nextProps[key]) {
+	          changeObj[key] = nextProps[key];
+	        } else if (Array.isArray(nextProps[key]) && !shallowequal(nextProps[key], _this2.props[key])) {
+	          changeObj[key] = nextProps[key];
+	        }
+	      }
+	    });
+	    this.store.setState(changeObj);
 	  };
 
 	  _proto._setState = function _setState(props) {
@@ -92163,23 +92181,23 @@
 	    if (isLoading) {
 	      return React__default.createElement("p", null, "\u6570\u636E\u8BF7\u6C42\u4E2D...");
 	    } else {
-	      var opt = {
-	        meta: this.meta,
-	        form: form,
-	        dataUrl: dataUrl,
-	        refCode: refCode,
-	        serviceCode: serviceCode,
-	        cItemName: cItemName,
-	        onOk: onOk,
-	        onCancel: onCancel,
-	        host: host,
-	        token: token,
-	        matchData: matchData,
-	        beforeGetData: beforeGetData,
-	        multiSelect: multiSelect,
-	        value: value,
-	        disabled: disabled
-	      };
+	      // const opt = {
+	      //     meta: this.meta,
+	      //     form ,
+	      //     dataUrl,
+	      //     refCode,
+	      //     serviceCode,
+	      //     cItemName,
+	      //     onOk,
+	      //     onCancel,
+	      //     host,
+	      //     token,
+	      //     matchData,
+	      //     beforeGetData,
+	      //     multiSelect,
+	      //     value,
+	      //     disabled,
+	      // }
 	      return React__default.createElement(miniStore.Provider, {
 	        store: this.store
 	      }, React__default.createElement(RenderEngine, null));

@@ -7,8 +7,9 @@ import Header from 'components/Header';
 import TreeDemo from '../Tree';
 import TableDemo from '../Table';
 import './index.less';
-import 'ref-mdd/dist/ref-mdd.css';//只在这一处引入参照的样式
+import 'tinper-bee/build/index.css';
 
+import 'ref-mdd/dist/ref-mdd.css';//只在这一处引入参照的样式
 class App extends Component {
     constructor(props) {
         super(props);

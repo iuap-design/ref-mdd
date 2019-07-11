@@ -63,12 +63,9 @@ class Tree extends Component {
   }
 
   componentWillReceiveProps(nextProps){
- 
-    // if(this.state.matchData !== nextProps.matchData){
-    //   this.setState({
-    //     matchData:nextProps.matchData
-    //   })
-    // }
+    if(nextProps.dataUrl !== this.props.dataUrl){
+      this.dataUrl = nextProps.dataUrl;
+    }
   }
 
   onSave = (data,name) => {

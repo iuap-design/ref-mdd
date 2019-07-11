@@ -30,7 +30,7 @@ const { getFieldProps, getFieldError } = this.props.form;
                 token={mtlInfo.tree.token}
                 host={mtlInfo.tree.host} 
                 multiSelect={false}
-                {...getFieldProps('code', {
+                {...getFieldProps('tree1', {
                     rules: [{
                         message: '提示：请选择单选组织',
                         required: true
@@ -38,15 +38,7 @@ const { getFieldProps, getFieldError } = this.props.form;
                 })
                 }
            />
-           <span className='error'>{getFieldError('code')}</span>
-           <Button 
-            colors="primary"
-            onClick={() => {
-              this.props.form.validateFields((err, values) => {
-                if (err) return;
-                alert("您选择的是"+JSON.stringify(values))
-              });
-            }}>提交</Button>
+           <span className='error'>{getFieldError('tree1')}</span>
         </div>
         <div className="demo-label">
           <span >多选（组织）：</span>
@@ -56,7 +48,7 @@ const { getFieldProps, getFieldError } = this.props.form;
                 host={mtlInfo.tree.host} 
                 
                 multiSelect={true}
-                {...getFieldProps('code2', {
+                {...getFieldProps('tree2', {
                     rules: [{
                         message: '提示：请选择多选组织',
                         required: true
@@ -64,13 +56,14 @@ const { getFieldProps, getFieldError } = this.props.form;
                 })
                 }
            />
-           <span className='error'>{getFieldError('code2')}</span>
+           <span className='error'>{getFieldError('tree2')}</span>
            <Button 
             colors="primary"
             onClick={() => {
               this.props.form.validateFields((err, values) => {
                 if (err) return;
-                alert("您选择的是"+JSON.stringify(values))
+                alert("第一个您选择的是"+JSON.stringify(values.tree1));
+                alert("第二个您选择的是"+JSON.stringify(values.tree2));
               });
             }}>提交</Button>
         </div>

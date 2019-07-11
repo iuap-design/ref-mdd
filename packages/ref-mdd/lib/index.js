@@ -39,21 +39,38 @@ class ModelDrivenRefer extends Component {
             return false;
 
         } 
-        if(nextProps.value !== this.props.value){
-            this.store.setState({
-                value:nextProps.value,
-            });
-        }
-        if(nextProps.disabled !== this.props.disabled){
-            this.store.setState({
-                disabled:nextProps.disabled,
-            });
-        } 
-        if(!shallowequal(nextProps.matchData,this.props.matchData)){
-            this.store.setState({
-                matchData:nextProps.matchData,
-            });
-        } 
+        // if(nextProps.value !== this.props.value){
+        //     this.store.setState({
+        //         value:nextProps.value,
+        //     });
+        // }
+        // if(nextProps.disabled !== this.props.disabled){
+        //     this.store.setState({
+        //         disabled:nextProps.disabled,
+        //     });
+        // } 
+        // if(!shallowequal(nextProps.matchData,this.props.matchData)){
+        //     this.store.setState({
+        //         matchData:nextProps.matchData,
+        //     });
+        // } 
+        //下面找到前后改变的属性只修改改变的属性
+        let changeObj={};
+        Object.keys(nextProps).forEach(key=>{
+             if(this.props.hasOwnProperty(key)){
+                 //判断是什么类型的
+                 if(typeof(nextProps[key])==='string' && this.props[key] !== nextProps[key]){
+                     
+                     changeObj[key] =nextProps[key] 
+                 
+                 }else if(Array.isArray(nextProps[key]) && !shallowequal(nextProps[key],this.props[key])){
+                     changeObj[key] =nextProps[key] 
+                 
+                 }
+             }
+ 
+        });
+        this.store.setState(changeObj);
     }
     
     _setState(props){
@@ -149,23 +166,23 @@ class ModelDrivenRefer extends Component {
         if (isLoading) {
             return <p>数据请求中...</p>
         } else {
-            const opt = {
-                meta: this.meta,
-                form ,
-                dataUrl,
-                refCode,
-                serviceCode,
-                cItemName,
-                onOk,
-                onCancel,
-                host,
-                token,
-                matchData,
-                beforeGetData,
-                multiSelect,
-                value,
-                disabled,
-            }
+            // const opt = {
+            //     meta: this.meta,
+            //     form ,
+            //     dataUrl,
+            //     refCode,
+            //     serviceCode,
+            //     cItemName,
+            //     onOk,
+            //     onCancel,
+            //     host,
+            //     token,
+            //     matchData,
+            //     beforeGetData,
+            //     multiSelect,
+            //     value,
+            //     disabled,
+            // }
             return (
                 <Provider store={this.store}>
                     <RenderEngine />

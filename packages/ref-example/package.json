@@ -8,7 +8,6 @@
     "build": "ucf-scripts build",
     "war": "rimraf war && mkdir war && jar cvfM0 ./war/mtl-example.war ./ucf-publish/mtl-example",
     "war2": "rimraf war && mkdir war && jar cvfM0 ./war/dist.war ./ucf-publish/"
-
   },
   "keywords": [],
   "author": "",
@@ -22,6 +21,7 @@
     "bee-overlay-modal": "0.0.2",
     "bee-table": "^2.0.5",
     "immutable": "^4.0.0-rc.12",
+    "indexof": "0.0.1",
     "mini-store": "^2.0.0",
     "mirrorx": "^0.2.12",
     "react": "^16.8.4",
