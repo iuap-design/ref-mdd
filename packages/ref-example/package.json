@@ -6,7 +6,9 @@
   "scripts": {
     "start": "ucf-scripts start --homepage=mtl-example --mode production",
     "build": "ucf-scripts build",
-    "war": "rimraf war && mkdir war && jar cvfM0 ./war/mtl-example.war ./ucf-publish/mtl-example"
+    "war": "rimraf war && mkdir war && jar cvfM0 ./war/mtl-example.war ./ucf-publish/mtl-example",
+    "war2": "rimraf war && mkdir war && jar cvfM0 ./war/dist.war ./ucf-publish/"
+
   },
   "keywords": [],
   "author": "",

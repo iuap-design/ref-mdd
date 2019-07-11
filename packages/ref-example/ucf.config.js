@@ -8,7 +8,10 @@ module.exports = (env, argv) => {
     return {
         context: "",// 上下文对象
         // 启动所有模块，默认这个配置，速度慢的时候使用另外的配置
-        bootList: true,
+        bootList: [
+            'mtl-example',
+            'ref-mdd-example',
+        ],
         // 代理的配置
         proxy: [
             {
@@ -72,7 +75,7 @@ module.exports = (env, argv) => {
         },
         // 别名配置
         alias: {
-            'ref-mdd1': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
+            'ref-mdd': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
         },
         // 构建排除指定包
         externals: {
