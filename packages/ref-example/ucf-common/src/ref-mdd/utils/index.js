@@ -57,7 +57,7 @@ export function initReferInfo(dataType, refEntity, viewApplication={},propsState
         dataUrl = token?`${host}${defaultDataURL}?token=${token}`:`${host}${defaultDataURL}`;
     }
     this.dataUrl = dataUrl;
-    this.cBillName = viewApplication.cBillName;
+    this.cBillName = viewApplication.cBillName ||  refEntity.name;
     this.getQueryParam = getQueryParam;
     this.refCode = propsState.refCode;
     this.param = getQueryParam(dataType, refEntity, viewApplication,beforeGetData,this.refCode);//数据查询参数

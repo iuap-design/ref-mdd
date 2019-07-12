@@ -6,8 +6,8 @@ import React, { Component } from 'react';
 import Header from 'components/Header';
 import TreeDemo from '../Tree';
 import TableDemo from '../Table';
+import TreeTableDemo from '../TreeTable';
 import './index.less';
-import 'tinper-bee/build/index.css';
 
 import 'ref-mdd/dist/ref-mdd.css';//只在这一处引入参照的样式
 class App extends Component {
@@ -30,7 +30,7 @@ class App extends Component {
                 <Header title='refmdd场景展示' />
                 <TreeDemo/>
                 <TableDemo/>
-                
+                <TreeTableDemo/>
             </div>
         );
     }

@@ -1,8 +1,8 @@
 
 /**
  *
- * @title ref-mdd 参照-表形
- * @description 具有单选多选的表形参照
+ * @title ref-mdd 参照-树表形
+ * @description 具有单选多选的树表形参照
  *
  */
 
@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 // import { Button, Form } from 'tinper-bee';
 import ModelDrivenRefer from 'ref-mdd';
 import {mtlInfo} from '../../refmddconst';
-class RefTable1 extends Component {
+class RefTreeTable1 extends Component {
   constructor() {
     super();
     this.state = {
@@ -24,18 +24,18 @@ class RefTable1 extends Component {
         <div className="demo-label">
           <span >单选（组织）：</span>
           <ModelDrivenRefer 
-                refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                refCode={mtlInfo.treeTable.refCode}  
+               url={mtlInfo.treeTable.url}
+               dataUrl={mtlInfo.treeTable.dataUrl} 
                 multiSelect={false}
            />
         </div>
         <div className="demo-label">
           <span >多选（组织）：</span>
           <ModelDrivenRefer 
-                refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                refCode={mtlInfo.treeTable.refCode}  
+               url={mtlInfo.treeTable.url}
+               dataUrl={mtlInfo.treeTable.dataUrl} 
                 multiSelect={true}
            />
         </div>
@@ -44,4 +44,4 @@ class RefTable1 extends Component {
   }
 };
 
-export default RefTable1;
+export default RefTreeTable1;

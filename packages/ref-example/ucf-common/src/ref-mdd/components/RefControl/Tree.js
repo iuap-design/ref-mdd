@@ -63,12 +63,9 @@ class Tree extends Component {
   }
 
   componentWillReceiveProps(nextProps){
- 
-    // if(this.state.matchData !== nextProps.matchData){
-    //   this.setState({
-    //     matchData:nextProps.matchData
-    //   })
-    // }
+    if(nextProps.dataUrl !== this.props.dataUrl){
+      this.dataUrl = nextProps.dataUrl;
+    }
   }
 
   onSave = (data,name) => {
@@ -154,19 +151,21 @@ class Tree extends Component {
       filterData: this.state.filterData,
       showLoading: showLoading,
       disabled:props.disabled,//不可选，业务需求
+      matchData:props.matchData,
+      value:props.value,
+      onChange:props.onChange,//为了让form表单的校验进来
     };
-    // console.log('tree-onChange',props.onChange)
     return (
-      <RefTreeWithInput
-        {...option}
-        getRefTreeData={this.getData}
-        filterUrlFunc={this.searchData}
-        onSave={this.onSave}
-        canClickGoOn={this.getData}
-        matchData={props.matchData}
-        value={props.value}
-        onChange={props.onChange}
-      />
+      <div className='ref-container-tree'>
+        <RefTreeWithInput
+          {...option}
+          getRefTreeData={this.getData}
+          filterUrlFunc={this.searchData}
+          onSave={this.onSave}
+          canClickGoOn={this.getData}
+        
+        />
+      </div>
     );
   }
 }

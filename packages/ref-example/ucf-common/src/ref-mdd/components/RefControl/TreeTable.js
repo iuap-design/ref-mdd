@@ -38,12 +38,13 @@ class TreeTable extends Component {
     this.getTableData = getTableData.bind(this);
     this.page = {
       pageCount: 1, //总页数
-      currPageIndex:0,
+      currPageIndex:1,
       pageSize: "10", //每页数据数
     };
     this.state = {
       value: ""
     };
+    this.searchTimeOut;
   }
   
   componentWillUnmount(){
@@ -51,6 +52,13 @@ class TreeTable extends Component {
       clearTimeout(this.timer);
       this.timer = null;
     }
+  }
+  getMultiple = () =>{
+    let props = this.props;
+    let multiSelect =props.multiSelect == undefined
+    ? props.meta.refEntity.bMultiSel
+    : props.multiSelect;
+    return multiSelect
   }
   getData = async ()=>{
     this.setState({
@@ -62,7 +70,8 @@ class TreeTable extends Component {
         if (this.onAfterAjax) {
             this.onAfterAjax(bodyData);
         }
-        this.launchTableHeader(columnsData);
+        
+        this.launchTableHeader(columnsData,this.getMultiple());
         this.launchTableData(bodyData);
         if (this.onAfterAjax && !this.state.isAfterAjax) {
             this.onAfterAjax(treeData);
@@ -93,11 +102,12 @@ class TreeTable extends Component {
     param.data = record[0];
     param.path = record[0] && record[0].path;
     this._getTableDataByParam(param);
-
   };
   onTreeSearch = value => { 
-    // alert(value);
-    console.log('treeSearch---',value);
+    clearTimeout(this.searchTimeOut);
+    this.searchTimeOut  = setTimeout(() => {
+      this._getRefTreeDataByParam(value)
+    }, 300);
     
   };
   loadTableData = pageInfo => {
@@ -135,38 +145,75 @@ class TreeTable extends Component {
       });
     });
   }
+
+  _getRefTreeDataByParam =(value)=>{
+    this.setState({
+      showLoading: true
+    });
+    this.getRefTreeData(value).then(treeData=>{
+      let { data = [] } = treeData.data;
+      this.treeData = data;
+      this.setState({
+        showLoading: false
+      });
+    }).catch(e=>{
+      this.setState({
+        showLoading: false
+      });
+    });
+  }
+   /**
+   * 再次打开清空所有的搜索条件
+   */
+  clearGetDataParam = () =>{
+    delete(this.param.likeValue);
+    this.page = {
+      pageCount: 1, //总页数
+      currPageIndex:1,
+      pageSize: "10", //每页数据数
+    }
+  }
   onSave = data => {
-    // console.log("save", JSON.stringify(item));
-    const { store } = this.props;
+    this.clearGetDataParam();
+    const { store,onOk } = this.props;
     store.setState({
       matchData: data
     });
     onOk && onOk(data);
   };
 
-  render() {
-    const props = this.props;
+  render() { 
+    let props = this.props; 
+    const propsParamTreeTable = {
+        title:this.cBillName,
+        multiple:this.getMultiple(),
+        displayField:`{${this.displayField}}`,
+        inputDisplay:`{${this.displayField}}`,
+        valueField:this.valueField,
+        treeData:this.treeData,
+        columnsData:this.columnsData,
+        tableData:this.tableData,
+        page:this.page,
+        showLoading :this.state.showLoading,
+        nodeDisplay:`{${this.displayField}}`,
+        defaultExpandAll : false,
+        matchData:props.matchData,
+        value:props.value,
+        onChange:props.onChange,//为了让form表单的校验进来
+        disabled:props.disabled,//不可选，业务需求
+    };
     return (
+      <div className='ref-container-tree-table'>
         <RefTreeTableWithInput
-        title={this.cBillName}
-        displayField={`{${this.displayField}}`}
-        valueField={this.valueField}
-        lang='zh_CN'
-        treeData={this.treeData}
-        onTreeChange={this.onTreeChange} 
-        onTreeSearch={this.onTreeSearch}
-        columnsData={this.columnsData}
-        tableData={this.tableData}
-        page={this.page}
-        loadTableData={this.loadTableData}
-        onTableSearch={this.onTableSearch}
-        onSave={this.onSave}
-        matchData={props.matchData}
-        showLoading ={this.state.showLoading}
-        nodeDisplay={`{${this.displayField}}`}
-        defaultExpandAll = {false}
-        canClickGoOn={this.getData}
-    />
+          {...propsParamTreeTable}
+          onTreeChange={this.onTreeChange} 
+          onTreeSearch={this.onTreeSearch}
+          loadTableData={this.loadTableData}
+          onTableSearch={this.onTableSearch}
+          onSave={this.onSave}
+          canClickGoOn={this.getData}
+      />
+      </div>
     );
   }
 }

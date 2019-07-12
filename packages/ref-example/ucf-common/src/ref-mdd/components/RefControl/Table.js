@@ -51,7 +51,10 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.dataUrl = nextProps.dataUrl;
+    if(nextProps.dataUrl !== this.props.dataUrl){
+      this.dataUrl = nextProps.dataUrl;
+    }
+   
    
   }
   /**
@@ -242,13 +245,12 @@ class Table extends Component {
       miniSearchFunc: searchFilterInfo,
       matchData:props.matchData || [],
       value:props.value,
-      onChange:props.onChange,
+      onChange:props.onChange,//为了让form表单的校验进来
       emptyBut: true, //清空按钮是否展示
       disabled:props.disabled,//不可选，业务需求
     };
-    console.log('table',propsParam.valueField,propsParam.displayField)
     return (
-      <div className='ref-container'>
+      <div className='ref-container-table'>
         <RefMultipleTableWithInput
           {...propsParam}
           onSave={this.onSave}

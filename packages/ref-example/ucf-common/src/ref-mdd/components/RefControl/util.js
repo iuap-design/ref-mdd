@@ -5,6 +5,9 @@ import {
 
 import request from "../../utils/request";
 import Radio  from "bee-radio";
+/**
+ * 表参照的请求总入口
+ */
 function getTableInfo(){
     let  param = this.param;
     param.page = {
@@ -13,33 +16,13 @@ function getTableInfo(){
     };
     let requestList = [getTableHeader.call(this), getTableData.call(this,param)];
     return Promise.all(requestList)
-    //   .then(([columnsData, bodyData]) => {
-    //     // 请求完表体数据回调
-    //     if (this.onAfterAjax) {
-    //         this.onAfterAjax(bodyData);
-    //     }
-    //     launchTableHeader.call(this,columnsData);
-    //     launchTableData.call(this,bodyData);
-    //     this.setState({
-    //       showLoading: false
-    //     });
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //     launchTableHeader.call(this,{});
-    //     launchTableData.call(this,{});
-    //     this.setState({
-    //       showLoading: false
-    //     });
-    //     console.error(e);
-    //   });
    
   }
 
-  /**
-   * 转换元数据参照表格数据为可识别的格式
-   *
-   */
+/**
+ * 转换元数据参照表格数据为可识别的格式
+ *
+ */
 function convertMetaTableData() {
     const { view={} } = this;
     let strFieldCode = [],
@@ -66,6 +49,11 @@ function convertMetaTableData() {
     })
     // return tpl;
   };
+  
+/**
+ * 表参照---列数据
+ * @param {*} params 
+ */
 function getTableHeader(){
     const _this = this;
     return new Promise((resolve, reject) => {
@@ -73,6 +61,10 @@ function getTableHeader(){
     });
   };
 
+/**
+ * 表参照---表体数据
+ * @param {*} params 
+ */
 function getTableData(params){
   let extraParams = {};
   this.beforeGetData = this.props.store.getState().beforeGetData
@@ -136,8 +128,9 @@ function getTableData(params){
     }
     this.columnsData = colunmsList;
   };
+
   /**
-   * 处理并渲染表格数据
+   * 处理并渲染表体数据
    */
   function launchTableData (response){
     if (!response) return;
@@ -160,7 +153,10 @@ function getTableData(params){
   };
 
 
-  //   获取树组件数据
+  /**
+   * 请求树数据
+   * @param {*} value 
+   */
   function getRefTreeData (value){
     let extraParams = {};
     this.beforeGetData = this.props.store.getState().beforeGetData

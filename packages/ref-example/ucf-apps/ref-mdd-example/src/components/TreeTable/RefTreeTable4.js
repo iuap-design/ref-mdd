@@ -1,8 +1,8 @@
 
 /**
  *
- * @title ref-mdd 参照-表形
- * @description 具有校验的表参照
+ * @title ref-mdd 参照-树表形
+ * @description 具有校验的树表参照
  *
  */
 
@@ -11,7 +11,7 @@ import ModelDrivenRefer from 'ref-mdd';
 import {Button,Form} from 'tinper-bee';
 import {mtlInfo} from '../../refmddconst';
 
-class RefTable4 extends Component {
+class RefTreeTable4 extends Component {
   constructor() {
     super();
     this.state={
@@ -26,11 +26,11 @@ const { getFieldProps, getFieldError } = this.props.form;
         <div className="demo-label">
           <span >单选（组织）：</span>
           <ModelDrivenRefer 
-                refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                refCode={mtlInfo.treeTable.refCode}  
+               url={mtlInfo.treeTable.url}
+               dataUrl={mtlInfo.treeTable.dataUrl} 
                 multiSelect={false}
-                {...getFieldProps('table1', {
+                {...getFieldProps('tt1', {
                     rules: [{
                         message: '提示：请选择单选组织',
                         required: true
@@ -38,17 +38,17 @@ const { getFieldProps, getFieldError } = this.props.form;
                 })
                 }
            />
-           <span className='error'>{getFieldError('table1')}</span>
+           <span className='error'>{getFieldError('tt1')}</span>
         </div>
         <div className="demo-label">
           <span >多选（组织）：</span>
           <ModelDrivenRefer 
-                refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                refCode={mtlInfo.treeTable.refCode}  
+                url={mtlInfo.treeTable.url}
+                dataUrl={mtlInfo.treeTable.dataUrl} 
                 
                 multiSelect={true}
-                {...getFieldProps('table2', {
+                {...getFieldProps('tt2', {
                     rules: [{
                         message: '提示：请选择多选组织',
                         required: true
@@ -56,14 +56,14 @@ const { getFieldProps, getFieldError } = this.props.form;
                 })
                 }
            />
-           <span className='error'>{getFieldError('table2')}</span>
+           <span className='error'>{getFieldError('tt2')}</span>
            <Button 
             colors="primary"
             onClick={() => {
               this.props.form.validateFields((err, values) => {
                 if (err) return;
-                alert("第一个您选择的是"+JSON.stringify(values.table1));
-                alert("第二个您选择的是"+JSON.stringify(values.table2));
+                alert("第一个您选择的是:\n"+JSON.stringify(values.tt1));
+                alert("第二个您选择的是:\n"+JSON.stringify(values.tt2));
               });
             }}>提交</Button>
         </div>
@@ -71,4 +71,4 @@ const { getFieldProps, getFieldError } = this.props.form;
     )
   }
 };
-export default Form.createForm()(RefTable4);
+export default Form.createForm()(RefTreeTable4);

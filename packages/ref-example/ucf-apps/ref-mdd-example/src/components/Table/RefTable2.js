@@ -1,7 +1,7 @@
 
 /**
  *
- * @title ref-mdd 参照-树形
+ * @title ref-mdd 参照-表形
  * @description 具有初始值的表参照
  *
  */

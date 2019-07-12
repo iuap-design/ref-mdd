@@ -20,7 +20,8 @@ export const mtlInfo = {
         token:'bttSWFicUMxL0xXVjhjVUd2TkFuUEZVcjhQaHd3aitUd1NKREorTlI3cThOenYxMTRpTWJpTkkyZXVuQ0dmUFkvbUV6WG04QzUwQ2JhVk1MTFFxREt2dW5FckJlQ1ViRFZSTFJyNGFLMWpxbTA9__1562740378781',  
     },
     treeTable:{
-        serviceCode:'pc_product',
-        refCode:'pc_taxrevenueref'
+        url:'/ref/getRefMeta',
+        dataUrl:'/ref/getRefData',
+        refCode:'neworgdeptstaff_treegrid',
     }
 }

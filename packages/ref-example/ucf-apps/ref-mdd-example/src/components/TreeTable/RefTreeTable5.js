@@ -1,8 +1,8 @@
 
 /**
  *
- * @title ref-mdd 参照-表形
- * @description 具有校验的表参照清空操作
+ * @title ref-mdd 参照-树表形
+ * @description 具有校验的树表参照清空操作
  *
  */
 
@@ -11,7 +11,7 @@ import ModelDrivenRefer from 'ref-mdd';
 import {Button,Form} from 'tinper-bee';
 import {mtlInfo} from '../../refmddconst';
 
-class RefTable5 extends Component {
+class RefTreeTable5 extends Component {
   constructor() {
     super();
     this.state={
@@ -26,9 +26,9 @@ class RefTable5 extends Component {
                 <div className="demo-label">
                 <span >单选（组织）：</span>
                 <ModelDrivenRefer 
-                        refCode={mtlInfo.table.refCode}  
-                        token={mtlInfo.table.token}
-                        host={mtlInfo.table.host} 
+                       refCode={mtlInfo.treeTable.refCode}  
+                       url={mtlInfo.treeTable.url}
+                       dataUrl={mtlInfo.treeTable.dataUrl} 
                         multiSelect={false}
                         {...getFieldProps('code', {
                             rules: [{
@@ -49,9 +49,9 @@ class RefTable5 extends Component {
                 <div className="demo-label">
                 <span >多选（组织）：</span>
                 <ModelDrivenRefer 
-                        refCode={mtlInfo.table.refCode}  
-                        token={mtlInfo.table.token}
-                        host={mtlInfo.table.host} 
+                       refCode={mtlInfo.treeTable.refCode}  
+                       url={mtlInfo.treeTable.url}
+                       dataUrl={mtlInfo.treeTable.dataUrl} 
                         
                         multiSelect={true}
                         {...getFieldProps('code2', {
@@ -74,4 +74,4 @@ class RefTable5 extends Component {
     )
   }
 };
-export default Form.createForm()(RefTable5);
+export default Form.createForm()(RefTreeTable5);
