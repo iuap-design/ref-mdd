@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
         // 启动所有模块，默认这个配置，速度慢的时候使用另外的配置
         bootList: [
             'mtl-example',
-            'ref-mdd-example',
+            'refmdd-example',
         ],
         // 代理的配置
         proxy: [
