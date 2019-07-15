@@ -7,7 +7,7 @@ import { connect } from "mini-store";
 import { RefTreeTableWithInput } from "ref-tree-table/lib/index";
 
 // 工具类
-import {  initReferInfo } from "../../utils";
+import {  initReferInfo, needRecallInitReferInfo } from "../../utils";
 import {getTableInfo,getRefTreeData,launchTableHeader,launchTableData,getTableData} from './util';
 
 // 样式
@@ -44,15 +44,31 @@ class TreeTable extends Component {
     this.state = {
       value: ""
     };
-    this.searchTimeOut;
+    this.searchTimeOut;//tree搜索延迟
+    this.timer;//table搜索延迟
   }
   
   componentWillUnmount(){
-    if(this.timer){
+    if(this.timer || this.searchTimeOut){
       clearTimeout(this.timer);
+      clearTimeout(this.searchTimeOut);
       this.timer = null;
+      this.searchTimeOut = null;
     }
   }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.dataUrl !== this.props.dataUrl){
+      this.dataUrl = nextProps.dataUrl;
+    }
+    //是否重新初始化initReferInfo
+    let need = needRecallInitReferInfo(nextProps,this.props);
+    if(need){
+      let { viewApplication, refEntity } = nextProps.meta;
+      initReferInfo.call(this,dataType, refEntity, viewApplication,nextProps);
+    }
+  }
+
   getMultiple = () =>{
     let props = this.props;
     let multiSelect =props.multiSelect == undefined

@@ -25,3 +25,5 @@ export const mtlInfo = {
         refCode:'neworgdeptstaff_treegrid',
     }
 }
+
+export const basePath = 'https://github.com/iuap-design/ref-mdd/blob/master/packages/ref-example/ucf-apps/refmdd-example/src/components/Tree'

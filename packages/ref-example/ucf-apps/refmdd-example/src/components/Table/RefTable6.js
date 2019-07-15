@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import ModelDrivenRefer from 'ref-mdd';
-import {mtlInfo} from '../../refmddconst';
+import {mtlInfo,basePath} from '../../refmddconst';
 
 class RefTable6 extends Component {
   constructor() {
@@ -28,7 +28,11 @@ class RefTable6 extends Component {
                     host={mtlInfo.table.host} 
                     disabled={true}
                 />
-                
+                <span className="source-code">
+                    <a target="_blank" href={`${basePath}/RefTable6.js`}>
+                    源码
+                    </a>
+                </span>
         </div>
     )
   }

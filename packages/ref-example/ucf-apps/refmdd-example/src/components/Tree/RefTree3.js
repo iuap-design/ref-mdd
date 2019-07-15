@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import ModelDrivenRefer from 'ref-mdd';
 import {Button} from 'tinper-bee';
-import {mtlInfo} from '../../refmddconst';
+import {mtlInfo,basePath} from '../../refmddconst';
 
 class RefTree3 extends Component {
   constructor() {
@@ -73,6 +73,11 @@ class RefTree3 extends Component {
            />
            <Button onClick={()=>this.clear('multiValue')}>单选的清空按钮</Button>
         </div>
+        <span className="source-code">
+             <a target="_blank" href={`${basePath}/RefTree3.js`}>
+             源码
+             </a>
+        </span>
     </div>
     )
   }

@@ -8,7 +8,7 @@ import {
   RefMultipleTableWithInput
 } from "ref-multiple-table/lib/index";
 // 工具类
-import {initReferInfo } from "../../utils";
+import {initReferInfo,needRecallInitReferInfo } from "../../utils";
 import {getTableInfo,launchTableHeader,launchTableData,getTableData} from './util';
 
 // 样式
@@ -54,6 +54,13 @@ class Table extends Component {
     if(nextProps.dataUrl !== this.props.dataUrl){
       this.dataUrl = nextProps.dataUrl;
     }
+    //是否重新初始化initReferInfo
+    let need = needRecallInitReferInfo(nextProps,this.props);
+    if(need){
+      let { viewApplication, refEntity } = nextProps.meta;
+      initReferInfo.call(this,dataType, refEntity, viewApplication,nextProps);
+    }
+    
    
    
   }

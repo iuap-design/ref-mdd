@@ -21,7 +21,7 @@ import 'ref-mdd/dist/ref-mdd.css';
 import './index.less';
 //所需变量
 const { FormItem } = Form;
-import {mtlInfo} from '../../refmddconst';
+import {mtlInfo,basePath} from '../../refmddconst';
 class SearchArea extends Component {
 
     constructor(props) {

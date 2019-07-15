@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 // import { Button, Form } from 'tinper-bee';
 import ModelDrivenRefer from 'ref-mdd';
-import {mtlInfo} from '../../refmddconst';
+import {mtlInfo,basePath} from '../../refmddconst';
 class RefTreeTable1 extends Component {
   constructor() {
     super();
@@ -39,6 +39,11 @@ class RefTreeTable1 extends Component {
                 multiSelect={true}
            />
         </div>
+        <span className="source-code">
+            <a target="_blank" href={`${basePath}/RefTreeTable1.js`}>
+            源码
+            </a>
+        </span>
     </div>
     )
   }

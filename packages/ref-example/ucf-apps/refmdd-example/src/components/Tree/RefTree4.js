@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import ModelDrivenRefer from 'ref-mdd';
 import {Button,Form} from 'tinper-bee';
-import {mtlInfo} from '../../refmddconst';
+import {mtlInfo,basePath} from '../../refmddconst';
 
 class RefTree4 extends Component {
   constructor() {
@@ -67,6 +67,11 @@ const { getFieldProps, getFieldError } = this.props.form;
               });
             }}>提交</Button>
         </div>
+        <span className="source-code">
+             <a target="_blank" href={`${basePath}/RefTree4.js`}>
+             源码
+             </a>
+        </span>
     </div>
     )
   }

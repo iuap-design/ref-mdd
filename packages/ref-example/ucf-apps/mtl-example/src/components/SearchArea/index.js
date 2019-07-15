@@ -36,7 +36,7 @@ const mtlInfo = {
         // serviceCode:'aa_merchant',
         refCode:'ucfbasedoc.bd_currencytenantref',  
         host:'https://u8cupc-daily.yyuap.com',
-        token:'bttfc83858e-4b54-42de-8142-aabf5a16926a__1562397442596',  
+        token:'bttSWFicUMxL0xXVjhjVUd2TkFuUEZVcjhQaHd3aitUd1NKREorTlI3cThOenYxMTRpTWJpTkkyZXVuQ0dmUFkvbUV6WG04QzUwQ2JhVk1MTFFxREt2dW5FckJlQ1ViRFZSTFJyNGFLMWpxbTA9__1562740378781',  
     },
     tree:{
         // metaUrl:'/uniform/pub/ref/getRefMeta',
@@ -49,15 +49,21 @@ const mtlInfo = {
         // token:'btt3176d04c-7883-484b-b647-a283a7e86dd4__1562210394952',
         refCode:'ucf-org-center.org_unit_tree_ref',  
         host:'https://u8cupc-daily.yyuap.com',
-        token:'btt0e12aef1-fca4-44ca-b3bb-b60e8f2acda5__1562567819740',  
+        token:'bttSWFicUMxL0xXVjhjVUd2TkFuUEZVcjhQaHd3aitUd1NKREorTlI3cThOenYxMTRpTWJpTkkyZXVuQ0dmUFkvbUV6WG04QzUwQ2JhVk1MTFFxREt2dW5FckJlQ1ViRFZSTFJyNGFLMWpxbTA9__1562740378781',  
     },
+    // treeTable:{
+    //     // metaUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefMeta?terminalType=1&token=btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881&refimestamp=1559026546502',
+    //     // dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
+    //     // host:"http://u8cupc-test.yyuap.com",
+    //     // token:"btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881",
+    //     serviceCode:'pc_product',
+    //     refCode:'pc_taxrevenueref',
+        
+    // }
     treeTable:{
-        // metaUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefMeta?terminalType=1&token=btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881&refimestamp=1559026546502',
-        // dataUrl:'http://u8cupc-test.yyuap.com/uniform/bill/ref/getRefData?token=bttef236866-596b-4881-a2e9-d47639b0024b__1558279973682',
-        // host:"http://u8cupc-test.yyuap.com",
-        // token:"btt44f45048-a1de-4dad-a9c2-ada5fec53ce0__1559025009881",
-        serviceCode:'pc_product',
-        refCode:'pc_taxrevenueref'
+        url:'/ref/getRefMeta',
+        dataUrl:'/ref/getRefData',
+        refCode:'neworgdeptstaff_treegrid',
     }
 }
 //所需变量
@@ -68,6 +74,7 @@ class SearchArea extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            testCode:'ucfbasedoc.bd_currencytenantref',
             matchData:[{"orgtype":1,"parent":"","code":"001","name":"zjc626(测试)","sort":0,"id":"1283412664783104","pubts":"2019-06-26 15:14:52","orgid":"1283412664783104"}]
         }
     }
@@ -119,7 +126,7 @@ class SearchArea extends Component {
     }
     click=()=>{
         this.setState({
-            matchData:[]
+            testCode:'hahahha'
         })
     }
     render() {
@@ -152,7 +159,8 @@ class SearchArea extends Component {
                         <FormItem>
                             <Label>部门</Label>
                             <ModelDrivenRefer form={_this.props.form} 
-                                          refCode={mtlInfo.table.refCode} 
+                                        //   refCode={mtlInfo.table.refCode} 
+                                        refCode={this.state.testCode}
                                           onOk={this.onOk('depart')}
                                           token={mtlInfo.table.token}
                                           host={mtlInfo.table.host}
@@ -173,11 +181,15 @@ class SearchArea extends Component {
                     <Col md={6} xs={6}>
                         <FormItem>
                             <Label>税收分类码</Label>
-                            <ModelDrivenRefer form={_this.props.form}  refCode={mtlInfo.treeTable.refCode} beforeGetData={this.getDataParams}/>
+                            <ModelDrivenRefer form={_this.props.form}  
+                            refCode={mtlInfo.treeTable.refCode} 
+                            url={mtlInfo.treeTable.url} 
+                            dataUrl={mtlInfo.treeTable.dataUrl} 
+                            beforeGetData={this.getDataParams}/>
                         </FormItem>
                     </Col>
                 </Row>
-                <button onClick={this.click}>changeMatchData</button>
+                <button onClick={this.click}>change testCode</button>
             </SearchPanel>
         )
     }
