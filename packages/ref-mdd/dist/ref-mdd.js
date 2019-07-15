@@ -872,10 +872,19 @@
 	  }
 
 	  this.dataUrl = dataUrl;
-	  this.cBillName = viewApplication.cBillName;
+	  this.cBillName = viewApplication.cBillName || refEntity.name;
 	  this.getQueryParam = getQueryParam;
 	  this.refCode = propsState.refCode;
 	  this.param = getQueryParam(dataType, refEntity, viewApplication, beforeGetData, this.refCode); //数据查询参数
+	}
+	/**
+	 * 是否需要重新调用上面initReferInfo函数
+	 */
+
+	function needRecallInitReferInfo(nextProps, preProps) {
+	  var initReferInfoNeedChange = false;
+	  initReferInfoNeedChange = nextProps.dataUrl !== preProps.dataUrl || nextProps.refCode !== preProps.refCode || nextProps.host !== preProps.host || nextProps.url !== preProps.url || nextProps.serviceCode !== preProps.serviceCode;
+	  return initReferInfoNeedChange;
 	}
 
 	var _extends_1 = createCommonjsModule(function (module) {
@@ -86716,6 +86725,10 @@
 
 	var Radio = unwrapExports(build$s);
 
+	/**
+	 * 表参照的请求总入口
+	 */
+
 	function getTableInfo() {
 	  var param = this.param;
 	  param.page = {
@@ -86723,26 +86736,7 @@
 	    pageIndex: this.page.currPageIndex
 	  };
 	  var requestList = [getTableHeader.call(this), getTableData.call(this, param)];
-	  return Promise.all(requestList); //   .then(([columnsData, bodyData]) => {
-	  //     // 请求完表体数据回调
-	  //     if (this.onAfterAjax) {
-	  //         this.onAfterAjax(bodyData);
-	  //     }
-	  //     launchTableHeader.call(this,columnsData);
-	  //     launchTableData.call(this,bodyData);
-	  //     this.setState({
-	  //       showLoading: false
-	  //     });
-	  //   })
-	  //   .catch(e => {
-	  //     console.log(e);
-	  //     launchTableHeader.call(this,{});
-	  //     launchTableData.call(this,{});
-	  //     this.setState({
-	  //       showLoading: false
-	  //     });
-	  //     console.error(e);
-	  //   });
+	  return Promise.all(requestList);
 	}
 	/**
 	 * 转换元数据参照表格数据为可识别的格式
@@ -86777,6 +86771,10 @@
 	    resolve(tpl); // reject({err:true});
 	  }); // return tpl;
 	}
+	/**
+	 * 表参照---列数据
+	 * @param {*} params 
+	 */
 
 	function getTableHeader() {
 	  var _this = this;
@@ -86785,6 +86783,10 @@
 	    resolve(convertMetaTableData.call(_this));
 	  });
 	}
+	/**
+	 * 表参照---表体数据
+	 * @param {*} params 
+	 */
 
 	function getTableData(params) {
 	  var extraParams = {};
@@ -86855,7 +86857,7 @@
 	  this.columnsData = colunmsList;
 	}
 	/**
-	 * 处理并渲染表格数据
+	 * 处理并渲染表体数据
 	 */
 
 	function launchTableData(response) {
@@ -86876,6 +86878,10 @@
 	  this.page.currPageIndex = data.pageIndex || 0;
 	  this.page.totalElements = data.recordCount || 0;
 	}
+	/**
+	 * 请求树数据
+	 * @param {*} value 
+	 */
 
 	function getRefTreeData(value) {
 	  var extraParams = {};
@@ -87113,6 +87119,16 @@
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	    if (nextProps.dataUrl !== this.props.dataUrl) {
 	      this.dataUrl = nextProps.dataUrl;
+	    } //是否重新初始化initReferInfo
+
+
+	    var need = needRecallInitReferInfo(nextProps, this.props);
+
+	    if (need) {
+	      var _nextProps$meta = nextProps.meta,
+	          viewApplication = _nextProps$meta.viewApplication,
+	          refEntity = _nextProps$meta.refEntity;
+	      initReferInfo.call(this, dataType, refEntity, viewApplication, nextProps);
 	    }
 	  }
 	  /**
@@ -87166,14 +87182,14 @@
 	      matchData: props.matchData || [],
 	      value: props.value,
 	      onChange: props.onChange,
+	      //为了让form表单的校验进来
 	      emptyBut: true,
 	      //清空按钮是否展示
 	      disabled: props.disabled //不可选，业务需求
 
 	    };
-	    console.log('table', propsParam.valueField, propsParam.displayField);
 	    return React__default.createElement("div", {
-	      className: "ref-container"
+	      className: "ref-container-table"
 	    }, React__default.createElement(lib_6$1, _extends_1({}, propsParam, {
 	      onSave: this.onSave,
 	      onCancel: this.onCancel,
@@ -90316,6 +90332,16 @@
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	    if (nextProps.dataUrl !== this.props.dataUrl) {
 	      this.dataUrl = nextProps.dataUrl;
+	    } //是否重新初始化initReferInfo
+
+
+	    var need = needRecallInitReferInfo(nextProps, this.props);
+
+	    if (need) {
+	      var _nextProps$meta = nextProps.meta,
+	          viewApplication = _nextProps$meta.viewApplication,
+	          refEntity = _nextProps$meta.refEntity;
+	      initReferInfo.call(this, dataType$1, refEntity, viewApplication, nextProps);
 	    }
 	  };
 
@@ -90365,19 +90391,21 @@
 	      treeData: this.treeData,
 	      filterData: this.state.filterData,
 	      showLoading: showLoading,
-	      disabled: props.disabled //不可选，业务需求
+	      disabled: props.disabled,
+	      //不可选，业务需求
+	      matchData: props.matchData,
+	      value: props.value,
+	      onChange: props.onChange //为了让form表单的校验进来
 
-	    }; // console.log('tree-onChange',props.onChange)
-
-	    return React__default.createElement(lib_4$2, _extends_1({}, option, {
+	    };
+	    return React__default.createElement("div", {
+	      className: "ref-container-tree"
+	    }, React__default.createElement(lib_4$2, _extends_1({}, option, {
 	      getRefTreeData: this.getData,
 	      filterUrlFunc: this.searchData,
 	      onSave: this.onSave,
-	      canClickGoOn: this.getData,
-	      matchData: props.matchData,
-	      value: props.value,
-	      onChange: props.onChange
-	    }));
+	      canClickGoOn: this.getData
+	    })));
 	  };
 
 	  return Tree;
@@ -91601,10 +91629,17 @@
 	function (_Component) {
 	  inheritsLoose(TreeTable, _Component);
 
-	  function TreeTable(props) {
+	  function TreeTable(_props) {
 	    var _this;
 
-	    _this = _Component.call(this, props) || this;
+	    _this = _Component.call(this, _props) || this;
+
+	    _this.getMultiple = function () {
+	      var props = _this.props;
+	      var multiSelect = props.multiSelect == undefined ? props.meta.refEntity.bMultiSel : props.multiSelect;
+	      return multiSelect;
+	    };
+
 	    _this.getData =
 	    /*#__PURE__*/
 	    asyncToGenerator(
@@ -91631,7 +91666,7 @@
 	                  _this.onAfterAjax(bodyData);
 	                }
 
-	                _this.launchTableHeader(columnsData);
+	                _this.launchTableHeader(columnsData, _this.getMultiple());
 
 	                _this.launchTableData(bodyData);
 
@@ -91688,8 +91723,10 @@
 	    };
 
 	    _this.onTreeSearch = function (value) {
-	      // alert(value);
-	      console.log('treeSearch---', value);
+	      clearTimeout(_this.searchTimeOut);
+	      _this.searchTimeOut = setTimeout(function () {
+	        _this._getRefTreeDataByParam(value);
+	      }, 300);
 	    };
 
 	    _this.loadTableData = function (pageInfo) {
@@ -91734,9 +91771,43 @@
 	      });
 	    };
 
+	    _this._getRefTreeDataByParam = function (value) {
+	      _this.setState({
+	        showLoading: true
+	      });
+
+	      _this.getRefTreeData(value).then(function (treeData) {
+	        var _treeData$data$data2 = treeData.data.data,
+	            data = _treeData$data$data2 === void 0 ? [] : _treeData$data$data2;
+	        _this.treeData = data;
+
+	        _this.setState({
+	          showLoading: false
+	        });
+	      }).catch(function (e) {
+	        _this.setState({
+	          showLoading: false
+	        });
+	      });
+	    };
+
+	    _this.clearGetDataParam = function () {
+	      delete _this.param.likeValue;
+	      _this.page = {
+	        pageCount: 1,
+	        //总页数
+	        currPageIndex: 1,
+	        pageSize: "10" //每页数据数
+
+	      };
+	    };
+
 	    _this.onSave = function (data) {
-	      // console.log("save", JSON.stringify(item));
-	      var store = _this.props.store;
+	      _this.clearGetDataParam();
+
+	      var _this$props = _this.props,
+	          store = _this$props.store,
+	          onOk = _this$props.onOk;
 	      store.setState({
 	        matchData: data
 	      });
@@ -91746,10 +91817,10 @@
 	    _this.columnsData = [];
 	    _this.tableData = [];
 	    _this.originTableData = [];
-	    var _props$meta = props.meta,
+	    var _props$meta = _props.meta,
 	        viewApplication = _props$meta.viewApplication,
 	        refEntity = _props$meta.refEntity;
-	    initReferInfo.call(assertThisInitialized(_this), dataType$2, refEntity, viewApplication, props);
+	    initReferInfo.call(assertThisInitialized(_this), dataType$2, refEntity, viewApplication, _props);
 	    _this.view = viewApplication.view;
 	    _this.dataType = '';
 	    _this.getTableInfo = getTableInfo.bind(assertThisInitialized(_this));
@@ -91760,47 +91831,79 @@
 	    _this.page = {
 	      pageCount: 1,
 	      //总页数
-	      currPageIndex: 0,
+	      currPageIndex: 1,
 	      pageSize: "10" //每页数据数
 
 	    };
 	    _this.state = {
 	      value: ""
 	    };
+	    _this.searchTimeOut; //tree搜索延迟
+
+	    _this.timer; //table搜索延迟
+
 	    return _this;
 	  }
 
 	  var _proto = TreeTable.prototype;
 
 	  _proto.componentWillUnmount = function componentWillUnmount() {
-	    if (this.timer) {
+	    if (this.timer || this.searchTimeOut) {
 	      clearTimeout(this.timer);
+	      clearTimeout(this.searchTimeOut);
 	      this.timer = null;
+	      this.searchTimeOut = null;
+	    }
+	  };
+
+	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	    if (nextProps.dataUrl !== this.props.dataUrl) {
+	      this.dataUrl = nextProps.dataUrl;
+	    } //是否重新初始化initReferInfo
+
+
+	    var need = needRecallInitReferInfo(nextProps, this.props);
+
+	    if (need) {
+	      var _nextProps$meta = nextProps.meta,
+	          viewApplication = _nextProps$meta.viewApplication,
+	          refEntity = _nextProps$meta.refEntity;
+	      initReferInfo.call(this, dataType$2, refEntity, viewApplication, nextProps);
 	    }
 	  };
 
 	  _proto.render = function render() {
 	    var props = this.props;
-	    return React__default.createElement(lib_3$3, {
+	    var propsParamTreeTable = {
 	      title: this.cBillName,
+	      multiple: this.getMultiple(),
 	      displayField: "{" + this.displayField + "}",
+	      inputDisplay: "{" + this.displayField + "}",
 	      valueField: this.valueField,
-	      lang: "zh_CN",
 	      treeData: this.treeData,
-	      onTreeChange: this.onTreeChange,
-	      onTreeSearch: this.onTreeSearch,
 	      columnsData: this.columnsData,
 	      tableData: this.tableData,
 	      page: this.page,
-	      loadTableData: this.loadTableData,
-	      onTableSearch: this.onTableSearch,
-	      onSave: this.onSave,
-	      matchData: props.matchData,
 	      showLoading: this.state.showLoading,
 	      nodeDisplay: "{" + this.displayField + "}",
 	      defaultExpandAll: false,
+	      matchData: props.matchData,
+	      value: props.value,
+	      onChange: props.onChange,
+	      //为了让form表单的校验进来
+	      disabled: props.disabled //不可选，业务需求
+
+	    };
+	    return React__default.createElement("div", {
+	      className: "ref-container-tree-table"
+	    }, React__default.createElement(lib_3$3, _extends_1({}, propsParamTreeTable, {
+	      onTreeChange: this.onTreeChange,
+	      onTreeSearch: this.onTreeSearch,
+	      loadTableData: this.loadTableData,
+	      onTableSearch: this.onTableSearch,
+	      onSave: this.onSave,
 	      canClickGoOn: this.getData
-	    });
+	    })));
 	  };
 
 	  return TreeTable;
@@ -91929,11 +92032,29 @@
 	function (_Component) {
 	  inheritsLoose(ModelDrivenRefer, _Component);
 
-	  function ModelDrivenRefer(props) {
+	  function ModelDrivenRefer(_props) {
 	    var _this;
 
-	    _this = _Component.call(this, props) || this;
+	    _this = _Component.call(this, _props) || this;
 	    _this.meta = {};
+
+	    _this.getRefMeta = function (props) {
+	      var _props$url = props.url,
+	          url = _props$url === void 0 ? '' : _props$url,
+	          _props$token = props.token,
+	          token = _props$token === void 0 ? '' : _props$token,
+	          _props$host = props.host,
+	          host = _props$host === void 0 ? '' : _props$host;
+	      var defaultUrl = '/uniform/pub/ref/getRefMeta'; // 判断props中的url是否存在，存在走用户传入的url，
+	      // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
+
+	      if (!url) {
+	        url = token ? "" + host + defaultUrl + "?token=" + token : defaultUrl;
+	      } // this.handleDynamicView(url)
+
+
+	      _this.getMetaDataByCustomURL(url, props);
+	    };
 
 	    _this.handleDynamicView = function (url) {
 	      if (url) _this.getMetaDataByCustomURL(url); // 该逻辑暂时无用，用于考虑后续的兼容性。
@@ -91978,21 +92099,21 @@
 	    function () {
 	      var _ref3 = asyncToGenerator(
 	      /*#__PURE__*/
-	      regenerator.mark(function _callee2(url) {
-	        var _this$props, serviceCode, refCode, _ref4, data, isNeedRender;
+	      regenerator.mark(function _callee2(url, props) {
+	        var _ref4, serviceCode, refCode, _ref5, data, isNeedRender;
 
 	        return regenerator.wrap(function _callee2$(_context2) {
 	          while (1) {
 	            switch (_context2.prev = _context2.next) {
 	              case 0:
-	                _this$props = _this.props, serviceCode = _this$props.serviceCode, refCode = _this$props.refCode;
+	                _ref4 = props || _this.props, serviceCode = _ref4.serviceCode, refCode = _ref4.refCode;
 	                url += "?serviceCode=" + serviceCode + "&refCode=" + refCode;
 	                _context2.next = 4;
 	                return getMeta(url);
 
 	              case 4:
-	                _ref4 = _context2.sent;
-	                data = _ref4.data;
+	                _ref5 = _context2.sent;
+	                data = _ref5.data;
 	                isNeedRender = _this.state.isNeedRender;
 
 	                if (data.code == 200) {
@@ -92013,7 +92134,7 @@
 	        }, _callee2);
 	      }));
 
-	      return function (_x) {
+	      return function (_x, _x2) {
 	        return _ref3.apply(this, arguments);
 	      };
 	    }();
@@ -92047,29 +92168,14 @@
 	      isNeedRender: false,
 	      isLoading: true
 	    };
-	    _this.store = miniStore.create(props);
+	    _this.store = miniStore.create(_props);
 	    return _this;
 	  }
 
 	  var _proto = ModelDrivenRefer.prototype;
 
 	  _proto.componentWillMount = function componentWillMount() {
-	    var _this$props2 = this.props,
-	        _this$props2$url = _this$props2.url,
-	        url = _this$props2$url === void 0 ? '' : _this$props2$url,
-	        _this$props2$token = _this$props2.token,
-	        token = _this$props2$token === void 0 ? '' : _this$props2$token,
-	        _this$props2$host = _this$props2.host,
-	        host = _this$props2$host === void 0 ? '' : _this$props2$host;
-	    var defaultUrl = '/uniform/pub/ref/getRefMeta'; // 判断props中的url是否存在，存在走用户传入的url，
-	    // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
-
-	    if (!url) {
-	      url = token ? "" + host + defaultUrl + "?token=" + token : defaultUrl;
-	    } // this.handleDynamicView(url)
-
-
-	    this.getMetaDataByCustomURL(url);
+	    this.getRefMeta(this.props);
 	  };
 
 	  _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
@@ -92086,36 +92192,28 @@
 	      this._setState(nextProps);
 
 	      return false;
-	    } // if(nextProps.value !== this.props.value){
-	    //     this.store.setState({
-	    //         value:nextProps.value,
-	    //     });
-	    // }
-	    // if(nextProps.disabled !== this.props.disabled){
-	    //     this.store.setState({
-	    //         disabled:nextProps.disabled,
-	    //     });
-	    // } 
-	    // if(!shallowequal(nextProps.matchData,this.props.matchData)){
-	    //     this.store.setState({
-	    //         matchData:nextProps.matchData,
-	    //     });
-	    // } 
-	    //下面找到前后改变的属性只修改改变的属性
+	    } //下面找到前后改变的属性只修改改变的属性
 
 
 	    var changeObj = {};
-	    Object.keys(nextProps).forEach(function (key) {
-	      if (_this2.props.hasOwnProperty(key)) {
-	        //判断是什么类型的
-	        if (typeof nextProps[key] === 'string' && _this2.props[key] !== nextProps[key]) {
-	          changeObj[key] = nextProps[key];
-	        } else if (Array.isArray(nextProps[key]) && !shallowequal(nextProps[key], _this2.props[key])) {
-	          changeObj[key] = nextProps[key];
+
+	    if (!shallowequal(nextProps, this.props)) {
+	      Object.keys(nextProps).forEach(function (key) {
+	        if (_this2.props.hasOwnProperty(key)) {
+	          //判断是什么类型的
+	          if (typeof nextProps[key] === 'string' && _this2.props[key] !== nextProps[key]) {
+	            changeObj[key] = nextProps[key];
+	          } else if (Array.isArray(nextProps[key]) && !shallowequal(nextProps[key], _this2.props[key])) {
+	            changeObj[key] = nextProps[key];
+	          }
 	        }
+	      });
+	      this.store.setState(changeObj);
+
+	      if ('refCode' in changeObj || 'host' in changeObj || 'dataUrl' in changeObj || 'url' in changeObj || 'serviceCode' in changeObj) {
+	        this.getRefMeta(nextProps);
 	      }
-	    });
-	    this.store.setState(changeObj);
+	    }
 	  };
 
 	  _proto._setState = function _setState(props) {
@@ -92161,22 +92259,7 @@
 	  ;
 
 	  _proto.render = function render() {
-	    var isLoading = this.state.isLoading;
-	    var _this$props3 = this.props,
-	        form = _this$props3.form,
-	        dataUrl = _this$props3.dataUrl,
-	        refCode = _this$props3.refCode,
-	        serviceCode = _this$props3.serviceCode,
-	        cItemName = _this$props3.cItemName,
-	        onOk = _this$props3.onOk,
-	        host = _this$props3.host,
-	        onCancel = _this$props3.onCancel,
-	        token = _this$props3.token,
-	        matchData = _this$props3.matchData,
-	        value = _this$props3.value,
-	        beforeGetData = _this$props3.beforeGetData,
-	        multiSelect = _this$props3.multiSelect,
-	        disabled = _this$props3.disabled;
+	    var isLoading = this.state.isLoading; // let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,onCancel,token,matchData,value,beforeGetData,multiSelect,disabled} = this.props;
 
 	    if (isLoading) {
 	      return React__default.createElement("p", null, "\u6570\u636E\u8BF7\u6C42\u4E2D...");

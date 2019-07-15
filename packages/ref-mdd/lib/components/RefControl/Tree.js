@@ -8,7 +8,7 @@ import { connect } from "mini-store";
 import { RefTreeWithInput } from "ref-tree/lib/index";
 
 // 工具类
-import { initReferInfo } from "../../utils";
+import { initReferInfo, needRecallInitReferInfo } from "../../utils";
 import {getRefTreeData} from './util';
 
 // 样式
@@ -65,6 +65,12 @@ class Tree extends Component {
   componentWillReceiveProps(nextProps){
     if(nextProps.dataUrl !== this.props.dataUrl){
       this.dataUrl = nextProps.dataUrl;
+    }
+    //是否重新初始化initReferInfo
+    let need = needRecallInitReferInfo(nextProps,this.props);
+    if(need){
+      let { viewApplication, refEntity } = nextProps.meta;
+      initReferInfo.call(this,dataType, refEntity, viewApplication,nextProps);
     }
   }
 
@@ -151,19 +157,21 @@ class Tree extends Component {
       filterData: this.state.filterData,
       showLoading: showLoading,
       disabled:props.disabled,//不可选，业务需求
+      matchData:props.matchData,
+      value:props.value,
+      onChange:props.onChange,//为了让form表单的校验进来
     };
-    // console.log('tree-onChange',props.onChange)
     return (
-      <RefTreeWithInput
-        {...option}
-        getRefTreeData={this.getData}
-        filterUrlFunc={this.searchData}
-        onSave={this.onSave}
-        canClickGoOn={this.getData}
-        matchData={props.matchData}
-        value={props.value}
-        onChange={props.onChange}
-      />
+      <div className='ref-container-tree'>
+        <RefTreeWithInput
+          {...option}
+          getRefTreeData={this.getData}
+          filterUrlFunc={this.searchData}
+          onSave={this.onSave}
+          canClickGoOn={this.getData}
+        
+        />
+      </div>
     );
   }
 }

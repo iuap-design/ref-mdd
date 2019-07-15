@@ -18,7 +18,10 @@ class ModelDrivenRefer extends Component {
     }
     meta = {};
     componentWillMount() {
-        let {url='',token='',host=''} = this.props;
+       this.getRefMeta(this.props);
+    }
+    getRefMeta=(props) =>{
+        let {url='',token='',host=''} = props;
         const defaultUrl = '/uniform/pub/ref/getRefMeta';
         // 判断props中的url是否存在，存在走用户传入的url，
         // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
@@ -26,7 +29,7 @@ class ModelDrivenRefer extends Component {
             url = token?`${host}${defaultUrl}?token=${token}`:defaultUrl  
         }
         // this.handleDynamicView(url)
-        this.getMetaDataByCustomURL(url);
+        this.getMetaDataByCustomURL(url,props);
     }
     componentWillReceiveProps(nextProps){
         //这里注意一下value可能是string类型或者数组格式
@@ -39,38 +42,32 @@ class ModelDrivenRefer extends Component {
             return false;
 
         } 
-        // if(nextProps.value !== this.props.value){
-        //     this.store.setState({
-        //         value:nextProps.value,
-        //     });
-        // }
-        // if(nextProps.disabled !== this.props.disabled){
-        //     this.store.setState({
-        //         disabled:nextProps.disabled,
-        //     });
-        // } 
-        // if(!shallowequal(nextProps.matchData,this.props.matchData)){
-        //     this.store.setState({
-        //         matchData:nextProps.matchData,
-        //     });
-        // } 
+       
         //下面找到前后改变的属性只修改改变的属性
         let changeObj={};
-        Object.keys(nextProps).forEach(key=>{
-             if(this.props.hasOwnProperty(key)){
-                 //判断是什么类型的
-                 if(typeof(nextProps[key])==='string' && this.props[key] !== nextProps[key]){
-                     
-                     changeObj[key] =nextProps[key] 
-                 
-                 }else if(Array.isArray(nextProps[key]) && !shallowequal(nextProps[key],this.props[key])){
-                     changeObj[key] =nextProps[key] 
-                 
-                 }
-             }
- 
-        });
-        this.store.setState(changeObj);
+        if(!shallowequal(nextProps,this.props)){
+            Object.keys(nextProps).forEach(key=>{
+                if(this.props.hasOwnProperty(key)){
+                    //判断是什么类型的
+                    if(typeof(nextProps[key])==='string' && this.props[key] !== nextProps[key]){
+                        
+                        changeObj[key] =nextProps[key] 
+                    
+                    }else if(Array.isArray(nextProps[key]) && !shallowequal(nextProps[key],this.props[key])){
+                        changeObj[key] =nextProps[key] 
+                    
+                    }
+                }
+    
+           });
+           
+           this.store.setState(changeObj);
+           if('refCode' in changeObj || 'host' in changeObj ||'dataUrl' in changeObj ||'url' in changeObj ||'serviceCode' in changeObj ){
+               this.getRefMeta(nextProps)
+           }
+        }
+      
+       
     }
     
     _setState(props){
@@ -120,8 +117,8 @@ class ModelDrivenRefer extends Component {
         let { data } = await getMeta(`/meta?billtype=${billtype}&billno=${billno}`);
     }
 
-    getMetaDataByCustomURL = async url => {
-        const {serviceCode,refCode} = this.props;
+    getMetaDataByCustomURL = async (url,props)=> {
+        const {serviceCode,refCode} = props ||this.props;
         url += `?serviceCode=${serviceCode}&refCode=${refCode}`;
         let { data } = await getMeta(url);
         const { isNeedRender } = this.state;
@@ -162,7 +159,7 @@ class ModelDrivenRefer extends Component {
 
     render() {
         let { isLoading } = this.state;
-        let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,onCancel,token,matchData,value,beforeGetData,multiSelect,disabled} = this.props;
+        // let { form,dataUrl,refCode,serviceCode ,cItemName,onOk,host,onCancel,token,matchData,value,beforeGetData,multiSelect,disabled} = this.props;
         if (isLoading) {
             return <p>数据请求中...</p>
         } else {

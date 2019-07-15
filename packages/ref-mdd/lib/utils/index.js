@@ -57,8 +57,21 @@ export function initReferInfo(dataType, refEntity, viewApplication={},propsState
         dataUrl = token?`${host}${defaultDataURL}?token=${token}`:`${host}${defaultDataURL}`;
     }
     this.dataUrl = dataUrl;
-    this.cBillName = viewApplication.cBillName;
+    this.cBillName = viewApplication.cBillName ||  refEntity.name;
     this.getQueryParam = getQueryParam;
     this.refCode = propsState.refCode;
     this.param = getQueryParam(dataType, refEntity, viewApplication,beforeGetData,this.refCode);//数据查询参数
+}
+
+/**
+ * 是否需要重新调用上面initReferInfo函数
+ */
+export function needRecallInitReferInfo(nextProps,preProps){
+    let initReferInfoNeedChange =false;
+    initReferInfoNeedChange = nextProps.dataUrl !== preProps.dataUrl 
+    || nextProps.refCode !== preProps.refCode
+    || nextProps.host !== preProps.host
+    || nextProps.url !== preProps.url
+    || nextProps.serviceCode !== preProps.serviceCode
+    return initReferInfoNeedChange;
 }

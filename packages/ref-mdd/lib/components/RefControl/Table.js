@@ -8,7 +8,7 @@ import {
   RefMultipleTableWithInput
 } from "ref-multiple-table/lib/index";
 // 工具类
-import {initReferInfo } from "../../utils";
+import {initReferInfo,needRecallInitReferInfo } from "../../utils";
 import {getTableInfo,launchTableHeader,launchTableData,getTableData} from './util';
 
 // 样式
@@ -54,6 +54,13 @@ class Table extends Component {
     if(nextProps.dataUrl !== this.props.dataUrl){
       this.dataUrl = nextProps.dataUrl;
     }
+    //是否重新初始化initReferInfo
+    let need = needRecallInitReferInfo(nextProps,this.props);
+    if(need){
+      let { viewApplication, refEntity } = nextProps.meta;
+      initReferInfo.call(this,dataType, refEntity, viewApplication,nextProps);
+    }
+    
    
    
   }
@@ -245,13 +252,12 @@ class Table extends Component {
       miniSearchFunc: searchFilterInfo,
       matchData:props.matchData || [],
       value:props.value,
-      onChange:props.onChange,
+      onChange:props.onChange,//为了让form表单的校验进来
       emptyBut: true, //清空按钮是否展示
       disabled:props.disabled,//不可选，业务需求
     };
-    console.log('table',propsParam.valueField,propsParam.displayField)
     return (
-      <div className='ref-container'>
+      <div className='ref-container-table'>
         <RefMultipleTableWithInput
           {...propsParam}
           onSave={this.onSave}
