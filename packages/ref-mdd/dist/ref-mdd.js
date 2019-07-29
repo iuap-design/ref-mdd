@@ -36096,6 +36096,1050 @@
 	  style: {}
 	};
 
+	var KeyCode_1 = createCommonjsModule(function (module, exports) {
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * @ignore
+	 * some key-codes definition and utils from closure-library
+	 * @author yiminghe@gmail.com
+	 */
+
+	var KeyCode = {
+	  /**
+	   * MAC_ENTER
+	   */
+	  MAC_ENTER: 3,
+	  /**
+	   * BACKSPACE
+	   */
+	  BACKSPACE: 8,
+	  /**
+	   * TAB
+	   */
+	  TAB: 9,
+	  /**
+	   * NUMLOCK on FF/Safari Mac
+	   */
+	  NUM_CENTER: 12, // NUMLOCK on FF/Safari Mac
+	  /**
+	   * ENTER
+	   */
+	  ENTER: 13,
+	  /**
+	   * SHIFT
+	   */
+	  SHIFT: 16,
+	  /**
+	   * CTRL
+	   */
+	  CTRL: 17,
+	  /**
+	   * ALT
+	   */
+	  ALT: 18,
+	  /**
+	   * PAUSE
+	   */
+	  PAUSE: 19,
+	  /**
+	   * CAPS_LOCK
+	   */
+	  CAPS_LOCK: 20,
+	  /**
+	   * ESC
+	   */
+	  ESC: 27,
+	  /**
+	   * SPACE
+	   */
+	  SPACE: 32,
+	  /**
+	   * PAGE_UP
+	   */
+	  PAGE_UP: 33, // also NUM_NORTH_EAST
+	  /**
+	   * PAGE_DOWN
+	   */
+	  PAGE_DOWN: 34, // also NUM_SOUTH_EAST
+	  /**
+	   * END
+	   */
+	  END: 35, // also NUM_SOUTH_WEST
+	  /**
+	   * HOME
+	   */
+	  HOME: 36, // also NUM_NORTH_WEST
+	  /**
+	   * LEFT
+	   */
+	  LEFT: 37, // also NUM_WEST
+	  /**
+	   * UP
+	   */
+	  UP: 38, // also NUM_NORTH
+	  /**
+	   * RIGHT
+	   */
+	  RIGHT: 39, // also NUM_EAST
+	  /**
+	   * DOWN
+	   */
+	  DOWN: 40, // also NUM_SOUTH
+	  /**
+	   * PRINT_SCREEN
+	   */
+	  PRINT_SCREEN: 44,
+	  /**
+	   * INSERT
+	   */
+	  INSERT: 45, // also NUM_INSERT
+	  /**
+	   * DELETE
+	   */
+	  DELETE: 46, // also NUM_DELETE
+	  /**
+	   * ZERO
+	   */
+	  ZERO: 48,
+	  /**
+	   * ONE
+	   */
+	  ONE: 49,
+	  /**
+	   * TWO
+	   */
+	  TWO: 50,
+	  /**
+	   * THREE
+	   */
+	  THREE: 51,
+	  /**
+	   * FOUR
+	   */
+	  FOUR: 52,
+	  /**
+	   * FIVE
+	   */
+	  FIVE: 53,
+	  /**
+	   * SIX
+	   */
+	  SIX: 54,
+	  /**
+	   * SEVEN
+	   */
+	  SEVEN: 55,
+	  /**
+	   * EIGHT
+	   */
+	  EIGHT: 56,
+	  /**
+	   * NINE
+	   */
+	  NINE: 57,
+	  /**
+	   * QUESTION_MARK
+	   */
+	  QUESTION_MARK: 63, // needs localization
+	  /**
+	   * A
+	   */
+	  A: 65,
+	  /**
+	   * B
+	   */
+	  B: 66,
+	  /**
+	   * C
+	   */
+	  C: 67,
+	  /**
+	   * D
+	   */
+	  D: 68,
+	  /**
+	   * E
+	   */
+	  E: 69,
+	  /**
+	   * F
+	   */
+	  F: 70,
+	  /**
+	   * G
+	   */
+	  G: 71,
+	  /**
+	   * H
+	   */
+	  H: 72,
+	  /**
+	   * I
+	   */
+	  I: 73,
+	  /**
+	   * J
+	   */
+	  J: 74,
+	  /**
+	   * K
+	   */
+	  K: 75,
+	  /**
+	   * L
+	   */
+	  L: 76,
+	  /**
+	   * M
+	   */
+	  M: 77,
+	  /**
+	   * N
+	   */
+	  N: 78,
+	  /**
+	   * O
+	   */
+	  O: 79,
+	  /**
+	   * P
+	   */
+	  P: 80,
+	  /**
+	   * Q
+	   */
+	  Q: 81,
+	  /**
+	   * R
+	   */
+	  R: 82,
+	  /**
+	   * S
+	   */
+	  S: 83,
+	  /**
+	   * T
+	   */
+	  T: 84,
+	  /**
+	   * U
+	   */
+	  U: 85,
+	  /**
+	   * V
+	   */
+	  V: 86,
+	  /**
+	   * W
+	   */
+	  W: 87,
+	  /**
+	   * X
+	   */
+	  X: 88,
+	  /**
+	   * Y
+	   */
+	  Y: 89,
+	  /**
+	   * Z
+	   */
+	  Z: 90,
+	  /**
+	   * META
+	   */
+	  META: 91, // WIN_KEY_LEFT
+	  /**
+	   * WIN_KEY_RIGHT
+	   */
+	  WIN_KEY_RIGHT: 92,
+	  /**
+	   * CONTEXT_MENU
+	   */
+	  CONTEXT_MENU: 93,
+	  /**
+	   * NUM_ZERO
+	   */
+	  NUM_ZERO: 96,
+	  /**
+	   * NUM_ONE
+	   */
+	  NUM_ONE: 97,
+	  /**
+	   * NUM_TWO
+	   */
+	  NUM_TWO: 98,
+	  /**
+	   * NUM_THREE
+	   */
+	  NUM_THREE: 99,
+	  /**
+	   * NUM_FOUR
+	   */
+	  NUM_FOUR: 100,
+	  /**
+	   * NUM_FIVE
+	   */
+	  NUM_FIVE: 101,
+	  /**
+	   * NUM_SIX
+	   */
+	  NUM_SIX: 102,
+	  /**
+	   * NUM_SEVEN
+	   */
+	  NUM_SEVEN: 103,
+	  /**
+	   * NUM_EIGHT
+	   */
+	  NUM_EIGHT: 104,
+	  /**
+	   * NUM_NINE
+	   */
+	  NUM_NINE: 105,
+	  /**
+	   * NUM_MULTIPLY
+	   */
+	  NUM_MULTIPLY: 106,
+	  /**
+	   * NUM_PLUS
+	   */
+	  NUM_PLUS: 107,
+	  /**
+	   * NUM_MINUS
+	   */
+	  NUM_MINUS: 109,
+	  /**
+	   * NUM_PERIOD
+	   */
+	  NUM_PERIOD: 110,
+	  /**
+	   * NUM_DIVISION
+	   */
+	  NUM_DIVISION: 111,
+	  /**
+	   * F1
+	   */
+	  F1: 112,
+	  /**
+	   * F2
+	   */
+	  F2: 113,
+	  /**
+	   * F3
+	   */
+	  F3: 114,
+	  /**
+	   * F4
+	   */
+	  F4: 115,
+	  /**
+	   * F5
+	   */
+	  F5: 116,
+	  /**
+	   * F6
+	   */
+	  F6: 117,
+	  /**
+	   * F7
+	   */
+	  F7: 118,
+	  /**
+	   * F8
+	   */
+	  F8: 119,
+	  /**
+	   * F9
+	   */
+	  F9: 120,
+	  /**
+	   * F10
+	   */
+	  F10: 121,
+	  /**
+	   * F11
+	   */
+	  F11: 122,
+	  /**
+	   * F12
+	   */
+	  F12: 123,
+	  /**
+	   * NUMLOCK
+	   */
+	  NUMLOCK: 144,
+	  /**
+	   * SEMICOLON
+	   */
+	  SEMICOLON: 186, // needs localization
+	  /**
+	   * DASH
+	   */
+	  DASH: 189, // needs localization
+	  /**
+	   * EQUALS
+	   */
+	  EQUALS: 187, // needs localization
+	  /**
+	   * COMMA
+	   */
+	  COMMA: 188, // needs localization
+	  /**
+	   * PERIOD
+	   */
+	  PERIOD: 190, // needs localization
+	  /**
+	   * SLASH
+	   */
+	  SLASH: 191, // needs localization
+	  /**
+	   * APOSTROPHE
+	   */
+	  APOSTROPHE: 192, // needs localization
+	  /**
+	   * SINGLE_QUOTE
+	   */
+	  SINGLE_QUOTE: 222, // needs localization
+	  /**
+	   * OPEN_SQUARE_BRACKET
+	   */
+	  OPEN_SQUARE_BRACKET: 219, // needs localization
+	  /**
+	   * BACKSLASH
+	   */
+	  BACKSLASH: 220, // needs localization
+	  /**
+	   * CLOSE_SQUARE_BRACKET
+	   */
+	  CLOSE_SQUARE_BRACKET: 221, // needs localization
+	  /**
+	   * WIN_KEY
+	   */
+	  WIN_KEY: 224,
+	  /**
+	   * MAC_FF_META
+	   */
+	  MAC_FF_META: 224, // Firefox (Gecko) fires this for the meta key instead of 91
+	  /**
+	   * WIN_IME
+	   */
+	  WIN_IME: 229
+	};
+
+	/*
+	 whether text and modified key is entered at the same time.
+	 */
+	KeyCode.isTextModifyingKeyEvent = function isTextModifyingKeyEvent(e) {
+	  var keyCode = e.keyCode;
+	  if (e.altKey && !e.ctrlKey || e.metaKey ||
+	  // Function keys don't generate text
+	  keyCode >= KeyCode.F1 && keyCode <= KeyCode.F12) {
+	    return false;
+	  }
+
+	  // The following keys are quite harmless, even in combination with
+	  // CTRL, ALT or SHIFT.
+	  switch (keyCode) {
+	    case KeyCode.ALT:
+	    case KeyCode.CAPS_LOCK:
+	    case KeyCode.CONTEXT_MENU:
+	    case KeyCode.CTRL:
+	    case KeyCode.DOWN:
+	    case KeyCode.END:
+	    case KeyCode.ESC:
+	    case KeyCode.HOME:
+	    case KeyCode.INSERT:
+	    case KeyCode.LEFT:
+	    case KeyCode.MAC_FF_META:
+	    case KeyCode.META:
+	    case KeyCode.NUMLOCK:
+	    case KeyCode.NUM_CENTER:
+	    case KeyCode.PAGE_DOWN:
+	    case KeyCode.PAGE_UP:
+	    case KeyCode.PAUSE:
+	    case KeyCode.PRINT_SCREEN:
+	    case KeyCode.RIGHT:
+	    case KeyCode.SHIFT:
+	    case KeyCode.UP:
+	    case KeyCode.WIN_KEY:
+	    case KeyCode.WIN_KEY_RIGHT:
+	      return false;
+	    default:
+	      return true;
+	  }
+	};
+
+	/*
+	 whether character is entered.
+	 */
+	KeyCode.isCharacterKey = function isCharacterKey(keyCode) {
+	  if (keyCode >= KeyCode.ZERO && keyCode <= KeyCode.NINE) {
+	    return true;
+	  }
+
+	  if (keyCode >= KeyCode.NUM_ZERO && keyCode <= KeyCode.NUM_MULTIPLY) {
+	    return true;
+	  }
+
+	  if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z) {
+	    return true;
+	  }
+
+	  // Safari sends zero key code for non-latin characters.
+	  if (window.navigation.userAgent.indexOf('WebKit') !== -1 && keyCode === 0) {
+	    return true;
+	  }
+
+	  switch (keyCode) {
+	    case KeyCode.SPACE:
+	    case KeyCode.QUESTION_MARK:
+	    case KeyCode.NUM_PLUS:
+	    case KeyCode.NUM_MINUS:
+	    case KeyCode.NUM_PERIOD:
+	    case KeyCode.NUM_DIVISION:
+	    case KeyCode.SEMICOLON:
+	    case KeyCode.DASH:
+	    case KeyCode.EQUALS:
+	    case KeyCode.COMMA:
+	    case KeyCode.PERIOD:
+	    case KeyCode.SLASH:
+	    case KeyCode.APOSTROPHE:
+	    case KeyCode.SINGLE_QUOTE:
+	    case KeyCode.OPEN_SQUARE_BRACKET:
+	    case KeyCode.BACKSLASH:
+	    case KeyCode.CLOSE_SQUARE_BRACKET:
+	      return true;
+	    default:
+	      return false;
+	  }
+	};
+
+	exports['default'] = KeyCode;
+	module.exports = exports['default'];
+	});
+
+	unwrapExports(KeyCode_1);
+
+	var isMobile$1 = createCommonjsModule(function (module) {
+	(function(global) {
+	  var apple_phone = /iPhone/i,
+	    apple_ipod = /iPod/i,
+	    apple_tablet = /iPad/i,
+	    android_phone = /\bAndroid(?:.+)Mobile\b/i, // Match 'Android' AND 'Mobile'
+	    android_tablet = /Android/i,
+	    amazon_phone = /\bAndroid(?:.+)SD4930UR\b/i,
+	    amazon_tablet = /\bAndroid(?:.+)(?:KF[A-Z]{2,4})\b/i,
+	    windows_phone = /Windows Phone/i,
+	    windows_tablet = /\bWindows(?:.+)ARM\b/i, // Match 'Windows' AND 'ARM'
+	    other_blackberry = /BlackBerry/i,
+	    other_blackberry_10 = /BB10/i,
+	    other_opera = /Opera Mini/i,
+	    other_chrome = /\b(CriOS|Chrome)(?:.+)Mobile/i,
+	    other_firefox = /Mobile(?:.+)Firefox\b/i; // Match 'Mobile' AND 'Firefox'
+
+	  function match(regex, userAgent) {
+	    return regex.test(userAgent);
+	  }
+
+	  function isMobile(userAgent) {
+	    var ua =
+	      userAgent ||
+	      (typeof navigator !== 'undefined' ? navigator.userAgent : '');
+
+	    // Facebook mobile app's integrated browser adds a bunch of strings that
+	    // match everything. Strip it out if it exists.
+	    var tmp = ua.split('[FBAN');
+	    if (typeof tmp[1] !== 'undefined') {
+	      ua = tmp[0];
+	    }
+
+	    // Twitter mobile app's integrated browser on iPad adds a "Twitter for
+	    // iPhone" string. Same probably happens on other tablet platforms.
+	    // This will confuse detection so strip it out if it exists.
+	    tmp = ua.split('Twitter');
+	    if (typeof tmp[1] !== 'undefined') {
+	      ua = tmp[0];
+	    }
+
+	    var result = {
+	      apple: {
+	        phone: match(apple_phone, ua) && !match(windows_phone, ua),
+	        ipod: match(apple_ipod, ua),
+	        tablet:
+	          !match(apple_phone, ua) &&
+	          match(apple_tablet, ua) &&
+	          !match(windows_phone, ua),
+	        device:
+	          (match(apple_phone, ua) ||
+	            match(apple_ipod, ua) ||
+	            match(apple_tablet, ua)) &&
+	          !match(windows_phone, ua)
+	      },
+	      amazon: {
+	        phone: match(amazon_phone, ua),
+	        tablet: !match(amazon_phone, ua) && match(amazon_tablet, ua),
+	        device: match(amazon_phone, ua) || match(amazon_tablet, ua)
+	      },
+	      android: {
+	        phone:
+	          (!match(windows_phone, ua) && match(amazon_phone, ua)) ||
+	          (!match(windows_phone, ua) && match(android_phone, ua)),
+	        tablet:
+	          !match(windows_phone, ua) &&
+	          !match(amazon_phone, ua) &&
+	          !match(android_phone, ua) &&
+	          (match(amazon_tablet, ua) || match(android_tablet, ua)),
+	        device:
+	          (!match(windows_phone, ua) &&
+	            (match(amazon_phone, ua) ||
+	              match(amazon_tablet, ua) ||
+	              match(android_phone, ua) ||
+	              match(android_tablet, ua))) ||
+	          match(/\bokhttp\b/i, ua)
+	      },
+	      windows: {
+	        phone: match(windows_phone, ua),
+	        tablet: match(windows_tablet, ua),
+	        device: match(windows_phone, ua) || match(windows_tablet, ua)
+	      },
+	      other: {
+	        blackberry: match(other_blackberry, ua),
+	        blackberry10: match(other_blackberry_10, ua),
+	        opera: match(other_opera, ua),
+	        firefox: match(other_firefox, ua),
+	        chrome: match(other_chrome, ua),
+	        device:
+	          match(other_blackberry, ua) ||
+	          match(other_blackberry_10, ua) ||
+	          match(other_opera, ua) ||
+	          match(other_firefox, ua) ||
+	          match(other_chrome, ua)
+	      }
+	    };
+	    (result.any =
+	      result.apple.device ||
+	      result.android.device ||
+	      result.windows.device ||
+	      result.other.device),
+	      // excludes 'other' devices and ipods, targeting touchscreen phones
+	      (result.phone =
+	        result.apple.phone || result.android.phone || result.windows.phone),
+	      (result.tablet =
+	        result.apple.tablet || result.android.tablet || result.windows.tablet);
+
+	    return result;
+	  }
+
+	  if (
+	    
+	    module.exports &&
+	    typeof window === 'undefined'
+	  ) {
+	    // Node.js
+	    module.exports = isMobile;
+	  } else if (
+	    
+	    module.exports &&
+	    typeof window !== 'undefined'
+	  ) {
+	    // Browserify
+	    module.exports = isMobile();
+	    module.exports.isMobile = isMobile;
+	  } else {
+	    global.isMobile = isMobile();
+	  }
+	})(commonjsGlobal);
+	});
+	var isMobile_1 = isMobile$1.isMobile;
+
+	var util$3 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.isMobileDevice = exports.setStyle = exports.getWidth = exports.menuAllProps = undefined;
+	exports.noop = noop;
+	exports.getKeyFromChildrenIndex = getKeyFromChildrenIndex;
+	exports.getMenuIdFromSubMenuEventKey = getMenuIdFromSubMenuEventKey;
+	exports.loopMenuItem = loopMenuItem;
+	exports.loopMenuItemRecursively = loopMenuItemRecursively;
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+
+
+	function noop() {}
+
+	function getKeyFromChildrenIndex(child, menuEventKey, index) {
+	  var prefix = menuEventKey || '';
+	  return child.key || prefix + 'item_' + index;
+	}
+
+	function getMenuIdFromSubMenuEventKey(eventKey) {
+	  return eventKey + '-menu-';
+	}
+
+	function loopMenuItem(children, cb) {
+	  var index = -1;
+	  _react2['default'].Children.forEach(children, function (c) {
+	    index++;
+	    if (c && c.type && c.type.isMenuItemGroup) {
+	      _react2['default'].Children.forEach(c.props.children, function (c2) {
+	        index++;
+	        cb(c2, index);
+	      });
+	    } else {
+	      cb(c, index);
+	    }
+	  });
+	}
+
+	function loopMenuItemRecursively(children, keys, ret) {
+	  /* istanbul ignore if */
+	  if (!children || ret.find) {
+	    return;
+	  }
+	  _react2['default'].Children.forEach(children, function (c) {
+	    if (c) {
+	      var construct = c.type;
+	      if (!construct || !(construct.isSubMenu || construct.isMenuItem || construct.isMenuItemGroup)) {
+	        return;
+	      }
+	      if (keys.indexOf(c.key) !== -1) {
+	        ret.find = true;
+	      } else if (c.props.children) {
+	        loopMenuItemRecursively(c.props.children, keys, ret);
+	      }
+	    }
+	  });
+	}
+
+	var menuAllProps = exports.menuAllProps = ['defaultSelectedKeys', 'selectedKeys', 'defaultOpenKeys', 'openKeys', 'mode', 'getPopupContainer', 'onSelect', 'onDeselect', 'onDestroy', 'openTransitionName', 'openAnimation', 'subMenuOpenDelay', 'subMenuCloseDelay', 'forceSubMenuRender', 'triggerSubMenuAction', 'level', 'selectable', 'multiple', 'onOpenChange', 'visible', 'focusable', 'defaultActiveFirst', 'prefixCls', 'inlineIndent', 'parentMenu', 'title', 'rootPrefixCls', 'eventKey', 'active', 'onItemHover', 'onTitleMouseEnter', 'onTitleMouseLeave', 'onTitleClick', 'popupAlign', 'popupOffset', 'isOpen', 'renderMenuItem', 'manualRef', 'subMenuKey', 'disabled', 'index', 'isSelected', 'store', 'activeKey', 'builtinPlacements', 'overflowedIndicator',
+
+	// the following keys found need to be removed from test regression
+	'attribute', 'value', 'popupClassName', 'inlineCollapsed', 'menu', 'theme', 'itemIcon', 'expandIcon'];
+
+	// ref: https://github.com/ant-design/ant-design/issues/14007
+	// ref: https://bugs.chromium.org/p/chromium/issues/detail?id=360889
+	// getBoundingClientRect return the full precision value, which is
+	// not the same behavior as on chrome. Set the precision to 6 to
+	// unify their behavior
+	var getWidth = exports.getWidth = function getWidth(elem) {
+	  var width = elem && typeof elem.getBoundingClientRect === 'function' && elem.getBoundingClientRect().width;
+	  if (width) {
+	    width = +width.toFixed(6);
+	  }
+	  return width || 0;
+	};
+
+	var setStyle = exports.setStyle = function setStyle(elem, styleProperty, value) {
+	  if (elem && typeof elem.style === 'object') {
+	    elem.style[styleProperty] = value;
+	  }
+	};
+
+	var isMobileDevice = exports.isMobileDevice = function isMobileDevice() {
+	  return isMobile$1.any;
+	};
+	});
+
+	unwrapExports(util$3);
+	var util_1$2 = util$3.isMobileDevice;
+	var util_2 = util$3.setStyle;
+	var util_3 = util$3.getWidth;
+	var util_4 = util$3.menuAllProps;
+	var util_5 = util$3.noop;
+	var util_6 = util$3.getKeyFromChildrenIndex;
+	var util_7 = util$3.getMenuIdFromSubMenuEventKey;
+	var util_8 = util$3.loopMenuItem;
+	var util_9 = util$3.loopMenuItemRecursively;
+
+	var MenuItem_1 = createCommonjsModule(function (module, exports) {
+
+	exports.__esModule = true;
+	exports.MenuItem = undefined;
+
+
+
+	var _extends3 = _interopRequireDefault(_extends$4);
+
+
+
+	var _classCallCheck3 = _interopRequireDefault(classCallCheck$1);
+
+
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(possibleConstructorReturn$1);
+
+
+
+	var _inherits3 = _interopRequireDefault(inherits$1);
+
+
+
+	var _react2 = _interopRequireDefault(React__default);
+
+
+
+	var _reactDom2 = _interopRequireDefault(ReactDOM__default);
+
+
+
+	var _propTypes2 = _interopRequireDefault(propTypes);
+
+
+
+	var _KeyCode2 = _interopRequireDefault(KeyCode_1);
+
+
+
+	var _classnames2 = _interopRequireDefault(classnames);
+
+
+
+	var _domScrollIntoView2 = _interopRequireDefault(lib$2);
+
+
+
+
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	/* eslint react/no-is-mounted:0 */
+
+	var MenuItem = exports.MenuItem = function (_React$Component) {
+	  (0, _inherits3['default'])(MenuItem, _React$Component);
+
+	  function MenuItem(props) {
+	    (0, _classCallCheck3['default'])(this, MenuItem);
+
+	    var _this = (0, _possibleConstructorReturn3['default'])(this, _React$Component.call(this, props));
+
+	    _this.onKeyDown = function (e) {
+	      var keyCode = e.keyCode;
+	      if (keyCode === _KeyCode2['default'].ENTER) {
+	        _this.onClick(e);
+	        return true;
+	      }
+	    };
+
+	    _this.onMouseLeave = function (e) {
+	      var _this$props = _this.props,
+	          eventKey = _this$props.eventKey,
+	          onItemHover = _this$props.onItemHover,
+	          onMouseLeave = _this$props.onMouseLeave;
+
+	      onItemHover({
+	        key: eventKey,
+	        hover: false
+	      });
+	      onMouseLeave({
+	        key: eventKey,
+	        domEvent: e
+	      });
+	    };
+
+	    _this.onMouseEnter = function (e) {
+	      var _this$props2 = _this.props,
+	          eventKey = _this$props2.eventKey,
+	          onItemHover = _this$props2.onItemHover,
+	          onMouseEnter = _this$props2.onMouseEnter;
+
+	      onItemHover({
+	        key: eventKey,
+	        hover: true
+	      });
+	      onMouseEnter({
+	        key: eventKey,
+	        domEvent: e
+	      });
+	    };
+
+	    _this.onClick = function (e) {
+	      var _this$props3 = _this.props,
+	          eventKey = _this$props3.eventKey,
+	          multiple = _this$props3.multiple,
+	          onClick = _this$props3.onClick,
+	          onSelect = _this$props3.onSelect,
+	          onDeselect = _this$props3.onDeselect,
+	          isSelected = _this$props3.isSelected;
+
+	      var info = {
+	        key: eventKey,
+	        keyPath: [eventKey],
+	        item: _this,
+	        domEvent: e
+	      };
+	      onClick(info);
+	      if (multiple) {
+	        if (isSelected) {
+	          onDeselect(info);
+	        } else {
+	          onSelect(info);
+	        }
+	      } else if (!isSelected) {
+	        onSelect(info);
+	      }
+	    };
+
+	    return _this;
+	  }
+
+	  MenuItem.prototype.componentDidMount = function componentDidMount() {
+	    // invoke customized ref to expose component to mixin
+	    this.callRef();
+	  };
+
+	  MenuItem.prototype.componentDidUpdate = function componentDidUpdate() {
+	    if (this.props.active) {
+	      (0, _domScrollIntoView2['default'])(_reactDom2['default'].findDOMNode(this), _reactDom2['default'].findDOMNode(this.props.parentMenu), {
+	        onlyScrollIfNeeded: true
+	      });
+	    }
+	    this.callRef();
+	  };
+
+	  MenuItem.prototype.componentWillUnmount = function componentWillUnmount() {
+	    var props = this.props;
+	    if (props.onDestroy) {
+	      props.onDestroy(props.eventKey);
+	    }
+	  };
+
+	  MenuItem.prototype.getPrefixCls = function getPrefixCls() {
+	    return this.props.rootPrefixCls + '-item';
+	  };
+
+	  MenuItem.prototype.getActiveClassName = function getActiveClassName() {
+	    return this.getPrefixCls() + '-active';
+	  };
+
+	  MenuItem.prototype.getSelectedClassName = function getSelectedClassName() {
+	    return this.getPrefixCls() + '-selected';
+	  };
+
+	  MenuItem.prototype.getDisabledClassName = function getDisabledClassName() {
+	    return this.getPrefixCls() + '-disabled';
+	  };
+
+	  MenuItem.prototype.callRef = function callRef() {
+	    if (this.props.manualRef) {
+	      this.props.manualRef(this);
+	    }
+	  };
+
+	  MenuItem.prototype.render = function render() {
+	    var _classNames;
+
+	    var props = (0, _extends3['default'])({}, this.props);
+	    var className = (0, _classnames2['default'])(this.getPrefixCls(), props.className, (_classNames = {}, _classNames[this.getActiveClassName()] = !props.disabled && props.active, _classNames[this.getSelectedClassName()] = props.isSelected, _classNames[this.getDisabledClassName()] = props.disabled, _classNames));
+	    var attrs = (0, _extends3['default'])({}, props.attribute, {
+	      title: props.title,
+	      className: className,
+	      // set to menuitem by default
+	      role: props.role || 'menuitem',
+	      'aria-disabled': props.disabled
+	    });
+
+	    if (props.role === 'option') {
+	      // overwrite to option
+	      attrs = (0, _extends3['default'])({}, attrs, {
+	        role: 'option',
+	        'aria-selected': props.isSelected
+	      });
+	    } else if (props.role === null || props.role === 'none') {
+	      // sometimes we want to specify role inside <li/> element
+	      // <li><a role='menuitem'>Link</a></li> would be a good example
+	      // in this case the role on <li/> should be "none" to
+	      // remove the implied listitem role.
+	      // https://www.w3.org/TR/wai-aria-practices-1.1/examples/menubar/menubar-1/menubar-1.html
+	      attrs.role = 'none';
+	    }
+	    // In case that onClick/onMouseLeave/onMouseEnter is passed down from owner
+	    var mouseEvent = {
+	      onClick: props.disabled ? null : this.onClick,
+	      onMouseLeave: props.disabled ? null : this.onMouseLeave,
+	      onMouseEnter: props.disabled ? null : this.onMouseEnter
+	    };
+	    var style = (0, _extends3['default'])({}, props.style);
+	    if (props.mode === 'inline') {
+	      style.paddingLeft = props.inlineIndent * props.level;
+	    }
+	    util$3.menuAllProps.forEach(function (key) {
+	      return delete props[key];
+	    });
+	    var icon = this.props.itemIcon;
+	    if (typeof this.props.itemIcon === 'function') {
+	      icon = _react2['default'].createElement(this.props.itemIcon, this.props);
+	    }
+	    return _react2['default'].createElement(
+	      'li',
+	      (0, _extends3['default'])({}, props, attrs, mouseEvent, {
+	        style: style
+	      }),
+	      props.children,
+	      icon
+	    );
+	  };
+
+	  return MenuItem;
+	}(_react2['default'].Component);
+
+	MenuItem.propTypes = {
+	  attribute: _propTypes2['default'].object,
+	  rootPrefixCls: _propTypes2['default'].string,
+	  eventKey: _propTypes2['default'].string,
+	  active: _propTypes2['default'].bool,
+	  children: _propTypes2['default'].any,
+	  selectedKeys: _propTypes2['default'].array,
+	  disabled: _propTypes2['default'].bool,
+	  title: _propTypes2['default'].string,
+	  onItemHover: _propTypes2['default'].func,
+	  onSelect: _propTypes2['default'].func,
+	  onClick: _propTypes2['default'].func,
+	  onDeselect: _propTypes2['default'].func,
+	  parentMenu: _propTypes2['default'].object,
+	  onDestroy: _propTypes2['default'].func,
+	  onMouseEnter: _propTypes2['default'].func,
+	  onMouseLeave: _propTypes2['default'].func,
+	  multiple: _propTypes2['default'].bool,
+	  isSelected: _propTypes2['default'].bool,
+	  manualRef: _propTypes2['default'].func,
+	  itemIcon: _propTypes2['default'].oneOfType([_propTypes2['default'].func, _propTypes2['default'].node])
+	};
+	MenuItem.defaultProps = {
+	  onSelect: util$3.noop,
+	  onMouseEnter: util$3.noop,
+	  onMouseLeave: util$3.noop,
+	  manualRef: util$3.noop
+	};
+
+
+	MenuItem.isMenuItem = true;
+
+	var connected = (0, miniStore__default.connect)(function (_ref, _ref2) {
+	  var activeKey = _ref.activeKey,
+	      selectedKeys = _ref.selectedKeys;
+	  var eventKey = _ref2.eventKey,
+	      subMenuKey = _ref2.subMenuKey;
+	  return {
+	    active: activeKey[subMenuKey] === eventKey,
+	    isSelected: selectedKeys.indexOf(eventKey) !== -1
+	  };
+	})(MenuItem);
+
+	exports['default'] = connected;
+	});
+
+	unwrapExports(MenuItem_1);
+	var MenuItem_2 = MenuItem_1.MenuItem;
+
 	var Option_1 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -36146,7 +37190,7 @@
 
 	unwrapExports(Option_1);
 
-	var util$3 = createCommonjsModule(function (module, exports) {
+	var util$4 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -36358,29 +37402,29 @@
 	}
 	});
 
-	unwrapExports(util$3);
-	var util_1$2 = util$3.UNSELECTABLE_ATTRIBUTE;
-	var util_2 = util$3.UNSELECTABLE_STYLE;
-	var util_3 = util$3.toTitle;
-	var util_4 = util$3.getValuePropValue;
-	var util_5 = util$3.getPropValue;
-	var util_6 = util$3.isMultiple;
-	var util_7 = util$3.isCombobox;
-	var util_8 = util$3.isMultipleOrTags;
-	var util_9 = util$3.isMultipleOrTagsOrCombobox;
-	var util_10 = util$3.isSingleMode;
-	var util_11 = util$3.toArray;
-	var util_12 = util$3.getMapKey;
-	var util_13 = util$3.preventDefaultEvent;
-	var util_14 = util$3.findIndexInValueBySingleValue;
-	var util_15 = util$3.getLabelFromPropsValue;
-	var util_16 = util$3.getSelectKeys;
-	var util_17 = util$3.findFirstMenuItem;
-	var util_18 = util$3.includesSeparators;
-	var util_19 = util$3.splitBySeparators;
-	var util_20 = util$3.defaultFilterFn;
-	var util_21 = util$3.validateOptionValue;
-	var util_22 = util$3.saveRef;
+	unwrapExports(util$4);
+	var util_1$3 = util$4.UNSELECTABLE_ATTRIBUTE;
+	var util_2$1 = util$4.UNSELECTABLE_STYLE;
+	var util_3$1 = util$4.toTitle;
+	var util_4$1 = util$4.getValuePropValue;
+	var util_5$1 = util$4.getPropValue;
+	var util_6$1 = util$4.isMultiple;
+	var util_7$1 = util$4.isCombobox;
+	var util_8$1 = util$4.isMultipleOrTags;
+	var util_9$1 = util$4.isMultipleOrTagsOrCombobox;
+	var util_10 = util$4.isSingleMode;
+	var util_11 = util$4.toArray;
+	var util_12 = util$4.getMapKey;
+	var util_13 = util$4.preventDefaultEvent;
+	var util_14 = util$4.findIndexInValueBySingleValue;
+	var util_15 = util$4.getLabelFromPropsValue;
+	var util_16 = util$4.getSelectKeys;
+	var util_17 = util$4.findFirstMenuItem;
+	var util_18 = util$4.includesSeparators;
+	var util_19 = util$4.splitBySeparators;
+	var util_20 = util$4.defaultFilterFn;
+	var util_21 = util$4.validateOptionValue;
+	var util_22 = util$4.saveRef;
 
 	var contains$2 = createCommonjsModule(function (module, exports) {
 
@@ -37573,7 +38617,7 @@
 	    };
 
 	    _this.lastInputValue = props.inputValue;
-	    _this.saveMenuRef = (0, util$3.saveRef)(_this, 'menuRef');
+	    _this.saveMenuRef = (0, util$4.saveRef)(_this, 'menuRef');
 	    return _this;
 	  }
 
@@ -37630,7 +38674,7 @@
 	        menuProps.onClick = onMenuSelect;
 	      }
 
-	      var selectedKeys = (0, util$3.getSelectKeys)(menuItems, value);
+	      var selectedKeys = (0, util$4.getSelectKeys)(menuItems, value);
 	      var activeKeyProps = {};
 
 	      var clonedMenuItems = menuItems;
@@ -37702,7 +38746,7 @@
 	          transform: 'translateZ(0)'
 	        },
 	        onFocus: this.props.onPopupFocus,
-	        onMouseDown: util$3.preventDefaultEvent,
+	        onMouseDown: util$4.preventDefaultEvent,
 	        onScroll: this.props.onPopupScroll
 	      },
 	      renderMenu
@@ -37818,8 +38862,8 @@
 
 	    _initialiseProps.call(_this);
 
-	    _this.saveDropdownMenuRef = (0, util$3.saveRef)(_this, 'dropdownMenuRef');
-	    _this.saveTriggerRef = (0, util$3.saveRef)(_this, 'triggerRef');
+	    _this.saveDropdownMenuRef = (0, util$4.saveRef)(_this, 'dropdownMenuRef');
+	    _this.saveTriggerRef = (0, util$4.saveRef)(_this, 'triggerRef');
 
 	    _this.state = {
 	      dropdownWidth: null
@@ -37870,7 +38914,7 @@
 	    var hideAction = void 0;
 	    if (disabled) {
 	      hideAction = [];
-	    } else if ((0, util$3.isSingleMode)(props) && !showSearch) {
+	    } else if ((0, util$4.isSingleMode)(props) && !showSearch) {
 	      hideAction = ['click'];
 	    } else {
 	      hideAction = ['blur'];
@@ -38111,6 +39155,10 @@
 
 
 
+	var _MenuItem2 = _interopRequireDefault(MenuItem_1);
+
+
+
 	var _warning2 = _interopRequireDefault(warning_1);
 
 
@@ -38184,12 +39232,12 @@
 	      skipBuildOptionsInfo: true
 	    };
 
-	    _this.saveInputRef = (0, util$3.saveRef)(_this, 'inputRef');
-	    _this.saveInputMirrorRef = (0, util$3.saveRef)(_this, 'inputMirrorRef');
-	    _this.saveTopCtrlRef = (0, util$3.saveRef)(_this, 'topCtrlRef');
-	    _this.saveSelectTriggerRef = (0, util$3.saveRef)(_this, 'selectTriggerRef');
-	    _this.saveRootRef = (0, util$3.saveRef)(_this, 'rootRef');
-	    _this.saveSelectionRef = (0, util$3.saveRef)(_this, 'selectionRef');
+	    _this.saveInputRef = (0, util$4.saveRef)(_this, 'inputRef');
+	    _this.saveInputMirrorRef = (0, util$4.saveRef)(_this, 'inputMirrorRef');
+	    _this.saveTopCtrlRef = (0, util$4.saveRef)(_this, 'topCtrlRef');
+	    _this.saveSelectTriggerRef = (0, util$4.saveRef)(_this, 'selectTriggerRef');
+	    _this.saveRootRef = (0, util$4.saveRef)(_this, 'rootRef');
+	    _this.saveSelectionRef = (0, util$4.saveRef)(_this, 'selectionRef');
 	    return _this;
 	  }
 
@@ -38200,7 +39248,7 @@
 	  };
 
 	  Select.prototype.componentDidUpdate = function componentDidUpdate() {
-	    if ((0, util$3.isMultipleOrTags)(this.props)) {
+	    if ((0, util$4.isMultipleOrTags)(this.props)) {
 	      var inputNode = this.getInputDOMNode();
 	      var mirrorNode = this.getInputMirrorDOMNode();
 	      if (inputNode.value) {
@@ -38227,7 +39275,7 @@
 
 
 	  Select.prototype.focus = function focus() {
-	    if ((0, util$3.isSingleMode)(this.props)) {
+	    if ((0, util$4.isSingleMode)(this.props)) {
 	      this.selectionRef.focus();
 	    } else {
 	      this.getInputDOMNode().focus();
@@ -38235,7 +39283,7 @@
 	  };
 
 	  Select.prototype.blur = function blur() {
-	    if ((0, util$3.isSingleMode)(this.props)) {
+	    if ((0, util$4.isSingleMode)(this.props)) {
 	      this.selectionRef.blur();
 	    } else {
 	      this.getInputDOMNode().blur();
@@ -38261,9 +39309,9 @@
 	      _extends({
 	        key: 'clear',
 	        className: prefixCls + '-selection-clear',
-	        onMouseDown: util$3.preventDefaultEvent,
-	        style: util$3.UNSELECTABLE_STYLE
-	      }, util$3.UNSELECTABLE_ATTRIBUTE, {
+	        onMouseDown: util$4.preventDefaultEvent,
+	        style: util$4.UNSELECTABLE_STYLE
+	      }, util$4.UNSELECTABLE_ATTRIBUTE, {
 	        onClick: this.onClearSelection
 	      }),
 	      clearIcon || _react2["default"].createElement('i', { className: prefixCls + '-selection-clear-icon' })
@@ -38271,7 +39319,7 @@
 	    if (!allowClear) {
 	      return null;
 	    }
-	    if ((0, util$3.isCombobox)(this.props)) {
+	    if ((0, util$4.isCombobox)(this.props)) {
 	      if (inputValue) {
 	        return clear;
 	      }
@@ -38287,7 +39335,7 @@
 	    var _rootCls;
 
 	    var props = this.props;
-	    var multiple = (0, util$3.isMultipleOrTags)(props);
+	    var multiple = (0, util$4.isMultipleOrTags)(props);
 	    var state = this.state;
 	    var className = props.className,
 	        disabled = props.disabled,
@@ -38309,13 +39357,13 @@
 	      }
 	    }
 	    var extraSelectionProps = _extends({}, dataOrAriaAttributeProps);
-	    if (!(0, util$3.isMultipleOrTagsOrCombobox)(props)) {
+	    if (!(0, util$4.isMultipleOrTagsOrCombobox)(props)) {
 	      extraSelectionProps = _extends({}, extraSelectionProps, {
 	        onKeyDown: this.onKeyDown,
 	        tabIndex: props.disabled ? -1 : 0
 	      });
 	    }
-	    var rootCls = (_rootCls = {}, _defineProperty(_rootCls, className, !!className), _defineProperty(_rootCls, prefixCls, 1), _defineProperty(_rootCls, prefixCls + '-open', open), _defineProperty(_rootCls, prefixCls + '-focused', open || !!this._focused), _defineProperty(_rootCls, prefixCls + '-combobox', (0, util$3.isCombobox)(props)), _defineProperty(_rootCls, prefixCls + '-disabled', disabled), _defineProperty(_rootCls, prefixCls + '-enabled', !disabled), _defineProperty(_rootCls, prefixCls + '-allow-clear', !!props.allowClear), _defineProperty(_rootCls, prefixCls + '-no-arrow', !props.showArrow), _rootCls);
+	    var rootCls = (_rootCls = {}, _defineProperty(_rootCls, className, !!className), _defineProperty(_rootCls, prefixCls, 1), _defineProperty(_rootCls, prefixCls + '-open', open), _defineProperty(_rootCls, prefixCls + '-focused', open || !!this._focused), _defineProperty(_rootCls, prefixCls + '-combobox', (0, util$4.isCombobox)(props)), _defineProperty(_rootCls, prefixCls + '-disabled', disabled), _defineProperty(_rootCls, prefixCls + '-enabled', !disabled), _defineProperty(_rootCls, prefixCls + '-allow-clear', !!props.allowClear), _defineProperty(_rootCls, prefixCls + '-no-arrow', !props.showArrow), _rootCls);
 	    return _react2["default"].createElement(
 	      _SelectTrigger2["default"],
 	      {
@@ -38386,8 +39434,8 @@
 	            _extends({
 	              key: 'arrow',
 	              className: prefixCls + '-arrow',
-	              style: util$3.UNSELECTABLE_STYLE
-	            }, util$3.UNSELECTABLE_ATTRIBUTE, {
+	              style: util$4.UNSELECTABLE_STYLE
+	            }, util$4.UNSELECTABLE_ATTRIBUTE, {
 	              onClick: this.onArrowClick
 	            }),
 	            inputIcon || _react2["default"].createElement('i', { className: prefixCls + '-arrow-icon' })
@@ -38471,10 +39519,10 @@
 	Select.getInputValueForCombobox = function (props, optionsInfo, useDefaultValue) {
 	  var value = [];
 	  if ('value' in props && !useDefaultValue) {
-	    value = (0, util$3.toArray)(props.value);
+	    value = (0, util$4.toArray)(props.value);
 	  }
 	  if ('defaultValue' in props && useDefaultValue) {
-	    value = (0, util$3.toArray)(props.defaultValue);
+	    value = (0, util$4.toArray)(props.defaultValue);
 	  }
 	  if (value.length) {
 	    value = value[0];
@@ -38484,8 +39532,8 @@
 	  var label = value;
 	  if (props.labelInValue) {
 	    label = value.label;
-	  } else if (optionsInfo[(0, util$3.getMapKey)(value)]) {
-	    label = optionsInfo[(0, util$3.getMapKey)(value)].label;
+	  } else if (optionsInfo[(0, util$4.getMapKey)(value)]) {
+	    label = optionsInfo[(0, util$4.getMapKey)(value)].label;
 	  }
 	  if (label === undefined) {
 	    label = '';
@@ -38494,15 +39542,15 @@
 	};
 
 	Select.getLabelFromOption = function (props, option) {
-	  return (0, util$3.getPropValue)(option, props.optionLabelProp);
+	  return (0, util$4.getPropValue)(option, props.optionLabelProp);
 	};
 
 	Select.getOptionsInfoFromProps = function (props, preState) {
 	  var options = Select.getOptionsFromChildren(props.children);
 	  var optionsInfo = {};
 	  options.forEach(function (option) {
-	    var singleValue = (0, util$3.getValuePropValue)(option);
-	    optionsInfo[(0, util$3.getMapKey)(singleValue)] = {
+	    var singleValue = (0, util$4.getValuePropValue)(option);
+	    optionsInfo[(0, util$4.getMapKey)(singleValue)] = {
 	      option: option,
 	      value: singleValue,
 	      label: Select.getLabelFromOption(props, option),
@@ -38514,7 +39562,7 @@
 	    var oldOptionsInfo = preState.optionsInfo;
 	    var value = preState.value;
 	    value.forEach(function (v) {
-	      var key = (0, util$3.getMapKey)(v);
+	      var key = (0, util$4.getMapKey)(v);
 	      if (!optionsInfo[key] && oldOptionsInfo[key] !== undefined) {
 	        optionsInfo[key] = oldOptionsInfo[key];
 	      }
@@ -38526,10 +39574,10 @@
 	Select.getValueFromProps = function (props, useDefaultValue) {
 	  var value = [];
 	  if ('value' in props && !useDefaultValue) {
-	    value = (0, util$3.toArray)(props.value);
+	    value = (0, util$4.toArray)(props.value);
 	  }
 	  if ('defaultValue' in props && useDefaultValue) {
-	    value = (0, util$3.toArray)(props.defaultValue);
+	    value = (0, util$4.toArray)(props.defaultValue);
 	  }
 	  if (props.labelInValue) {
 	    value = value.map(function (v) {
@@ -38546,7 +39594,7 @@
 	    var tokenSeparators = _this2.props.tokenSeparators;
 
 	    var val = event.target.value;
-	    if ((0, util$3.isMultipleOrTags)(_this2.props) && tokenSeparators.length && (0, util$3.includesSeparators)(val, tokenSeparators)) {
+	    if ((0, util$4.isMultipleOrTags)(_this2.props) && tokenSeparators.length && (0, util$4.includesSeparators)(val, tokenSeparators)) {
 	      var nextValue = _this2.getValueByInput(val);
 	      if (nextValue !== undefined) {
 	        _this2.fireChange(nextValue);
@@ -38559,7 +39607,7 @@
 	    _this2.setState({
 	      open: true
 	    });
-	    if ((0, util$3.isCombobox)(_this2.props)) {
+	    if ((0, util$4.isCombobox)(_this2.props)) {
 	      _this2.fireChange([val]);
 	    }
 	  };
@@ -38604,7 +39652,7 @@
 	    }
 	    var state = _this2.state;
 	    var keyCode = event.keyCode;
-	    if ((0, util$3.isMultipleOrTags)(props) && !event.target.value && keyCode === lib$1.KeyCode.BACKSPACE) {
+	    if ((0, util$4.isMultipleOrTags)(props) && !event.target.value && keyCode === lib$1.KeyCode.BACKSPACE) {
 	      event.preventDefault();
 	      var value = state.value;
 
@@ -38652,11 +39700,11 @@
 
 	    var value = _this2.state.value;
 	    var props = _this2.props;
-	    var selectedValue = (0, util$3.getValuePropValue)(item);
+	    var selectedValue = (0, util$4.getValuePropValue)(item);
 	    var lastValue = value[value.length - 1];
 	    _this2.fireSelect(selectedValue);
-	    if ((0, util$3.isMultipleOrTags)(props)) {
-	      if ((0, util$3.findIndexInValueBySingleValue)(value, selectedValue) !== -1) {
+	    if ((0, util$4.isMultipleOrTags)(props)) {
+	      if ((0, util$4.findIndexInValueBySingleValue)(value, selectedValue) !== -1) {
 	        return;
 	      }
 	      value = value.concat([selectedValue]);
@@ -38670,8 +39718,8 @@
 	    }
 	    _this2.fireChange(value);
 	    var inputValue = void 0;
-	    if ((0, util$3.isCombobox)(props)) {
-	      inputValue = (0, util$3.getPropValue)(item, props.optionLabelProp);
+	    if ((0, util$4.isCombobox)(props)) {
+	      inputValue = (0, util$4.getPropValue)(item, props.optionLabelProp);
 	    } else {
 	      inputValue = '';
 	    }
@@ -38685,11 +39733,11 @@
 	        domEvent = _ref2.domEvent;
 
 	    if (domEvent.type === 'keydown' && domEvent.keyCode === lib$1.KeyCode.ENTER) {
-	      _this2.removeSelected((0, util$3.getValuePropValue)(item));
+	      _this2.removeSelected((0, util$4.getValuePropValue)(item));
 	      return;
 	    }
 	    if (domEvent.type === 'click') {
-	      _this2.removeSelected((0, util$3.getValuePropValue)(item));
+	      _this2.removeSelected((0, util$4.getValuePropValue)(item));
 	    }
 	    var props = _this2.props;
 
@@ -38719,7 +39767,7 @@
 	      return;
 	    }
 	    _this2.clearBlurTime();
-	    if (!(0, util$3.isMultipleOrTagsOrCombobox)(_this2.props) && e.target === _this2.getInputDOMNode()) {
+	    if (!(0, util$4.isMultipleOrTagsOrCombobox)(_this2.props) && e.target === _this2.getInputDOMNode()) {
 	      return;
 	    }
 	    if (_this2._focused) {
@@ -38749,12 +39797,12 @@
 	      var value = _this2.state.value;
 	      var inputValue = _this2.state.inputValue;
 
-	      if ((0, util$3.isSingleMode)(props) && props.showSearch && inputValue && props.defaultActiveFirstOption) {
+	      if ((0, util$4.isSingleMode)(props) && props.showSearch && inputValue && props.defaultActiveFirstOption) {
 	        var options = _this2._options || [];
 	        if (options.length) {
-	          var firstOption = (0, util$3.findFirstMenuItem)(options);
+	          var firstOption = (0, util$4.findFirstMenuItem)(options);
 	          if (firstOption) {
-	            value = [(0, util$3.getValuePropValue)(firstOption)];
+	            value = [(0, util$4.getValuePropValue)(firstOption)];
 	            _this2.fireChange(value);
 	          }
 	          if (props.showSearch && props.supportWrite) {
@@ -38763,7 +39811,7 @@
 	            _this2.fireChange(value, true);
 	          }
 	        }
-	      } else if ((0, util$3.isMultipleOrTags)(props) && inputValue) {
+	      } else if ((0, util$4.isMultipleOrTags)(props) && inputValue) {
 	        if (_this2._mouseDown) {
 	          // need update dropmenu when not blur
 	          _this2.setInputValue('');
@@ -38779,7 +39827,7 @@
 	      }
 
 	      // if click the rest space of Select in multiple mode
-	      if ((0, util$3.isMultipleOrTags)(props) && _this2._mouseDown) {
+	      if ((0, util$4.isMultipleOrTags)(props) && _this2._mouseDown) {
 	        _this2.maybeFocus(true, true);
 	        _this2._mouseDown = false;
 	        return;
@@ -38817,15 +39865,15 @@
 	  this.getOptionInfoBySingleValue = function (value, optionsInfo) {
 	    var info = void 0;
 	    optionsInfo = optionsInfo || _this2.state.optionsInfo;
-	    if (optionsInfo[(0, util$3.getMapKey)(value)]) {
-	      info = optionsInfo[(0, util$3.getMapKey)(value)];
+	    if (optionsInfo[(0, util$4.getMapKey)(value)]) {
+	      info = optionsInfo[(0, util$4.getMapKey)(value)];
 	    }
 	    if (info) {
 	      return info;
 	    }
 	    var defaultLabel = value;
 	    if (_this2.props.labelInValue) {
-	      var label = (0, util$3.getLabelFromPropsValue)(_this2.props.value, value);
+	      var label = (0, util$4.getLabelFromPropsValue)(_this2.props.value, value);
 	      if (label !== undefined) {
 	        defaultLabel = label;
 	      }
@@ -38862,7 +39910,7 @@
 	    var value = null;
 	    Object.keys(_this2.state.optionsInfo).forEach(function (key) {
 	      var info = _this2.state.optionsInfo[key];
-	      if ((0, util$3.toArray)(info.label).join('') === label) {
+	      if ((0, util$4.toArray)(info.label).join('') === label) {
 	        value = info.value;
 	      }
 	    });
@@ -38894,7 +39942,7 @@
 	          };
 	        });
 	      }
-	      return (0, util$3.isMultipleOrTags)(_this2.props) ? vls : vls[0];
+	      return (0, util$4.isMultipleOrTags)(_this2.props) ? vls : vls[0];
 	    }
 	    return vls;
 	  };
@@ -38925,7 +39973,7 @@
 	    if (state.value.length) {
 	      hidden = true;
 	    }
-	    if ((0, util$3.isCombobox)(props) && state.value.length === 1 && !state.value[0]) {
+	    if ((0, util$4.isCombobox)(props) && state.value.length === 1 && !state.value[0]) {
 	      hidden = false;
 	    }
 	    var placeholder = props.placeholder;
@@ -38933,11 +39981,11 @@
 	      return _react2["default"].createElement(
 	        'div',
 	        _extends({
-	          onMouseDown: util$3.preventDefaultEvent,
+	          onMouseDown: util$4.preventDefaultEvent,
 	          style: _extends({
 	            display: hidden ? 'none' : 'block'
-	          }, util$3.UNSELECTABLE_STYLE)
-	        }, util$3.UNSELECTABLE_ATTRIBUTE, {
+	          }, util$4.UNSELECTABLE_STYLE)
+	        }, util$4.UNSELECTABLE_ATTRIBUTE, {
 	          onClick: _this2.onPlaceholderClick,
 	          className: props.prefixCls + '-selection-placeholder'
 	        }),
@@ -39010,7 +40058,7 @@
 	      backfillValue: undefined
 	    };
 	    // clear search input value when open is false in singleMode.
-	    if (!open && (0, util$3.isSingleMode)(props) && props.showSearch) {
+	    if (!open && (0, util$4.isSingleMode)(props) && props.showSearch) {
 	      _this2.setInputValue('', false);
 	    }
 	    if (!open) {
@@ -39043,18 +40091,18 @@
 
 	    var nextValue = _this2.state.value;
 	    var hasNewValue = false;
-	    (0, util$3.splitBySeparators)(string, tokenSeparators).forEach(function (label) {
+	    (0, util$4.splitBySeparators)(string, tokenSeparators).forEach(function (label) {
 	      var selectedValue = [label];
 	      if (multiple) {
 	        var value = _this2.getValueByLabel(label);
-	        if (value && (0, util$3.findIndexInValueBySingleValue)(nextValue, value) === -1) {
+	        if (value && (0, util$4.findIndexInValueBySingleValue)(nextValue, value) === -1) {
 	          nextValue = nextValue.concat(value);
 	          hasNewValue = true;
 	          _this2.fireSelect(value);
 	        }
 	      } else {
 	        // tag
-	        if ((0, util$3.findIndexInValueBySingleValue)(nextValue, label) === -1) {
+	        if ((0, util$4.findIndexInValueBySingleValue)(nextValue, label) === -1) {
 	          nextValue = nextValue.concat(selectedValue);
 	          hasNewValue = true;
 	          _this2.fireSelect(label);
@@ -39072,7 +40120,7 @@
 	    }
 	    var open = (state || _this2.state).open;
 	    var options = _this2._options || [];
-	    if ((0, util$3.isMultipleOrTagsOrCombobox)(_this2.props) || !_this2.props.showSearch) {
+	    if ((0, util$4.isMultipleOrTagsOrCombobox)(_this2.props) || !_this2.props.showSearch) {
 	      if (open && !options.length) {
 	        open = false;
 	      }
@@ -39089,13 +40137,13 @@
 	  };
 
 	  this.handleBackfill = function (item) {
-	    if (!_this2.props.backfill || !((0, util$3.isSingleMode)(_this2.props) || (0, util$3.isCombobox)(_this2.props))) {
+	    if (!_this2.props.backfill || !((0, util$4.isSingleMode)(_this2.props) || (0, util$4.isCombobox)(_this2.props))) {
 	      return;
 	    }
 
-	    var key = (0, util$3.getValuePropValue)(item);
+	    var key = (0, util$4.getValuePropValue)(item);
 
-	    if ((0, util$3.isCombobox)(_this2.props)) {
+	    if ((0, util$4.isCombobox)(_this2.props)) {
 	      _this2.setInputValue(key, false);
 	    }
 
@@ -39106,7 +40154,7 @@
 	  };
 
 	  this.filterOption = function (input, child) {
-	    var defaultFilter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : util$3.defaultFilterFn;
+	    var defaultFilter = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : util$4.defaultFilterFn;
 	    var value = _this2.state.value;
 
 	    var lastValue = value[value.length - 1];
@@ -39173,7 +40221,7 @@
 	      var _document = document,
 	          activeElement = _document.activeElement;
 
-	      if (input && (open || (0, util$3.isMultipleOrTagsOrCombobox)(_this2.props))) {
+	      if (input && (open || (0, util$4.isMultipleOrTagsOrCombobox)(_this2.props))) {
 	        if (activeElement !== input) {
 	          input.focus();
 	          _this2._focused = true;
@@ -39199,7 +40247,7 @@
 	    var value = _this2.state.value.filter(function (singleValue) {
 	      return singleValue !== selectedKey;
 	    });
-	    var canMultiple = (0, util$3.isMultipleOrTags)(props);
+	    var canMultiple = (0, util$4.isMultipleOrTags)(props);
 
 	    if (canMultiple) {
 	      var event = selectedKey;
@@ -39216,7 +40264,7 @@
 
 	  this.openIfHasChildren = function () {
 	    var props = _this2.props;
-	    if (_react2["default"].Children.count(props.children) || (0, util$3.isSingleMode)(props)) {
+	    if (_react2["default"].Children.count(props.children) || (0, util$4.isSingleMode)(props)) {
 	      _this2.setOpenState(true);
 	    }
 	  };
@@ -39237,13 +40285,13 @@
 	    } else {
 	      var vls = _this2.getVLForOnChange(value);
 	      var options = _this2.getOptionsBySingleValue(value);
-	      props.onChange(vls, (0, util$3.isMultipleOrTags)(_this2.props) ? options : options[0]);
+	      props.onChange(vls, (0, util$4.isMultipleOrTags)(_this2.props) ? options : options[0]);
 	    }
 	  };
 
 	  this.isChildDisabled = function (key) {
 	    return (0, lib$1.toArray)(_this2.props.children).some(function (child) {
-	      var childValue = (0, util$3.getValuePropValue)(child);
+	      var childValue = (0, util$4.getValuePropValue)(child);
 	      return childValue === key && child.props && child.props.disabled;
 	    });
 	  };
@@ -39275,11 +40323,11 @@
 	      value.forEach(function (singleValue) {
 	        var key = singleValue;
 	        var menuItem = _react2["default"].createElement(
-	          Menu.Item,
+	          _MenuItem2["default"],
 	          {
-	            style: util$3.UNSELECTABLE_STYLE,
+	            style: util$4.UNSELECTABLE_STYLE,
 	            role: 'option',
-	            attribute: util$3.UNSELECTABLE_ATTRIBUTE,
+	            attribute: util$4.UNSELECTABLE_ATTRIBUTE,
 	            value: key,
 	            key: key
 	          },
@@ -39295,7 +40343,7 @@
 	          // 2, filterOption is set to false
 	          // condition 2 does not mean the option has same value with inputValue
 	          var filterFn = function filterFn() {
-	            return (0, util$3.getValuePropValue)(option) === inputValue;
+	            return (0, util$4.getValuePropValue)(option) === inputValue;
 	          };
 	          if (filterOption !== false) {
 	            return !_this2.filterOption.call(_this2, inputValue, option, filterFn);
@@ -39304,11 +40352,11 @@
 	        });
 	        if (notFindInputItem) {
 	          options.unshift(_react2["default"].createElement(
-	            Menu.Item,
+	            _MenuItem2["default"],
 	            {
-	              style: util$3.UNSELECTABLE_STYLE,
+	              style: util$4.UNSELECTABLE_STYLE,
 	              role: 'option',
-	              attribute: util$3.UNSELECTABLE_ATTRIBUTE,
+	              attribute: util$4.UNSELECTABLE_ATTRIBUTE,
 	              value: inputValue,
 	              key: inputValue
 	            },
@@ -39320,10 +40368,10 @@
 
 	    if (!options.length && notFoundContent) {
 	      options = [_react2["default"].createElement(
-	        Menu.Item,
+	        _MenuItem2["default"],
 	        {
-	          style: util$3.UNSELECTABLE_STYLE,
-	          attribute: util$3.UNSELECTABLE_ATTRIBUTE,
+	          style: util$4.UNSELECTABLE_STYLE,
+	          attribute: util$4.UNSELECTABLE_ATTRIBUTE,
 	          disabled: true,
 	          role: 'option',
 	          value: 'NOT_FOUND',
@@ -39366,14 +40414,14 @@
 
 	      (0, _warning2["default"])(child.type.isSelectOption, 'the children of `Select` should be `Select.Option` or `Select.OptGroup`, ' + ('instead of `' + (child.type.name || child.type.displayName || child.type) + '`.'));
 
-	      var childValue = (0, util$3.getValuePropValue)(child);
+	      var childValue = (0, util$4.getValuePropValue)(child);
 
-	      (0, util$3.validateOptionValue)(childValue, _this2.props);
+	      (0, util$4.validateOptionValue)(childValue, _this2.props);
 
 	      if (_this2.filterOption(inputValue, child)) {
-	        var menuItem = _react2["default"].createElement(Menu.Item, _extends({
-	          style: util$3.UNSELECTABLE_STYLE,
-	          attribute: util$3.UNSELECTABLE_ATTRIBUTE,
+	        var menuItem = _react2["default"].createElement(_MenuItem2["default"], _extends({
+	          style: util$4.UNSELECTABLE_STYLE,
+	          attribute: util$4.UNSELECTABLE_ATTRIBUTE,
 	          value: childValue,
 	          key: childValue,
 	          role: 'option'
@@ -39408,7 +40456,7 @@
 	    var className = prefixCls + '-selection-rendered';
 	    // search input is inside topControlNode in single, multiple & combobox. 2016/04/13
 	    var innerNode = null;
-	    if ((0, util$3.isSingleMode)(props)) {
+	    if ((0, util$4.isSingleMode)(props)) {
 	      var selectedValue = null;
 	      if (value.length) {
 	        var showSelectedValue = false;
@@ -39434,7 +40482,7 @@
 	          {
 	            key: 'value',
 	            className: prefixCls + '-selection-selected-value',
-	            title: (0, util$3.toTitle)(title || label),
+	            title: (0, util$4.toTitle)(title || label),
 	            style: {
 	              display: showSelectedValue ? 'block' : 'none',
 	              opacity: opacity
@@ -39472,12 +40520,12 @@
 	        maxTagPlaceholderEl = _react2["default"].createElement(
 	          'li',
 	          _extends({
-	            style: util$3.UNSELECTABLE_STYLE
-	          }, util$3.UNSELECTABLE_ATTRIBUTE, {
-	            onMouseDown: util$3.preventDefaultEvent,
+	            style: util$4.UNSELECTABLE_STYLE
+	          }, util$4.UNSELECTABLE_ATTRIBUTE, {
+	            onMouseDown: util$4.preventDefaultEvent,
 	            className: prefixCls + '-selection-choice ' + prefixCls + '-selection-choice-disabled',
 	            key: 'maxTagPlaceholder',
-	            title: (0, util$3.toTitle)(content)
+	            title: (0, util$4.toTitle)(content)
 	          }),
 	          _react2["default"].createElement(
 	            'div',
@@ -39486,7 +40534,7 @@
 	          )
 	        );
 	      }
-	      if ((0, util$3.isMultipleOrTags)(props)) {
+	      if ((0, util$4.isMultipleOrTags)(props)) {
 	        selectedValueNodes = limitedCountValue.map(function (singleValue, index) {
 	          var key = singleValue || index;
 	          var info = _this2.getOptionInfoBySingleValue(singleValue);
@@ -39500,12 +40548,12 @@
 	          return _react2["default"].createElement(
 	            'li',
 	            _extends({
-	              style: util$3.UNSELECTABLE_STYLE
-	            }, util$3.UNSELECTABLE_ATTRIBUTE, {
-	              onMouseDown: util$3.preventDefaultEvent,
+	              style: util$4.UNSELECTABLE_STYLE
+	            }, util$4.UNSELECTABLE_ATTRIBUTE, {
+	              onMouseDown: util$4.preventDefaultEvent,
 	              className: choiceClassName,
 	              key: key,
-	              title: (0, util$3.toTitle)(title)
+	              title: (0, util$4.toTitle)(title)
 	            }),
 	            _react2["default"].createElement(
 	              'div',
@@ -39541,7 +40589,7 @@
 	        _this2.getInputElement()
 	      ));
 
-	      if ((0, util$3.isMultipleOrTags)(props) && choiceTransitionName) {
+	      if ((0, util$4.isMultipleOrTags)(props) && choiceTransitionName) {
 	        innerNode = _react2["default"].createElement(
 	          _beeAnimate2["default"],
 	          {
@@ -42537,534 +43585,6 @@
 		throttle: throttle$1,
 		debounce: debounce
 	});
-
-	var KeyCode_1 = createCommonjsModule(function (module, exports) {
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/**
-	 * @ignore
-	 * some key-codes definition and utils from closure-library
-	 * @author yiminghe@gmail.com
-	 */
-
-	var KeyCode = {
-	  /**
-	   * MAC_ENTER
-	   */
-	  MAC_ENTER: 3,
-	  /**
-	   * BACKSPACE
-	   */
-	  BACKSPACE: 8,
-	  /**
-	   * TAB
-	   */
-	  TAB: 9,
-	  /**
-	   * NUMLOCK on FF/Safari Mac
-	   */
-	  NUM_CENTER: 12, // NUMLOCK on FF/Safari Mac
-	  /**
-	   * ENTER
-	   */
-	  ENTER: 13,
-	  /**
-	   * SHIFT
-	   */
-	  SHIFT: 16,
-	  /**
-	   * CTRL
-	   */
-	  CTRL: 17,
-	  /**
-	   * ALT
-	   */
-	  ALT: 18,
-	  /**
-	   * PAUSE
-	   */
-	  PAUSE: 19,
-	  /**
-	   * CAPS_LOCK
-	   */
-	  CAPS_LOCK: 20,
-	  /**
-	   * ESC
-	   */
-	  ESC: 27,
-	  /**
-	   * SPACE
-	   */
-	  SPACE: 32,
-	  /**
-	   * PAGE_UP
-	   */
-	  PAGE_UP: 33, // also NUM_NORTH_EAST
-	  /**
-	   * PAGE_DOWN
-	   */
-	  PAGE_DOWN: 34, // also NUM_SOUTH_EAST
-	  /**
-	   * END
-	   */
-	  END: 35, // also NUM_SOUTH_WEST
-	  /**
-	   * HOME
-	   */
-	  HOME: 36, // also NUM_NORTH_WEST
-	  /**
-	   * LEFT
-	   */
-	  LEFT: 37, // also NUM_WEST
-	  /**
-	   * UP
-	   */
-	  UP: 38, // also NUM_NORTH
-	  /**
-	   * RIGHT
-	   */
-	  RIGHT: 39, // also NUM_EAST
-	  /**
-	   * DOWN
-	   */
-	  DOWN: 40, // also NUM_SOUTH
-	  /**
-	   * PRINT_SCREEN
-	   */
-	  PRINT_SCREEN: 44,
-	  /**
-	   * INSERT
-	   */
-	  INSERT: 45, // also NUM_INSERT
-	  /**
-	   * DELETE
-	   */
-	  DELETE: 46, // also NUM_DELETE
-	  /**
-	   * ZERO
-	   */
-	  ZERO: 48,
-	  /**
-	   * ONE
-	   */
-	  ONE: 49,
-	  /**
-	   * TWO
-	   */
-	  TWO: 50,
-	  /**
-	   * THREE
-	   */
-	  THREE: 51,
-	  /**
-	   * FOUR
-	   */
-	  FOUR: 52,
-	  /**
-	   * FIVE
-	   */
-	  FIVE: 53,
-	  /**
-	   * SIX
-	   */
-	  SIX: 54,
-	  /**
-	   * SEVEN
-	   */
-	  SEVEN: 55,
-	  /**
-	   * EIGHT
-	   */
-	  EIGHT: 56,
-	  /**
-	   * NINE
-	   */
-	  NINE: 57,
-	  /**
-	   * QUESTION_MARK
-	   */
-	  QUESTION_MARK: 63, // needs localization
-	  /**
-	   * A
-	   */
-	  A: 65,
-	  /**
-	   * B
-	   */
-	  B: 66,
-	  /**
-	   * C
-	   */
-	  C: 67,
-	  /**
-	   * D
-	   */
-	  D: 68,
-	  /**
-	   * E
-	   */
-	  E: 69,
-	  /**
-	   * F
-	   */
-	  F: 70,
-	  /**
-	   * G
-	   */
-	  G: 71,
-	  /**
-	   * H
-	   */
-	  H: 72,
-	  /**
-	   * I
-	   */
-	  I: 73,
-	  /**
-	   * J
-	   */
-	  J: 74,
-	  /**
-	   * K
-	   */
-	  K: 75,
-	  /**
-	   * L
-	   */
-	  L: 76,
-	  /**
-	   * M
-	   */
-	  M: 77,
-	  /**
-	   * N
-	   */
-	  N: 78,
-	  /**
-	   * O
-	   */
-	  O: 79,
-	  /**
-	   * P
-	   */
-	  P: 80,
-	  /**
-	   * Q
-	   */
-	  Q: 81,
-	  /**
-	   * R
-	   */
-	  R: 82,
-	  /**
-	   * S
-	   */
-	  S: 83,
-	  /**
-	   * T
-	   */
-	  T: 84,
-	  /**
-	   * U
-	   */
-	  U: 85,
-	  /**
-	   * V
-	   */
-	  V: 86,
-	  /**
-	   * W
-	   */
-	  W: 87,
-	  /**
-	   * X
-	   */
-	  X: 88,
-	  /**
-	   * Y
-	   */
-	  Y: 89,
-	  /**
-	   * Z
-	   */
-	  Z: 90,
-	  /**
-	   * META
-	   */
-	  META: 91, // WIN_KEY_LEFT
-	  /**
-	   * WIN_KEY_RIGHT
-	   */
-	  WIN_KEY_RIGHT: 92,
-	  /**
-	   * CONTEXT_MENU
-	   */
-	  CONTEXT_MENU: 93,
-	  /**
-	   * NUM_ZERO
-	   */
-	  NUM_ZERO: 96,
-	  /**
-	   * NUM_ONE
-	   */
-	  NUM_ONE: 97,
-	  /**
-	   * NUM_TWO
-	   */
-	  NUM_TWO: 98,
-	  /**
-	   * NUM_THREE
-	   */
-	  NUM_THREE: 99,
-	  /**
-	   * NUM_FOUR
-	   */
-	  NUM_FOUR: 100,
-	  /**
-	   * NUM_FIVE
-	   */
-	  NUM_FIVE: 101,
-	  /**
-	   * NUM_SIX
-	   */
-	  NUM_SIX: 102,
-	  /**
-	   * NUM_SEVEN
-	   */
-	  NUM_SEVEN: 103,
-	  /**
-	   * NUM_EIGHT
-	   */
-	  NUM_EIGHT: 104,
-	  /**
-	   * NUM_NINE
-	   */
-	  NUM_NINE: 105,
-	  /**
-	   * NUM_MULTIPLY
-	   */
-	  NUM_MULTIPLY: 106,
-	  /**
-	   * NUM_PLUS
-	   */
-	  NUM_PLUS: 107,
-	  /**
-	   * NUM_MINUS
-	   */
-	  NUM_MINUS: 109,
-	  /**
-	   * NUM_PERIOD
-	   */
-	  NUM_PERIOD: 110,
-	  /**
-	   * NUM_DIVISION
-	   */
-	  NUM_DIVISION: 111,
-	  /**
-	   * F1
-	   */
-	  F1: 112,
-	  /**
-	   * F2
-	   */
-	  F2: 113,
-	  /**
-	   * F3
-	   */
-	  F3: 114,
-	  /**
-	   * F4
-	   */
-	  F4: 115,
-	  /**
-	   * F5
-	   */
-	  F5: 116,
-	  /**
-	   * F6
-	   */
-	  F6: 117,
-	  /**
-	   * F7
-	   */
-	  F7: 118,
-	  /**
-	   * F8
-	   */
-	  F8: 119,
-	  /**
-	   * F9
-	   */
-	  F9: 120,
-	  /**
-	   * F10
-	   */
-	  F10: 121,
-	  /**
-	   * F11
-	   */
-	  F11: 122,
-	  /**
-	   * F12
-	   */
-	  F12: 123,
-	  /**
-	   * NUMLOCK
-	   */
-	  NUMLOCK: 144,
-	  /**
-	   * SEMICOLON
-	   */
-	  SEMICOLON: 186, // needs localization
-	  /**
-	   * DASH
-	   */
-	  DASH: 189, // needs localization
-	  /**
-	   * EQUALS
-	   */
-	  EQUALS: 187, // needs localization
-	  /**
-	   * COMMA
-	   */
-	  COMMA: 188, // needs localization
-	  /**
-	   * PERIOD
-	   */
-	  PERIOD: 190, // needs localization
-	  /**
-	   * SLASH
-	   */
-	  SLASH: 191, // needs localization
-	  /**
-	   * APOSTROPHE
-	   */
-	  APOSTROPHE: 192, // needs localization
-	  /**
-	   * SINGLE_QUOTE
-	   */
-	  SINGLE_QUOTE: 222, // needs localization
-	  /**
-	   * OPEN_SQUARE_BRACKET
-	   */
-	  OPEN_SQUARE_BRACKET: 219, // needs localization
-	  /**
-	   * BACKSLASH
-	   */
-	  BACKSLASH: 220, // needs localization
-	  /**
-	   * CLOSE_SQUARE_BRACKET
-	   */
-	  CLOSE_SQUARE_BRACKET: 221, // needs localization
-	  /**
-	   * WIN_KEY
-	   */
-	  WIN_KEY: 224,
-	  /**
-	   * MAC_FF_META
-	   */
-	  MAC_FF_META: 224, // Firefox (Gecko) fires this for the meta key instead of 91
-	  /**
-	   * WIN_IME
-	   */
-	  WIN_IME: 229
-	};
-
-	/*
-	 whether text and modified key is entered at the same time.
-	 */
-	KeyCode.isTextModifyingKeyEvent = function isTextModifyingKeyEvent(e) {
-	  var keyCode = e.keyCode;
-	  if (e.altKey && !e.ctrlKey || e.metaKey ||
-	  // Function keys don't generate text
-	  keyCode >= KeyCode.F1 && keyCode <= KeyCode.F12) {
-	    return false;
-	  }
-
-	  // The following keys are quite harmless, even in combination with
-	  // CTRL, ALT or SHIFT.
-	  switch (keyCode) {
-	    case KeyCode.ALT:
-	    case KeyCode.CAPS_LOCK:
-	    case KeyCode.CONTEXT_MENU:
-	    case KeyCode.CTRL:
-	    case KeyCode.DOWN:
-	    case KeyCode.END:
-	    case KeyCode.ESC:
-	    case KeyCode.HOME:
-	    case KeyCode.INSERT:
-	    case KeyCode.LEFT:
-	    case KeyCode.MAC_FF_META:
-	    case KeyCode.META:
-	    case KeyCode.NUMLOCK:
-	    case KeyCode.NUM_CENTER:
-	    case KeyCode.PAGE_DOWN:
-	    case KeyCode.PAGE_UP:
-	    case KeyCode.PAUSE:
-	    case KeyCode.PRINT_SCREEN:
-	    case KeyCode.RIGHT:
-	    case KeyCode.SHIFT:
-	    case KeyCode.UP:
-	    case KeyCode.WIN_KEY:
-	    case KeyCode.WIN_KEY_RIGHT:
-	      return false;
-	    default:
-	      return true;
-	  }
-	};
-
-	/*
-	 whether character is entered.
-	 */
-	KeyCode.isCharacterKey = function isCharacterKey(keyCode) {
-	  if (keyCode >= KeyCode.ZERO && keyCode <= KeyCode.NINE) {
-	    return true;
-	  }
-
-	  if (keyCode >= KeyCode.NUM_ZERO && keyCode <= KeyCode.NUM_MULTIPLY) {
-	    return true;
-	  }
-
-	  if (keyCode >= KeyCode.A && keyCode <= KeyCode.Z) {
-	    return true;
-	  }
-
-	  // Safari sends zero key code for non-latin characters.
-	  if (window.navigation.userAgent.indexOf('WebKit') !== -1 && keyCode === 0) {
-	    return true;
-	  }
-
-	  switch (keyCode) {
-	    case KeyCode.SPACE:
-	    case KeyCode.QUESTION_MARK:
-	    case KeyCode.NUM_PLUS:
-	    case KeyCode.NUM_MINUS:
-	    case KeyCode.NUM_PERIOD:
-	    case KeyCode.NUM_DIVISION:
-	    case KeyCode.SEMICOLON:
-	    case KeyCode.DASH:
-	    case KeyCode.EQUALS:
-	    case KeyCode.COMMA:
-	    case KeyCode.PERIOD:
-	    case KeyCode.SLASH:
-	    case KeyCode.APOSTROPHE:
-	    case KeyCode.SINGLE_QUOTE:
-	    case KeyCode.OPEN_SQUARE_BRACKET:
-	    case KeyCode.BACKSLASH:
-	    case KeyCode.CLOSE_SQUARE_BRACKET:
-	      return true;
-	    default:
-	      return false;
-	  }
-	};
-
-	exports['default'] = KeyCode;
-	module.exports = exports['default'];
-	});
-
-	unwrapExports(KeyCode_1);
 
 	var DateConstants = createCommonjsModule(function (module, exports) {
 
@@ -47785,7 +48305,7 @@
 
 	unwrapExports(DateTHead_1);
 
-	var util$4 = createCommonjsModule(function (module, exports) {
+	var util$5 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -47910,17 +48430,17 @@
 	}
 	});
 
-	unwrapExports(util$4);
-	var util_1$3 = util$4.getTodayTime;
-	var util_2$1 = util$4.getTitleString;
-	var util_3$1 = util$4.getTodayTimeStr;
-	var util_4$1 = util$4.getMonthName;
-	var util_5$1 = util$4.syncTime;
-	var util_6$1 = util$4.getTimeConfig;
-	var util_7$1 = util$4.isTimeValidByConfig;
-	var util_8$1 = util$4.isTimeValid;
-	var util_9$1 = util$4.isAllowedDate;
-	var util_10$1 = util$4.formatDate;
+	unwrapExports(util$5);
+	var util_1$4 = util$5.getTodayTime;
+	var util_2$2 = util$5.getTitleString;
+	var util_3$2 = util$5.getTodayTimeStr;
+	var util_4$2 = util$5.getMonthName;
+	var util_5$2 = util$5.syncTime;
+	var util_6$2 = util$5.getTimeConfig;
+	var util_7$2 = util$5.isTimeValidByConfig;
+	var util_8$2 = util$5.isTimeValid;
+	var util_9$2 = util$5.isAllowedDate;
+	var util_10$1 = util$5.formatDate;
 
 	var DateTBody_1 = createCommonjsModule(function (module, exports) {
 
@@ -48004,7 +48524,7 @@
 	    var jIndex = void 0;
 	    var current = void 0;
 	    var dateTable = [];
-	    var today = (0, util$4.getTodayTime)(value);
+	    var today = (0, util$5.getTodayTime)(value);
 	    var cellClass = prefixCls + '-cell';
 	    var weekNumberCellClass = prefixCls + '-week-number-cell';
 	    var dateClass = prefixCls + '-date';
@@ -48173,7 +48693,7 @@
 	            onClick: disabled ? undefined : props.onSelect.bind(null, current),
 	            onMouseEnter: disabled ? undefined : props.onDayHover && props.onDayHover.bind(null, current) || undefined,
 	            role: 'gridcell',
-	            title: (0, util$4.getTitleString)(current),
+	            title: (0, util$5.getTitleString)(current),
 	            className: cls
 	          },
 	          dateHtml
@@ -48386,7 +48906,7 @@
 	      months[rowIndex] = [];
 	      for (var colIndex = 0; colIndex < COL; colIndex++) {
 	        current.month(index);
-	        var content = (0, util$4.getMonthName)(current);
+	        var content = (0, util$5.getMonthName)(current);
 	        months[rowIndex][colIndex] = {
 	          value: index,
 	          content: content,
@@ -48403,7 +48923,7 @@
 
 	    var props = this.props;
 	    var value = this.state.value;
-	    var today = (0, util$4.getTodayTime)(value);
+	    var today = (0, util$5.getTodayTime)(value);
 	    var months = this.months();
 	    var currentMonth = value.month();
 	    var prefixCls = props.prefixCls,
@@ -48547,7 +49067,7 @@
 	    var selectedValue = props.selectedValue;
 
 	    _this.state = {
-	      str: (0, util$4.formatDate)(selectedValue, _this.props.format),
+	      str: (0, util$5.formatDate)(selectedValue, _this.props.format),
 	      invalid: false,
 	      hasFocus: false
 	    };
@@ -48571,7 +49091,7 @@
 	    var selectedValue = nextProps.selectedValue;
 	    if (!state.hasFocus) {
 	      newState = {
-	        str: (0, util$4.formatDate)(selectedValue, nextProps.format),
+	        str: (0, util$5.formatDate)(selectedValue, nextProps.format),
 	        invalid: false
 	      };
 	    }
@@ -48714,7 +49234,7 @@
 	    _this2.setState(function (prevState, prevProps) {
 	      return {
 	        hasFocus: false,
-	        str: (0, util$4.formatDate)(prevProps.value, prevProps.format)
+	        str: (0, util$5.formatDate)(prevProps.value, prevProps.format)
 	      };
 	    });
 	    _this2.props.onBlur && _this2.props.onBlur(e);
@@ -49795,7 +50315,7 @@
 	      text = _ref.text;
 
 	  var localeNow = (!text && timePicker ? locale.now : text) || locale.today;
-	  var disabledToday = disabledDate && !(0, util$4.isAllowedDate)((0, util$4.getTodayTime)(value), disabledDate);
+	  var disabledToday = disabledDate && !(0, util$5.isAllowedDate)((0, util$5.getTodayTime)(value), disabledDate);
 	  var isDisabled = disabledToday || disabled;
 	  var disabledTodayClass = isDisabled ? prefixCls + '-today-btn-disabled' : '';
 	  return _react2["default"].createElement(
@@ -49804,7 +50324,7 @@
 	      className: prefixCls + '-today-btn ' + disabledTodayClass,
 	      role: 'button',
 	      onClick: isDisabled ? null : onToday,
-	      title: (0, util$4.getTodayTimeStr)(value)
+	      title: (0, util$5.getTodayTimeStr)(value)
 	    },
 	    localeNow
 	  );
@@ -50084,7 +50604,7 @@
 	function getNowByCurrentStateValue(value) {
 	  var ret = void 0;
 	  if (value) {
-	    ret = (0, util$4.getTodayTime)(value);
+	    ret = (0, util$5.getTodayTime)(value);
 	  } else {
 	    ret = (0, _moment2["default"])();
 	  }
@@ -50164,7 +50684,7 @@
 	      }, _this.isAllowedDate = function (value) {
 	        var disabledDate = _this.props.disabledDate;
 	        var disabledTime = _this.props.disabledTime;
-	        return (0, util$4.isAllowedDate)(value, disabledDate, disabledTime);
+	        return (0, util$5.isAllowedDate)(value, disabledDate, disabledTime);
 	      }, _temp), _possibleConstructorReturn(_this, _ret);
 	    }
 
@@ -50518,7 +51038,7 @@
 	        mode = state.mode;
 
 	    var showTimePicker = mode === 'time';
-	    var disabledTimeConfig = showTimePicker && disabledTime && timePicker ? (0, util$4.getTimeConfig)(selectedValue, disabledTime) : null;
+	    var disabledTimeConfig = showTimePicker && disabledTime && timePicker ? (0, util$5.getTimeConfig)(selectedValue, disabledTime) : null;
 
 	    var timePickerEle = null;
 
@@ -50787,7 +51307,7 @@
 	    if (!selectedValue && timePicker) {
 	      var timePickerDefaultValue = timePicker.props.defaultValue;
 	      if (timePickerDefaultValue) {
-	        (0, util$4.syncTime)(timePickerDefaultValue, value);
+	        (0, util$5.syncTime)(timePickerDefaultValue, value);
 	      }
 	    }
 	    _this2.onSelect(value);
@@ -50796,7 +51316,7 @@
 	  this.onToday = function () {
 	    var value = _this2.state.value;
 
-	    var now = (0, util$4.getTodayTime)(value);
+	    var now = (0, util$5.getTodayTime)(value);
 	    _this2.onSelect(now, {
 	      source: 'todayButton'
 	    });
@@ -53307,7 +53827,7 @@
 	        onInputBlur = props.onInputBlur;
 
 	    var shouldShowTimePicker = showTimePicker && timePicker;
-	    var disabledTimeConfig = shouldShowTimePicker && disabledTime ? (0, util$4.getTimeConfig)(selectedValue, disabledTime) : null;
+	    var disabledTimeConfig = shouldShowTimePicker && disabledTime ? (0, util$5.getTimeConfig)(selectedValue, disabledTime) : null;
 	    var rangeClassName = prefixCls + '-range';
 	    var newProps = {
 	      locale: locale,
@@ -53642,7 +54162,7 @@
 
 	    var startValue = this.getStartValue();
 	    var endValue = this.getEndValue();
-	    var todayTime = (0, util$4.getTodayTime)(startValue);
+	    var todayTime = (0, util$5.getTodayTime)(startValue);
 	    var thisMonth = todayTime.month();
 	    var thisYear = todayTime.year();
 	    var isTodayInView = startValue.year() === thisYear && startValue.month() === thisMonth || endValue.year() === thisYear && endValue.month() === thisMonth;
@@ -53834,28 +54354,28 @@
 	    var nextSelectedValue = void 0;
 	    if (type === 'both') {
 	      if (!firstSelectedValue) {
-	        (0, util$4.syncTime)(prevSelectedValue[0], value);
+	        (0, util$5.syncTime)(prevSelectedValue[0], value);
 	        nextSelectedValue = [value];
 	      } else if (_this2.compare(firstSelectedValue, value) < 0) {
-	        (0, util$4.syncTime)(prevSelectedValue[1], value);
+	        (0, util$5.syncTime)(prevSelectedValue[1], value);
 	        nextSelectedValue = [firstSelectedValue, value];
 	      } else {
-	        (0, util$4.syncTime)(prevSelectedValue[0], value);
-	        (0, util$4.syncTime)(prevSelectedValue[1], firstSelectedValue);
+	        (0, util$5.syncTime)(prevSelectedValue[0], value);
+	        (0, util$5.syncTime)(prevSelectedValue[1], firstSelectedValue);
 	        nextSelectedValue = [value, firstSelectedValue];
 	      }
 	    } else if (type === 'start') {
-	      (0, util$4.syncTime)(prevSelectedValue[0], value);
+	      (0, util$5.syncTime)(prevSelectedValue[0], value);
 	      var endValue = selectedValue[1];
 	      nextSelectedValue = endValue && _this2.compare(endValue, value) > 0 ? [value, endValue] : [value];
 	    } else {
 	      // type === 'end'
 	      var startValue = selectedValue[0];
 	      if (startValue && _this2.compare(startValue, value) <= 0) {
-	        (0, util$4.syncTime)(prevSelectedValue[1], value);
+	        (0, util$5.syncTime)(prevSelectedValue[1], value);
 	        nextSelectedValue = [startValue, value];
 	      } else {
-	        (0, util$4.syncTime)(prevSelectedValue[0], value);
+	        (0, util$5.syncTime)(prevSelectedValue[0], value);
 	        nextSelectedValue = [value];
 	      }
 	    }
@@ -54045,7 +54565,7 @@
 	  };
 
 	  this.onToday = function () {
-	    var startValue = (0, util$4.getTodayTime)(_this2.state.value[0]);
+	    var startValue = (0, util$5.getTodayTime)(_this2.state.value[0]);
 	    var endValue = startValue.clone().add(1, 'months');
 	    _this2.setState({ value: [startValue, endValue] });
 	  };
@@ -54144,7 +54664,7 @@
 	    // keep selectedTime when select date
 	    if (selectedValue[0] && _this2.props.timePicker) {
 	      value = value.clone();
-	      (0, util$4.syncTime)(selectedValue[0], value);
+	      (0, util$5.syncTime)(selectedValue[0], value);
 	    }
 	    if (_this2.state.showTimePicker && selectedValue[0]) {
 	      return selectedValue[0];
@@ -54161,7 +54681,7 @@
 	    var endValue = value[1] ? value[1].clone() : value[0].clone().add(1, 'month');
 	    // keep selectedTime when select date
 	    if (selectedValue[1] && _this2.props.timePicker) {
-	      (0, util$4.syncTime)(selectedValue[1], endValue);
+	      (0, util$5.syncTime)(selectedValue[1], endValue);
 	    }
 	    if (showTimePicker) {
 	      return selectedValue[1] ? selectedValue[1] : _this2.getStartValue();
@@ -54214,7 +54734,7 @@
 	  };
 
 	  this.isAllowedDateAndTime = function (selectedValue) {
-	    return (0, util$4.isAllowedDate)(selectedValue[0], _this2.props.disabledDate, _this2.disabledStartTime) && (0, util$4.isAllowedDate)(selectedValue[1], _this2.props.disabledDate, _this2.disabledEndTime);
+	    return (0, util$5.isAllowedDate)(selectedValue[0], _this2.props.disabledDate, _this2.disabledStartTime) && (0, util$5.isAllowedDate)(selectedValue[1], _this2.props.disabledDate, _this2.disabledEndTime);
 	  };
 
 	  this.isMonthYearPanelShow = function (mode) {
@@ -54241,10 +54761,10 @@
 	    if (timePicker && timePicker.props.defaultValue) {
 	      var timePickerDefaultValue = timePicker.props.defaultValue;
 	      if (!prevSelectedValue[0] && selectedValue[0]) {
-	        (0, util$4.syncTime)(timePickerDefaultValue[0], selectedValue[0]);
+	        (0, util$5.syncTime)(timePickerDefaultValue[0], selectedValue[0]);
 	      }
 	      if (!prevSelectedValue[1] && selectedValue[1]) {
-	        (0, util$4.syncTime)(timePickerDefaultValue[1], selectedValue[1]);
+	        (0, util$5.syncTime)(timePickerDefaultValue[1], selectedValue[1]);
 	      }
 	    }
 
@@ -54615,7 +55135,7 @@
 	                    },
 	                    _react2["default"].createElement(_beeFormControl2["default"], {
 	                        placeholder: _this2.props.placeholder ? _this2.props.placeholder : 'start ~ end',
-	                        value: isValidRange(value) && (0, util$4.formatDate)(value[0], formatStr) + " ~ " + (0, util$4.formatDate)(value[1], formatStr) || '',
+	                        value: isValidRange(value) && (0, util$5.formatDate)(value[0], formatStr) + " ~ " + (0, util$5.formatDate)(value[1], formatStr) || '',
 	                        disabled: props.disabled,
 	                        onFocus: function onFocus(v, e) {
 	                            _this2.outInputFocus(e);
@@ -54659,7 +55179,7 @@
 	        //传入value和dateString
 	        if (props.onChange && isValidRange(value) || value.length == 0) {
 	            if (value.length > 0) {
-	                props.onChange(value, "[\"" + (0, util$4.formatDate)(value[0], formatStr) + "\" , \"" + (0, util$4.formatDate)(value[1], formatStr) + "\"]");
+	                props.onChange(value, "[\"" + (0, util$5.formatDate)(value[0], formatStr) + "\" , \"" + (0, util$5.formatDate)(value[1], formatStr) + "\"]");
 	            } else {
 	                props.onChange(null);
 	            }
@@ -56452,7 +56972,7 @@
 
 	unwrapExports(build$f);
 
-	var util$5 = createCommonjsModule(function (module, exports) {
+	var util$6 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -56576,16 +57096,16 @@
 	}
 	});
 
-	unwrapExports(util$5);
-	var util_1$4 = util$5.setStyle;
-	var util_2$2 = util$5.getWidth;
-	var util_3$2 = util$5.menuAllProps;
-	var util_4$2 = util$5.noop;
-	var util_5$2 = util$5.getKeyFromChildrenIndex;
-	var util_6$2 = util$5.getMenuIdFromSubMenuEventKey;
-	var util_7$2 = util$5.loopMenuItem;
-	var util_8$2 = util$5.loopMenuItemRecursively;
-	var util_9$2 = util$5.fireKeyEvent;
+	unwrapExports(util$6);
+	var util_1$5 = util$6.setStyle;
+	var util_2$3 = util$6.getWidth;
+	var util_3$3 = util$6.menuAllProps;
+	var util_4$3 = util$6.noop;
+	var util_5$3 = util$6.getKeyFromChildrenIndex;
+	var util_6$3 = util$6.getMenuIdFromSubMenuEventKey;
+	var util_7$3 = util$6.loopMenuItem;
+	var util_8$3 = util$6.loopMenuItemRecursively;
+	var util_9$3 = util$6.fireKeyEvent;
 
 	var placements_1$1 = createCommonjsModule(function (module, exports) {
 
@@ -56705,7 +57225,7 @@
 	};
 
 	var updateDefaultActiveFirst = function updateDefaultActiveFirst(store, eventKey, defaultActiveFirst) {
-	  var menuId = (0, util$5.getMenuIdFromSubMenuEventKey)(eventKey);
+	  var menuId = (0, util$6.getMenuIdFromSubMenuEventKey)(eventKey);
 	  var state = store.getState();
 	  store.setState({
 	    defaultActiveFirst: _extends({}, state.defaultActiveFirst, _defineProperty({}, menuId, defaultActiveFirst))
@@ -56809,7 +57329,7 @@
 	      forceSubMenuRender: props.forceSubMenuRender,
 	      triggerSubMenuAction: props.triggerSubMenuAction,
 	      builtinPlacements: props.builtinPlacements,
-	      defaultActiveFirst: props.store.getState().defaultActiveFirst[(0, util$5.getMenuIdFromSubMenuEventKey)(props.eventKey)],
+	      defaultActiveFirst: props.store.getState().defaultActiveFirst[(0, util$6.getMenuIdFromSubMenuEventKey)(props.eventKey)],
 	      multiple: props.multiple,
 	      prefixCls: props.rootPrefixCls,
 	      id: this._menuId,
@@ -56949,7 +57469,7 @@
 	        subMenuCloseDelay = props.subMenuCloseDelay,
 	        builtinPlacements = props.builtinPlacements;
 
-	    util$5.menuAllProps.forEach(function (key) {
+	    util$6.menuAllProps.forEach(function (key) {
 	      return delete props[key];
 	    });
 	    // Set onClick to null, to ignore propagated onClick event
@@ -57018,12 +57538,12 @@
 	  expandIcon: _propTypes2["default"].oneOfType([_propTypes2["default"].func, _propTypes2["default"].node])
 	};
 	SubMenu.defaultProps = {
-	  onMouseEnter: util$5.noop,
-	  onMouseLeave: util$5.noop,
-	  onTitleMouseEnter: util$5.noop,
-	  onTitleMouseLeave: util$5.noop,
-	  onTitleClick: util$5.noop,
-	  manualRef: util$5.noop,
+	  onMouseEnter: util$6.noop,
+	  onMouseLeave: util$6.noop,
+	  onTitleMouseEnter: util$6.noop,
+	  onTitleMouseLeave: util$6.noop,
+	  onTitleClick: util$6.noop,
+	  manualRef: util$6.noop,
 	  mode: 'vertical',
 	  title: ''
 	};
@@ -57231,7 +57751,7 @@
 
 	  this.isChildrenSelected = function () {
 	    var ret = { find: false };
-	    (0, util$5.loopMenuItemRecursively)(_this3.props.children, _this3.props.selectedKeys, ret);
+	    (0, util$6.loopMenuItemRecursively)(_this3.props.children, _this3.props.selectedKeys, ret);
 	    return ret.find;
 	  };
 
@@ -57407,7 +57927,7 @@
 
 	      var popupClassName = theme ? prefixCls + '-' + theme : '';
 	      var props = {};
-	      util$5.menuAllProps.forEach(function (k) {
+	      util$6.menuAllProps.forEach(function (k) {
 	        if (rest[k] !== undefined) {
 	          props[k] = rest[k];
 	        }
@@ -57446,7 +57966,7 @@
 	      var lastOverflowedIndicatorPlaceholder = ul.children[ulChildrenNodes.length - 1];
 
 	      // need last overflowed indicator for calculating length;
-	      (0, util$5.setStyle)(lastOverflowedIndicatorPlaceholder, 'display', 'inline-block');
+	      (0, util$6.setStyle)(lastOverflowedIndicatorPlaceholder, 'display', 'inline-block');
 
 	      var menuItemNodes = _this.getMenuItemNodes();
 
@@ -57458,23 +57978,23 @@
 	      });
 
 	      overflowedItems.forEach(function (c) {
-	        (0, util$5.setStyle)(c, 'display', 'inline-block');
+	        (0, util$6.setStyle)(c, 'display', 'inline-block');
 	      });
 
 	      _this.menuItemSizes = menuItemNodes.map(function (c) {
-	        return (0, util$5.getWidth)(c);
+	        return (0, util$6.getWidth)(c);
 	      });
 
 	      overflowedItems.forEach(function (c) {
-	        (0, util$5.setStyle)(c, 'display', 'none');
+	        (0, util$6.setStyle)(c, 'display', 'none');
 	      });
-	      _this.overflowedIndicatorWidth = (0, util$5.getWidth)(ul.children[ul.children.length - 1]);
+	      _this.overflowedIndicatorWidth = (0, util$6.getWidth)(ul.children[ul.children.length - 1]);
 	      _this.originalTotalWidth = _this.menuItemSizes.reduce(function (acc, cur) {
 	        return acc + cur;
 	      }, 0);
 	      _this.handleResize();
 	      // prevent the overflowed indicator from taking space;
-	      (0, util$5.setStyle)(lastOverflowedIndicatorPlaceholder, 'display', 'none');
+	      (0, util$6.setStyle)(lastOverflowedIndicatorPlaceholder, 'display', 'none');
 	    }, _this.resizeObserver = null, _this.mutationObserver = null, _this.originalTotalWidth = 0, _this.overflowedItems = [], _this.menuItemSizes = [], _this.handleResize = function () {
 	      if (_this.props.mode !== 'horizontal') {
 	        return;
@@ -57484,7 +58004,7 @@
 	      if (!ul) {
 	        return;
 	      }
-	      var width = (0, util$5.getWidth)(ul);
+	      var width = (0, util$6.getWidth)(ul);
 
 	      _this.overflowedItems = [];
 	      var currentSumWidth = 0;
@@ -57742,8 +58262,8 @@
 
 	  if (activeKey) {
 	    var found = void 0;
-	    (0, util$5.loopMenuItem)(children, function (c, i) {
-	      if (c && !c.props.disabled && activeKey === (0, util$5.getKeyFromChildrenIndex)(c, eventKey, i)) {
+	    (0, util$6.loopMenuItem)(children, function (c, i) {
+	      if (c && !c.props.disabled && activeKey === (0, util$6.getKeyFromChildrenIndex)(c, eventKey, i)) {
 	        found = true;
 	      }
 	    });
@@ -57753,9 +58273,9 @@
 	  }
 	  activeKey = null;
 	  if (props.defaultActiveFirst) {
-	    (0, util$5.loopMenuItem)(children, function (c, i) {
+	    (0, util$6.loopMenuItem)(children, function (c, i) {
 	      if (!activeKey && c && !c.props.disabled) {
-	        activeKey = (0, util$5.getKeyFromChildrenIndex)(c, eventKey, i);
+	        activeKey = (0, util$6.getKeyFromChildrenIndex)(c, eventKey, i);
 	      }
 	    });
 	    return activeKey;
@@ -57851,7 +58371,7 @@
 	        overflowedIndicator = props.overflowedIndicator,
 	        theme = props.theme;
 
-	    util$5.menuAllProps.forEach(function (key) {
+	    util$6.menuAllProps.forEach(function (key) {
 	      return delete props[key];
 	    });
 
@@ -57930,7 +58450,7 @@
 	  visible: true,
 	  focusable: true,
 	  style: {},
-	  manualRef: util$5.noop
+	  manualRef: util$6.noop
 	};
 
 	var _initialiseProps = function _initialiseProps() {
@@ -58043,7 +58563,7 @@
 	  this.renderCommonMenuItem = function (child, i, extraProps) {
 	    var state = _this3.props.store.getState();
 	    var props = _this3.props;
-	    var key = (0, util$5.getKeyFromChildrenIndex)(child, props.eventKey, i);
+	    var key = (0, util$6.getKeyFromChildrenIndex)(child, props.eventKey, i);
 	    var childProps = child.props;
 	    var isActive = key === state.activeKey;
 	    var newChildProps = _extends({
@@ -58060,7 +58580,7 @@
 	      active: !childProps.disabled && isActive,
 	      multiple: props.multiple,
 	      onClick: function onClick(e) {
-	        (childProps.onClick || util$5.noop)(e);
+	        (childProps.onClick || util$6.noop)(e);
 	        _this3.onClick(e);
 	      },
 	      onItemHover: _this3.onItemHover,
@@ -58274,10 +58794,10 @@
 	};
 	Menu.defaultProps = {
 	  selectable: true,
-	  onClick: util$5.noop,
-	  onSelect: util$5.noop,
-	  onOpenChange: util$5.noop,
-	  onDeselect: util$5.noop,
+	  onClick: util$6.noop,
+	  onSelect: util$6.noop,
+	  onOpenChange: util$6.noop,
+	  onDeselect: util$6.noop,
 	  defaultSelectedKeys: [],
 	  defaultOpenKeys: [],
 	  subMenuOpenDelay: 0.1,
@@ -58395,7 +58915,7 @@
 	  };
 
 	  this.focus = function () {
-	    (0, util$5.fireKeyEvent)(_reactDom2["default"].findDOMNode(_this3.innerMenu), 'keydown', 40);
+	    (0, util$6.fireKeyEvent)(_reactDom2["default"].findDOMNode(_this3.innerMenu), 'keydown', 40);
 	    _this3.props.onFocus && _this3.props.onFocus();
 	  };
 	};
@@ -58406,7 +58926,7 @@
 
 	unwrapExports(Menu_1);
 
-	var MenuItem_1 = createCommonjsModule(function (module, exports) {
+	var MenuItem_1$1 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -58617,7 +59137,7 @@
 	    if (props.mode === 'inline') {
 	      style.paddingLeft = props.inlineIndent * props.level;
 	    }
-	    util$5.menuAllProps.forEach(function (key) {
+	    util$6.menuAllProps.forEach(function (key) {
 	      return delete props[key];
 	    });
 	    var icon = this.props.itemIcon;
@@ -58660,10 +59180,10 @@
 	  itemIcon: _propTypes2["default"].oneOfType([_propTypes2["default"].func, _propTypes2["default"].node])
 	};
 	MenuItem.defaultProps = {
-	  onSelect: util$5.noop,
-	  onMouseEnter: util$5.noop,
-	  onMouseLeave: util$5.noop,
-	  manualRef: util$5.noop
+	  onSelect: util$6.noop,
+	  onMouseEnter: util$6.noop,
+	  onMouseLeave: util$6.noop,
+	  manualRef: util$6.noop
 	};
 
 
@@ -58683,8 +59203,8 @@
 	exports["default"] = connected;
 	});
 
-	unwrapExports(MenuItem_1);
-	var MenuItem_2 = MenuItem_1.MenuItem;
+	unwrapExports(MenuItem_1$1);
+	var MenuItem_2$1 = MenuItem_1$1.MenuItem;
 
 	var MenuItemGroup_1 = createCommonjsModule(function (module, exports) {
 
@@ -58753,7 +59273,7 @@
 	    var title = props.title,
 	        children = props.children;
 
-	    util$5.menuAllProps.forEach(function (key) {
+	    util$6.menuAllProps.forEach(function (key) {
 	      return delete props[key];
 	    });
 
@@ -59118,7 +59638,7 @@
 
 
 
-	var _MenuItem2 = _interopRequireDefault(MenuItem_1);
+	var _MenuItem2 = _interopRequireDefault(MenuItem_1$1);
 
 
 
@@ -63737,7 +64257,7 @@
 
 	var build$j = Table_1;
 
-	var util$6 = createCommonjsModule(function (module, exports) {
+	var util$7 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -63817,10 +64337,10 @@
 	}
 	});
 
-	unwrapExports(util$6);
-	var util_1$5 = util$6.sortBy;
-	var util_2$3 = util$6.compare;
-	var util_3$3 = util$6.ObjectAssign;
+	unwrapExports(util$7);
+	var util_1$6 = util$7.sortBy;
+	var util_2$4 = util$7.compare;
+	var util_3$4 = util$7.ObjectAssign;
 
 	var multiSelect_1 = createCommonjsModule(function (module, exports) {
 
@@ -63871,7 +64391,7 @@
 
 	      var obj = _this.getCheckedOrIndeter(props.data);
 	      _this.state = _extends({}, obj, {
-	        data: (0, util$6.ObjectAssign)(props.data)
+	        data: (0, util$7.ObjectAssign)(props.data)
 	      });
 	      return _this;
 	    }
@@ -63880,7 +64400,7 @@
 	      if ('data' in nextProps) {
 	        var obj = this.getCheckedOrIndeter(nextProps.data);
 	        this.setState(_extends({}, obj, {
-	          data: (0, util$6.ObjectAssign)(nextProps.data)
+	          data: (0, util$7.ObjectAssign)(nextProps.data)
 	        }));
 	      }
 	    };
@@ -65869,7 +66389,7 @@
 
 	unwrapExports(promise$1);
 
-	var util$7 = createCommonjsModule(function (module, exports) {
+	var util$8 = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -66114,15 +66634,15 @@
 	}
 	});
 
-	unwrapExports(util$7);
-	var util_1$6 = util$7.warning;
-	var util_2$4 = util$7.convertFieldsError;
-	var util_3$4 = util$7.format;
-	var util_4$3 = util$7.isEmptyValue;
-	var util_5$3 = util$7.isEmptyObject;
-	var util_6$3 = util$7.asyncMap;
-	var util_7$3 = util$7.complementError;
-	var util_8$3 = util$7.deepMerge;
+	unwrapExports(util$8);
+	var util_1$7 = util$8.warning;
+	var util_2$5 = util$8.convertFieldsError;
+	var util_3$5 = util$8.format;
+	var util_4$4 = util$8.isEmptyValue;
+	var util_5$4 = util$8.isEmptyObject;
+	var util_6$4 = util$8.asyncMap;
+	var util_7$4 = util$8.complementError;
+	var util_8$4 = util$8.deepMerge;
 
 	var required_1 = createCommonjsModule(function (module, exports) {
 
@@ -66132,7 +66652,7 @@
 
 
 
-	var util = _interopRequireWildcard(util$7);
+	var util = _interopRequireWildcard(util$8);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -66166,7 +66686,7 @@
 
 
 
-	var util = _interopRequireWildcard(util$7);
+	var util = _interopRequireWildcard(util$8);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -66204,7 +66724,7 @@
 
 
 
-	var util = _interopRequireWildcard(util$7);
+	var util = _interopRequireWildcard(util$8);
 
 
 
@@ -66310,7 +66830,7 @@
 
 
 
-	var util = _interopRequireWildcard(util$7);
+	var util = _interopRequireWildcard(util$8);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -66382,7 +66902,7 @@
 
 
 
-	var util = _interopRequireWildcard(util$7);
+	var util = _interopRequireWildcard(util$8);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -66419,7 +66939,7 @@
 
 
 
-	var util = _interopRequireWildcard(util$7);
+	var util = _interopRequireWildcard(util$8);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
@@ -66530,11 +67050,11 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value, 'string') && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value, 'string') && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options, 'string');
-	    if (!(0, util$7.isEmptyValue)(value, 'string')) {
+	    if (!(0, util$8.isEmptyValue)(value, 'string')) {
 	      _rule2['default'].type(rule, value, source, errors, options);
 	      _rule2['default'].range(rule, value, source, errors, options);
 	      _rule2['default'].pattern(rule, value, source, errors, options);
@@ -66579,7 +67099,7 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66626,7 +67146,7 @@
 	    if (value === '') {
 	      value = undefined;
 	    }
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66671,7 +67191,7 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66715,11 +67235,11 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
-	    if (!(0, util$7.isEmptyValue)(value)) {
+	    if (!(0, util$8.isEmptyValue)(value)) {
 	      _rule2['default'].type(rule, value, source, errors, options);
 	    }
 	  }
@@ -66759,7 +67279,7 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66804,7 +67324,7 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66849,11 +67369,11 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value, 'array') && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value, 'array') && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options, 'array');
-	    if (!(0, util$7.isEmptyValue)(value, 'array')) {
+	    if (!(0, util$8.isEmptyValue)(value, 'array')) {
 	      _rule2['default'].type(rule, value, source, errors, options);
 	      _rule2['default'].range(rule, value, source, errors, options);
 	    }
@@ -66894,7 +67414,7 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66940,7 +67460,7 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
@@ -66987,11 +67507,11 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value, 'string') && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value, 'string') && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
-	    if (!(0, util$7.isEmptyValue)(value, 'string')) {
+	    if (!(0, util$8.isEmptyValue)(value, 'string')) {
 	      _rule2['default'].pattern(rule, value, source, errors, options);
 	    }
 	  }
@@ -67023,11 +67543,11 @@
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  // console.log('validate on %s value', value);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options);
-	    if (!(0, util$7.isEmptyValue)(value)) {
+	    if (!(0, util$8.isEmptyValue)(value)) {
 	      var dateObject = void 0;
 
 	      if (typeof value === 'number') {
@@ -67097,11 +67617,11 @@
 	  var errors = [];
 	  var validate = rule.required || !rule.required && source.hasOwnProperty(rule.field);
 	  if (validate) {
-	    if ((0, util$7.isEmptyValue)(value, ruleType) && !rule.required) {
+	    if ((0, util$8.isEmptyValue)(value, ruleType) && !rule.required) {
 	      return callback();
 	    }
 	    _rule2['default'].required(rule, value, source, errors, options, ruleType);
-	    if (!(0, util$7.isEmptyValue)(value, ruleType)) {
+	    if (!(0, util$8.isEmptyValue)(value, ruleType)) {
 	      _rule2['default'].type(rule, value, source, errors, options);
 	    }
 	  }
@@ -67323,7 +67843,7 @@
 	Schema.prototype = {
 	  messages: function messages(_messages) {
 	    if (_messages) {
-	      this._messages = (0, util$7.deepMerge)((0, messages_1.newMessages)(), _messages);
+	      this._messages = (0, util$8.deepMerge)((0, messages_1.newMessages)(), _messages);
 	    }
 	    return this._messages;
 	  },
@@ -67386,7 +67906,7 @@
 	        errors = null;
 	        fields = null;
 	      } else {
-	        fields = (0, util$7.convertFieldsError)(errors);
+	        fields = (0, util$8.convertFieldsError)(errors);
 	      }
 	      callback(errors, fields);
 	    }
@@ -67396,7 +67916,7 @@
 	      if (messages === messages_1.messages) {
 	        messages = (0, messages_1.newMessages)();
 	      }
-	      (0, util$7.deepMerge)(messages, options.messages);
+	      (0, util$8.deepMerge)(messages, options.messages);
 	      options.messages = messages;
 	    } else {
 	      options.messages = this.messages();
@@ -67440,7 +67960,7 @@
 	      });
 	    });
 	    var errorFields = {};
-	    return (0, util$7.asyncMap)(series, options, function (data, doIt) {
+	    return (0, util$8.asyncMap)(series, options, function (data, doIt) {
 	      var rule = data.rule;
 	      var deep = (rule.type === 'object' || rule.type === 'array') && ((0, _typeof3['default'])(rule.fields) === 'object' || (0, _typeof3['default'])(rule.defaultField) === 'object');
 	      deep = deep && (rule.required || !rule.required && data.value);
@@ -67466,7 +67986,7 @@
 	          errors = [].concat(rule.message);
 	        }
 
-	        errors = errors.map((0, util$7.complementError)(rule));
+	        errors = errors.map((0, util$8.complementError)(rule));
 
 	        if (options.first && errors.length) {
 	          errorFields[rule.field] = 1;
@@ -67480,9 +68000,9 @@
 	          // go deeper
 	          if (rule.required && !data.value) {
 	            if (rule.message) {
-	              errors = [].concat(rule.message).map((0, util$7.complementError)(rule));
+	              errors = [].concat(rule.message).map((0, util$8.complementError)(rule));
 	            } else if (options.error) {
-	              errors = [options.error(rule, (0, util$7.format)(options.messages.required, rule.field))];
+	              errors = [options.error(rule, (0, util$8.format)(options.messages.required, rule.field))];
 	            } else {
 	              errors = [];
 	            }
@@ -67554,7 +68074,7 @@
 	      rule.type = 'pattern';
 	    }
 	    if (typeof rule.validator !== 'function' && rule.type && !_validator2['default'].hasOwnProperty(rule.type)) {
-	      throw new Error((0, util$7.format)('Unknown rule type %s', rule.type));
+	      throw new Error((0, util$8.format)('Unknown rule type %s', rule.type));
 	    }
 	    return rule.type || 'string';
 	  },
@@ -67581,7 +68101,7 @@
 	  _validator2['default'][type] = validator;
 	};
 
-	Schema.warning = util$7.warning;
+	Schema.warning = util$8.warning;
 
 	Schema.messages = messages_1.messages;
 
@@ -82769,7 +83289,7 @@
 
 	unwrapExports(polyfill_shim$1);
 
-	var util$8 = createCommonjsModule(function (module, exports) {
+	var util$9 = createCommonjsModule(function (module, exports) {
 
 	exports.__esModule = true;
 	exports.UNSELECTABLE_ATTRIBUTE = exports.UNSELECTABLE_STYLE = undefined;
@@ -82957,20 +83477,20 @@
 	}
 	});
 
-	unwrapExports(util$8);
-	var util_1$7 = util$8.UNSELECTABLE_ATTRIBUTE;
-	var util_2$5 = util$8.UNSELECTABLE_STYLE;
-	var util_3$5 = util$8.toTitle;
-	var util_4$4 = util$8.toArray;
-	var util_5$4 = util$8.createRef;
-	var util_6$4 = util$8.resetAriaId;
-	var util_7$4 = util$8.generateAriaId;
-	var util_8$4 = util$8.isLabelInValue;
-	var util_9$3 = util$8.refValParse;
-	var util_10$2 = util$8.formatInternalValue;
-	var util_11$1 = util$8.formatDisplayValue;
-	var util_12$1 = util$8.getRefname;
-	var util_13$1 = util$8.formatSelectorValue;
+	unwrapExports(util$9);
+	var util_1$8 = util$9.UNSELECTABLE_ATTRIBUTE;
+	var util_2$6 = util$9.UNSELECTABLE_STYLE;
+	var util_3$6 = util$9.toTitle;
+	var util_4$5 = util$9.toArray;
+	var util_5$5 = util$9.createRef;
+	var util_6$5 = util$9.resetAriaId;
+	var util_7$5 = util$9.generateAriaId;
+	var util_8$5 = util$9.isLabelInValue;
+	var util_9$4 = util$9.refValParse;
+	var util_10$2 = util$9.formatInternalValue;
+	var util_11$1 = util$9.formatDisplayValue;
+	var util_12$1 = util$9.getRefname;
+	var util_13$1 = util$9.formatSelectorValue;
 
 	var SelectTrigger_1$1 = createCommonjsModule(function (module, exports) {
 
@@ -83063,7 +83583,7 @@
 	      }
 	    };
 
-	    _this.triggerRef = (0, util$8.createRef)();
+	    _this.triggerRef = (0, util$9.createRef)();
 	    return _this;
 	  }
 
@@ -83211,7 +83731,7 @@
 	        _this.domRef.current.focus();
 	      };
 
-	      _this.domRef = (0, util$8.createRef)();
+	      _this.domRef = (0, util$9.createRef)();
 	      return _this;
 	    }
 
@@ -83226,7 +83746,7 @@
 	      var onSelectorClear = this.context.rcTreeSelect.onSelectorClear;
 
 
-	      if (!allowClear || !selectorValueList.length || !(0, util$8.formatDisplayValue)(selectorValueList[0], inputDisplay, valueList)) {
+	      if (!allowClear || !selectorValueList.length || !(0, util$9.formatDisplayValue)(selectorValueList[0], inputDisplay, valueList)) {
 	        return null;
 	      }
 
@@ -83522,7 +84042,7 @@
 	      }
 	    };
 
-	    _this.menuRef = (0, util$8.createRef)();
+	    _this.menuRef = (0, util$9.createRef)();
 	    return _this;
 	  }
 
@@ -83705,12 +84225,12 @@
 	      var innerNode = void 0;
 
 	      if (selectorValueList.length) {
-	        var displayVal = (0, util$8.formatDisplayValue)(selectorValueList[0], inputDisplay, valueList);
+	        var displayVal = (0, util$9.formatDisplayValue)(selectorValueList[0], inputDisplay, valueList);
 	        innerNode = _react2["default"].createElement(
 	          'span',
 	          {
 	            key: 'value',
-	            title: (0, util$8.toTitle)(displayVal),
+	            title: (0, util$9.toTitle)(displayVal),
 	            className: prefixCls + '-selection-selected-value'
 	          },
 	          displayVal || ''
@@ -83730,7 +84250,7 @@
 	      );
 	    };
 
-	    _this.selectorRef = (0, util$8.createRef)();
+	    _this.selectorRef = (0, util$9.createRef)();
 	    return _this;
 	  }
 
@@ -83824,8 +84344,8 @@
 	      }
 	    };
 
-	    _this.inputRef = (0, util$8.createRef)();
-	    _this.mirrorInputRef = (0, util$8.createRef)();
+	    _this.inputRef = (0, util$9.createRef)();
+	    _this.mirrorInputRef = (0, util$9.createRef)();
 	    return _this;
 	  }
 
@@ -84042,9 +84562,9 @@
 	      );
 	    };
 
-	    _this.inputRef = (0, util$8.createRef)();
-	    _this.searchRef = (0, util$8.createRef)();
-	    _this.popupRef = (0, util$8.createRef)();
+	    _this.inputRef = (0, util$9.createRef)();
+	    _this.searchRef = (0, util$9.createRef)();
+	    _this.popupRef = (0, util$9.createRef)();
 	    return _this;
 	  }
 
@@ -84165,11 +84685,11 @@
 	    return _react2["default"].createElement(
 	      'li',
 	      _extends({
-	        style: _extends({}, util$8.UNSELECTABLE_STYLE, style)
-	      }, util$8.UNSELECTABLE_ATTRIBUTE, {
+	        style: _extends({}, util$9.UNSELECTABLE_STYLE, style)
+	      }, util$9.UNSELECTABLE_ATTRIBUTE, {
 	        role: 'menuitem',
 	        className: (0, _classnames2["default"])(prefixCls + '-selection__choice', className),
-	        title: (0, util$8.toTitle)(value || label)
+	        title: (0, util$9.toTitle)(value || label)
 	      }),
 	      _react2["default"].createElement(
 	        'span',
@@ -84262,7 +84782,7 @@
 	  // Basic selectors
 	  myValueList.forEach(function (item) {
 	    // const { props: { disabled } = {} } = (valueEntities[value] || {}).node || {};
-	    var inputVal = (0, util$8.formatDisplayValue)(item, inputDisplay, valueList);
+	    var inputVal = (0, util$9.formatDisplayValue)(item, inputDisplay, valueList);
 	    var key = item[valueField] || item.refpk; //兼容初始值可能会没有valueField
 	    nodeKeys.push({
 	      key: key,
@@ -84470,7 +84990,7 @@
 	      }));
 	    };
 
-	    _this.inputRef = (0, util$8.createRef)();
+	    _this.inputRef = (0, util$9.createRef)();
 	    return _this;
 	  }
 
@@ -84695,12 +85215,12 @@
 	      valueList: valueList || []
 	    };
 
-	    _this.selectorRef = (0, util$8.createRef)();
-	    _this.selectTriggerRef = (0, util$8.createRef)();
+	    _this.selectorRef = (0, util$9.createRef)();
+	    _this.selectTriggerRef = (0, util$9.createRef)();
 
 	    // ARIA need `aria-controls` props mapping
 	    // Since this need user input. Let's generate ourselves
-	    _this.ariaId = (0, util$8.generateAriaId)(prefixAria + '-list');
+	    _this.ariaId = (0, util$9.generateAriaId)(prefixAria + '-list');
 	    return _this;
 	  }
 
@@ -84766,7 +85286,7 @@
 	          newState.selectorValueMap = selectorValueMap;
 	          valueRefresh = false;
 	        } else {
-	          var _formatInternalValue = (0, util$8.formatInternalValue)(value, nextProps),
+	          var _formatInternalValue = (0, util$9.formatInternalValue)(value, nextProps),
 	              selectorValueList = _formatInternalValue.selectorValueList,
 	              _selectorValueMap = _formatInternalValue.selectorValueMap; // 考虑多选
 
@@ -84793,7 +85313,7 @@
 	          newState.selectorValueMap = selectorValueMap;
 	          valueRefresh = false;
 	        } else {
-	          newState.value = (0, util$8.refValParse)(propValue, nextProps);
+	          newState.value = (0, util$9.refValParse)(propValue, nextProps);
 	          valueRefresh = true;
 	        }
 	      });
@@ -84811,7 +85331,7 @@
 	        newState.selectorValueMap = selectorValueMap;
 	        valueRefresh = false;
 	      } else {
-	        newState.value = (0, util$8.refValParse)(propValue, nextProps);
+	        newState.value = (0, util$9.refValParse)(propValue, nextProps);
 	        valueRefresh = true;
 	      }
 	    });
@@ -84823,7 +85343,7 @@
 	        newState.selectorValueList = [];
 	        newState.selectorValueMap = {};
 	      } else {
-	        var _formatInternalValue2 = (0, util$8.formatInternalValue)(newState.value, nextProps),
+	        var _formatInternalValue2 = (0, util$9.formatInternalValue)(newState.value, nextProps),
 	            selectorValueList = _formatInternalValue2.selectorValueList,
 	            selectorValueMap = _formatInternalValue2.selectorValueMap; // 考虑多选
 
@@ -87228,7 +87748,7 @@
 	unwrapExports(utils$5);
 	var utils_1$4 = utils$5.refValParse;
 
-	var util$9 = createCommonjsModule(function (module, exports) {
+	var util$a = createCommonjsModule(function (module, exports) {
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -87599,21 +88119,21 @@
 	}
 	});
 
-	unwrapExports(util$9);
-	var util_1$8 = util$9.browser;
-	var util_2$6 = util$9.getOffset;
-	var util_3$6 = util$9.loopAllChildren;
-	var util_4$5 = util$9.isInclude;
-	var util_5$5 = util$9.filterParentPosition;
-	var util_6$5 = util$9.handleCheckState;
-	var util_7$5 = util$9.getCheck;
-	var util_8$5 = util$9.getStrictlyValue;
-	var util_9$4 = util$9.arraysEqual;
-	var util_10$3 = util$9.closest;
-	var util_11$2 = util$9.isTreeNode;
-	var util_12$2 = util$9.toArray;
-	var util_13$2 = util$9.getNodeChildren;
-	var util_14$1 = util$9.warnOnlyTreeNode;
+	unwrapExports(util$a);
+	var util_1$9 = util$a.browser;
+	var util_2$7 = util$a.getOffset;
+	var util_3$7 = util$a.loopAllChildren;
+	var util_4$6 = util$a.isInclude;
+	var util_5$6 = util$a.filterParentPosition;
+	var util_6$6 = util$a.handleCheckState;
+	var util_7$6 = util$a.getCheck;
+	var util_8$6 = util$a.getStrictlyValue;
+	var util_9$5 = util$a.arraysEqual;
+	var util_10$3 = util$a.closest;
+	var util_11$2 = util$a.isTreeNode;
+	var util_12$2 = util$a.toArray;
+	var util_13$2 = util$a.getNodeChildren;
+	var util_14$1 = util$a.warnOnlyTreeNode;
 
 	var Tree_1 = createCommonjsModule(function (module, exports) {
 
@@ -87728,7 +88248,7 @@
 	  };
 
 	  Tree.prototype.onDragEnterGap = function onDragEnterGap(e, treeNode) {
-	    var offsetTop = (0, util$9.getOffset)(treeNode.selectHandle).top;
+	    var offsetTop = (0, util$a.getOffset)(treeNode.selectHandle).top;
 	    var offsetHeight = treeNode.selectHandle.offsetHeight;
 	    var pageY = e.pageY;
 	    var gapHeight = 2;
@@ -87900,7 +88420,7 @@
 	      }
 	      this.treeNodesStates[treeNode.props.pos].checked = checked;
 	      newSt.checkedNodes = [];
-	      (0, util$9.loopAllChildren)(this.props.children, function (item, ind, pos, keyOrPos) {
+	      (0, util$a.loopAllChildren)(this.props.children, function (item, ind, pos, keyOrPos) {
 	        if (checkedKeys.indexOf(keyOrPos) !== -1) {
 	          newSt.checkedNodes.push(item);
 	          rsCheckedKeys.push(keyOrPos);
@@ -87912,7 +88432,7 @@
 	        });
 	      }
 	      var halfChecked = this.props.checkedKeys ? this.props.checkedKeys.halfChecked : [];
-	      this.props.onCheck((0, util$9.getStrictlyValue)(rsCheckedKeys, halfChecked), newSt);
+	      this.props.onCheck((0, util$a.getStrictlyValue)(rsCheckedKeys, halfChecked), newSt);
 	    } else {
 	      if (checked && index === -1) {
 	        this.treeNodesStates[treeNode.props.pos].checked = true;
@@ -87922,14 +88442,14 @@
 	            checkedPositions.push(i);
 	          }
 	        });
-	        (0, util$9.handleCheckState)(this.treeNodesStates, (0, util$9.filterParentPosition)(checkedPositions), true);
+	        (0, util$a.handleCheckState)(this.treeNodesStates, (0, util$a.filterParentPosition)(checkedPositions), true);
 	      }
 	      if (!checked) {
 	        this.treeNodesStates[treeNode.props.pos].checked = false;
 	        this.treeNodesStates[treeNode.props.pos].halfChecked = false;
-	        (0, util$9.handleCheckState)(this.treeNodesStates, [treeNode.props.pos], false);
+	        (0, util$a.handleCheckState)(this.treeNodesStates, [treeNode.props.pos], false);
 	      }
-	      var checkKeys = (0, util$9.getCheck)(this.treeNodesStates);
+	      var checkKeys = (0, util$a.getCheck)(this.treeNodesStates);
 	      newSt.checkedNodes = checkKeys.checkedNodes;
 	      newSt.checkedNodesPositions = checkKeys.checkedNodesPositions;
 	      newSt.halfCheckedKeys = checkKeys.halfCheckedKeys;
@@ -87975,7 +88495,7 @@
 
 	    var selectedNodes = [];
 	    if (selectedKeys.length) {
-	      (0, util$9.loopAllChildren)(this.props.children, function (item) {
+	      (0, util$a.loopAllChildren)(this.props.children, function (item) {
 	        if (selectedKeys.indexOf(item.key) !== -1) {
 	          selectedNodes.push(item);
 	        }
@@ -88074,7 +88594,7 @@
 	      tempPosArrLength = tempPosArr.length;
 	    }
 	    //选中下一个相邻的节点
-	    (0, util$9.loopAllChildren)(props.children, function (itemNode, index, pos, newKey) {
+	    (0, util$a.loopAllChildren)(props.children, function (itemNode, index, pos, newKey) {
 	      if (pos == nextPos) {
 	        nextTreeNode = itemNode;
 	      }
@@ -88100,7 +88620,7 @@
 	    //查询的下一个节点不为空的话，则选中
 	    if (nextTreeNode) {
 	      var queryInfo = 'a[pos="' + nextPos + '"]';
-	      var parentEle = (0, util$9.closest)(e.target, ".u-tree");
+	      var parentEle = (0, util$a.closest)(e.target, ".u-tree");
 	      var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
 	      focusEle && focusEle.focus();
 	      var eventKey = nextTreeNode.props.eventKey || nextTreeNode.key;
@@ -88128,7 +88648,7 @@
 	    var prevTreeNode = void 0,
 	        preElement = void 0;
 	    //选中上一个相邻的节点
-	    (0, util$9.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	    (0, util$a.loopAllChildren)(props.children, function (item, index, pos, newKey) {
 	      if (pos == prePos) {
 	        prevTreeNode = item;
 	      }
@@ -88141,7 +88661,7 @@
 	          var preElementArr = e.target.parentElement.previousElementSibling.querySelectorAll('a');
 	          preElement = preElementArr[preElementArr.length - 1];
 	          prePos = preElement.getAttribute('pos');
-	          (0, util$9.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	          (0, util$a.loopAllChildren)(props.children, function (item, index, pos, newKey) {
 	            if (pos == prePos) {
 	              prevTreeNode = item;
 	            }
@@ -88195,7 +88715,7 @@
 
 	  Tree.prototype._focusDom = function _focusDom(selectKeyDomPos, targetDom) {
 	    var queryInfo = 'a[pos="' + selectKeyDomPos + '"]';
-	    var parentEle = (0, util$9.closest)(targetDom, ".u-tree");
+	    var parentEle = (0, util$a.closest)(targetDom, ".u-tree");
 	    var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
 	    if (document.activeElement !== focusEle) {
 	      focusEle && focusEle.focus();
@@ -88224,7 +88744,7 @@
 	      if (this.selectKeyDomExist && tabIndexKey || !tabIndexKey) {
 	        isExist = true;
 	        var queryInfo = 'a[pos="' + this.selectKeyDomPos + '"]';
-	        var parentEle = (0, util$9.closest)(e.target, ".u-tree");
+	        var parentEle = (0, util$a.closest)(e.target, ".u-tree");
 	        var focusEle = parentEle ? parentEle.querySelector(queryInfo) : null;
 	        focusEle && focusEle.focus();
 	      }
@@ -88256,19 +88776,19 @@
 	    }
 	    var expandedPositionArr = [];
 	    if (props.autoExpandParent) {
-	      (0, util$9.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	      (0, util$a.loopAllChildren)(props.children, function (item, index, pos, newKey) {
 	        if (keys.indexOf(newKey) > -1) {
 	          expandedPositionArr.push(pos);
 	        }
 	      });
 	    }
 	    var filterExpandedKeys = [];
-	    (0, util$9.loopAllChildren)(props.children, function (item, index, pos, newKey) {
+	    (0, util$a.loopAllChildren)(props.children, function (item, index, pos, newKey) {
 	      if (expandAll) {
 	        filterExpandedKeys.push(newKey);
 	      } else if (props.autoExpandParent) {
 	        expandedPositionArr.forEach(function (p) {
-	          if ((p.split('-').length > pos.split('-').length && (0, util$9.isInclude)(pos.split('-'), p.split('-')) || pos === p) && filterExpandedKeys.indexOf(newKey) === -1) {
+	          if ((p.split('-').length > pos.split('-').length && (0, util$a.isInclude)(pos.split('-'), p.split('-')) || pos === p) && filterExpandedKeys.indexOf(newKey) === -1) {
 	            filterExpandedKeys.push(newKey);
 	          }
 	        });
@@ -88336,9 +88856,9 @@
 	  Tree.prototype.getDragNodes = function getDragNodes(treeNode) {
 	    var dragNodesKeys = [];
 	    var tPArr = treeNode.props.pos.split('-');
-	    (0, util$9.loopAllChildren)(this.props.children, function (item, index, pos, newKey) {
+	    (0, util$a.loopAllChildren)(this.props.children, function (item, index, pos, newKey) {
 	      var pArr = pos.split('-');
-	      if (treeNode.props.pos === pos || tPArr.length < pArr.length && (0, util$9.isInclude)(tPArr, pArr)) {
+	      if (treeNode.props.pos === pos || tPArr.length < pArr.length && (0, util$a.isInclude)(tPArr, pArr)) {
 	        dragNodesKeys.push(newKey);
 	      }
 	    });
@@ -88476,7 +88996,7 @@
 	    // }
 	    var getTreeNodesStates = function getTreeNodesStates() {
 	      _this5.treeNodesStates = {};
-	      (0, util$9.loopAllChildren)(props.children, function (item, index, pos, keyOrPos, siblingPosition) {
+	      (0, util$a.loopAllChildren)(props.children, function (item, index, pos, keyOrPos, siblingPosition) {
 	        _this5.treeNodesStates[pos] = {
 	          siblingPosition: siblingPosition
 	        };
@@ -88495,13 +89015,13 @@
 	      } else {
 	        var checkedKeys = this.state.checkedKeys;
 	        var checkKeys = void 0;
-	        if (!props.loadData && this.checkKeys && this._checkedKeys && (0, util$9.arraysEqual)(this._checkedKeys, checkedKeys) && !this.dataChange) {
+	        if (!props.loadData && this.checkKeys && this._checkedKeys && (0, util$a.arraysEqual)(this._checkedKeys, checkedKeys) && !this.dataChange) {
 	          // if checkedKeys the same as _checkedKeys from onCheck, use _checkedKeys.
 	          checkKeys = this.checkKeys;
 	        } else {
 	          var checkedPositions = [];
 	          this.treeNodesStates = {};
-	          (0, util$9.loopAllChildren)(props.children, function (item, index, pos, keyOrPos, siblingPosition) {
+	          (0, util$a.loopAllChildren)(props.children, function (item, index, pos, keyOrPos, siblingPosition) {
 	            _this5.treeNodesStates[pos] = {
 	              node: item,
 	              key: keyOrPos,
@@ -88515,8 +89035,8 @@
 	            }
 	          });
 	          // if the parent node's key exists, it all children node will be checked
-	          (0, util$9.handleCheckState)(this.treeNodesStates, (0, util$9.filterParentPosition)(checkedPositions), true);
-	          checkKeys = (0, util$9.getCheck)(this.treeNodesStates);
+	          (0, util$a.handleCheckState)(this.treeNodesStates, (0, util$a.filterParentPosition)(checkedPositions), true);
+	          checkKeys = (0, util$a.getCheck)(this.treeNodesStates);
 	        }
 	        this.halfCheckedKeys = checkKeys.halfCheckedKeys;
 	        this.checkedKeys = checkKeys.checkedKeys;
@@ -88651,7 +89171,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 
-	var browserUa = typeof window !== 'undefined' ? (0, util$9.browser)(window.navigator) : '';
+	var browserUa = typeof window !== 'undefined' ? (0, util$a.browser)(window.navigator) : '';
 	var ieOrEdge = /.*(IE|Edge).+/.test(browserUa);
 	// const uaArray = browserUa.split(' ');
 	// const gtIE8 = uaArray.length !== 2 || uaArray[0].indexOf('IE') === -1 || Number(uaArray[1]) > 8;
@@ -88669,13 +89189,13 @@
 	    _this2.getNodeChildren = function () {
 	      var children = _this2.props.children;
 
-	      var originList = (0, util$9.toArray)(children).filter(function (node) {
+	      var originList = (0, util$a.toArray)(children).filter(function (node) {
 	        return node;
 	      });
-	      var targetList = (0, util$9.getNodeChildren)(originList);
+	      var targetList = (0, util$a.getNodeChildren)(originList);
 
 	      if (originList.length !== targetList.length) {
-	        (0, util$9.warnOnlyTreeNode)();
+	        (0, util$a.warnOnlyTreeNode)();
 	      }
 
 	      return targetList;
