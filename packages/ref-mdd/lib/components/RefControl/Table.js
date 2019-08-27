@@ -236,8 +236,14 @@ class Table extends Component {
       // style:{width:200},
       title: cBillName,
       multiple: multiSelect,
-      displayField: `{${displayField}}`,//ref-core0.x.x版本以上的需要的input展示
-      inputDisplay:`{${displayField}}`,//ref-core1.0.x版本以上的需要的input展示
+      displayField: record => {
+        //下拉展示的名字
+        return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+      },//ref-core0.x.x版本以上的需要的input展示
+      inputDisplay:record => {
+        //输入框的名字
+        return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+      },//ref-core1.0.x版本以上的需要的input展示
       valueField: valueField,
       showLoading: showLoading,
       columnsData: columnsData,

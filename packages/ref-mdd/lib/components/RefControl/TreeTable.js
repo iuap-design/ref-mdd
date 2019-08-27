@@ -203,15 +203,24 @@ class TreeTable extends Component {
     const propsParamTreeTable = {
         title:this.cBillName,
         multiple:this.getMultiple(),
-        displayField:`{${this.displayField}}`,
-        inputDisplay:`{${this.displayField}}`,
+        displayField:record => {
+          //下拉的展示 
+          return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+        },
+          inputDisplay:record => {
+          //输入框的名字
+          return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+        },
         valueField:this.valueField,
         treeData:this.treeData,
         columnsData:this.columnsData,
         tableData:this.tableData,
         page:this.page,
         showLoading :this.state.showLoading,
-        nodeDisplay:`{${this.displayField}}`,
+        nodeDisplay:record => {
+          //树节点
+          return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+        },
         defaultExpandAll : false,
         matchData:props.matchData,
         value:props.value,

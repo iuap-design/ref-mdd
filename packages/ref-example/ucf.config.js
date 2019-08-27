@@ -75,7 +75,7 @@ module.exports = (env, argv) => {
         },
         // 别名配置
         alias: {
-            'ref-mdd': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
+            'ref-mdd1': path.resolve(__dirname, 'ucf-common/src/ref-mdd/')
         },
         // 构建排除指定包
         externals: {

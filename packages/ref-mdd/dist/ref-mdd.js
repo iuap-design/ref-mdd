@@ -87657,6 +87657,8 @@
 	  ;
 
 	  _proto.render = function render() {
+	    var _this3 = this;
+
 	    var props = this.props;
 	    var _props$meta2 = props.meta,
 	        viewApplication = _props$meta2.viewApplication,
@@ -87683,9 +87685,15 @@
 	      // style:{width:200},
 	      title: cBillName,
 	      multiple: multiSelect,
-	      displayField: "{" + displayField + "}",
+	      displayField: function displayField(record) {
+	        //下拉展示的名字
+	        return record[_this3.displayField]; //ref-core0.x.x版本以上的需要的input展示
+	      },
 	      //ref-core0.x.x版本以上的需要的input展示
-	      inputDisplay: "{" + displayField + "}",
+	      inputDisplay: function inputDisplay(record) {
+	        //输入框的名字
+	        return record[_this3.displayField]; //ref-core0.x.x版本以上的需要的input展示
+	      },
 	      //ref-core1.0.x版本以上的需要的input展示
 	      valueField: valueField,
 	      showLoading: showLoading,
@@ -92393,19 +92401,30 @@
 	  };
 
 	  _proto.render = function render() {
+	    var _this2 = this;
+
 	    var props = this.props;
 	    var propsParamTreeTable = {
 	      title: this.cBillName,
 	      multiple: this.getMultiple(),
-	      displayField: "{" + this.displayField + "}",
-	      inputDisplay: "{" + this.displayField + "}",
+	      displayField: function displayField(record) {
+	        //下拉的展示 
+	        return record[_this2.displayField]; //ref-core0.x.x版本以上的需要的input展示
+	      },
+	      inputDisplay: function inputDisplay(record) {
+	        //输入框的名字
+	        return record[_this2.displayField]; //ref-core0.x.x版本以上的需要的input展示
+	      },
 	      valueField: this.valueField,
 	      treeData: this.treeData,
 	      columnsData: this.columnsData,
 	      tableData: this.tableData,
 	      page: this.page,
 	      showLoading: this.state.showLoading,
-	      nodeDisplay: "{" + this.displayField + "}",
+	      nodeDisplay: function nodeDisplay(record) {
+	        //树节点
+	        return record[_this2.displayField]; //ref-core0.x.x版本以上的需要的input展示
+	      },
 	      defaultExpandAll: false,
 	      matchData: props.matchData,
 	      value: props.value,
