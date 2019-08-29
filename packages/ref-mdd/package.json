@@ -1,6 +1,6 @@
 {
   "name": "ref-mdd",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "",
   "main": "dist/ref-mdd.js",
   "scripts": {

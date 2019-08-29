@@ -22,7 +22,7 @@ class ModelDrivenRefer extends Component {
     }
     getRefMeta=(props) =>{
         let {url='',token='',host=''} = props;
-        const defaultUrl = '/uniform/pub/ref/getRefMeta';
+        const defaultUrl = (!!props.nonuniform?'/':'/uniform/')+'pub/ref/getRefMeta';
         // 判断props中的url是否存在，存在走用户传入的url，
         // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
         if(!url){

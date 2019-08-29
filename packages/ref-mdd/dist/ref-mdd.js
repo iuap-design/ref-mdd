@@ -865,7 +865,7 @@
 
 	  this.displayField = refEntity.cEntityNameFld; //参照显示值
 
-	  var defaultDataURL = '/uniform/' + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
+	  var defaultDataURL = (!!this.props.nonuniform ? '/' : '/uniform/') + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
 
 	  if (!dataUrl) {
 	    dataUrl = token ? "" + host + defaultDataURL + "?token=" + token : "" + host + defaultDataURL;
@@ -92584,7 +92584,7 @@
 	          token = _props$token === void 0 ? '' : _props$token,
 	          _props$host = props.host,
 	          host = _props$host === void 0 ? '' : _props$host;
-	      var defaultUrl = '/uniform/pub/ref/getRefMeta'; // 判断props中的url是否存在，存在走用户传入的url，
+	      var defaultUrl = (!!props.nonuniform ? '/' : '/uniform/') + 'pub/ref/getRefMeta'; // 判断props中的url是否存在，存在走用户传入的url，
 	      // 不存在判断使用传入host和token，再跟默认的defaultMetaURL拼接
 
 	      if (!url) {
