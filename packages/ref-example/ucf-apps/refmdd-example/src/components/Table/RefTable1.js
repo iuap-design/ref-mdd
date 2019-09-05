@@ -25,8 +25,8 @@ class RefTable1 extends Component {
           <span >单选（组织）：</span>
           <ModelDrivenRefer 
                 refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                url={mtlInfo.table.url}
+                dataUrl={mtlInfo.table.dataUrl} 
                 multiSelect={false}
            />
         </div>
@@ -34,8 +34,8 @@ class RefTable1 extends Component {
           <span >多选（组织）：</span>
           <ModelDrivenRefer 
                 refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                url={mtlInfo.table.url}
+                dataUrl={mtlInfo.table.dataUrl} 
                 multiSelect={true}
            />
         </div>

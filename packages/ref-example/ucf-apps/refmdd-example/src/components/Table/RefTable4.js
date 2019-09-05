@@ -26,9 +26,9 @@ const { getFieldProps, getFieldError } = this.props.form;
         <div className="demo-label">
           <span >单选（组织）：</span>
           <ModelDrivenRefer 
-                refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                                refCode={mtlInfo.table.refCode}  
+                url={mtlInfo.table.url}
+                dataUrl={mtlInfo.table.dataUrl} 
                 multiSelect={false}
                 {...getFieldProps('table1', {
                     rules: [{
@@ -43,9 +43,9 @@ const { getFieldProps, getFieldError } = this.props.form;
         <div className="demo-label">
           <span >多选（组织）：</span>
           <ModelDrivenRefer 
-                refCode={mtlInfo.table.refCode}  
-                token={mtlInfo.table.token}
-                host={mtlInfo.table.host} 
+                                refCode={mtlInfo.table.refCode}  
+                url={mtlInfo.table.url}
+                dataUrl={mtlInfo.table.dataUrl} 
                 
                 multiSelect={true}
                 {...getFieldProps('table2', {

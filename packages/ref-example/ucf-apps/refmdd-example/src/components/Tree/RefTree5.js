@@ -26,9 +26,9 @@ class RefTree5 extends Component {
                 <div className="demo-label">
                 <span >单选（组织）：</span>
                 <ModelDrivenRefer 
-                        refCode={mtlInfo.tree.refCode}  
-                        token={mtlInfo.tree.token}
-                        host={mtlInfo.tree.host} 
+                        refCode={mtlInfo.table.refCode}  
+                        url={mtlInfo.table.url}
+                        dataUrl={mtlInfo.table.dataUrl} 
                         multiSelect={false}
                         {...getFieldProps('code', {
                             rules: [{
@@ -50,9 +50,8 @@ class RefTree5 extends Component {
                 <span >多选（组织）：</span>
                 <ModelDrivenRefer 
                         refCode={mtlInfo.tree.refCode}  
-                        token={mtlInfo.tree.token}
-                        host={mtlInfo.tree.host} 
-                        
+                        url={mtlInfo.tree.url}
+                        dataUrl={mtlInfo.tree.dataUrl} 
                         multiSelect={true}
                         {...getFieldProps('code2', {
                             rules: [{

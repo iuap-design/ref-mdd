@@ -24,8 +24,8 @@ class RefTable6 extends Component {
                 <span >不可用：</span>
                 <ModelDrivenRefer 
                     refCode={mtlInfo.table.refCode}  
-                    token={mtlInfo.table.token}
-                    host={mtlInfo.table.host} 
+                    url={mtlInfo.table.url}
+                    dataUrl={mtlInfo.table.dataUrl} 
                     disabled={true}
                 />
                 <span className="source-code">

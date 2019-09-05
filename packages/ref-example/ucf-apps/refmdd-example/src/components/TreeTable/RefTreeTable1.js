@@ -34,8 +34,8 @@ class RefTreeTable1 extends Component {
           <span >多选（组织）：</span>
           <ModelDrivenRefer 
                 refCode={mtlInfo.treeTable.refCode}  
-               url={mtlInfo.treeTable.url}
-               dataUrl={mtlInfo.treeTable.dataUrl} 
+                url={mtlInfo.treeTable.url}
+                dataUrl={mtlInfo.treeTable.dataUrl} 
                 multiSelect={true}
            />
         </div>
