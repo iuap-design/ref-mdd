@@ -171,8 +171,8 @@ class Table extends Component {
   searchFilterInfo = filterInfo => {
     const _this = this;
     let { param } = this;
-    if(this.filterInfo === filterInfo.trim()) return;
-    this.filterInfo = filterInfo.trim();
+    if(!!filterInfo && this.filterInfo === filterInfo.trim()) return;
+    this.filterInfo =  filterInfo === undefined ?"": filterInfo.trim();
     // this.filterInfo = filterInfo;
     //还原数据信息
     this.page.currPageIndex = 1;

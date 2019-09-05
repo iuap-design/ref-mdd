@@ -87564,16 +87564,18 @@
 	      var _assertThisInitialize = assertThisInitialized(_this2),
 	          param = _assertThisInitialize.param;
 
-	      _this2.filterInfo = filterInfo; //还原数据信息
+	      if (!!filterInfo && _this2.filterInfo === filterInfo.trim()) return;
+	      _this2.filterInfo = filterInfo === undefined ? "" : filterInfo.trim(); // this.filterInfo = filterInfo;
+	      //还原数据信息
 
 	      _this2.page.currPageIndex = 1;
 	      _this2.page.pageSize = '10';
 	      var paramWithFilter = Object.assign({}, param, {
 	        page: _this2.page,
-	        likeValue: filterInfo
+	        likeValue: _this2.filterInfo
 	      });
 
-	      if (!filterInfo) {
+	      if (!_this2.filterInfo) {
 	        delete paramWithFilter.likeValue;
 	      }
 
@@ -90782,12 +90784,22 @@
 	          while (1) {
 	            switch (_context.prev = _context.next) {
 	              case 0:
+	                if (!(!!value && _this._searchValueTree === value.trim())) {
+	                  _context.next = 2;
+	                  break;
+	                }
+
+	                return _context.abrupt("return");
+
+	              case 2:
+	                _this._searchValueTree = value === undefined ? "" : value.trim();
+
 	                _this.setState({
 	                  showLoading: true
 	                });
 
-	                _context.next = 3;
-	                return _this.getRefTreeData(value).then(function (treeData) {
+	                _context.next = 6;
+	                return _this.getRefTreeData(_this._searchValueTree).then(function (treeData) {
 	                  _this.setState({
 	                    showLoading: false
 	                  });
@@ -90812,11 +90824,11 @@
 	                  });
 	                });
 
-	              case 3:
+	              case 6:
 	                flag = _context.sent;
 	                return _context.abrupt("return", flag);
 
-	              case 5:
+	              case 8:
 	              case "end":
 	                return _context.stop();
 	            }
@@ -92251,9 +92263,11 @@
 	    };
 
 	    _this.onTreeSearch = function (value) {
+	      if (!!value && _this._searchValueTree === value.trim()) return;
+	      _this._searchValueTree = value === undefined ? "" : value.trim();
 	      clearTimeout(_this.searchTimeOut);
 	      _this.searchTimeOut = setTimeout(function () {
-	        _this._getRefTreeDataByParam(value);
+	        _this._getRefTreeDataByParam(_this._searchValueTree);
 	      }, 300);
 	    };
 
@@ -92265,19 +92279,14 @@
 	    };
 
 	    _this.onTableSearch = function (value) {
-	      console.log("onTableSearch", value);
+	      if (!!value && _this._searchValueTable === value.trim()) return;
+	      _this._searchValueTable = value === undefined ? "" : value.trim();
 
 	      var _assertThisInitialize3 = assertThisInitialized(_this),
 	          param = _assertThisInitialize3.param;
 
-	      value ? param.likeValue = value : param.likeValue = null;
-
-	      _this._getTableDataByParam(param);
-
-	      if (_this.timer) {
-	        clearTimeout(_this.timer);
-	      }
-
+	      _this._searchValueTable ? param.likeValue = _this._searchValueTable : param.likeValue = null;
+	      clearTimeout(_this.timer);
 	      _this.timer = setTimeout(_this._getTableDataByParam(param), 300);
 	    };
 

@@ -90,8 +90,8 @@ class Tree extends Component {
   };
 
   getData = async (value) => {
-    if(this._searchValueTree === value.trim()) return;
-    this._searchValueTree = value.trim();
+    if(!!value && this._searchValueTree === value.trim()) return;
+    this._searchValueTree =  value === undefined ?"": value.trim();
     this.setState({
       showLoading: true
     });

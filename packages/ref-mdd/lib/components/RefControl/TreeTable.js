@@ -120,8 +120,8 @@ class TreeTable extends Component {
     this._getTableDataByParam(param);
   };
   onTreeSearch = value => { 
-    if(this._searchValueTree === value.trim()) return;
-    this._searchValueTree = value.trim();
+    if( !!value && this._searchValueTree === value.trim()) return;
+    this._searchValueTree = value === undefined ?"": value.trim();
     clearTimeout(this.searchTimeOut);
     this.searchTimeOut  = setTimeout(() => {
       this._getRefTreeDataByParam(this._searchValueTree)
@@ -136,8 +136,8 @@ class TreeTable extends Component {
   };
 
   onTableSearch = value => {
-    if(this._searchValueTable === value.trim()) return;
-    this._searchValueTable = value.trim();
+    if( !!value && this._searchValueTable === value.trim()) return;
+    this._searchValueTable = value === undefined ?"": value.trim();
     const {param} = this;
     this._searchValueTable ? param.likeValue=this._searchValueTable : param.likeValue =null
     clearTimeout(this.timer);
