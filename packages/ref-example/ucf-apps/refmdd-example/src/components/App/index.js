@@ -9,7 +9,7 @@ import TableDemo from '../Table';
 import TreeTableDemo from '../TreeTable';
 import 'bee-button/build/Button.css';
 import './index.less';
-import 'ref-mdd/dist/ref-mdd.css';//只在这一处引入参照的样式
+// import 'ref-mdd/dist/ref-mdd.css';//只在这一处引入参照的样式
 class App extends Component {
     constructor(props) {
         super(props);

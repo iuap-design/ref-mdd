@@ -171,15 +171,17 @@ class Table extends Component {
   searchFilterInfo = filterInfo => {
     const _this = this;
     let { param } = this;
-    this.filterInfo = filterInfo;
+    if(this.filterInfo === filterInfo.trim()) return;
+    this.filterInfo = filterInfo.trim();
+    // this.filterInfo = filterInfo;
     //还原数据信息
     this.page.currPageIndex = 1;
     this.page.pageSize = '10';
     let paramWithFilter = Object.assign({}, param, {
       page:this.page,
-      likeValue: filterInfo
+      likeValue: this.filterInfo
     });
-    if(!filterInfo){
+    if(!this.filterInfo){
       delete(paramWithFilter.likeValue)
     }
     _this.loadTableData(paramWithFilter);

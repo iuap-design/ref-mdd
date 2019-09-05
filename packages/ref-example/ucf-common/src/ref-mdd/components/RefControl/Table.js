@@ -171,15 +171,17 @@ class Table extends Component {
   searchFilterInfo = filterInfo => {
     const _this = this;
     let { param } = this;
-    this.filterInfo = filterInfo;
+    if(this.filterInfo === filterInfo.trim()) return;
+    this.filterInfo = filterInfo.trim();
+    // this.filterInfo = filterInfo;
     //还原数据信息
     this.page.currPageIndex = 1;
     this.page.pageSize = '10';
     let paramWithFilter = Object.assign({}, param, {
       page:this.page,
-      likeValue: filterInfo
+      likeValue: this.filterInfo
     });
-    if(!filterInfo){
+    if(!this.filterInfo){
       delete(paramWithFilter.likeValue)
     }
     _this.loadTableData(paramWithFilter);
@@ -236,8 +238,14 @@ class Table extends Component {
       // style:{width:200},
       title: cBillName,
       multiple: multiSelect,
-      displayField: `{${displayField}}`,//ref-core0.x.x版本以上的需要的input展示
-      inputDisplay:`{${displayField}}`,//ref-core1.0.x版本以上的需要的input展示
+      displayField: record => {
+        //下拉展示的名字
+        return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+      },//ref-core0.x.x版本以上的需要的input展示
+      inputDisplay:record => {
+        //输入框的名字
+        return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+      },//ref-core1.0.x版本以上的需要的input展示
       valueField: valueField,
       showLoading: showLoading,
       columnsData: columnsData,

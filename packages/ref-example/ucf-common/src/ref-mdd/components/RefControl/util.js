@@ -183,4 +183,13 @@ function getTableData(params){
     });
   }
 
+  /**
+   * 新增方法，判断searchValue是否需要执行搜索。去除前后空格
+   */
+  function searchFunctionGoOn(value){
+    let temp = value.trim();
+    if(!temp ){
+
+    }
+  }
   export {getTableInfo,getRefTreeData,launchTableData,launchTableHeader,getTableData};

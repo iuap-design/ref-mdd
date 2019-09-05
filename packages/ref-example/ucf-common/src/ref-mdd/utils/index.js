@@ -52,7 +52,7 @@ export function initReferInfo(dataType, refEntity, viewApplication={},propsState
     // this.dataUrl = propsState.dataUrl;
     this.valueField = refEntity.cEntityKeyFld;//参照真实值
     this.displayField = refEntity.cEntityNameFld;//参照显示值
-    const defaultDataURL = '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
+    const defaultDataURL = (!!this.props.nonuniform?'/':'/uniform/')+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     if(!dataUrl){
         dataUrl = token?`${host}${defaultDataURL}?token=${token}`:`${host}${defaultDataURL}`;
     }

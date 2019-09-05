@@ -120,9 +120,11 @@ class TreeTable extends Component {
     this._getTableDataByParam(param);
   };
   onTreeSearch = value => { 
+    if(this._searchValueTree === value.trim()) return;
+    this._searchValueTree = value.trim();
     clearTimeout(this.searchTimeOut);
     this.searchTimeOut  = setTimeout(() => {
-      this._getRefTreeDataByParam(value)
+      this._getRefTreeDataByParam(this._searchValueTree)
     }, 300);
     
   };
@@ -134,14 +136,11 @@ class TreeTable extends Component {
   };
 
   onTableSearch = value => {
-    console.log("onTableSearch", value);
+    if(this._searchValueTable === value.trim()) return;
+    this._searchValueTable = value.trim();
     const {param} = this;
-    value ? param.likeValue=value : param.likeValue =null
-    this._getTableDataByParam(param)
-    if(this.timer){
-      clearTimeout(this.timer);
-    }
-    
+    this._searchValueTable ? param.likeValue=this._searchValueTable : param.likeValue =null
+    clearTimeout(this.timer);
     this.timer = setTimeout(this._getTableDataByParam(param),300);
   };
 
@@ -203,15 +202,24 @@ class TreeTable extends Component {
     const propsParamTreeTable = {
         title:this.cBillName,
         multiple:this.getMultiple(),
-        displayField:`{${this.displayField}}`,
-        inputDisplay:`{${this.displayField}}`,
+        displayField:record => {
+          //下拉的展示 
+          return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+        },
+          inputDisplay:record => {
+          //输入框的名字
+          return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+        },
         valueField:this.valueField,
         treeData:this.treeData,
         columnsData:this.columnsData,
         tableData:this.tableData,
         page:this.page,
         showLoading :this.state.showLoading,
-        nodeDisplay:`{${this.displayField}}`,
+        nodeDisplay:record => {
+          //树节点
+          return record[this.displayField];//ref-core0.x.x版本以上的需要的input展示
+        },
         defaultExpandAll : false,
         matchData:props.matchData,
         value:props.value,

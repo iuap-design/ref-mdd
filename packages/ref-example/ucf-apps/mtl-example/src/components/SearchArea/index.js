@@ -19,7 +19,6 @@ import SearchPanel from 'components/SearchPanel';
 import MTLComponent from 'ref-mdd';
 // import MTLComponent from '../../../../../ucf-common/src/ref-mdd/index';
 
-import 'ref-mdd/dist/ref-mdd.css';
 import './index.less';
 const mtlUrl = {
   tableMetaUrl: '/uniform/pub/ref/getRefMeta',

@@ -90,10 +90,12 @@ class Tree extends Component {
   };
 
   getData = async (value) => {
+    if(this._searchValueTree === value.trim()) return;
+    this._searchValueTree = value.trim();
     this.setState({
       showLoading: true
     });
-    const flag = await this.getRefTreeData(value)
+    const flag = await this.getRefTreeData(this._searchValueTree)
       .then(treeData => {
         this.setState({
           showLoading: false
