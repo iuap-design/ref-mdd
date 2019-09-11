@@ -842,15 +842,22 @@
 	}
 	/**
 	 * 初始化参照信息
+	 * 20190911注意refEntity中的cEntityFld可能不是真正的displayField,目前只测出表格
 	 */
 
-	function initReferInfo(dataType, refEntity, viewApplication, propsState) {
+	function initReferInfo(dataType, refEntity, viewApplication, propsState, viewModel) {
+	  var _this = this;
+
 	  if (viewApplication === void 0) {
 	    viewApplication = {};
 	  }
 
 	  if (propsState === void 0) {
 	    propsState = {};
+	  }
+
+	  if (viewModel === void 0) {
+	    viewModel = {};
 	  }
 
 	  var _propsState = propsState,
@@ -864,6 +871,17 @@
 	  this.valueField = refEntity.cEntityKeyFld; //参照真实值
 
 	  this.displayField = refEntity.cEntityNameFld; //参照显示值
+
+	  if (!!Object.keys(viewModel).length) {
+	    if (viewModel.entities && viewModel.entities[0] && viewModel.entities[0].fields) {
+	      viewModel.entities[0].fields.some(function (item) {
+	        if (item.cFieldName === refEntity.cEntityNameFld) {
+	          _this.displayField = item.cItemName;
+	          return true;
+	        }
+	      });
+	    }
+	  }
 
 	  var defaultDataURL = (!!this.props.nonuniform ? '/' : '/uniform/') + (refEntity.svcKey ? refEntity.svcKey + '/ref/getRefData' : 'bill/ref/getRefData'); //表体请求url
 
@@ -87449,7 +87467,7 @@
 	  function Table(_props) {
 	    var _this2;
 
-	    _this2 = _Component.call(this, _props) || this;
+	    _this2 = _Component.call(this, _props) || this; //20190911注意refEntity中的cEntityFld可能不是真正的displayField
 
 	    _this2.clearGetDataParam = function () {
 	      delete _this2.param.likeValue;
@@ -87604,8 +87622,9 @@
 
 	    var _props$meta = _props.meta,
 	        viewApplication = _props$meta.viewApplication,
-	        refEntity = _props$meta.refEntity;
-	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, _props);
+	        refEntity = _props$meta.refEntity,
+	        viewmodel = _props$meta.viewmodel;
+	    initReferInfo.call(assertThisInitialized(_this2), dataType, refEntity, viewApplication, _props, viewmodel);
 	    _this2.view = viewApplication.view; // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
 
 	    _this2.columnsData = []; //表头数据
@@ -87649,8 +87668,9 @@
 	    if (need) {
 	      var _nextProps$meta = nextProps.meta,
 	          viewApplication = _nextProps$meta.viewApplication,
-	          refEntity = _nextProps$meta.refEntity;
-	      initReferInfo.call(this, dataType, refEntity, viewApplication, nextProps);
+	          refEntity = _nextProps$meta.refEntity,
+	          viewmodel = _nextProps$meta.viewmodel;
+	      initReferInfo.call(this, dataType, refEntity, viewApplication, nextProps, viewmodel);
 	    }
 	  }
 	  /**

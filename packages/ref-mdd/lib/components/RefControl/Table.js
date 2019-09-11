@@ -22,8 +22,9 @@ class Table extends Component {
 
   constructor(props) {
     super(props);
-    let { viewApplication, refEntity } = props.meta;
-    initReferInfo.call(this,dataType, refEntity, viewApplication,props);
+    //20190911注意refEntity中的cEntityFld可能不是真正的displayField
+    let { viewApplication, refEntity,viewmodel } = props.meta;
+    initReferInfo.call(this,dataType, refEntity, viewApplication,props,viewmodel);
     this.view = viewApplication.view;
     // this.dataUrl =  '/uniform/'+(refEntity.svcKey?refEntity.svcKey+'/ref/getRefData': 'bill/ref/getRefData');//表体请求url
     this.columnsData = []; //表头数据
@@ -57,8 +58,8 @@ class Table extends Component {
     //是否重新初始化initReferInfo
     let need = needRecallInitReferInfo(nextProps,this.props);
     if(need){
-      let { viewApplication, refEntity } = nextProps.meta;
-      initReferInfo.call(this,dataType, refEntity, viewApplication,nextProps);
+      let { viewApplication, refEntity ,viewmodel} = nextProps.meta;
+      initReferInfo.call(this,dataType, refEntity, viewApplication,nextProps,viewmodel);
     }
     
    
