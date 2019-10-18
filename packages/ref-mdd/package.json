@@ -1,6 +1,6 @@
 {
   "name": "ref-mdd",
-  "version": "1.0.21",
+  "version": "1.0.23",
   "description": "",
   "main": "dist/ref-mdd.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "postcss-preset-env": "^6.6.0",
     "ref-multiple-table": "^2.1.0",
     "ref-tree": "^2.1.0",
-    "ref-tree-table": "^2.1.0",
+    "ref-tree-table": "^2.1.2",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-uglify": "^6.0.2"
   },
